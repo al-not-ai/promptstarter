@@ -1,7 +1,4 @@
-"use client";
-
-import { cn } from "@/lib/utils";
-import { TOOL_CATEGORIES } from "@/lib/tools";
+import { ToolNav } from "@/components/tool-nav";
 
 interface SidebarProps {
   activeToolId: string;
@@ -10,45 +7,14 @@ interface SidebarProps {
 
 export function Sidebar({ activeToolId, onToolSelect }: SidebarProps) {
   return (
-    <aside className="fixed left-0 top-0 bottom-0 z-50 flex w-[260px] flex-col border-r border-white/8 bg-[#070707]">
-
+    <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[260px] flex-col border-r border-white/8 bg-[#070707]">
       <div className="flex h-[57px] shrink-0 items-center border-b border-white/8 px-6">
         <span className="font-mono text-xs tracking-wider text-muted-foreground">
           Tool Library
         </span>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
-        {TOOL_CATEGORIES.map(({ category, tools }) => (
-          <div key={category}>
-            <p className="px-3 mb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
-              {category}
-            </p>
-            <ul className="space-y-0.5">
-              {tools.map((tool) => {
-                const isActive = tool.id === activeToolId;
-                return (
-                  <li key={tool.id}>
-                    <button
-                      onClick={() => onToolSelect(tool.id)}
-                      className={cn(
-                        "w-full text-left px-3 py-2 rounded-sm font-mono text-sm tracking-normal transition-colors duration-150",
-                        "border-l-2",
-                        isActive
-                          ? "border-primary text-foreground bg-white/[0.04]"
-                          : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/[0.02]"
-                      )}
-                      style={isActive ? { textShadow: "0 0 12px rgba(57,255,20,0.2)" } : {}}
-                    >
-                      {tool.label}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </nav>
+      <ToolNav activeToolId={activeToolId} onToolSelect={onToolSelect} />
 
       <div className="shrink-0 border-t border-white/8 px-6 py-4">
         <p className="font-mono text-[10px] tracking-wider text-muted-foreground/30">

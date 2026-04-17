@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sidebar } from "@/components/sidebar";
+import { StatusHeader } from "@/components/status-header";
 import { TOOLS } from "@/lib/tools";
 
 function defaultValues(toolId: string): Record<string, number> {
@@ -40,43 +41,32 @@ export default function Home() {
   }
 
   return (
-    <div className="grid-bg relative flex min-h-screen flex-col bg-background">
+    <div className="grid-bg relative flex min-h-screen flex-col bg-background overflow-x-hidden">
+
+      {/* Desktop sidebar — hidden on mobile */}
       <Sidebar activeToolId={activeToolId} onToolSelect={handleToolSelect} />
 
-      {/* Header */}
-      <header className="fixed top-0 left-[260px] right-0 z-40 flex items-center justify-between border-b border-white/10 bg-black/50 px-10 py-4 backdrop-blur-md">
-        <span className="font-mono text-sm font-bold tracking-wider text-foreground">
-          PROMPTSTARTER <span className="text-primary">// V1.0</span>
-        </span>
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-          </span>
-          <span className="font-mono text-xs text-muted-foreground">
-            System <span className="text-primary">Active</span>
-          </span>
-        </div>
-      </header>
+      {/* Header — full width on mobile, offset on desktop */}
+      <StatusHeader activeToolId={activeToolId} onToolSelect={handleToolSelect} />
 
-      {/* Main */}
-      <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-10 ml-[260px]">
+      {/* Main — no left margin on mobile, offset on desktop */}
+      <main className="flex flex-1 items-start md:items-center justify-center px-4 md:px-6 pt-24 pb-8 md:ml-[260px]">
         <Card className="w-full max-w-5xl border border-white/10 bg-white/[0.02] backdrop-blur-md">
 
-          <CardHeader className="border-b border-white/10 px-10 py-7">
+          <CardHeader className="border-b border-white/10 px-6 md:px-10 py-6 md:py-7">
             <p className="font-mono text-xs tracking-wider text-muted-foreground mb-1">
               {activeTool.category} — Calibration Matrix
             </p>
-            <h1 className="font-mono text-2xl font-bold tracking-tight text-foreground">
+            <h1 className="font-mono text-xl md:text-2xl font-bold tracking-tight text-foreground">
               {activeTool.label}
             </h1>
           </CardHeader>
 
-          <CardContent className="px-10 py-10">
-            <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
+          <CardContent className="px-6 md:px-10 py-8 md:py-10">
+            <div className="grid grid-cols-1 gap-10 md:gap-12 md:grid-cols-2">
 
               {/* Target Intelligence */}
-              <div className="space-y-8">
+              <div className="space-y-6 md:space-y-8">
                 <p className="font-mono text-xs tracking-wider text-muted-foreground border-b border-white/10 pb-3">
                   Target Intelligence
                 </p>
@@ -88,7 +78,7 @@ export default function Home() {
                   <Input
                     value={targetAccount}
                     onChange={(e) => setTargetAccount(e.target.value)}
-                    className="font-mono bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/30 focus-visible:ring-primary h-11"
+                    className="font-mono bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/30 focus-visible:ring-primary h-[44px]"
                     placeholder="Salesforce, Acme Corp…"
                   />
                 </div>
@@ -100,13 +90,12 @@ export default function Home() {
                   <Input
                     value={industryVertical}
                     onChange={(e) => setIndustryVertical(e.target.value)}
-                    className="font-mono bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/30 focus-visible:ring-primary h-11"
+                    className="font-mono bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/30 focus-visible:ring-primary h-[44px]"
                     placeholder="Enterprise SaaS, FinTech…"
                   />
                 </div>
 
-                {/* Readiness indicator */}
-                <div className="flex items-center gap-2.5 pt-2">
+                <div className="flex items-center gap-2.5 pt-1">
                   <span
                     className={`h-1.5 w-1.5 rounded-full transition-colors duration-500 ${
                       isReady ? "bg-primary" : "bg-muted-foreground/30"
@@ -121,8 +110,8 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Calibration Variables — driven by active tool */}
-              <div className="space-y-8">
+              {/* Calibration Variables */}
+              <div className="space-y-6 md:space-y-8">
                 <p className="font-mono text-xs tracking-wider text-muted-foreground border-b border-white/10 pb-3">
                   Calibration Variables
                 </p>
@@ -135,36 +124,39 @@ export default function Home() {
                         <p className="font-mono text-xs text-muted-foreground mt-0.5">{control.description}</p>
                       </div>
                       <span
-                        className="font-mono text-2xl font-bold text-primary tabular-nums"
+                        className="font-mono text-2xl font-bold text-primary tabular-nums ml-4"
                         style={{ textShadow: "0 0 16px rgba(57,255,20,0.4)" }}
                       >
                         {controlValues[control.id]}
                         <span className="text-sm text-primary/50">%</span>
                       </span>
                     </div>
-                    <Slider
-                      value={[controlValues[control.id]]}
-                      onValueChange={(val) => handleSliderChange(control.id, val as number[])}
-                      min={0}
-                      max={100}
-                      step={1}
-                    />
+                    {/* Slider wrapper ensures 44px touch target */}
+                    <div className="py-[10px]">
+                      <Slider
+                        value={[controlValues[control.id]]}
+                        onValueChange={(val) => handleSliderChange(control.id, val as number[])}
+                        min={0}
+                        max={100}
+                        step={1}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Actions */}
-            <div className="mt-10 flex gap-4 border-t border-white/10 pt-8">
+            <div className="mt-8 md:mt-10 flex gap-3 md:gap-4 border-t border-white/10 pt-6 md:pt-8">
               <Button
                 variant="outline"
                 onClick={handleReset}
-                className="w-28 font-mono text-xs border-white/10 bg-transparent text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                className="w-24 md:w-28 font-mono text-xs border-white/10 bg-transparent text-muted-foreground hover:bg-white/5 hover:text-foreground h-[44px]"
               >
                 Reset
               </Button>
               <Button
-                className="flex-1 font-mono text-sm tracking-wide transition-all duration-500"
+                className="flex-1 font-mono text-sm tracking-wide transition-all duration-500 h-[44px]"
                 disabled={!isReady}
                 style={isReady ? { boxShadow: "0 0 24px rgba(57,255,20,0.35), 0 0 60px rgba(57,255,20,0.1)" } : {}}
               >
