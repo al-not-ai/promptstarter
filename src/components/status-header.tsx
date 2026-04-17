@@ -36,7 +36,8 @@ export function StatusHeader({ activeToolId, onToolSelect }: StatusHeaderProps) 
       </button>
 
       <span className="font-mono text-sm font-bold tracking-wider text-foreground">
-        PROMPTSTARTER <span className="text-primary">// V1.0</span>
+        <span className="hidden sm:inline">PROMPTSTARTER </span>
+        <span className="text-primary">// V1.0</span>
       </span>
 
       <div className="flex items-center gap-2">
@@ -51,7 +52,7 @@ export function StatusHeader({ activeToolId, onToolSelect }: StatusHeaderProps) 
 
       {/* Mobile Sheet drawer */}
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-[280px] border-r border-white/10 bg-[#070707] p-0">
+        <SheetContent side="left" className="w-[80vw] max-w-[280px] border-r border-white/10 bg-[#070707] p-0">
           <SheetHeader className="flex h-[57px] items-center justify-start border-b border-white/8 px-6">
             <SheetTitle className="font-mono text-xs tracking-wider text-muted-foreground">
               Tool Library
