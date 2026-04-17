@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Sidebar } from "@/components/sidebar";
 
 interface SliderRowProps {
   label: string;
@@ -62,9 +63,10 @@ export default function Home() {
 
   return (
     <div className="grid-bg relative flex min-h-screen flex-col bg-background">
+      <Sidebar />
 
-      {/* Header — brand only, one status signal */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-white/10 bg-black/50 px-10 py-4 backdrop-blur-md">
+      {/* Header — offset to clear sidebar */}
+      <header className="fixed top-0 left-[260px] right-0 z-40 flex items-center justify-between border-b border-white/10 bg-black/50 px-10 py-4 backdrop-blur-md">
         <span className="font-mono text-sm font-bold tracking-[0.2em] text-foreground">
           PROMPTSTARTER <span className="text-primary">// V1.0</span>
         </span>
@@ -79,8 +81,8 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main */}
-      <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-10">
+      {/* Main — offset to clear sidebar */}
+      <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-10 ml-[260px]">
         <Card className="w-full max-w-5xl border border-white/10 bg-white/[0.02] backdrop-blur-md">
 
           <CardHeader className="border-b border-white/10 px-10 py-7">
