@@ -52,7 +52,7 @@ export default function Home() {
             </div>
             <Slider
               value={power}
-              onValueChange={setPower}
+              onValueChange={(val) => setPower(val as number[])}
               min={0}
               max={100}
               step={1}
