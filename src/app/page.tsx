@@ -1,65 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sidebar } from "@/components/sidebar";
+import { TOOLS } from "@/lib/tools";
 
-interface SliderRowProps {
-  label: string;
-  description: string;
-  value: number[];
-  onChange: (val: number[]) => void;
-}
-
-function SliderRow({ label, description, value, onChange }: SliderRowProps) {
-  return (
-    <div className="space-y-3">
-      <div className="flex items-baseline justify-between">
-        <div>
-          <p className="font-mono text-sm text-foreground">{label}</p>
-          <p className="font-mono text-xs text-muted-foreground mt-0.5">{description}</p>
-        </div>
-        <span
-          className="font-mono text-2xl font-bold text-primary tabular-nums"
-          style={{ textShadow: "0 0 16px rgba(57,255,20,0.4)" }}
-        >
-          {value[0]}<span className="text-sm text-primary/50">%</span>
-        </span>
-      </div>
-      <Slider
-        value={value}
-        onValueChange={(val) => onChange(val as number[])}
-        min={0}
-        max={100}
-        step={1}
-      />
-    </div>
-  );
+function defaultValues(toolId: string): Record<string, number> {
+  const tool = TOOLS.find((t) => t.id === toolId)!;
+  return Object.fromEntries(tool.controls.map((c) => [c.id, c.defaultValue]));
 }
 
 export default function Home() {
+  const [activeToolId, setActiveToolId] = useState(TOOLS[0].id);
   const [targetAccount, setTargetAccount] = useState("");
   const [industryVertical, setIndustryVertical] = useState("");
-  const [conversionIntensity, setConversionIntensity] = useState([72]);
-  const [urgencyCoefficient, setUrgencyCoefficient] = useState([45]);
-  const [personalizationDepth, setPersonalizationDepth] = useState([88]);
+  const [controlValues, setControlValues] = useState<Record<string, number>>(
+    defaultValues(TOOLS[0].id)
+  );
 
+  const activeTool = TOOLS.find((t) => t.id === activeToolId)!;
   const isReady = targetAccount.trim().length > 0;
+
+  const handleToolSelect = useCallback((toolId: string) => {
+    setActiveToolId(toolId);
+    setControlValues(defaultValues(toolId));
+  }, []);
+
+  function handleSliderChange(controlId: string, val: number[]) {
+    setControlValues((prev) => ({ ...prev, [controlId]: val[0] }));
+  }
 
   function handleReset() {
     setTargetAccount("");
     setIndustryVertical("");
-    setConversionIntensity([72]);
-    setUrgencyCoefficient([45]);
-    setPersonalizationDepth([88]);
+    setControlValues(defaultValues(activeToolId));
   }
 
   return (
     <div className="grid-bg relative flex min-h-screen flex-col bg-background">
-      <Sidebar />
+      <Sidebar activeToolId={activeToolId} onToolSelect={handleToolSelect} />
 
       {/* Header */}
       <header className="fixed top-0 left-[260px] right-0 z-40 flex items-center justify-between border-b border-white/10 bg-black/50 px-10 py-4 backdrop-blur-md">
@@ -83,10 +65,10 @@ export default function Home() {
 
           <CardHeader className="border-b border-white/10 px-10 py-7">
             <p className="font-mono text-xs tracking-wider text-muted-foreground mb-1">
-              Calibration Matrix
+              {activeTool.category} — Calibration Matrix
             </p>
             <h1 className="font-mono text-2xl font-bold tracking-tight text-foreground">
-              Prompt Engineering Interface
+              {activeTool.label}
             </h1>
           </CardHeader>
 
@@ -139,30 +121,36 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Calibration Variables */}
+              {/* Calibration Variables — driven by active tool */}
               <div className="space-y-8">
                 <p className="font-mono text-xs tracking-wider text-muted-foreground border-b border-white/10 pb-3">
                   Calibration Variables
                 </p>
 
-                <SliderRow
-                  label="Conversion Intensity"
-                  description="Aggression of CTA and value framing"
-                  value={conversionIntensity}
-                  onChange={setConversionIntensity}
-                />
-                <SliderRow
-                  label="Urgency Coefficient"
-                  description="Time-pressure and scarcity signaling"
-                  value={urgencyCoefficient}
-                  onChange={setUrgencyCoefficient}
-                />
-                <SliderRow
-                  label="Personalization Depth"
-                  description="Account-specific context injection"
-                  value={personalizationDepth}
-                  onChange={setPersonalizationDepth}
-                />
+                {activeTool.controls.map((control) => (
+                  <div key={control.id} className="space-y-3">
+                    <div className="flex items-baseline justify-between">
+                      <div>
+                        <p className="font-mono text-sm text-foreground">{control.label}</p>
+                        <p className="font-mono text-xs text-muted-foreground mt-0.5">{control.description}</p>
+                      </div>
+                      <span
+                        className="font-mono text-2xl font-bold text-primary tabular-nums"
+                        style={{ textShadow: "0 0 16px rgba(57,255,20,0.4)" }}
+                      >
+                        {controlValues[control.id]}
+                        <span className="text-sm text-primary/50">%</span>
+                      </span>
+                    </div>
+                    <Slider
+                      value={[controlValues[control.id]]}
+                      onValueChange={(val) => handleSliderChange(control.id, val as number[])}
+                      min={0}
+                      max={100}
+                      step={1}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -180,7 +168,7 @@ export default function Home() {
                 disabled={!isReady}
                 style={isReady ? { boxShadow: "0 0 24px rgba(57,255,20,0.35), 0 0 60px rgba(57,255,20,0.1)" } : {}}
               >
-                {isReady ? "Generate Sales Prompt" : "Awaiting Target Lock"}
+                {isReady ? `Generate — ${activeTool.label}` : "Awaiting Target Lock"}
               </Button>
             </div>
           </CardContent>

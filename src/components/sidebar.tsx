@@ -1,22 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { TOOL_CATEGORIES } from "@/lib/tools";
 
-const TOOLS = [
-  {
-    category: "Strategic Outbound",
-    items: ["Cold Entry", "Executive Briefing", "LinkedIn Hook"],
-  },
-  {
-    category: "Deal Flow",
-    items: ["Objection Crusher", "Value Prop Align", "Final Push"],
-  },
-];
+interface SidebarProps {
+  activeToolId: string;
+  onToolSelect: (toolId: string) => void;
+}
 
-export function Sidebar() {
-  const [activeTool, setActiveTool] = useState("Cold Entry");
-
+export function Sidebar({ activeToolId, onToolSelect }: SidebarProps) {
   return (
     <aside className="fixed left-0 top-0 bottom-0 z-50 flex w-[260px] flex-col border-r border-white/8 bg-[#070707]">
 
@@ -27,18 +19,18 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
-        {TOOLS.map(({ category, items }) => (
+        {TOOL_CATEGORIES.map(({ category, tools }) => (
           <div key={category}>
             <p className="px-3 mb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
               {category}
             </p>
             <ul className="space-y-0.5">
-              {items.map((tool) => {
-                const isActive = tool === activeTool;
+              {tools.map((tool) => {
+                const isActive = tool.id === activeToolId;
                 return (
-                  <li key={tool}>
+                  <li key={tool.id}>
                     <button
-                      onClick={() => setActiveTool(tool)}
+                      onClick={() => onToolSelect(tool.id)}
                       className={cn(
                         "w-full text-left px-3 py-2 rounded-sm font-mono text-sm tracking-normal transition-colors duration-150",
                         "border-l-2",
@@ -48,7 +40,7 @@ export function Sidebar() {
                       )}
                       style={isActive ? { textShadow: "0 0 12px rgba(57,255,20,0.2)" } : {}}
                     >
-                      {tool}
+                      {tool.label}
                     </button>
                   </li>
                 );
