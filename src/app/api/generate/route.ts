@@ -33,10 +33,10 @@ Never write exact opening lines, closing lines, or sample dialogue.
 - The receiving AI writes the words. You set the rails.
 
 RULE 4 — THE INTERACTIVE KICKOFF:
-[THE INTERACTIVE KICKOFF] commands the receiving AI to end its output with one single, punchy strategic clarifying question.
-- Must reference active calibration settings (posture, tone, aggression).
-- Must give the user a frictionless way to dial up, shift tone, or change angle.
-- Energy: sparring partner checking in — not a chatbot asking for feedback.
+[THE INTERACTIVE KICKOFF] is NOT a description of what to ask. It is a literal command string — written in imperative second-person — that will be pasted directly into the receiving AI as its final instruction.
+- Write the command, don't describe it. "After you generate..." not "The AI should ask..."
+- The command must tell the receiving AI to end its output with ONE punchy strategic clarifying question referencing the active posture/calibration.
+- Sparring partner energy only. No chatbot phrasing.
 
 RULE 5 — OUTPUT STRUCTURE:
 Output exactly these 6 sections in order. Nothing before section 1. Nothing after section 6.
@@ -124,14 +124,14 @@ Locked directives. Zero latitude to deviate.
 - **HUMANITY TETHER:** Direct means confident and peer-to-peer — NOT rude, robotic, or sociopathic. The "${primaryPosture}" posture must maintain professional likability. Challenging without alienating. Sharp without being cold.
 
 ## **[THE INTERACTIVE KICKOFF]**
-- **Directive:** Command the receiving AI to end its output with exactly one strategic clarifying question
-- **Question must reference:** "${primaryPosture}" posture + "${secondaryPosture}" setting
-- **Tone:** sparring partner — punchy, direct, one sentence
-- **Purpose:** give the user a frictionless path to dial up aggression, shift tone, or change the angle${
+Write a direct command for the receiving AI — not a description of one. This is the literal final instruction that appears at the end of the output. Write it in imperative second-person, starting with "After you generate...". It must:
+- Tell the receiving AI to end its output with ONE punchy clarifying question about the "${primaryPosture}" posture or "${secondaryPosture}" calibration
+- Keep the question sharp and specific — sparring partner energy, not chatbot energy${
   hasContext
-    ? ""
+    ? `
+- Do NOT request documents or context — the user has already provided intel`
     : `
-- **Context Invite:** After the clarifying question, append this line verbatim: "Feel free to drop any recent email threads, LinkedIn profiles, or call notes below to sharpen this further. If you don't have any, just reply 'Execute' and I'll write the baseline."`
+- After the clarifying question, invite the user to paste email threads, call notes, LinkedIn profiles, or URLs to sharpen the strategy — or tell them to reply "Execute" to get the baseline version without additional context`
 }`;
 }
 
