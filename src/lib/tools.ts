@@ -8,6 +8,7 @@ export type Tool = {
   id: string;
   name: string;
   category: string;
+  outputFormat: string;
   controls: ToolControl[];
 };
 
@@ -16,6 +17,7 @@ export const tools: Tool[] = [
     id: "post-proposal-engagement",
     name: "The Post-Proposal Engagement Brief",
     category: "DEAL RECOVERY",
+    outputFormat: "Short-form Direct Email or LinkedIn Message",
     controls: [
       { id: "disengagement", label: "Disengagement Strategy", labels: ["Value Reiteration", "Soft Check-in", "Executive Escalation", "Polite Withdrawal"] },
       { id: "tone", label: "Communication Tone", labels: ["Warm & Casual", "Standard Professional", "Data-Driven & Analytical", "Direct & Executive"] }
@@ -25,6 +27,7 @@ export const tools: Tool[] = [
     id: "executive-alignment",
     name: "The Executive Alignment Brief",
     category: "STAKEHOLDER NAVIGATION",
+    outputFormat: "Internal Co-Authored Memo or Briefing Document",
     controls: [
       { id: "bypass", label: "Executive Bypass Level", labels: ["Empower Champion", "Co-Authored Ask", "Direct Executive Copy", "Strict Executive Override"] },
       { id: "anchor", label: "Value Anchor Focus", labels: ["Risk Mitigation", "Operational Efficiency", "Revenue Acceleration", "Strategic Market Position"] }
@@ -34,6 +37,7 @@ export const tools: Tool[] = [
     id: "procurement-matrix",
     name: "The Procurement & Financial Justification Matrix",
     category: "COMMERCIAL CLOSING",
+    outputFormat: "Executive Summary / 1-Page Business Case",
     controls: [
       { id: "financial", label: "Financial Stance", labels: ["Cost Savings Focus", "Opportunity Cost", "ROI Projection", "Total Cost of Ownership"] },
       { id: "posture", label: "Negotiation Posture", labels: ["Accommodating", "Collaborative Problem Solving", "Firm on Value", "Walk-Away Ready"] }

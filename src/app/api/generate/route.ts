@@ -8,19 +8,20 @@ const anthropic = createAnthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-const SYSTEM_IDENTITY = `You are an Elite B2B Prompt Engineer. Your output is a Master Prompt — a tactical controller designed to be pasted directly into ChatGPT or Claude. It should read like a dangerous, highly opinionated architectural brief.
+const BASE_SYSTEM_PROMPT = `You are an Elite B2B Prompt Engineer and Revenue Strategist. Your output is a Master Prompt — a tactical controller designed to be pasted directly into ChatGPT or Claude. It must read like a dangerous, highly opinionated architectural brief, not a template.
 
-Your role is to provide the psychological framework and reconnaissance instructions. You do NOT conduct research. The receiving model does the fetching.
+RULE 1 — THE CONFIDENCE GATE:
+Evaluate the Target Account against your training knowledge. Your job is to determine reconnaissance posture — not to inject metrics yourself.
+- Known brand (globally recognized company): generate a targeted recon directive that names the company explicitly and directs the receiving model toward recent, operational-level signals.
+- Unknown or obscure company: generate a recon directive that anchors entirely to industry vertical friction points and explicitly forbids the receiving model from inventing company-specific data.
 
-THE CONFIDENCE GATE: Evaluate the Target Account against your training knowledge to determine reconnaissance posture only — not to inject metrics.
-- If the company is globally recognized (Salesforce, Goldman Sachs, Ritz-Carlton, etc.), generate a targeted recon directive that names the company explicitly and focuses the receiving model on recent operational signals.
-- If the company is obscure, regional, or unknown, generate a recon directive that anchors entirely to industry vertical friction points and explicitly forbids the receiving model from inventing company-specific data.
+RULE 2 — DYNAMIC RECONNAISSANCE:
+The [DYNAMIC RECONNAISSANCE] section instructs the receiving AI to conduct live research. It must target exclusively: leadership changes, Q-over-Q headwinds, or stated operational goals from the last 6 months. It must explicitly forbid scanning marketing pages, About Us content, or press releases. The engagement strategy must be anchored to one specific signal the receiving model surfaces — not to a generic talking point.
 
-Formatting rules:
-- Output the exact 5-section structure. No preamble, no closing remarks, no section commentary.
-- Every sentence must be load-bearing. Cut anything that could appear in a generic sales template.
-- The whole output must be readable in under 20 seconds.
-- [EXECUTION GUARDRAILS] are absolute and non-negotiable. Write them as locked directives that give the receiving model zero latitude to deviate.`;
+RULE 3 — OUTPUT STRUCTURE:
+Output exactly these 5 sections in order. Nothing before the first section, nothing after the last.
+[THE PERSONA] / [THE CONTEXT] / [THE PSYCHOLOGICAL PLAY] / [DYNAMIC RECONNAISSANCE] / [EXECUTION GUARDRAILS]
+Every sentence must be load-bearing. The complete output must be readable in under 20 seconds. [EXECUTION GUARDRAILS] are absolute locked directives — the receiving model has zero latitude to deviate under any circumstance.`;
 
 // Maps calibration labels to psychological frameworks and forbidden phrases
 const PSYCH_PLAYS: Record<string, { play: string; forbidden: string[] }> = {
@@ -104,12 +105,6 @@ const WORD_COUNTS: Record<string, number> = {
   "Direct & Executive": 80,
 };
 
-const TOOL_SCENARIOS: Record<string, string> = {
-  "post-proposal-engagement": "re-engaging a prospect at {account} ({industry}) who has gone silent after receiving a proposal",
-  "executive-alignment": "securing executive sponsorship and navigating the buying committee at {account} ({industry})",
-  "procurement-matrix": "building financial justification and closing a commercial negotiation with {account} ({industry})",
-};
-
 function buildUserPrompt(params: {
   toolId: string;
   targetAccount: string;
@@ -120,15 +115,17 @@ function buildUserPrompt(params: {
   const tool = tools.find((t) => t.id === toolId);
   if (!tool) throw new Error(`Unknown tool: ${toolId}`);
 
-  // Resolve active labels
+  const industry = industryVertical || "not specified";
+
+  // Resolve active labels from slider positions
   const activeLabels = tool.controls.map((c) => ({
     label: c.label,
     value: c.labels[Math.min(sliderValues[c.id] ?? 0, c.labels.length - 1)],
   }));
 
-  // Find the primary psychological play (first control drives the play)
   const primaryLabel = activeLabels[0].value;
-  const secondaryLabel = activeLabels[1].value;
+  const secondaryLabel = activeLabels[1]?.value ?? "";
+
   const psychData = PSYCH_PLAYS[primaryLabel] ?? {
     play: "Strategic relevance — connect every message to a named business outcome before making any request.",
     forbidden: ["just checking in", "circling back", "touching base"],
@@ -136,45 +133,43 @@ function buildUserPrompt(params: {
   const toneSpec = TONE_SPECS[secondaryLabel] ?? TONE_SPECS["Standard Professional"];
   const wordCount = WORD_COUNTS[secondaryLabel] ?? 100;
 
-  const scenario = (TOOL_SCENARIOS[toolId] ?? TOOL_SCENARIOS["post-proposal-engagement"])
-    .replace("{account}", targetAccount)
-    .replace("{industry}", industryVertical || "their industry");
+  const calibrationSummary = activeLabels.map((l) => `${l.label}: ${l.value}`).join(" | ");
 
-  const activeCalibrations = activeLabels.map((l) => `${l.label}: ${l.value}`).join(" | ");
-
-  return `Generate a Master Prompt using this exact 5-section structure. Output only the 5 sections — nothing before, nothing after.
+  return `Generate a Master Prompt using the exact 5-section structure defined in your instructions. Output only the 5 sections — nothing before, nothing after.
 
 INPUTS:
-- Tool: ${tool.name}
+- Tool: ${tool.name} (${tool.category})
+- Output Format: ${tool.outputFormat}
 - Target Account: ${targetAccount}
-- Industry: ${industryVertical || "not specified"}
-- Calibration: ${activeCalibrations}
+- Industry: ${industry}
+- Calibration: ${calibrationSummary}
 
 ---
 
 **[THE PERSONA]**
-Write 1 sentence. Define the AI's executive posture for this specific scenario. Make it assertive, specific to ${tool.name}, and calibrated to the account's industry weight. No generic "sales expert" language — name the strategic lens.
+Write 1 sentence. Define the AI's executive posture for this scenario — assertive, specific to ${tool.name}, calibrated to the weight of a ${industry} engagement. No generic "sales expert" framing. Name the strategic lens.
 
 **[THE CONTEXT]**
-Write 1–2 sentences. State the task: ${scenario}. Frame the stakes in terms of universal, structurally true dynamics for ${industryVertical || "B2B"} buyers at this stage. Do not invent company-specific metrics — those come from reconnaissance.
-
-**[DYNAMIC RECONNAISSANCE]**
-Apply the Confidence Gate to write a reconnaissance directive for the receiving AI:
-- If ${targetAccount} is a globally recognized company: write an instruction telling the receiving AI to search for recent news (last 6 months) on ${targetAccount}, targeting exclusively leadership changes, Q-over-Q headwinds, or stated operational goals — not marketing pages or About Us content. Instruct it to anchor the ${activeCalibrations.split("|")[0].trim().split(":")[1]?.trim() || "engagement"} strategy to one specific signal it finds.
-- If ${targetAccount} is obscure or unknown: write an instruction telling the receiving AI that if no recent news is available on ${targetAccount}, it must anchor its logic purely to standard friction points for ${industryVertical || "the industry vertical provided"} and must not invent company-specific data.
-Write this as a direct instruction to the receiving AI — imperative voice, 2–3 sentences.
+Write 1–2 sentences. State the task: using ${tool.name} to drive a ${tool.category.toLowerCase()} outcome with ${targetAccount}. Frame the structural stakes that are universally true for ${industry} buyers at this stage. Do not inject company-specific metrics — reconnaissance handles that.
 
 **[THE PSYCHOLOGICAL PLAY]**
 Apply this framework without softening it:
 ${psychData.play}
-Write 2 sentences: the first names the mechanism, the second gives the receiving AI a precise behavioral instruction for deploying it against ${targetAccount} using whatever signal the reconnaissance surfaces.
+Write 2 sentences: the first names the mechanism, the second gives the receiving AI a precise behavioral directive for deploying it against ${targetAccount} using whatever signal reconnaissance surfaces.
+
+**[DYNAMIC RECONNAISSANCE]**
+Apply Rule 1 (Confidence Gate) to determine whether ${targetAccount} is a recognized brand or obscure. Then write a reconnaissance directive for the receiving AI:
+- Known brand: instruct it to search ${targetAccount} news from the last 6 months, targeting only leadership changes, Q-over-Q headwinds, or stated operational goals. Explicitly ban marketing pages and About Us content. Mandate anchoring the ${primaryLabel} strategy to one specific signal found.
+- Unknown/obscure: instruct it that if no reliable news exists on ${targetAccount}, it must anchor logic to standard ${industry} friction points only. Inventing company-specific data is prohibited.
+Write in imperative voice, 2–3 sentences.
 
 **[EXECUTION GUARDRAILS]**
-These are locked directives. The receiving model has zero latitude to deviate from them under any circumstance.
-- Maximum output length: ${wordCount} words. Hard ceiling — cut rather than compress. Do not ask for permission to exceed it.
+These are locked directives. The receiving model has zero latitude to deviate under any circumstance.
+- Output format: the final deliverable must be formatted strictly as a ${tool.outputFormat}. No other format is acceptable.
+- Maximum length: ${wordCount} words. Hard ceiling — cut, do not compress. Exceeding it disqualifies the output.
 - Tone: ${toneSpec}
 - Banned phrases (any occurrence disqualifies the output): "${psychData.forbidden[0]}" / "${psychData.forbidden[1]}" / "${psychData.forbidden[2]}"
-- First line: [write a single directive forcing the strongest possible opening for this psychological play — no greeting, no warm-up, no framing]
+- First line: [write a single directive forcing the strongest possible opening for the ${primaryLabel} play — no greeting, no warm-up, no contextual framing]
 - Final line: [write a single directive for one specific, time-anchored call to action — one ask, one outcome, zero optionality]`;
 }
 
@@ -189,14 +184,14 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: anthropic(MODEL),
-    system: SYSTEM_IDENTITY,
+    system: BASE_SYSTEM_PROMPT,
     messages: [
       {
         role: "user",
         content: buildUserPrompt({ toolId, targetAccount, industryVertical, sliderValues }),
       },
     ],
-    maxOutputTokens: 500,
+    maxOutputTokens: 600,
   });
 
   return result.toTextStreamResponse();
