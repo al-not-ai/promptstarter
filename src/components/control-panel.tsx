@@ -118,13 +118,9 @@ export function ControlPanel({
               </p>
 
               {activeTool.controls.map((control) => {
-                const value = controlValues[control.id] ?? control.min;
-                const stepCount = control.labels.length - 1;
-                const labelIndex = Math.min(
-                  Math.round((value - control.min) / control.step),
-                  stepCount
-                );
-                const activeLabel = control.labels[labelIndex];
+                const maxIndex = control.labels.length - 1;
+                const value = Math.min(controlValues[control.id] ?? 0, maxIndex);
+                const activeLabel = control.labels[value];
 
                 return (
                   <div key={control.id} className="space-y-2">
@@ -141,9 +137,9 @@ export function ControlPanel({
                       <Slider
                         value={[value]}
                         onValueChange={(val) => onSliderChange(control.id, val[0])}
-                        min={control.min}
-                        max={control.max}
-                        step={control.step}
+                        min={0}
+                        max={maxIndex}
+                        step={1}
                       />
                     </div>
                   </div>

@@ -1,10 +1,7 @@
 export type ToolControl = {
   id: string;
   label: string;
-  min: number;
-  max: number;
-  step: number;
-  labels: [string, string, string, string];
+  labels: string[]; // 4 exact text steps
 };
 
 export type Tool = {
@@ -16,74 +13,32 @@ export type Tool = {
 
 export const tools: Tool[] = [
   {
-    id: "strategic-entry",
-    name: "Strategic Cold Entry",
-    category: "OUTBOUND EXPLORATION",
+    id: "post-proposal-engagement",
+    name: "The Post-Proposal Engagement Brief",
+    category: "DEAL RECOVERY",
     controls: [
-      {
-        id: "intensity",
-        label: "Strategic Intensity",
-        min: 0,
-        max: 99,
-        step: 33,
-        labels: ["Collaborative", "Consultative", "Competitive", "Challenger"],
-      },
-      {
-        id: "context",
-        label: "Contextual Depth",
-        min: 0,
-        max: 99,
-        step: 33,
-        labels: ["Surface-Level", "Researched", "Intelligence-Led", "Deep Cover"],
-      },
-    ],
+      { id: "disengagement", label: "Disengagement Strategy", labels: ["Value Reiteration", "Soft Check-in", "Executive Escalation", "Polite Withdrawal"] },
+      { id: "tone", label: "Communication Tone", labels: ["Warm & Casual", "Standard Professional", "Data-Driven & Analytical", "Direct & Executive"] }
+    ]
   },
   {
-    id: "executive-breacher",
-    name: "The Executive Breacher",
-    category: "DEAL FLOW",
+    id: "executive-alignment",
+    name: "The Executive Alignment Brief",
+    category: "STAKEHOLDER NAVIGATION",
     controls: [
-      {
-        id: "bypass",
-        label: "Bypass Velocity",
-        min: 0,
-        max: 99,
-        step: 33,
-        labels: ["Standard", "Direct", "Urgent", "Ruthless"],
-      },
-      {
-        id: "anchor",
-        label: "Value Anchor",
-        min: 0,
-        max: 99,
-        step: 33,
-        labels: ["Broad Benefit", "Business Case", "ROI-Driven", "Existential"],
-      },
-    ],
+      { id: "bypass", label: "Executive Bypass Level", labels: ["Empower Champion", "Co-Authored Ask", "Direct Executive Copy", "Strict Executive Override"] },
+      { id: "anchor", label: "Value Anchor Focus", labels: ["Risk Mitigation", "Operational Efficiency", "Revenue Acceleration", "Strategic Market Position"] }
+    ]
   },
   {
-    id: "ghosting-reviver",
-    name: "The Ghosting Reviver",
-    category: "RETENTION & RECOVERY",
+    id: "procurement-matrix",
+    name: "The Procurement & Financial Justification Matrix",
+    category: "COMMERCIAL CLOSING",
     controls: [
-      {
-        id: "permission",
-        label: "Permission to Close",
-        min: 0,
-        max: 99,
-        step: 33,
-        labels: ["Soft Check-In", "Reframe", "Direct Ask", "Final Notice"],
-      },
-      {
-        id: "tone",
-        label: "Tone of Authority",
-        min: 0,
-        max: 99,
-        step: 33,
-        labels: ["Empathetic", "Confident", "Assertive", "Commanding"],
-      },
-    ],
-  },
+      { id: "financial", label: "Financial Stance", labels: ["Cost Savings Focus", "Opportunity Cost", "ROI Projection", "Total Cost of Ownership"] },
+      { id: "posture", label: "Negotiation Posture", labels: ["Accommodating", "Collaborative Problem Solving", "Firm on Value", "Walk-Away Ready"] }
+    ]
+  }
 ];
 
 // Derive categories from the tools array — single source of truth

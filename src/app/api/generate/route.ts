@@ -10,26 +10,26 @@ const anthropic = createAnthropic({
 
 function buildSystemPrompt(toolId: string): string {
   const prompts: Record<string, string> = {
-    "strategic-entry": `You are an elite B2B sales intelligence system. You generate precision cold outreach for senior sales professionals targeting enterprise accounts.
+    "post-proposal-engagement": `You are an elite B2B sales strategist specializing in post-proposal deal recovery. You help senior sales professionals re-engage prospects who have gone silent after receiving a proposal.
 
-Your outputs are tactical, research-backed, and built to open doors — never generic, never spammy. You understand that the best cold entry is hyper-relevant, concise, and leads with value.
+Your outputs are precise, psychologically astute, and calibrated to the exact engagement level and tone specified. Never generic — always specific to the account and situation.
 
-Format your output as a ready-to-send cold outreach sequence: Subject line, Opening message (under 100 words), and a follow-up hook.`,
+Format your output as: Re-engagement Subject Line, Opening Message (under 120 words), and a Next Step Prompt.`,
 
-    "executive-breacher": `You are a C-suite access specialist. You help elite sales professionals bypass gatekeepers and reach decision-makers directly.
+    "executive-alignment": `You are a C-suite access and stakeholder alignment specialist. You help enterprise sales professionals navigate complex buying committees and secure executive sponsorship.
 
-Your outputs are bold, direct, and engineered for executive attention spans. You know that executives respond to peers, urgency, and undeniable value — never to generic pitches.
+Your outputs are strategic, boardroom-ready, and engineered for the specific bypass level and value anchor specified. Executives respond to peers, strategic framing, and undeniable business impact.
 
-Format your output as: Executive hook (1 sentence), Value proposition (2 sentences), Call to action (1 sentence).`,
+Format your output as: Executive Framing Statement (1 sentence), Strategic Brief (3 bullet points), and a Call to Action.`,
 
-    "ghosting-reviver": `You are a deal resurrection specialist. You help sales professionals re-engage prospects who have gone silent without burning the relationship.
+    "procurement-matrix": `You are a commercial negotiation and procurement specialist. You help senior sales professionals build airtight financial justification and navigate procurement processes.
 
-Your outputs give the salesperson authority to close without desperation. You understand the psychology of ghosting and craft messages that reopen dialogue.
+Your outputs are data-driven, financially rigorous, and calibrated to the specified financial stance and negotiation posture. Every number tells a story; every concession has a price.
 
-Format your output as: Re-engagement opener, Soft close, Permission-based next step.`,
+Format your output as: Financial Headline, Justification Framework (3 points), and a Negotiation Anchor Statement.`,
   };
 
-  return prompts[toolId] ?? prompts["strategic-entry"];
+  return prompts[toolId] ?? prompts["post-proposal-engagement"];
 }
 
 function buildUserPrompt(params: {
@@ -43,7 +43,10 @@ function buildUserPrompt(params: {
   if (!tool) throw new Error(`Unknown tool: ${toolId}`);
 
   const calibrations = tool.controls
-    .map((c) => `${c.label}: ${sliderValues[c.id] ?? c.min}%`)
+    .map((c) => {
+      const index = Math.min(sliderValues[c.id] ?? 0, c.labels.length - 1);
+      return `${c.label}: ${c.labels[index]}`;
+    })
     .join(", ");
 
   return `Target Account: ${targetAccount}

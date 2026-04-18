@@ -8,7 +8,7 @@ import { tools } from "@/lib/tools";
 
 function defaultValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
-  return Object.fromEntries(tool.controls.map((c) => [c.id, c.min]));
+  return Object.fromEntries(tool.controls.map((c) => [c.id, 0]));
 }
 
 export default function Home() {
