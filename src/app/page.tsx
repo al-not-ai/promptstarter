@@ -25,7 +25,7 @@ export default function Home() {
   const handleToolSelect = useCallback((toolId: string) => {
     setActiveToolId(toolId);
     setControlValues(defaultValues(toolId));
-  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="grid-bg relative flex min-h-screen flex-col bg-background overflow-x-hidden">
