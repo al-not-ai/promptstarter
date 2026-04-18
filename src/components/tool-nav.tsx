@@ -30,7 +30,7 @@ export function ToolNav({ activeToolId, onToolSelect }: ToolNavProps) {
                         ? "border-primary text-foreground bg-white/[0.04]"
                         : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/[0.02]"
                     )}
-                    style={isActive ? { textShadow: "0 0 12px rgba(57,255,20,0.2)" } : {}}
+                    style={isActive ? { textShadow: "0 0 12px rgba(255,51,0,0.2)" } : {}}
                   >
                     {tool.name}
                   </button>

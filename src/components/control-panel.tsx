@@ -102,7 +102,7 @@ export function ControlPanel({
                   className={`h-1.5 w-1.5 rounded-full transition-colors duration-500 ${
                     isReady ? "bg-primary" : "bg-muted-foreground/30"
                   }`}
-                  style={isReady ? { boxShadow: "0 0 6px rgba(57,255,20,0.9)" } : {}}
+                  style={isReady ? { boxShadow: "0 0 6px rgba(255,51,0,0.9)" } : {}}
                 />
                 <span className={`font-mono text-xs transition-colors duration-500 ${
                   isReady ? "text-primary" : "text-muted-foreground/50"
@@ -129,7 +129,7 @@ export function ControlPanel({
                       <p className="font-mono text-sm text-foreground">{control.label}</p>
                       <span
                         className="font-mono text-sm font-bold text-primary shrink-0"
-                        style={{ textShadow: "0 0 12px rgba(57,255,20,0.35)" }}
+                        style={{ textShadow: "0 0 12px rgba(255,51,0,0.35)" }}
                       >
                         {activeLabel}
                       </span>
@@ -162,7 +162,7 @@ export function ControlPanel({
               className="flex-1 font-mono text-sm tracking-wide transition-all duration-500 h-[44px]"
               disabled={!isReady || isLoading}
               onClick={handleGenerate}
-              style={isReady && !isLoading ? { boxShadow: "0 0 24px rgba(57,255,20,0.35), 0 0 60px rgba(57,255,20,0.1)" } : {}}
+              style={isReady && !isLoading ? { boxShadow: "0 0 24px rgba(255,51,0,0.35), 0 0 60px rgba(255,51,0,0.1)" } : {}}
             >
               {isLoading ? "Generating…" : isReady ? `Generate — ${activeTool.name}` : "Awaiting Target Lock"}
             </Button>

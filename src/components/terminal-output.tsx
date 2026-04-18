@@ -26,7 +26,7 @@ export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps
       <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.02]">
         <span
           className="h-1.5 w-1.5 rounded-full bg-primary"
-          style={{ boxShadow: "0 0 6px rgba(57,255,20,0.9)" }}
+          style={{ boxShadow: "0 0 6px rgba(255,51,0,0.9)" }}
         />
         <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50">
           Output Terminal
@@ -42,7 +42,7 @@ export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps
             <button
               onClick={handleCopy}
               className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-150 px-2 py-1 rounded-sm border border-white/10 hover:border-primary/40 hover:bg-primary/5"
-              style={copied ? { color: "rgb(57,255,20)", borderColor: "rgba(57,255,20,0.4)" } : { color: "rgba(113,113,122,0.7)" }}
+              style={copied ? { color: "rgb(255,51,0)", borderColor: "rgba(255,51,0,0.4)" } : { color: "rgba(113,113,122,0.7)" }}
             >
               {copied ? "Copied ✓" : "Copy"}
             </button>
@@ -55,7 +55,7 @@ export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps
         className="px-5 py-5 min-h-[180px] md:min-h-[220px] max-h-[420px] md:max-h-[520px] overflow-y-auto"
         style={{
           scrollbarWidth: "thin",
-          scrollbarColor: "rgba(57,255,20,0.15) transparent",
+          scrollbarColor: "rgba(255,51,0,0.15) transparent",
         }}
       >
         {isEmpty && (
@@ -76,7 +76,7 @@ export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps
             {isLoading && (
               <span
                 className="inline-block w-[7px] h-[14px] bg-primary ml-0.5 align-middle animate-pulse"
-                style={{ boxShadow: "0 0 8px rgba(57,255,20,0.8)" }}
+                style={{ boxShadow: "0 0 8px rgba(255,51,0,0.8)" }}
               />
             )}
           </pre>
@@ -85,7 +85,7 @@ export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps
         {isLoading && !output && (
           <span
             className="inline-block w-[7px] h-[14px] bg-primary animate-pulse"
-            style={{ boxShadow: "0 0 8px rgba(57,255,20,0.8)" }}
+            style={{ boxShadow: "0 0 8px rgba(255,51,0,0.8)" }}
           />
         )}
       </div>
