@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 interface TerminalOutputProps {
   output: string;
   isLoading: boolean;
@@ -8,6 +10,15 @@ interface TerminalOutputProps {
 
 export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps) {
   const isEmpty = !output && !isLoading && !error;
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    if (!output) return;
+    navigator.clipboard.writeText(output).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   return (
     <div className="w-full max-w-5xl mt-4 md:mt-6 border border-white/10 bg-black/40 backdrop-blur-md rounded-sm overflow-hidden">
@@ -20,15 +31,33 @@ export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps
         <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50">
           Output Terminal
         </span>
-        {isLoading && (
-          <span className="ml-auto font-mono text-[10px] text-primary animate-pulse">
-            Generating...
-          </span>
-        )}
+
+        <div className="ml-auto flex items-center gap-3">
+          {isLoading && (
+            <span className="font-mono text-[10px] text-primary animate-pulse">
+              Generating...
+            </span>
+          )}
+          {output && !isLoading && (
+            <button
+              onClick={handleCopy}
+              className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-150 px-2 py-1 rounded-sm border border-white/10 hover:border-primary/40 hover:bg-primary/5"
+              style={copied ? { color: "rgb(57,255,20)", borderColor: "rgba(57,255,20,0.4)" } : { color: "rgba(113,113,122,0.7)" }}
+            >
+              {copied ? "Copied ✓" : "Copy"}
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Terminal body */}
-      <div className="px-5 py-5 min-h-[180px] md:min-h-[220px]">
+      {/* Terminal body — scrollable, max height capped */}
+      <div
+        className="px-5 py-5 min-h-[180px] md:min-h-[220px] max-h-[420px] md:max-h-[520px] overflow-y-auto"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(57,255,20,0.15) transparent",
+        }}
+      >
         {isEmpty && (
           <p className="font-mono text-xs text-muted-foreground/30 select-none">
             Payload will appear here after generation...
