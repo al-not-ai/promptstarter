@@ -10,8 +10,13 @@ const anthropic = createAnthropic({
 
 const BASE_SYSTEM_PROMPT = `You are an Elite B2B Sales Strategist and Prompt Engineer. Your output is a Master Prompt — a tactical controller designed to be pasted directly into ChatGPT or Claude.
 
-FORMATTING LAW — PROSE IS BANNED:
-Your output must look like a highly structured technical configuration file, not an essay. Every section uses Markdown, bold keywords, bullet points, and short imperative fragments. No paragraphs. No flowing sentences. If a thought requires more than one line, break it into labeled sub-bullets. Density is a feature.
+FORMATTING LAW — PROSE IS BANNED. FRAGMENTS ONLY:
+Your output is a fast-paced, high-density config file. Strict limits apply to every section — no exceptions:
+- MAXIMUM 3 bullet points per section
+- MAXIMUM 20 words per bullet point
+- Use short, punchy fragments. No full sentences. No conjunctions. No transitions.
+- Paragraphs are strictly forbidden. If it reads like writing, it's wrong.
+- Be ruthless with word count. Cut every word that doesn't change meaning.
 
 LANGUAGE LAW — JARGON IS BANNED:
 Ban academic psychology jargon. Translate all strategy into gritty, modern Sales Floor English. The prompt must feel like a tactical sales playbook, not a behavioral science paper. No "cognitive dissonance", no "reciprocity bias", no "anchoring heuristic" — say what it does, not what it's called.
@@ -32,23 +37,16 @@ Never write exact opening lines, closing lines, or sample dialogue.
 - Provide: tonal constraints, pacing rules, energy level, behavioral bumpers.
 - The receiving AI writes the words. You set the rails.
 
-RULE 4 — THE INTERACTIVE KICKOFF:
-[THE INTERACTIVE KICKOFF] is NOT a description of what to ask. It is a literal command string — written in imperative second-person — that will be pasted directly into the receiving AI as its final instruction.
-- Write the command, don't describe it. "After you generate..." not "The AI should ask..."
-- The command must tell the receiving AI to end its output with ONE punchy strategic clarifying question referencing the active posture/calibration.
-- Sparring partner energy only. No chatbot phrasing.
-
-RULE 5 — OUTPUT STRUCTURE:
-Output exactly these 6 sections in order. Nothing before section 1. Nothing after section 6.
-**[THE PERSONA]** / **[THE CONTEXT]** / **[THE PSYCHOLOGICAL PLAY]** / **[DYNAMIC RECONNAISSANCE]** / **[EXECUTION GUARDRAILS]** / **[THE INTERACTIVE KICKOFF]**`;
+RULE 4 — OUTPUT STRUCTURE:
+Output exactly these 5 sections in order. Nothing before section 1. Nothing after section 5.
+**[THE PERSONA]** / **[THE CONTEXT]** / **[THE PSYCHOLOGICAL PLAY]** / **[DYNAMIC RECONNAISSANCE]** / **[EXECUTION GUARDRAILS]**`;
 
 function buildUserPrompt(params: {
   toolId: string;
   variableValues: Record<string, string>;
   sliderValues: Record<string, number>;
-  hasContext: boolean;
 }): string {
-  const { toolId, variableValues, sliderValues, hasContext } = params;
+  const { toolId, variableValues, sliderValues } = params;
   const tool = tools.find((t) => t.id === toolId);
   if (!tool) throw new Error(`Unknown tool: ${toolId}`);
 
@@ -70,7 +68,7 @@ function buildUserPrompt(params: {
 
   const primaryEntity = variableValues[tool.variables[0]?.name ?? ""] || "the target";
 
-  return `Generate a Master Prompt using the exact 6-section structure. Output only the 6 sections — nothing before, nothing after. PROSE IS BANNED. Use bullets, bold labels, and short fragments throughout.
+  return `Generate a Master Prompt using the exact 5-section structure. Output only the 5 sections — nothing before, nothing after. FRAGMENTS ONLY. Max 3 bullets per section, max 20 words per bullet.
 
 ## INPUTS
 **Tool:** ${tool.name} (${tool.category})
@@ -117,22 +115,8 @@ Apply Rule 1 (Confidence Gate) for "${primaryEntity}". Then output the correct d
 ## **[EXECUTION GUARDRAILS]**
 Locked directives. Zero latitude to deviate.
 - **Output format:** ${tool.outputFormat} — no other format acceptable
-- **Posture lock:** "${primaryPosture}" — first word to last, no drift, no softening
-- **Banned:** generic sales language / pleasantries / hedging / any non-actionable sentence
-- **Opening constraint:** [tonal directive — register, energy level, what the first moment must accomplish — do NOT write the line]
-- **Closing constraint:** [behavioral directive — pacing, specificity, what the final ask must force — do NOT write the line]
-- **HUMANITY TETHER:** Direct means confident and peer-to-peer — NOT rude, robotic, or sociopathic. The "${primaryPosture}" posture must maintain professional likability. Challenging without alienating. Sharp without being cold.
-
-## **[THE INTERACTIVE KICKOFF]**
-Write a direct command for the receiving AI — not a description of one. This is the literal final instruction that appears at the end of the output. Write it in imperative second-person, starting with "After you generate...". It must:
-- Tell the receiving AI to end its output with ONE punchy clarifying question about the "${primaryPosture}" posture or "${secondaryPosture}" calibration
-- Keep the question sharp and specific — sparring partner energy, not chatbot energy${
-  hasContext
-    ? `
-- Do NOT request documents or context — the user has already provided intel`
-    : `
-- After the clarifying question, invite the user to paste email threads, call notes, LinkedIn profiles, or URLs to sharpen the strategy — or tell them to reply "Execute" to get the baseline version without additional context`
-}`;
+- **Posture lock:** "${primaryPosture}" — first word to last, no drift
+- **HUMANITY TETHER:** "${primaryPosture}" means peer-to-peer confident — NOT rude, robotic, or sociopathic`;
 }
 
 export async function POST(req: Request) {
@@ -150,7 +134,7 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "user",
-        content: buildUserPrompt({ toolId, variableValues, sliderValues, hasContext }),
+        content: buildUserPrompt({ toolId, variableValues, sliderValues }),
       },
     ],
     maxOutputTokens: 2000,

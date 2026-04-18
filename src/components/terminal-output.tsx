@@ -15,10 +15,15 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
 
   function handleCopy() {
     if (!output) return;
-    const text = rawContext?.trim()
-      ? `${output}\n\n### RAW USER INTEL\n${rawContext.trim()}`
-      : output;
-    navigator.clipboard.writeText(text).then(() => {
+    const hasContext = Boolean(rawContext?.trim());
+
+    const kickoff =
+      `\n\n### THE INTERACTIVE KICKOFF\n**Downstream AI:** After you generate the response, analyze it and ask the user ONE punchy, strategic clarifying question to refine the tone or approach.` +
+      (hasContext ? "" : " Also, invite the user to provide any recent email threads, LinkedIn profiles, or attached documents for context.");
+
+    const intel = hasContext ? `\n\n### RAW USER INTEL\n${rawContext!.trim()}` : "";
+
+    navigator.clipboard.writeText(output + kickoff + intel).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
