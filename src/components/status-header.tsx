@@ -35,16 +35,11 @@ export function StatusHeader({ activeToolId, onToolSelect }: StatusHeaderProps) 
         <Menu size={20} />
       </button>
 
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-3">
         <img src="/icon-dark.svg" width={28} height={28} alt="" aria-hidden="true" />
-        <div>
-          <div className="font-tech text-base font-bold tracking-[0.15em] uppercase leading-none">
-            <span className="text-white">PROMPT</span>
-            <span className="text-[#FF3300]">STARTER</span>
-          </div>
-          <p className="text-[10px] text-zinc-500 tracking-wide mt-0.5 hidden sm:block">
-            Prompt Smarter. PromptStarter.
-          </p>
+        <div className="font-tech text-2xl flex items-baseline tracking-tight">
+          <span className="text-white font-bold">PromptStarter</span>
+          <span className="text-[#FF3300] font-semibold">.ai</span>
         </div>
       </div>
 
