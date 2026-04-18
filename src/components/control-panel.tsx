@@ -5,7 +5,6 @@ import { ChevronDown } from "lucide-react";
 import { useCompletion } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TerminalOutput } from "@/components/terminal-output";
 import type { Tool } from "@/lib/tools";
@@ -114,27 +113,31 @@ export function ControlPanel({
               {activeTool.sliders.map((slider) => {
                 const maxIndex = slider.steps.length - 1;
                 const value = Math.min(sliderValues[slider.id] ?? 0, maxIndex);
-                const activeStep = slider.steps[value];
 
                 return (
-                  <div key={slider.id} className="space-y-2">
-                    <div className="flex items-baseline justify-between gap-4">
-                      <p className="font-mono text-sm text-foreground">{slider.label}</p>
-                      <span
-                        className="font-mono text-sm font-bold text-primary shrink-0"
-                        style={{ textShadow: "0 0 12px rgba(255,51,0,0.35)" }}
-                      >
-                        {activeStep}
-                      </span>
-                    </div>
-                    <div className="py-[10px]">
-                      <Slider
-                        value={[value]}
-                        onValueChange={(val) => onSliderChange(slider.id, val[0])}
-                        min={0}
-                        max={maxIndex}
-                        step={1}
-                      />
+                  <div key={slider.id} className="space-y-3">
+                    <p className="font-mono text-xs tracking-wider text-muted-foreground">
+                      {slider.label}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {slider.steps.map((step, index) => {
+                        const isSelected = value === index;
+                        return (
+                          <button
+                            key={step}
+                            type="button"
+                            onClick={() => onSliderChange(slider.id, index)}
+                            className={`rounded-md text-xs font-medium transition-all duration-200 py-2.5 px-3 text-center border leading-snug ${
+                              isSelected
+                                ? "bg-[#FF3300]/10 border-[#FF3300] text-[#FF3300]"
+                                : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:border-zinc-700 hover:text-zinc-300"
+                            }`}
+                            style={isSelected ? { boxShadow: "0 0 10px rgba(255,51,0,0.2)" } : {}}
+                          >
+                            {step}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 );
