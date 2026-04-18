@@ -33,7 +33,7 @@ export const tools: Tool[] = [
       {
         id: "call-objective",
         label: "Primary Call Objective",
-        steps: ["Soft Discovery (Context)", "Friction Hunting (Pain Points)", "Qualification (Authority/Budget)", "Hypothesis Pitch (Provocative)"],
+        steps: ["Soft Discovery (Context)", "Friction Hunting (Pain Points)", "Qualification (Authority/Budget)", "Challenger Pitch (Provocative)"],
       },
       {
         id: "prospect-posture",
@@ -55,7 +55,7 @@ export const tools: Tool[] = [
       {
         id: "response-posture",
         label: "Psychological Posture",
-        steps: ["Empathic / Validating", "Analytical / ROI-Focused", "Curious / Questioning", "Direct / Challenging"],
+        steps: ["Consultative / Soft Pivot", "Analytical / ROI-Focused", "Curious / Questioning", "Direct / Challenging"],
       },
       {
         id: "next-step-aggression",
@@ -77,7 +77,7 @@ export const tools: Tool[] = [
       {
         id: "competitive-stance",
         label: "Competitive Stance",
-        steps: ["Subtle Trap-Setting", "Feature Parity Pivot", "Strategic Differentiation", "Direct Head-to-Head"],
+        steps: ["Subtle Trap-Setting", "Value Over Feature Pivot", "Strategic Differentiation", "Direct Head-to-Head"],
       },
       {
         id: "conversation-stage",
@@ -92,8 +92,8 @@ export const tools: Tool[] = [
     category: "Outreach",
     outputFormat: "Short-form Outreach (Under 100 words)",
     variables: [
-      { name: "prospectName", label: "Prospect Name", placeholder: "e.g., Sarah Smith" },
-      { name: "triggerEvent", label: "Trigger Event / Excuse to Reach Out", placeholder: "e.g., Just raised Series B" },
+      { name: "prospectName", label: "Target Persona or Name", placeholder: "e.g., Sarah Smith" },
+      { name: "triggerEvent", label: "Trigger Event or Core Pain", placeholder: "e.g., Just raised Series B" },
     ],
     sliders: [
       {
@@ -104,7 +104,7 @@ export const tools: Tool[] = [
       {
         id: "value-angle",
         label: "Primary Value Angle",
-        steps: ["Status / Ego", "Operational Efficiency", "Risk Mitigation", "Direct Revenue Growth"],
+        steps: ["Pattern Interrupt", "Operational Efficiency", "Risk Mitigation", "Direct Revenue Growth"],
       },
     ],
   },
