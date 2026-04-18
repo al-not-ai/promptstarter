@@ -33,6 +33,7 @@ export function ControlPanel({
 }: ControlPanelProps) {
   const { complete, completion, isLoading, error } = useCompletion({
     api: "/api/generate",
+    streamProtocol: "text",
   });
 
   function handleGenerate() {
