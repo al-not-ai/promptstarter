@@ -18,10 +18,16 @@ Evaluate any named entities (companies, competitors, people) against your traini
 RULE 2 — DYNAMIC RECONNAISSANCE:
 The [DYNAMIC RECONNAISSANCE] section instructs the receiving AI to conduct live research. Target exclusively: leadership changes, Q-over-Q headwinds, or stated operational goals from the last 6 months. Explicitly forbid marketing pages, About Us content, and press releases. The strategy must be anchored to one specific signal surfaced — not a generic talking point.
 
-RULE 3 — OUTPUT STRUCTURE:
-Output exactly these 5 sections in order. Nothing before the first section, nothing after the last.
-[THE PERSONA] / [THE CONTEXT] / [THE PSYCHOLOGICAL PLAY] / [DYNAMIC RECONNAISSANCE] / [EXECUTION GUARDRAILS]
-Every sentence must be load-bearing. Complete output readable in under 20 seconds. [EXECUTION GUARDRAILS] are absolute locked directives — the receiving model has zero latitude to deviate under any circumstance.`;
+RULE 3 — NO EXACT SCRIPTING:
+Never write exact first lines, last lines, or sample dialogue for the receiving AI. Instead, provide tonal constraints (register, pacing, energy level), behavioral bumpers (what to avoid, what to never do), and structural directives (what the opening must accomplish, what the close must force). The receiving AI writes the actual words — you set the rails it runs on.
+
+RULE 4 — THE INTERACTIVE KICKOFF:
+Every generated prompt must end with a [THE INTERACTIVE KICKOFF] section. This section commands the receiving AI to close its final output by asking the user one single, punchy, strategic clarifying question. The question must reference the calibration settings (tone, posture, aggression level) so the user can immediately redirect the output. It must feel like a sparring partner asking "want me to hit harder?" — not a chatbot asking "how can I help?".
+
+RULE 5 — OUTPUT STRUCTURE:
+Output exactly these 6 sections in order. Nothing before the first section, nothing after the last.
+[THE PERSONA] / [THE CONTEXT] / [THE PSYCHOLOGICAL PLAY] / [DYNAMIC RECONNAISSANCE] / [EXECUTION GUARDRAILS] / [THE INTERACTIVE KICKOFF]
+Every sentence must be load-bearing. Complete output readable in under 25 seconds. [EXECUTION GUARDRAILS] are absolute locked directives — the receiving model has zero latitude to deviate under any circumstance.`;
 
 function buildUserPrompt(params: {
   toolId: string;
@@ -50,7 +56,7 @@ function buildUserPrompt(params: {
 
   const primaryEntity = variableValues[tool.variables[0]?.name ?? ""] || "the target";
 
-  return `Generate a Master Prompt using the exact 5-section structure defined in your instructions. Output only the 5 sections — nothing before, nothing after.
+  return `Generate a Master Prompt using the exact 6-section structure defined in your instructions. Output only the 6 sections — nothing before, nothing after.
 
 INPUTS:
 - Tool: ${tool.name} (${tool.category})
@@ -83,8 +89,15 @@ These are locked directives. The receiving model has zero latitude to deviate un
 - Output format: the final deliverable must be formatted strictly as a ${tool.outputFormat}. No other format is acceptable.
 - Posture lock: "${primaryPosture}" must be maintained from the first word to the last. No drift, no softening.
 - Banned behavior: no generic sales language, no pleasantries, no hedging. Every sentence must be immediately actionable.
-- First line: [write a single directive forcing the strongest possible opening for the "${primaryPosture}" play — no warm-up, no context-setting]
-- Final line: [write a single directive for one specific call to action calibrated to "${secondaryPosture}" — one ask, one outcome, zero optionality]`;
+- Opening constraint: [write a tonal directive for how the output must open — register, energy, and what it must accomplish in the first sentence — do NOT write the line itself]
+- Closing constraint: [write a behavioral directive for how the output must close — pacing, specificity level, and what the final ask must force — do NOT write the line itself]
+
+**[THE INTERACTIVE KICKOFF]**
+Write a directive commanding the receiving AI to end its output with a single strategic clarifying question to the user. The question must:
+- Reference the active calibration: "${primaryPosture}" posture and "${secondaryPosture}" setting
+- Give the user a clear, low-friction way to redirect — dial up aggression, shift tone, change the angle
+- Sound like a sharp sparring partner checking in, not a chatbot asking for feedback
+- Be one sentence. Punchy. No preamble.`;
 }
 
 export async function POST(req: Request) {
