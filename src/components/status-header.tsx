@@ -36,8 +36,8 @@ export function StatusHeader({ activeToolId, onToolSelect }: StatusHeaderProps) 
       </button>
 
       <div className="flex items-center gap-3">
-        <img src="/icon-dark.svg" width={28} height={28} alt="" aria-hidden="true" />
-        <div className="font-tech text-2xl flex items-baseline tracking-tight">
+        <img src="/icon-dark.svg" width={32} height={32} alt="" aria-hidden="true" style={{ transform: "translateY(-2px)" }} />
+        <div className="font-tech text-xl flex items-baseline tracking-tight">
           <span className="text-white font-bold">PromptStarter</span>
           <span className="text-[#FF3300] font-semibold">.ai</span>
         </div>
