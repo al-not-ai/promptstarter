@@ -4,6 +4,7 @@ export type ToolControl = {
   min: number;
   max: number;
   step: number;
+  labels: [string, string, string, string];
 };
 
 export type Tool = {
@@ -19,8 +20,22 @@ export const tools: Tool[] = [
     name: "Strategic Cold Entry",
     category: "OUTBOUND EXPLORATION",
     controls: [
-      { id: "intensity", label: "Strategic Intensity", min: 0, max: 100, step: 33 },
-      { id: "context", label: "Contextual Depth", min: 0, max: 100, step: 33 },
+      {
+        id: "intensity",
+        label: "Strategic Intensity",
+        min: 0,
+        max: 99,
+        step: 33,
+        labels: ["Collaborative", "Consultative", "Competitive", "Challenger"],
+      },
+      {
+        id: "context",
+        label: "Contextual Depth",
+        min: 0,
+        max: 99,
+        step: 33,
+        labels: ["Surface-Level", "Researched", "Intelligence-Led", "Deep Cover"],
+      },
     ],
   },
   {
@@ -28,8 +43,22 @@ export const tools: Tool[] = [
     name: "The Executive Breacher",
     category: "DEAL FLOW",
     controls: [
-      { id: "bypass", label: "Bypass Velocity", min: 0, max: 100, step: 33 },
-      { id: "anchor", label: "Value Anchor", min: 0, max: 100, step: 33 },
+      {
+        id: "bypass",
+        label: "Bypass Velocity",
+        min: 0,
+        max: 99,
+        step: 33,
+        labels: ["Standard", "Direct", "Urgent", "Ruthless"],
+      },
+      {
+        id: "anchor",
+        label: "Value Anchor",
+        min: 0,
+        max: 99,
+        step: 33,
+        labels: ["Broad Benefit", "Business Case", "ROI-Driven", "Existential"],
+      },
     ],
   },
   {
@@ -37,8 +66,22 @@ export const tools: Tool[] = [
     name: "The Ghosting Reviver",
     category: "RETENTION & RECOVERY",
     controls: [
-      { id: "permission", label: "Permission to Close", min: 0, max: 100, step: 33 },
-      { id: "tone", label: "Tone of Authority", min: 0, max: 100, step: 33 },
+      {
+        id: "permission",
+        label: "Permission to Close",
+        min: 0,
+        max: 99,
+        step: 33,
+        labels: ["Soft Check-In", "Reframe", "Direct Ask", "Final Notice"],
+      },
+      {
+        id: "tone",
+        label: "Tone of Authority",
+        min: 0,
+        max: 99,
+        step: 33,
+        labels: ["Empathetic", "Confident", "Assertive", "Commanding"],
+      },
     ],
   },
 ];

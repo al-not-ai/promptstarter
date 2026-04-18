@@ -33,7 +33,7 @@ function Slider({
     >
       <div className="relative h-1 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className="absolute h-full bg-primary"
+          className="absolute h-full bg-primary transition-all duration-200 ease-out"
           style={{ width: `${percent}%` }}
         />
       </div>
@@ -50,10 +50,10 @@ function Slider({
           disabled && "pointer-events-none"
         )}
       />
-      {/* Visible thumb */}
+      {/* Visible thumb — transitions between detent positions */}
       <div
-        className="pointer-events-none absolute size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[box-shadow]"
-        style={{ left: `calc(${percent}% - ${percent / 100 * 12}px)` }}
+        className="pointer-events-none absolute size-4 shrink-0 rounded-full border border-primary/60 bg-white shadow-[0_0_8px_rgba(57,255,20,0.25)] transition-all duration-200 ease-out"
+        style={{ left: `calc(${percent}% - ${(percent / 100) * 16}px)` }}
       />
     </div>
   )

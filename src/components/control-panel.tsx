@@ -117,34 +117,38 @@ export function ControlPanel({
                 Calibration Variables
               </p>
 
-              {activeTool.controls.map((control) => (
-                <div key={control.id} className="space-y-3">
-                  <div className="flex items-baseline justify-between">
-                    <div>
+              {activeTool.controls.map((control) => {
+                const value = controlValues[control.id] ?? control.min;
+                const stepCount = control.labels.length - 1;
+                const labelIndex = Math.min(
+                  Math.round((value - control.min) / control.step),
+                  stepCount
+                );
+                const activeLabel = control.labels[labelIndex];
+
+                return (
+                  <div key={control.id} className="space-y-2">
+                    <div className="flex items-baseline justify-between gap-4">
                       <p className="font-mono text-sm text-foreground">{control.label}</p>
+                      <span
+                        className="font-mono text-sm font-bold text-primary shrink-0"
+                        style={{ textShadow: "0 0 12px rgba(57,255,20,0.35)" }}
+                      >
+                        {activeLabel}
+                      </span>
                     </div>
-                    <span
-                      className="font-mono text-2xl font-bold text-primary tabular-nums ml-4"
-                      style={{ textShadow: "0 0 16px rgba(57,255,20,0.4)" }}
-                    >
-                      {controlValues[control.id]}
-                      <span className="text-sm text-primary/50">%</span>
-                    </span>
+                    <div className="py-[10px]">
+                      <Slider
+                        value={[value]}
+                        onValueChange={(val) => onSliderChange(control.id, val[0])}
+                        min={control.min}
+                        max={control.max}
+                        step={control.step}
+                      />
+                    </div>
                   </div>
-                  <div className="py-[10px]">
-                    <Slider
-                      value={[controlValues[control.id] ?? control.min]}
-                      onValueChange={(val) => {
-                        const nums = val as number[];
-                        onSliderChange(control.id, nums[0]);
-                      }}
-                      min={control.min}
-                      max={control.max}
-                      step={control.step}
-                    />
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
