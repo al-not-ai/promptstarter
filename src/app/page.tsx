@@ -39,8 +39,8 @@ export default function Home() {
           targetAccount={targetAccount}
           industryVertical={industryVertical}
           isReady={isReady}
-          onSliderChange={(id, val) =>
-            setControlValues((prev) => ({ ...prev, [id]: val[0] }))
+          onSliderChange={(id, value) =>
+            setControlValues((prev) => ({ ...prev, [id]: value }))
           }
           onTargetAccountChange={setTargetAccount}
           onIndustryVerticalChange={setIndustryVertical}

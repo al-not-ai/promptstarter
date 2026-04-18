@@ -14,7 +14,7 @@ interface ControlPanelProps {
   targetAccount: string;
   industryVertical: string;
   isReady: boolean;
-  onSliderChange: (controlId: string, val: number[]) => void;
+  onSliderChange: (controlId: string, value: number) => void;
   onTargetAccountChange: (value: string) => void;
   onIndustryVerticalChange: (value: string) => void;
   onReset: () => void;
@@ -133,8 +133,11 @@ export function ControlPanel({
                   </div>
                   <div className="py-[10px]">
                     <Slider
-                      value={[controlValues[control.id]]}
-                      onValueChange={(val) => onSliderChange(control.id, val as number[])}
+                      value={[controlValues[control.id] ?? control.min]}
+                      onValueChange={(val) => {
+                        const nums = val as number[];
+                        onSliderChange(control.id, nums[0]);
+                      }}
                       min={control.min}
                       max={control.max}
                       step={control.step}
