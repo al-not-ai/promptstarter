@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Menu } from "lucide-react";
 import {
   Sheet,
@@ -37,7 +36,7 @@ export function StatusHeader({ activeToolId, onToolSelect }: StatusHeaderProps) 
       </button>
 
       <div className="flex items-center gap-2.5">
-        <Image src="/icon-dark.svg" width={28} height={28} alt="PromptStarter" />
+        <img src="/icon-dark.svg" width={28} height={28} alt="" aria-hidden="true" />
         <div>
           <div className="font-tech text-base font-bold tracking-[0.15em] uppercase leading-none">
             <span className="text-white">PROMPT</span>
