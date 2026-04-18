@@ -10,25 +10,21 @@ import type { Tool } from "@/lib/tools";
 
 interface ControlPanelProps {
   activeTool: Tool;
-  controlValues: Record<string, number>;
-  targetAccount: string;
-  industryVertical: string;
+  sliderValues: Record<string, number>;
+  variableValues: Record<string, string>;
   isReady: boolean;
-  onSliderChange: (controlId: string, value: number) => void;
-  onTargetAccountChange: (value: string) => void;
-  onIndustryVerticalChange: (value: string) => void;
+  onSliderChange: (sliderId: string, value: number) => void;
+  onVariableChange: (name: string, value: string) => void;
   onReset: () => void;
 }
 
 export function ControlPanel({
   activeTool,
-  controlValues,
-  targetAccount,
-  industryVertical,
+  sliderValues,
+  variableValues,
   isReady,
   onSliderChange,
-  onTargetAccountChange,
-  onIndustryVerticalChange,
+  onVariableChange,
   onReset,
 }: ControlPanelProps) {
   const { complete, completion, isLoading, error } = useCompletion({
@@ -40,15 +36,10 @@ export function ControlPanel({
     complete("", {
       body: {
         toolId: activeTool.id,
-        targetAccount,
-        industryVertical,
-        sliderValues: controlValues,
+        variableValues,
+        sliderValues,
       },
     });
-  }
-
-  function handleReset() {
-    onReset();
   }
 
   return (
@@ -67,35 +58,25 @@ export function ControlPanel({
         <CardContent className="px-6 md:px-10 py-8 md:py-10">
           <div className="grid grid-cols-1 gap-10 md:gap-12 md:grid-cols-2">
 
-            {/* Target Intelligence */}
+            {/* Target Intelligence — dynamic per tool */}
             <div className="space-y-6 md:space-y-8">
               <p className="font-mono text-xs tracking-wider text-muted-foreground border-b border-white/10 pb-3">
                 Target Intelligence
               </p>
 
-              <div className="space-y-2">
-                <label className="font-mono text-xs text-muted-foreground">
-                  Target Account
-                </label>
-                <Input
-                  value={targetAccount}
-                  onChange={(e) => onTargetAccountChange(e.target.value)}
-                  className="font-mono bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/30 focus-visible:ring-primary h-[44px]"
-                  placeholder="Salesforce, Acme Corp…"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="font-mono text-xs text-muted-foreground">
-                  Industry Vertical
-                </label>
-                <Input
-                  value={industryVertical}
-                  onChange={(e) => onIndustryVerticalChange(e.target.value)}
-                  className="font-mono bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/30 focus-visible:ring-primary h-[44px]"
-                  placeholder="Enterprise SaaS, FinTech…"
-                />
-              </div>
+              {activeTool.variables.map((variable) => (
+                <div key={variable.name} className="space-y-2">
+                  <label className="font-mono text-xs text-muted-foreground">
+                    {variable.label}
+                  </label>
+                  <Input
+                    value={variableValues[variable.name] ?? ""}
+                    onChange={(e) => onVariableChange(variable.name, e.target.value)}
+                    className="font-mono bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground/30 focus-visible:ring-primary h-[44px]"
+                    placeholder={variable.placeholder}
+                  />
+                </div>
+              ))}
 
               <div className="flex items-center gap-2.5 pt-1">
                 <span
@@ -118,26 +99,26 @@ export function ControlPanel({
                 Calibration Variables
               </p>
 
-              {activeTool.controls.map((control) => {
-                const maxIndex = control.labels.length - 1;
-                const value = Math.min(controlValues[control.id] ?? 0, maxIndex);
-                const activeLabel = control.labels[value];
+              {activeTool.sliders.map((slider) => {
+                const maxIndex = slider.steps.length - 1;
+                const value = Math.min(sliderValues[slider.id] ?? 0, maxIndex);
+                const activeStep = slider.steps[value];
 
                 return (
-                  <div key={control.id} className="space-y-2">
+                  <div key={slider.id} className="space-y-2">
                     <div className="flex items-baseline justify-between gap-4">
-                      <p className="font-mono text-sm text-foreground">{control.label}</p>
+                      <p className="font-mono text-sm text-foreground">{slider.label}</p>
                       <span
                         className="font-mono text-sm font-bold text-primary shrink-0"
                         style={{ textShadow: "0 0 12px rgba(255,51,0,0.35)" }}
                       >
-                        {activeLabel}
+                        {activeStep}
                       </span>
                     </div>
                     <div className="py-[10px]">
                       <Slider
                         value={[value]}
-                        onValueChange={(val) => onSliderChange(control.id, val[0])}
+                        onValueChange={(val) => onSliderChange(slider.id, val[0])}
                         min={0}
                         max={maxIndex}
                         step={1}
@@ -153,7 +134,7 @@ export function ControlPanel({
           <div className="mt-8 md:mt-10 flex gap-3 md:gap-4 border-t border-white/10 pt-6 md:pt-8">
             <Button
               variant="outline"
-              onClick={handleReset}
+              onClick={onReset}
               className="w-24 md:w-28 font-mono text-xs border-white/10 bg-transparent text-muted-foreground hover:bg-white/5 hover:text-foreground h-[44px]"
             >
               Reset

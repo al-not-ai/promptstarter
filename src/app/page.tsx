@@ -6,25 +6,33 @@ import { StatusHeader } from "@/components/status-header";
 import { ControlPanel } from "@/components/control-panel";
 import { tools } from "@/lib/tools";
 
-function defaultValues(toolId: string): Record<string, number> {
+function defaultSliderValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
-  return Object.fromEntries(tool.controls.map((c) => [c.id, 0]));
+  return Object.fromEntries(tool.sliders.map((s) => [s.id, 0]));
+}
+
+function defaultVariableValues(toolId: string): Record<string, string> {
+  const tool = tools.find((t) => t.id === toolId)!;
+  return Object.fromEntries(tool.variables.map((v) => [v.name, ""]));
 }
 
 export default function Home() {
   const [activeToolId, setActiveToolId] = useState(tools[0].id);
-  const [targetAccount, setTargetAccount] = useState("");
-  const [industryVertical, setIndustryVertical] = useState("");
-  const [controlValues, setControlValues] = useState<Record<string, number>>(
-    defaultValues(tools[0].id)
+  const [sliderValues, setSliderValues] = useState<Record<string, number>>(
+    defaultSliderValues(tools[0].id)
+  );
+  const [variableValues, setVariableValues] = useState<Record<string, string>>(
+    defaultVariableValues(tools[0].id)
   );
 
   const activeTool = tools.find((t) => t.id === activeToolId)!;
-  const isReady = targetAccount.trim().length > 0;
+  const firstVarName = activeTool.variables[0]?.name;
+  const isReady = Boolean(firstVarName && variableValues[firstVarName]?.trim().length > 0);
 
   const handleToolSelect = useCallback((toolId: string) => {
     setActiveToolId(toolId);
-    setControlValues(defaultValues(toolId));
+    setSliderValues(defaultSliderValues(toolId));
+    setVariableValues(defaultVariableValues(toolId));
   }, []);
 
   return (
@@ -35,19 +43,18 @@ export default function Home() {
       <main className="flex flex-1 items-start md:items-center justify-center px-4 md:px-6 pt-24 pb-8 md:ml-[260px]">
         <ControlPanel
           activeTool={activeTool}
-          controlValues={controlValues}
-          targetAccount={targetAccount}
-          industryVertical={industryVertical}
+          sliderValues={sliderValues}
+          variableValues={variableValues}
           isReady={isReady}
           onSliderChange={(id, value) =>
-            setControlValues((prev) => ({ ...prev, [id]: value }))
+            setSliderValues((prev) => ({ ...prev, [id]: value }))
           }
-          onTargetAccountChange={setTargetAccount}
-          onIndustryVerticalChange={setIndustryVertical}
+          onVariableChange={(name, value) =>
+            setVariableValues((prev) => ({ ...prev, [name]: value }))
+          }
           onReset={() => {
-            setTargetAccount("");
-            setIndustryVertical("");
-            setControlValues(defaultValues(activeToolId));
+            setSliderValues(defaultSliderValues(activeToolId));
+            setVariableValues(defaultVariableValues(activeToolId));
           }}
         />
       </main>
