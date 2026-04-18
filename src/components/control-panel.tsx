@@ -37,7 +37,7 @@ export function ControlPanel({
           {activeTool.category} — Calibration Matrix
         </p>
         <h1 className="font-mono text-xl md:text-2xl font-bold tracking-tight text-foreground">
-          {activeTool.label}
+          {activeTool.name}
         </h1>
       </CardHeader>
 
@@ -100,7 +100,6 @@ export function ControlPanel({
                 <div className="flex items-baseline justify-between">
                   <div>
                     <p className="font-mono text-sm text-foreground">{control.label}</p>
-                    <p className="font-mono text-xs text-muted-foreground mt-0.5">{control.description}</p>
                   </div>
                   <span
                     className="font-mono text-2xl font-bold text-primary tabular-nums ml-4"
@@ -114,9 +113,9 @@ export function ControlPanel({
                   <Slider
                     value={[controlValues[control.id]]}
                     onValueChange={(val) => onSliderChange(control.id, val as number[])}
-                    min={0}
-                    max={100}
-                    step={1}
+                    min={control.min}
+                    max={control.max}
+                    step={control.step}
                   />
                 </div>
               </div>
@@ -138,7 +137,7 @@ export function ControlPanel({
             disabled={!isReady}
             style={isReady ? { boxShadow: "0 0 24px rgba(57,255,20,0.35), 0 0 60px rgba(57,255,20,0.1)" } : {}}
           >
-            {isReady ? `Generate — ${activeTool.label}` : "Awaiting Target Lock"}
+            {isReady ? `Generate — ${activeTool.name}` : "Awaiting Target Lock"}
           </Button>
         </div>
       </CardContent>

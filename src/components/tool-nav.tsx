@@ -32,7 +32,7 @@ export function ToolNav({ activeToolId, onToolSelect }: ToolNavProps) {
                     )}
                     style={isActive ? { textShadow: "0 0 12px rgba(57,255,20,0.2)" } : {}}
                   >
-                    {tool.label}
+                    {tool.name}
                   </button>
                 </li>
               );
