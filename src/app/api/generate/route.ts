@@ -8,13 +8,17 @@ const anthropic = createAnthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-const SYSTEM_IDENTITY = `You are an Elite B2B Prompt Engineer. Your output is a concise, structured prompt designed to be pasted directly into ChatGPT or Claude.
+const SYSTEM_IDENTITY = `You are an Elite B2B Prompt Engineer. Your output is a concise, structured prompt designed to be pasted directly into ChatGPT or Claude. It should read like a dangerous, highly opinionated architectural brief — not a template.
 
-Rules:
-- Do not invent or research anything about the target account. Use the company name and industry as labels only.
-- Output must fit in the exact 4-section format provided. No preamble, no closing remarks.
-- Keep every section short. The whole output must be readable in under 15 seconds.
-- The psychological play and guardrails must be precise and directly derived from the calibration labels. No generic advice.`;
+THE CONFIDENCE GATE: Before writing, evaluate the Target Account and Industry against your training knowledge.
+- If the company is a globally recognized brand or operates in a well-documented industry (e.g., Salesforce, Ritz-Carlton, Goldman Sachs, enterprise SaaS, healthcare systems), inject 1–2 highly specific, realistic industry KPIs or friction points into [THE CONTEXT] section. These must be genuinely accurate — real metrics, named pressures, known buying behaviors.
+- If the company is obscure, regional, or unknown, DO NOT hallucinate specifics. Fall back to high-leverage, universal B2B pressure points that are true across the industry vertical provided. Label nothing as invented.
+
+Formatting rules:
+- Output the exact 4-section structure. No preamble, no closing remarks, no section commentary.
+- Every sentence must be load-bearing. Cut anything that could appear in a generic sales template.
+- The whole output must be readable in under 15 seconds.
+- [EXECUTION GUARDRAILS] are absolute and non-negotiable. Write them as locked directives that give the receiving model zero latitude to deviate.`;
 
 // Maps calibration labels to psychological frameworks and forbidden phrases
 const PSYCH_PLAYS: Record<string, { play: string; forbidden: string[] }> = {
@@ -147,23 +151,23 @@ INPUTS:
 ---
 
 **[THE PERSONA]**
-Write 1 sentence. Define the AI's executive posture for this specific scenario. Make it assertive and specific to the sales context (${tool.name}). No generic "sales expert" language.
+Write 1 sentence. Define the AI's executive posture for this specific scenario. Make it assertive, specific to ${tool.name}, and calibrated to the account's industry weight. No generic "sales expert" language — name the strategic lens.
 
 **[THE CONTEXT]**
-Write 1–2 sentences. State clearly: the task is ${scenario}. Do not add invented details about ${targetAccount}. Use the company name and industry as-is.
+Write 1–2 sentences. The task is ${scenario}. Apply the Confidence Gate: if ${targetAccount} is a recognized brand or ${industryVertical || "this industry"} has documented KPIs, inject 1–2 specific, real pressure points or metrics that make the context feel earned. If unknown, use universal B2B leverage that is true for the vertical.
 
 **[THE PSYCHOLOGICAL PLAY]**
-Apply this framework exactly:
+Apply this framework without softening it:
 ${psychData.play}
-Write 1–2 sentences that instruct the target AI on how to deploy this play in this specific context.
+Write 2 sentences: the first names the mechanism, the second gives the target AI a precise behavioral instruction for deploying it against ${targetAccount}.
 
 **[EXECUTION GUARDRAILS]**
-Output these as a clean bullet list:
-- Maximum output length: ${wordCount} words
+These are locked directives. The receiving model has zero latitude to deviate from them.
+- Maximum output length: ${wordCount} words. Enforce this as a hard ceiling — cut rather than compress.
 - Tone: ${toneSpec}
-- Do NOT use these phrases: "${psychData.forbidden[0]}", "${psychData.forbidden[1]}", "${psychData.forbidden[2]}"
-- Open with: [instruct the AI to open with the strongest possible first line for this psychological play — 1 directive sentence]
-- Close with: [instruct the AI to end with a single, specific call to action — 1 directive sentence]`;
+- Banned phrases (any occurrence disqualifies the output): "${psychData.forbidden[0]}" / "${psychData.forbidden[1]}" / "${psychData.forbidden[2]}"
+- First line: [write a single directive that forces the strongest possible opening for this psychological play — no pleasantries, no warm-up]
+- Final line: [write a single directive for a specific, time-anchored call to action — one ask, one outcome, nothing open-ended]`;
 }
 
 export async function POST(req: Request) {
