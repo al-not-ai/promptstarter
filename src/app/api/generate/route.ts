@@ -23,7 +23,6 @@ Output exactly these 5 sections in order. Nothing before the first section, noth
 [THE PERSONA] / [THE CONTEXT] / [THE PSYCHOLOGICAL PLAY] / [DYNAMIC RECONNAISSANCE] / [EXECUTION GUARDRAILS]
 Every sentence must be load-bearing. The complete output must be readable in under 20 seconds. [EXECUTION GUARDRAILS] are absolute locked directives — the receiving model has zero latitude to deviate under any circumstance.`;
 
-// Maps calibration labels to psychological frameworks and forbidden phrases
 const PSYCH_PLAYS: Record<string, { play: string; forbidden: string[] }> = {
   "Value Reiteration": {
     play: "Value Anchoring — re-establish the specific business outcome at stake before making any ask. The reader must recall why they were interested, not why you're following up.",
@@ -117,7 +116,6 @@ function buildUserPrompt(params: {
 
   const industry = industryVertical || "not specified";
 
-  // Resolve active labels from slider positions
   const activeLabels = tool.controls.map((c) => ({
     label: c.label,
     value: c.labels[Math.min(sliderValues[c.id] ?? 0, c.labels.length - 1)],
