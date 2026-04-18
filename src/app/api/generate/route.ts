@@ -13,6 +13,9 @@ const BASE_SYSTEM_PROMPT = `You are an Elite B2B Sales Strategist and Prompt Eng
 FORMATTING LAW — PROSE IS BANNED:
 Your output must look like a highly structured technical configuration file, not an essay. Every section uses Markdown, bold keywords, bullet points, and short imperative fragments. No paragraphs. No flowing sentences. If a thought requires more than one line, break it into labeled sub-bullets. Density is a feature.
 
+LANGUAGE LAW — JARGON IS BANNED:
+Ban academic psychology jargon. Translate all strategy into gritty, modern Sales Floor English. The prompt must feel like a tactical sales playbook, not a behavioral science paper. No "cognitive dissonance", no "reciprocity bias", no "anchoring heuristic" — say what it does, not what it's called.
+
 RULE 1 — THE CONFIDENCE GATE:
 Evaluate named entities (companies, competitors, people) against your training knowledge. Determine recon posture only — do not inject metrics yourself.
 - **Known entity** (recognized brand, public company, named exec): name it explicitly, target recent operational signals.
@@ -43,8 +46,9 @@ function buildUserPrompt(params: {
   toolId: string;
   variableValues: Record<string, string>;
   sliderValues: Record<string, number>;
+  hasContext: boolean;
 }): string {
-  const { toolId, variableValues, sliderValues } = params;
+  const { toolId, variableValues, sliderValues, hasContext } = params;
   const tool = tools.find((t) => t.id === toolId);
   if (!tool) throw new Error(`Unknown tool: ${toolId}`);
 
@@ -117,20 +121,27 @@ Locked directives. Zero latitude to deviate.
 - **Banned:** generic sales language / pleasantries / hedging / any non-actionable sentence
 - **Opening constraint:** [tonal directive — register, energy level, what the first moment must accomplish — do NOT write the line]
 - **Closing constraint:** [behavioral directive — pacing, specificity, what the final ask must force — do NOT write the line]
+- **HUMANITY TETHER:** Direct means confident and peer-to-peer — NOT rude, robotic, or sociopathic. The "${primaryPosture}" posture must maintain professional likability. Challenging without alienating. Sharp without being cold.
 
 ## **[THE INTERACTIVE KICKOFF]**
 - **Directive:** Command the receiving AI to end its output with exactly one strategic clarifying question
 - **Question must reference:** "${primaryPosture}" posture + "${secondaryPosture}" setting
 - **Tone:** sparring partner — punchy, direct, one sentence
-- **Purpose:** give the user a frictionless path to dial up aggression, shift tone, or change the angle`;
+- **Purpose:** give the user a frictionless path to dial up aggression, shift tone, or change the angle${
+  hasContext
+    ? ""
+    : `
+- **Context Invite:** After the clarifying question, append this line verbatim: "Feel free to drop any recent email threads, LinkedIn profiles, or call notes below to sharpen this further. If you don't have any, just reply 'Execute' and I'll write the baseline."`
+}`;
 }
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { toolId, variableValues, sliderValues } = body as {
+  const { toolId, variableValues, sliderValues, hasContext } = body as {
     toolId: string;
     variableValues: Record<string, string>;
     sliderValues: Record<string, number>;
+    hasContext: boolean;
   };
 
   const result = streamText({
@@ -139,7 +150,7 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "user",
-        content: buildUserPrompt({ toolId, variableValues, sliderValues }),
+        content: buildUserPrompt({ toolId, variableValues, sliderValues, hasContext }),
       },
     ],
     maxOutputTokens: 2000,

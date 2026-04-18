@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { useCompletion } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +29,9 @@ export function ControlPanel({
   onVariableChange,
   onReset,
 }: ControlPanelProps) {
+  const [rawContext, setRawContext] = useState("");
+  const [contextOpen, setContextOpen] = useState(false);
+
   const { complete, completion, isLoading, error } = useCompletion({
     api: "/api/generate",
     streamProtocol: "text",
@@ -38,8 +43,15 @@ export function ControlPanel({
         toolId: activeTool.id,
         variableValues,
         sliderValues,
+        hasContext: rawContext.trim().length > 0,
       },
     });
+  }
+
+  function handleReset() {
+    setRawContext("");
+    setContextOpen(false);
+    onReset();
   }
 
   return (
@@ -130,11 +142,41 @@ export function ControlPanel({
             </div>
           </div>
 
+          {/* Raw Intel Context — collapsible */}
+          <div className="mt-8 md:mt-10 border-t border-white/10 pt-6 md:pt-7">
+            <button
+              type="button"
+              onClick={() => setContextOpen((prev) => !prev)}
+              className="flex w-full items-center justify-between group"
+            >
+              <span className="font-mono text-xs text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors duration-150">
+                Add Raw Intel / Context{" "}
+                <span className="text-muted-foreground/25">(Optional)</span>
+              </span>
+              <ChevronDown
+                size={13}
+                className={`text-muted-foreground/30 group-hover:text-muted-foreground/50 transition-all duration-200 ${
+                  contextOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {contextOpen && (
+              <textarea
+                value={rawContext}
+                onChange={(e) => setRawContext(e.target.value)}
+                placeholder="Paste email threads, call notes, LinkedIn profiles, or any raw intel here..."
+                rows={5}
+                className="mt-3 w-full font-mono text-xs bg-white/5 border border-white/10 rounded-sm px-3 py-3 text-foreground/80 placeholder:text-muted-foreground/20 resize-none focus:outline-none focus:border-primary/30 transition-colors duration-150"
+              />
+            )}
+          </div>
+
           {/* Actions */}
-          <div className="mt-8 md:mt-10 flex gap-3 md:gap-4 border-t border-white/10 pt-6 md:pt-8">
+          <div className="mt-6 md:mt-7 flex gap-3 md:gap-4 border-t border-white/10 pt-6 md:pt-8">
             <Button
               variant="outline"
-              onClick={onReset}
+              onClick={handleReset}
               className="w-24 md:w-28 font-mono text-xs border-white/10 bg-transparent text-muted-foreground hover:bg-white/5 hover:text-foreground h-[44px]"
             >
               Reset
@@ -151,7 +193,7 @@ export function ControlPanel({
         </CardContent>
       </Card>
 
-      <TerminalOutput output={completion} isLoading={isLoading} error={error} />
+      <TerminalOutput output={completion} isLoading={isLoading} error={error} rawContext={rawContext} />
     </div>
   );
 }

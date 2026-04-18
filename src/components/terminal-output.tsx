@@ -6,15 +6,19 @@ interface TerminalOutputProps {
   output: string;
   isLoading: boolean;
   error: Error | undefined;
+  rawContext?: string;
 }
 
-export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps) {
+export function TerminalOutput({ output, isLoading, error, rawContext }: TerminalOutputProps) {
   const isEmpty = !output && !isLoading && !error;
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
     if (!output) return;
-    navigator.clipboard.writeText(output).then(() => {
+    const text = rawContext?.trim()
+      ? `${output}\n\n### RAW USER INTEL\n${rawContext.trim()}`
+      : output;
+    navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -44,7 +48,7 @@ export function TerminalOutput({ output, isLoading, error }: TerminalOutputProps
               className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-150 px-2 py-1 rounded-sm border border-white/10 hover:border-primary/40 hover:bg-primary/5"
               style={copied ? { color: "rgb(255,51,0)", borderColor: "rgba(255,51,0,0.4)" } : { color: "rgba(113,113,122,0.7)" }}
             >
-              {copied ? "Copied ✓" : "Copy"}
+              {copied ? "Copied ✓" : rawContext?.trim() ? "Copy + Intel" : "Copy"}
             </button>
           )}
         </div>
