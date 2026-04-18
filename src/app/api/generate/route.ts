@@ -142,7 +142,7 @@ export async function POST(req: Request) {
         content: buildUserPrompt({ toolId, variableValues, sliderValues }),
       },
     ],
-    maxOutputTokens: 1500,
+    maxOutputTokens: 2000,
   });
 
   return result.toTextStreamResponse();
