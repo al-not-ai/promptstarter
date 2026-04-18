@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { StatusHeader } from "@/components/status-header";
 import { ControlPanel } from "@/components/control-panel";
+import { AccessGate } from "@/components/AccessGate";
 import { tools } from "@/lib/tools";
 
 function defaultSliderValues(toolId: string): Record<string, number> {
@@ -36,6 +37,7 @@ export default function Home() {
   }, []);
 
   return (
+    <AccessGate>
     <div className="grid-bg relative flex min-h-screen flex-col bg-background overflow-x-hidden">
       <Sidebar activeToolId={activeToolId} onToolSelect={handleToolSelect} />
       <StatusHeader activeToolId={activeToolId} onToolSelect={handleToolSelect} />
@@ -59,5 +61,6 @@ export default function Home() {
         />
       </main>
     </div>
+    </AccessGate>
   );
 }
