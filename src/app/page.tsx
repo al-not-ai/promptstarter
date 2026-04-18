@@ -42,7 +42,7 @@ export default function Home() {
       <Sidebar activeToolId={activeToolId} onToolSelect={handleToolSelect} />
       <StatusHeader activeToolId={activeToolId} onToolSelect={handleToolSelect} />
 
-      <main className="flex flex-1 items-start md:items-center justify-center px-4 md:px-6 pt-24 pb-8 md:ml-[260px]">
+      <main className="flex flex-1 items-start justify-center px-4 md:px-6 pt-24 pb-16 md:ml-[260px]">
         <ControlPanel
           activeTool={activeTool}
           sliderValues={sliderValues}
