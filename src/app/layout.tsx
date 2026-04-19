@@ -26,9 +26,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("dark h-full antialiased font-sans", geist.variable, geistMono.variable, spaceGrotesk.variable)}
+      className={cn("dark antialiased font-sans", geist.variable, geistMono.variable, spaceGrotesk.variable)}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-[100dvh] flex flex-col">{children}</body>
     </html>
   );
 }

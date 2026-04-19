@@ -20,7 +20,7 @@ export function StatusHeader({ onMenuOpen }: StatusHeaderProps) {
       </button>
 
       {/* Centered logo */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
         <img
           src="/icon-dark.svg"
           width={28}

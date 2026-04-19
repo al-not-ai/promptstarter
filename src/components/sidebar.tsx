@@ -40,8 +40,8 @@ export function Sidebar({
       {/* Sidebar — always in DOM, slides with transform */}
       <aside
         className={`
-          flex flex-col fixed inset-y-0 left-0 z-[60]
-          w-64 border-r border-zinc-800 bg-[#070707]
+          flex flex-col fixed top-0 left-0 z-[60] h-[100dvh]
+          w-72 md:w-64 border-r border-zinc-800 bg-[#070707]
           transform transition-transform duration-300 ease-in-out
           overflow-visible
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
@@ -63,7 +63,7 @@ export function Sidebar({
         <div className="flex h-16 shrink-0 items-center border-b border-white/8 px-4 overflow-hidden">
           <div
             className={`flex flex-1 items-center transition-all duration-300 ease-in-out ${
-              isCollapsed ? "md:justify-center gap-3" : "gap-3"
+              isCollapsed ? "md:justify-center gap-2" : "gap-2"
             }`}
           >
             <img
@@ -105,7 +105,7 @@ export function Sidebar({
 
         {/* Footer */}
         <div
-          className={`shrink-0 border-t border-white/8 px-4 py-4 overflow-hidden transition-all duration-300 ${
+          className={`mt-auto shrink-0 border-t border-white/8 px-4 py-4 overflow-hidden transition-all duration-300 pb-[max(1rem,env(safe-area-inset-bottom))] ${
             isCollapsed ? "md:opacity-0 md:pointer-events-none opacity-100" : "opacity-100"
           }`}
         >
