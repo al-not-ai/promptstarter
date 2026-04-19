@@ -13,7 +13,7 @@ export function StatusHeader({ onMenuOpen }: StatusHeaderProps) {
       {/* Hamburger — far left, logically opens left drawer */}
       <button
         onClick={onMenuOpen}
-        className="flex items-center justify-center h-10 w-10 rounded-md text-zinc-400 hover:text-white hover:bg-white/5 transition-colors duration-150"
+        className="flex items-center justify-center h-11 w-11 rounded-md text-zinc-400 hover:text-white hover:bg-white/5 transition-colors duration-150"
         aria-label="Open navigation"
       >
         <Menu size={20} />
@@ -36,8 +36,8 @@ export function StatusHeader({ onMenuOpen }: StatusHeaderProps) {
         </div>
       </div>
 
-      {/* Right spacer for optical balance */}
-      <div className="w-10" />
+      {/* Right spacer — matches hamburger width for optical balance */}
+      <div className="w-11" />
     </header>
   );
 }

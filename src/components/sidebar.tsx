@@ -30,7 +30,7 @@ export function Sidebar({
     <>
       {/* Mobile backdrop — always in DOM, fades with opacity */}
       <div
-        className={`fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[95] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
           isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={onMobileClose}
@@ -40,19 +40,19 @@ export function Sidebar({
       {/* Sidebar — always in DOM, slides with transform */}
       <aside
         className={`
-          flex flex-col fixed top-0 left-0 z-[60] h-[100dvh]
-          w-72 md:w-64 border-r border-zinc-800 bg-[#070707]
-          transform transition-transform duration-300 ease-in-out
-          overflow-visible
+          flex flex-col fixed top-0 left-0 z-[100] h-[100dvh]
+          w-72 border-r border-zinc-800 bg-[#070707]
+          transition-[transform,width] duration-300 ease-in-out
+          overflow-visible overscroll-contain
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-          ${isCollapsed ? "md:w-16" : "md:w-64"}
+          ${isCollapsed ? "md:w-20" : "md:w-72"}
         `}
       >
         {/* Desktop floating toggle pill */}
         <button
           onClick={onToggle}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-50 h-6 w-6 bg-[#0a0a0a] border border-zinc-800 rounded-full items-center justify-center cursor-pointer hover:bg-zinc-900 hover:border-zinc-500 text-zinc-500 hover:text-zinc-300 transition-all duration-150"
+          className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 h-6 w-6 bg-[#0a0a0a] border border-zinc-800 rounded-full items-center justify-center cursor-pointer hover:bg-zinc-900 hover:border-zinc-500 text-zinc-500 hover:text-zinc-300 transition-all duration-150"
         >
           {isCollapsed
             ? <ChevronRight className="w-3.5 h-3.5" />
@@ -86,11 +86,11 @@ export function Sidebar({
             </div>
           </div>
 
-          {/* Mobile close button — only visible when drawer is open */}
+          {/* Mobile close button — 44px touch target */}
           <button
             onClick={onMobileClose}
             aria-label="Close navigation"
-            className="md:hidden flex items-center justify-center h-8 w-8 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150 shrink-0"
+            className="md:hidden flex items-center justify-center h-11 w-11 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150 shrink-0"
           >
             <X size={16} />
           </button>

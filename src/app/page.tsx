@@ -54,8 +54,8 @@ export default function Home() {
         <StatusHeader onMenuOpen={() => setMobileNavOpen(true)} />
 
         <main
-          className={`flex flex-1 items-start justify-center px-4 md:px-8 pt-20 md:pt-6 pb-16 transition-all duration-300 ${
-            sidebarCollapsed ? "md:ml-16" : "md:ml-64"
+          className={`flex flex-1 items-start justify-center px-4 md:px-8 pt-20 md:pt-6 pb-16 transition-[margin-left] duration-300 ease-in-out ${
+            sidebarCollapsed ? "md:ml-20" : "md:ml-72"
           }`}
         >
           <ControlPanel
