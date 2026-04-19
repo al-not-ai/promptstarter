@@ -69,7 +69,7 @@ export function ControlPanel({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {activeTool.variables.map((variable) => (
               <div key={variable.name} className="space-y-1.5">
-                <label className="font-mono text-xs text-zinc-300 font-medium">
+                <label className="text-sm font-semibold text-zinc-200 mb-1.5 block">
                   {variable.label}
                 </label>
                 <Input

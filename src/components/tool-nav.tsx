@@ -1,5 +1,6 @@
 "use client";
 
+import { Phone, ShieldCheck, BarChart2, Zap, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TOOL_CATEGORIES } from "@/lib/tools";
 
@@ -9,6 +10,13 @@ interface ToolNavProps {
   isCollapsed?: boolean;
 }
 
+const TOOL_ICONS: Record<string, LucideIcon> = {
+  "pre-call-recon":      Phone,
+  "objection-defuser":   ShieldCheck,
+  "competitor-battlecard": BarChart2,
+  "cold-hook":           Zap,
+};
+
 export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: ToolNavProps) {
   if (isCollapsed) {
     return (
@@ -16,6 +24,7 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
         {TOOL_CATEGORIES.flatMap(({ tools }) =>
           tools.map((tool) => {
             const isActive = tool.id === activeToolId;
+            const Icon = TOOL_ICONS[tool.id] ?? Zap;
             return (
               <button
                 key={tool.id}
@@ -24,16 +33,12 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
                 className={cn(
                   "flex items-center justify-center w-10 h-10 rounded-sm transition-colors duration-150",
                   isActive
-                    ? "bg-white/[0.06]"
-                    : "hover:bg-white/[0.03]"
+                    ? "bg-white/[0.06] text-primary"
+                    : "text-zinc-600 hover:text-zinc-300 hover:bg-white/[0.03]"
                 )}
+                style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : {}}
               >
-                <span
-                  className={`h-1.5 w-1.5 rounded-full transition-colors duration-150 ${
-                    isActive ? "bg-primary" : "bg-zinc-700"
-                  }`}
-                  style={isActive ? { boxShadow: "0 0 6px rgba(255,51,0,0.8)" } : {}}
-                />
+                <Icon size={17} strokeWidth={isActive ? 2.5 : 1.75} />
               </button>
             );
           })

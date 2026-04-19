@@ -59,17 +59,6 @@ export function StatusHeader({ activeToolId, onToolSelect }: StatusHeaderProps) 
         </div>
       </header>
 
-      {/* Desktop system status — top-right corner, no logo */}
-      <div className="hidden md:flex fixed top-0 right-0 z-40 items-center gap-2 px-5 py-4">
-        <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-        </span>
-        <span className="font-mono text-xs text-zinc-500">
-          System <span className="text-primary">Active</span>
-        </span>
-      </div>
-
       {/* Mobile sheet drawer */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-[80vw] max-w-[280px] border-r border-white/10 bg-[#070707] p-0">

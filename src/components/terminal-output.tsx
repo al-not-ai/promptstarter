@@ -29,9 +29,21 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
     });
   }
 
+  /* ── Empty skeleton ── */
+  if (isEmpty) {
+    return (
+      <div className="w-full min-h-[120px] bg-zinc-900/50 border border-zinc-800 rounded-lg flex items-center justify-center">
+        <p className="font-mono text-sm text-zinc-600 select-none">
+          Generated prompt will appear here...
+        </p>
+      </div>
+    );
+  }
+
+  /* ── Active state (loading / output / error) ── */
   return (
-    <div className="w-full max-w-5xl mt-4 md:mt-6 border border-white/10 bg-black/40 backdrop-blur-md rounded-sm overflow-hidden">
-      {/* Terminal header bar */}
+    <div className="w-full border border-white/10 bg-black/40 backdrop-blur-md rounded-lg overflow-hidden">
+      {/* Header bar */}
       <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.02]">
         <span
           className="h-1.5 w-1.5 rounded-full bg-primary"
@@ -59,20 +71,14 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
         </div>
       </div>
 
-      {/* Terminal body — scrollable, max height capped */}
+      {/* Body — auto-expands with content */}
       <div
-        className="px-5 py-5 min-h-[180px] md:min-h-[220px] max-h-[420px] md:max-h-[520px] overflow-y-auto"
+        className="px-5 py-5 max-h-[520px] overflow-y-auto"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "rgba(255,51,0,0.15) transparent",
         }}
       >
-        {isEmpty && (
-          <p className="font-mono text-xs text-muted-foreground/30 select-none">
-            Your generated prompt will appear here...
-          </p>
-        )}
-
         {error && (
           <p className="font-mono text-xs text-red-400/80">
             Error: {error.message}
