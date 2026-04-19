@@ -6,9 +6,42 @@ import { TOOL_CATEGORIES } from "@/lib/tools";
 interface ToolNavProps {
   activeToolId: string;
   onToolSelect: (toolId: string) => void;
+  isCollapsed?: boolean;
 }
 
-export function ToolNav({ activeToolId, onToolSelect }: ToolNavProps) {
+export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: ToolNavProps) {
+  if (isCollapsed) {
+    return (
+      <nav className="flex-1 overflow-y-auto py-4 flex flex-col items-center gap-1">
+        {TOOL_CATEGORIES.flatMap(({ tools }) =>
+          tools.map((tool) => {
+            const isActive = tool.id === activeToolId;
+            return (
+              <button
+                key={tool.id}
+                onClick={() => onToolSelect(tool.id)}
+                title={tool.name}
+                className={cn(
+                  "flex items-center justify-center w-10 h-10 rounded-sm transition-colors duration-150",
+                  isActive
+                    ? "bg-white/[0.06]"
+                    : "hover:bg-white/[0.03]"
+                )}
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full transition-colors duration-150 ${
+                    isActive ? "bg-primary" : "bg-zinc-700"
+                  }`}
+                  style={isActive ? { boxShadow: "0 0 6px rgba(255,51,0,0.8)" } : {}}
+                />
+              </button>
+            );
+          })
+        )}
+      </nav>
+    );
+  }
+
   return (
     <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
       {TOOL_CATEGORIES.map(({ category, tools }) => (

@@ -119,7 +119,7 @@ export function ControlPanel({
           </div>
 
           {/* Action row — context toggle left, buttons right */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-2 pt-4 border-t border-zinc-800">
+          <div className="flex flex-wrap justify-between items-center gap-4 mt-2 pt-4 border-t border-zinc-800">
 
             {/* Left: context toggle */}
             <button
@@ -149,7 +149,7 @@ export function ControlPanel({
                 Reset
               </Button>
               <Button
-                className="flex-1 sm:flex-none sm:w-36 font-mono text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
+                className="w-auto min-w-max whitespace-nowrap px-6 font-mono text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
                 disabled={!isReady || isLoading}
                 onClick={handleGenerate}
                 style={isReady && !isLoading ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" } : {}}
