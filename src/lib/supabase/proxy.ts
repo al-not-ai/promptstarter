@@ -1,15 +1,18 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import type { User } from "@supabase/supabase-js";
 
 /**
  * Refreshes the Supabase session on every request so the auth token
- * doesn't expire between page loads. Must be called from src/proxy.ts.
+ * doesn't expire between page loads, and returns the current user.
  *
  * IMPORTANT: Do not add any logic between createServerClient and
  * supabase.auth.getUser() — it will cause intermittent auth failures.
  */
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+export async function getSessionAndUser(
+  request: NextRequest
+): Promise<{ response: NextResponse; user: User | null }> {
+  let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,9 +26,9 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          supabaseResponse = NextResponse.next({ request });
+          response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            response.cookies.set(name, value, options)
           );
         },
       },
@@ -34,7 +37,9 @@ export async function updateSession(request: NextRequest) {
 
   // Refresh session — getUser() reaches Supabase Auth server to revalidate
   // the token. Do not remove or move this call.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  return supabaseResponse;
+  return { response, user };
 }
