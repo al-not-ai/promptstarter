@@ -26,6 +26,7 @@ export default function Home() {
     defaultVariableValues(tools[0].id)
   );
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const activeTool = tools.find((t) => t.id === activeToolId)!;
   const firstVarName = activeTool.variables[0]?.name;
@@ -39,17 +40,21 @@ export default function Home() {
 
   return (
     <AccessGate>
-      <div className="grid-bg relative flex min-h-screen flex-col bg-background overflow-x-hidden">
+      <div className="grid-bg relative flex min-h-[100dvh] flex-col bg-background overflow-x-hidden">
+
         <Sidebar
           activeToolId={activeToolId}
           onToolSelect={handleToolSelect}
           isCollapsed={sidebarCollapsed}
           onToggle={() => setSidebarCollapsed((prev) => !prev)}
+          isMobileOpen={mobileNavOpen}
+          onMobileClose={() => setMobileNavOpen(false)}
         />
-        <StatusHeader activeToolId={activeToolId} onToolSelect={handleToolSelect} />
+
+        <StatusHeader onMenuOpen={() => setMobileNavOpen(true)} />
 
         <main
-          className={`flex flex-1 items-start justify-center px-4 md:px-8 pt-[70px] md:pt-6 pb-16 transition-all duration-300 ${
+          className={`flex flex-1 items-start justify-center px-4 md:px-8 pt-20 md:pt-6 pb-16 transition-all duration-300 ${
             sidebarCollapsed ? "md:ml-16" : "md:ml-64"
           }`}
         >

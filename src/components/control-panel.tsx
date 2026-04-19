@@ -101,7 +101,7 @@ export function ControlPanel({
                           key={step}
                           type="button"
                           onClick={() => onSliderChange(slider.id, index)}
-                          className={`rounded-md text-xs font-medium transition-all duration-200 py-2 px-2 text-center border whitespace-normal break-words leading-tight min-h-[44px] h-full ${
+                          className={`rounded-md text-xs font-medium transition-all duration-200 py-2 px-2 text-center border whitespace-normal break-words leading-tight min-h-[48px] h-full ${
                             isSelected
                               ? "bg-[#FF3300]/10 border-[#FF3300] text-[#FF3300]"
                               : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:border-zinc-700 hover:text-zinc-200"

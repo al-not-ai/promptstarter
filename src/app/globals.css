@@ -99,7 +99,7 @@
 body {
   font-family: var(--font-sans), Arial, sans-serif;
   background: radial-gradient(ellipse 80% 60% at 50% 40%, #141414 0%, #0a0a0a 100%);
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .dark {
@@ -152,10 +152,10 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
-    @apply font-sans;
+    @apply font-sans bg-[#0a0a0a];
+  }
+  body {
+    @apply bg-background text-foreground min-h-[100dvh];
   }
 }
