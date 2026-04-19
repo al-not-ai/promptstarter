@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { ToolNav } from "@/components/tool-nav";
 
 interface SidebarProps {
@@ -22,30 +22,33 @@ export function Sidebar({
 }: SidebarProps) {
   function handleToolSelect(toolId: string) {
     onToolSelect(toolId);
-    onMobileClose(); // auto-close drawer on mobile after selection
+    // Slight delay so the user sees the selection before the drawer slides away
+    setTimeout(onMobileClose, 150);
   }
 
   return (
     <>
-      {/* Mobile backdrop overlay */}
-      {isMobileOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
-          onClick={onMobileClose}
-          aria-hidden="true"
-        />
-      )}
+      {/* Mobile backdrop — always in DOM, fades with opacity */}
+      <div
+        className={`fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
+          isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onMobileClose}
+        aria-hidden="true"
+      />
 
+      {/* Sidebar — always in DOM, slides with transform */}
       <aside
         className={`
-          flex flex-col fixed left-0 top-0 bottom-0 z-50
+          flex flex-col fixed inset-y-0 left-0 z-[60]
           w-64 border-r border-zinc-800 bg-[#070707]
-          transition-all duration-300 ease-in-out overflow-visible
+          transform transition-transform duration-300 ease-in-out
+          overflow-visible
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
           ${isCollapsed ? "md:w-16" : "md:w-64"}
         `}
       >
-        {/* Floating toggle pill — desktop only */}
+        {/* Desktop floating toggle pill */}
         <button
           onClick={onToggle}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -56,11 +59,11 @@ export function Sidebar({
             : <ChevronLeft className="w-3.5 h-3.5" />}
         </button>
 
-        {/* Header — logo + wordmark */}
+        {/* Header */}
         <div className="flex h-16 shrink-0 items-center border-b border-white/8 px-4 overflow-hidden">
           <div
-            className={`flex items-center transition-all duration-300 ease-in-out ${
-              isCollapsed ? "md:w-full md:justify-center gap-3" : "gap-3"
+            className={`flex flex-1 items-center transition-all duration-300 ease-in-out ${
+              isCollapsed ? "md:justify-center gap-3" : "gap-3"
             }`}
           >
             <img
@@ -72,8 +75,9 @@ export function Sidebar({
               }`}
               style={{ filter: "drop-shadow(0 0 8px rgba(255,51,0,0.45))" }}
             />
+            {/* translate-y-[2px] corrects optical alignment with bottom-heavy flame */}
             <div
-              className={`font-tech flex items-center leading-none tracking-tight whitespace-nowrap transition-all duration-300 ease-in-out overflow-hidden ${
+              className={`font-tech flex items-center leading-none tracking-tight whitespace-nowrap translate-y-[2px] transition-all duration-300 ease-in-out overflow-hidden ${
                 isCollapsed ? "md:w-0 md:opacity-0 opacity-100" : "opacity-100"
               }`}
             >
@@ -81,6 +85,15 @@ export function Sidebar({
               <span className="text-[#FF3300] font-bold text-xl">.ai</span>
             </div>
           </div>
+
+          {/* Mobile close button — only visible when drawer is open */}
+          <button
+            onClick={onMobileClose}
+            aria-label="Close navigation"
+            className="md:hidden flex items-center justify-center h-8 w-8 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150 shrink-0"
+          >
+            <X size={16} />
+          </button>
         </div>
 
         {/* Tool navigation */}
