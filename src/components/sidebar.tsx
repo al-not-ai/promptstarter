@@ -13,17 +13,28 @@ interface SidebarProps {
 export function Sidebar({ activeToolId, onToolSelect, isCollapsed, onToggle }: SidebarProps) {
   return (
     <aside
-      className={`hidden md:flex fixed left-0 top-0 bottom-0 z-50 flex-col border-r border-zinc-800 bg-[#070707] transition-all duration-300 overflow-hidden ${
+      className={`hidden md:flex fixed left-0 top-0 bottom-0 z-50 flex-col border-r border-zinc-800 bg-[#070707] transition-all duration-300 overflow-visible ${
         isCollapsed ? "w-16" : "w-64"
       }`}
     >
-      {/* Header — logo micro-interaction + collapse toggle */}
-      <div className="relative flex h-[57px] shrink-0 items-center border-b border-white/8 px-3">
+      {/* Floating toggle pill — sits on the right border */}
+      <button
+        onClick={onToggle}
+        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        className="absolute -right-3 top-8 z-50 h-6 w-6 bg-zinc-900 border border-zinc-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-800 hover:border-zinc-500 text-zinc-400 hover:text-white transition-all duration-150"
+      >
+        {isCollapsed
+          ? <ChevronRight className="w-3.5 h-3.5" />
+          : <ChevronLeft className="w-3.5 h-3.5" />}
+      </button>
+
+      {/* Header — logo + wordmark */}
+      <div className="flex h-[57px] shrink-0 items-center border-b border-white/8 px-4 overflow-hidden">
 
         {/* Logo container — centers and scales when collapsed */}
         <div
           className={`flex items-center transition-all duration-300 ease-in-out ${
-            isCollapsed ? "w-full justify-center" : "flex-1 gap-2.5 mr-1"
+            isCollapsed ? "w-full justify-center" : "gap-3"
           }`}
         >
           <img
@@ -31,32 +42,21 @@ export function Sidebar({ activeToolId, onToolSelect, isCollapsed, onToggle }: S
             alt=""
             aria-hidden="true"
             className={`shrink-0 transition-all duration-300 ease-in-out origin-center ${
-              isCollapsed ? "w-9 h-9 scale-110" : "w-6 h-6"
+              isCollapsed ? "w-9 h-9 scale-110" : "w-8 h-8"
             }`}
-            style={{ filter: "drop-shadow(0 0 8px rgba(255,51,0,0.45))", transform: "translateY(-1px)" }}
+            style={{ filter: "drop-shadow(0 0 8px rgba(255,51,0,0.45))" }}
           />
 
           {/* Wordmark — fades and collapses out */}
           <div
-            className={`font-tech flex items-baseline tracking-tight whitespace-nowrap transition-all duration-300 ease-in-out overflow-hidden ${
+            className={`font-tech flex items-center leading-none tracking-tight whitespace-nowrap transition-all duration-300 ease-in-out overflow-hidden ${
               isCollapsed ? "w-0 opacity-0" : "opacity-100"
             }`}
           >
-            <span className="text-white font-bold text-base">PromptStarter</span>
-            <span className="text-[#FF3300] font-semibold text-base">.ai</span>
+            <span className="text-white font-extrabold text-xl">PromptStarter</span>
+            <span className="text-[#FF3300] font-bold text-xl">.ai</span>
           </div>
         </div>
-
-        {/* Toggle chevron — absolute right edge */}
-        <button
-          onClick={onToggle}
-          className={`shrink-0 flex items-center justify-center h-7 w-7 rounded-sm text-zinc-600 hover:text-zinc-200 hover:bg-white/5 transition-colors duration-150 ${
-            isCollapsed ? "absolute right-1.5 bottom-1.5" : ""
-          }`}
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-        </button>
       </div>
 
       {/* Tool navigation */}
