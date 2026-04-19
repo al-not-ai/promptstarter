@@ -21,7 +21,7 @@ export function Sidebar({ activeToolId, onToolSelect, isCollapsed, onToggle }: S
       <button
         onClick={onToggle}
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        className="absolute -right-3 top-8 z-50 h-6 w-6 bg-zinc-900 border border-zinc-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-800 hover:border-zinc-500 text-zinc-400 hover:text-white transition-all duration-150"
+        className="absolute -right-3 top-1/2 -translate-y-1/2 z-50 h-6 w-6 bg-[#0a0a0a] border border-zinc-800 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-900 hover:border-zinc-500 text-zinc-500 hover:text-zinc-300 transition-all duration-150"
       >
         {isCollapsed
           ? <ChevronRight className="w-3.5 h-3.5" />
