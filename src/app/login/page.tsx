@@ -22,12 +22,30 @@ function LoginForm() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Read query-param errors forwarded by our callback route (?error=...)
   const searchParams = useSearchParams();
   useEffect(() => {
     if (searchParams.get("error")) {
       setError("Authentication failed. Please try again.");
     }
   }, [searchParams]);
+
+  // Read hash-fragment errors sent directly by Supabase Auth (#error=...)
+  // This happens when the redirect URL isn't whitelisted and Supabase falls
+  // back to the Site URL, appending the error as a fragment.
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.includes("error=")) return;
+    const params = new URLSearchParams(hash.slice(1));
+    const description = params.get("error_description");
+    setError(
+      description
+        ? description.replace(/\+/g, " ")
+        : "Authentication failed. Please try again."
+    );
+    // Clean the ugly fragment from the URL bar
+    window.history.replaceState({}, "", window.location.pathname);
+  }, []);
 
   async function handleGoogle() {
     setLoading("google");
