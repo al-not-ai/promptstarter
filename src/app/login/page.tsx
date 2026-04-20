@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { signInWithGoogle, signInWithEmail } from "./actions";
+import { createClient } from "@/lib/supabase/client";
 
-// Suspense boundary required by Next.js for any component using useSearchParams()
 export default function LoginPage() {
   return (
     <Suspense>
@@ -14,12 +13,15 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
+  // Browser client owns the full PKCE flow — code verifier lives in the
+  // browser, not generated server-side and fragily passed via cookies.
+  const supabase = useMemo(() => createClient(), []);
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState<"google" | "email" | null>(null);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Surface any error forwarded from the auth callback
   const searchParams = useSearchParams();
   useEffect(() => {
     if (searchParams.get("error")) {
@@ -30,10 +32,17 @@ function LoginForm() {
   async function handleGoogle() {
     setLoading("google");
     setError(null);
-    const result = await signInWithGoogle();
-    // If we reach here, the redirect didn't fire — surface the error
-    if (result?.error) setError(result.error);
-    setLoading(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    // If no error the browser is already navigating to Google — don't reset
+    if (error) {
+      setError(error.message);
+      setLoading(null);
+    }
   }
 
   async function handleEmail(e: React.FormEvent) {
@@ -41,9 +50,14 @@ function LoginForm() {
     if (!email.trim()) return;
     setLoading("email");
     setError(null);
-    const result = await signInWithEmail(email.trim());
-    if (result?.error) {
-      setError(result.error);
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) {
+      setError(error.message);
     } else {
       setSent(true);
     }
@@ -117,7 +131,7 @@ function LoginForm() {
                 Magic link sent — check your inbox.
               </p>
               <p className="font-mono text-[10px] text-zinc-500">
-                Link expires in 10 minutes. Check your spam if needed.
+                Link expires in 10 minutes. Check spam if needed.
               </p>
               <button
                 type="button"
@@ -169,7 +183,6 @@ function LoginForm() {
   );
 }
 
-/** Official Google "G" multicolor logo */
 function GoogleLogo() {
   return (
     <svg
