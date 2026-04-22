@@ -273,11 +273,12 @@ export async function POST(req: Request) {
           `</input>`;
 
         // ── 4. Run the agentic research loop with streaming ──────────────────
-        // Track input JSON being built up for each tool call (streamed as deltas)
-        const inputBuffers = new Map<
-          number,
-          { name: string; json: string }
-        >();
+        // Track input JSON being built up for CLIENT tool calls (submit_profile).
+        // Server-side tools (web_search, web_fetch) have their full input in the
+        // content_block_start event and do NOT emit input_json_delta deltas.
+        const inputBuffers = new Map<number, { name: string; json: string }>();
+        // Indices of server tool blocks already handled at content_block_start
+        const handledAtStart = new Set<number>();
 
         const aiStream = anthropic.messages.stream({
           model: "claude-sonnet-4-6",
@@ -296,22 +297,43 @@ export async function POST(req: Request) {
           messages: [{ role: "user", content: userMessage }],
         } as Parameters<typeof anthropic.messages.stream>[0]);
 
-        // Listen to raw SSE events to capture tool calls as they stream in
+        // Listen to raw SSE events to capture tool calls as they stream in.
+        //
+        // Key distinction:
+        //   server_tool_use (web_search, web_fetch) — Anthropic executes these
+        //     server-side. The full input object is embedded in content_block_start,
+        //     NOT streamed via input_json_delta. Emit status immediately at start.
+        //
+        //   tool_use (submit_profile) — client-side tool. Input streams via
+        //     input_json_delta deltas; accumulate and emit at content_block_stop.
+        //
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         aiStream.on("streamEvent", (event: any) => {
           if (event.type === "content_block_start") {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const block = event.content_block as Record<string, any> | undefined;
             if (!block) return;
-            const blockType = block.type as string;
-            const blockName = block.name as string | undefined;
             const index = event.index as number;
 
-            if (
-              blockType === "server_tool_use" ||
-              blockType === "tool_use"
-            ) {
-              inputBuffers.set(index, { name: blockName ?? "", json: "" });
+            if (block.type === "server_tool_use") {
+              // Full input is available right now — emit immediately
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const input = (block.input ?? {}) as Record<string, any>;
+              if (block.name === "web_search") {
+                const query = (input.query as string) ?? "the web";
+                emit({ status: `Searching: "${query}"…` });
+              } else if (block.name === "web_fetch") {
+                try {
+                  const hostname = new URL(input.url as string).hostname.replace(/^www\./, "");
+                  emit({ status: `Reading ${hostname}…` });
+                } catch {
+                  emit({ status: "Reading source page…" });
+                }
+              }
+              handledAtStart.add(index);
+            } else if (block.type === "tool_use") {
+              // submit_profile — input comes via streaming deltas
+              inputBuffers.set(index, { name: (block.name as string) ?? "", json: "" });
             }
           }
 
@@ -325,38 +347,21 @@ export async function POST(req: Request) {
           }
 
           if (event.type === "content_block_stop") {
-            const entry = inputBuffers.get(event.index as number);
+            const index = event.index as number;
+
+            // Server tools were already handled at start — skip
+            if (handledAtStart.has(index)) {
+              handledAtStart.delete(index);
+              return;
+            }
+
+            const entry = inputBuffers.get(index);
             if (!entry) return;
-            inputBuffers.delete(event.index as number);
+            inputBuffers.delete(index);
 
-            try {
-              const input = JSON.parse(entry.json || "{}") as Record<
-                string,
-                unknown
-              >;
-
-              if (entry.name === "web_search") {
-                const query = (input.query as string) ?? "the web";
-                emit({ status: `Searching: "${query}"…` });
-              } else if (entry.name === "web_fetch") {
-                try {
-                  const hostname = new URL(input.url as string).hostname.replace(
-                    /^www\./,
-                    ""
-                  );
-                  emit({ status: `Reading ${hostname}…` });
-                } catch {
-                  emit({ status: "Reading source page…" });
-                }
-              } else if (entry.name === "submit_profile") {
-                emit({ status: "✓ Research complete. Building profile…" });
-              }
-            } catch {
-              // Partial JSON or empty — emit generic fallback
-              if (entry.name === "web_search")
-                emit({ status: "Searching the web…" });
-              else if (entry.name === "web_fetch")
-                emit({ status: "Reading source…" });
+            // Only submit_profile reaches here
+            if (entry.name === "submit_profile") {
+              emit({ status: "✓ Research complete. Building profile…" });
             }
           }
         });

@@ -10,6 +10,8 @@ interface SidebarProps {
   onToggle: () => void;
   isMobileOpen: boolean;
   onMobileClose: () => void;
+  /** Company name from the active product profile. Hidden when sidebar is collapsed. */
+  companyName?: string;
 }
 
 export function Sidebar({
@@ -19,6 +21,7 @@ export function Sidebar({
   onToggle,
   isMobileOpen,
   onMobileClose,
+  companyName,
 }: SidebarProps) {
   function handleToolSelect(toolId: string) {
     onToolSelect(toolId);
@@ -95,6 +98,21 @@ export function Sidebar({
             <X size={16} />
           </button>
         </div>
+
+        {/* Company name strip — shows active product profile */}
+        {companyName && (
+          <div
+            className={`shrink-0 border-b border-white/5 overflow-hidden transition-all duration-300 ease-in-out ${
+              isCollapsed && !isMobileOpen
+                ? "md:max-h-0 md:py-0 md:opacity-0"
+                : "max-h-10 py-2 opacity-100"
+            }`}
+          >
+            <p className="font-mono text-[10px] tracking-wider text-[#FF3300]/70 truncate px-4 uppercase">
+              {companyName}
+            </p>
+          </div>
+        )}
 
         {/* Tool navigation */}
         <ToolNav

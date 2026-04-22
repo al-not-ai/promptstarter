@@ -1,6 +1,9 @@
 import { streamText } from "ai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { tools } from "@/lib/tools";
+import { createClient } from "@/lib/supabase/server";
+import { renderProfileAsXML } from "@/lib/profile-xml";
+import type { ProductProfile } from "@/lib/types/profile";
 
 const MODEL = "claude-haiku-4-5";
 
@@ -8,6 +11,10 @@ const anthropic = createAnthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+/**
+ * Core strategic framework — tool-agnostic, always included.
+ * Profile XML is appended after this if available.
+ */
 const BASE_SYSTEM_PROMPT = `You are an Elite B2B Sales Strategist and Prompt Engineer. Your output is a Master Prompt — a tactical controller designed to be pasted directly into ChatGPT or Claude.
 
 FORMATTING LAW — PROSE IS BANNED. FRAGMENTS ONLY:
@@ -43,8 +50,10 @@ function buildUserPrompt(params: {
   toolId: string;
   variableValues: Record<string, string>;
   sliderValues: Record<string, number>;
+  productName?: string;
+  companyName?: string;
 }): string {
-  const { toolId, variableValues, sliderValues } = params;
+  const { toolId, variableValues, sliderValues, productName, companyName } = params;
   const tool = tools.find((t) => t.id === toolId);
   if (!tool) throw new Error(`Unknown tool: ${toolId}`);
 
@@ -66,11 +75,17 @@ function buildUserPrompt(params: {
 
   const primaryEntity = variableValues[tool.variables[0]?.name ?? ""] || "the target";
 
+  // Include seller product context if available
+  const sellerContext =
+    productName || companyName
+      ? `\n**Seller's Product:** ${productName ?? companyName} (${companyName ?? ""})`
+      : "";
+
   return `Generate a Master Prompt using the exact 5-section structure. Output only the 5 sections — nothing before, nothing after. FRAGMENTS ONLY. Max 3 bullets per section, max 20 words per bullet.
 
 ## INPUTS
 **Tool:** ${tool.name} (${tool.category})
-**Output Format:** ${tool.outputFormat}
+**Output Format:** ${tool.outputFormat}${sellerContext}
 
 **Variables:**
 ${variableSummary}
@@ -118,21 +133,65 @@ Locked directives. Zero latitude to deviate.
 }
 
 export async function POST(req: Request) {
+  // ── Auth + profile lookup ──────────────────────────────────────────────────
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  // Fetch the user's active profile (default first, then most recently updated)
+  const { data: profile } = await supabase
+    .from("product_profiles")
+    .select("*")
+    .is("deleted_at", null)
+    .eq("user_id", user.id)
+    .in("research_status", ["ready", "draft", "user_edited"])
+    .order("is_default", { ascending: false })
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle() as { data: ProductProfile | null };
+
+  // ── Parse request body ─────────────────────────────────────────────────────
   const body = await req.json();
-  const { toolId, variableValues, sliderValues, hasContext } = body as {
+  const { toolId, variableValues, sliderValues } = body as {
     toolId: string;
     variableValues: Record<string, string>;
     sliderValues: Record<string, number>;
     hasContext: boolean;
   };
 
+  // ── Build system prompt with profile context ───────────────────────────────
+  let systemPrompt = BASE_SYSTEM_PROMPT;
+
+  if (profile) {
+    const profileXml = renderProfileAsXML(profile);
+    systemPrompt +=
+      `\n\n## SELLER PRODUCT PROFILE\n` +
+      `The sales rep using this tool sells the product below. Ground your Master Prompt ` +
+      `in this profile — use the actual product name, real differentiators, named proof ` +
+      `points, and specific objection handlers wherever they strengthen the strategy. ` +
+      `Do NOT invent capabilities not present in the profile.\n\n` +
+      profileXml;
+  }
+
+  // ── Stream the response ────────────────────────────────────────────────────
   const result = streamText({
     model: anthropic(MODEL),
-    system: BASE_SYSTEM_PROMPT,
+    system: systemPrompt,
     messages: [
       {
         role: "user",
-        content: buildUserPrompt({ toolId, variableValues, sliderValues }),
+        content: buildUserPrompt({
+          toolId,
+          variableValues,
+          sliderValues,
+          productName: profile?.product_name ?? undefined,
+          companyName: profile?.company_name ?? undefined,
+        }),
       },
     ],
     maxOutputTokens: 2000,

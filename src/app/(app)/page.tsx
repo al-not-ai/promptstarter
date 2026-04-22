@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/sidebar";
 import { StatusHeader } from "@/components/status-header";
 import { ControlPanel } from "@/components/control-panel";
 import { tools } from "@/lib/tools";
+import { useProfile } from "@/lib/profile-context";
 
 function defaultSliderValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
@@ -17,6 +18,7 @@ function defaultVariableValues(toolId: string): Record<string, string> {
 }
 
 export default function Home() {
+  const profile = useProfile();
   const [activeToolId, setActiveToolId] = useState(tools[0].id);
   const [sliderValues, setSliderValues] = useState<Record<string, number>>(
     defaultSliderValues(tools[0].id)
@@ -47,6 +49,7 @@ export default function Home() {
         onToggle={() => setSidebarCollapsed((prev) => !prev)}
         isMobileOpen={mobileNavOpen}
         onMobileClose={() => setMobileNavOpen(false)}
+        companyName={profile?.company_name ?? undefined}
       />
 
       <StatusHeader onMenuOpen={() => setMobileNavOpen(true)} />
