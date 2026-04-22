@@ -1,15 +1,26 @@
-export interface ProofPoint {
-  type: "case_study" | "logo" | "metric";
-  label: string;
-  detail?: string;
-  url?: string;
-}
-
-export interface ObjectionHandler {
-  objection: string;
-  response: string;
-}
-
+/**
+ * Product Profile types.
+ *
+ * Profiles are product-scoped, not company-scoped. A rep at a multi-product
+ * company (e.g. KEYENCE) sells one of many products to one of many markets;
+ * this profile matches their specific product or product group.
+ *
+ * User-facing fields — the rep fills these out or edits them:
+ *   - company_name          "KEYENCE"
+ *   - product_name          "IV3 Vision System" (can be a specific product or a product line)
+ *   - product_summary       One sentence on what it does
+ *   - key_differentiators   2–3 short phrases on what makes it stand out
+ *
+ * Metadata — captured automatically by the research flow, rarely user-edited:
+ *   - company_url           Company homepage
+ *   - product_url           The page we researched against (source of truth for re-research)
+ *   - is_default            One default profile per user
+ *   - research_status       Lifecycle state
+ *
+ * This schema is intentionally lean. Tone of voice, target buyer, competitors,
+ * and objections now live at the Tool level (per-generation inputs), not on
+ * the profile — they shift per-call and would stale out if locked in here.
+ */
 export type ResearchStatus =
   | "draft"
   | "researching"
@@ -21,40 +32,21 @@ export interface ProductProfile {
   id: string;
   user_id: string;
 
-  // Identity
+  // User-facing fields
   company_name: string;
-  company_url: string | null;
   product_name: string;
-  technical_category: string | null;
-
-  // Positioning
-  one_liner: string | null;
-  core_value_prop: string | null;
-  tone_of_voice: string | null;
-  founder_story: string | null;
-
-  // Arrays
+  product_summary: string | null;
   key_differentiators: string[];
-  primary_use_cases: string[];
-  target_market_segments: string[];
-  competitors: string[];
-  integrations: string[];
 
-  // JSONB
-  proof_points: ProofPoint[];
-  objection_handlers: ObjectionHandler[];
+  // Metadata captured during research
+  company_url: string | null;
+  product_url: string | null;
 
-  pricing_model: string | null;
-
-  // UX / multiplicity
+  // Lifecycle & multiplicity
   is_default: boolean;
-
-  // Research provenance
   research_status: ResearchStatus;
-  research_confidence: number | null;
 
-  // Versioning & timestamps
-  version: number;
+  // Timestamps & soft delete
   created_at: string;
   updated_at: string;
   deleted_at: string | null;

@@ -9,9 +9,17 @@ import type { ProductProfile } from "@/lib/types/profile";
  * Runs on every request to the Command Center (/) and any future
  * /app/[profileId] routes. Responsibilities:
  *   1. Confirm the user is authenticated (defense-in-depth on top of proxy)
- *   2. Fetch their most-relevant profile (default first, then most-recently-updated)
+ *   2. Fetch ALL of the user's active profiles (for the switcher)
  *   3. First-time users (no profiles at all) → /onboarding
- *   4. Everyone else → render the app with profile in context
+ *   4. Everyone else → render the app with the profiles + default active in context
+ *
+ * The active profile is determined by:
+ *   - is_default = true if present (user has an explicit default)
+ *   - otherwise the most recently updated profile
+ *
+ * Profiles mid-research are included so the sidebar reflects the live state
+ * (a placeholder "researching" row wouldn't normally be switched to, but the
+ * user can at least see it exists).
  */
 export default async function AppLayout({
   children,
@@ -27,22 +35,24 @@ export default async function AppLayout({
   // Proxy handles this, but be explicit in case of direct navigation
   if (!user) redirect("/login");
 
-  // Grab the user's most-relevant active profile:
-  // default profile wins; ties broken by most recently updated.
-  const { data: profile } = await supabase
+  const { data: rows } = await supabase
     .from("product_profiles")
     .select("*")
     .is("deleted_at", null)
+    .eq("user_id", user.id)
     .order("is_default", { ascending: false })
-    .order("updated_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .order("updated_at", { ascending: false });
+
+  const profiles = (rows ?? []) as ProductProfile[];
 
   // No profiles at all → first-time onboarding flow
-  if (!profile) redirect("/onboarding");
+  if (profiles.length === 0) redirect("/onboarding");
+
+  const initialActiveId =
+    profiles.find((p) => p.is_default)?.id ?? profiles[0].id;
 
   return (
-    <ProfileProvider profile={profile as ProductProfile}>
+    <ProfileProvider profiles={profiles} initialActiveId={initialActiveId}>
       {children}
     </ProfileProvider>
   );

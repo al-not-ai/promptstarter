@@ -171,10 +171,12 @@ export async function POST(req: Request) {
     const profileXml = renderProfileAsXML(profile);
     systemPrompt +=
       `\n\n## SELLER PRODUCT PROFILE\n` +
-      `The sales rep using this tool sells the product below. Ground your Master Prompt ` +
-      `in this profile — use the actual product name, real differentiators, named proof ` +
-      `points, and specific objection handlers wherever they strengthen the strategy. ` +
-      `Do NOT invent capabilities not present in the profile.\n\n` +
+      `The sales rep using this tool sells the product below. These are the *constant* ` +
+      `anchor facts — use the real product name, the actual summary, and the stated ` +
+      `differentiators wherever they strengthen the Master Prompt. Do NOT invent ` +
+      `capabilities or claims not present in the profile. For per-call specifics ` +
+      `(target buyer, tone, competitor, objection), rely on the tool variables and ` +
+      `sliders — not this profile.\n\n` +
       profileXml;
   }
 
