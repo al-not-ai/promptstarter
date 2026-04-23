@@ -8,6 +8,22 @@
 
 import fs from "fs";
 
+const TEST_PROFILE = {
+  company_name: "Velara",
+  product_name: "Velara Revenue OS",
+  company_url: "https://velara.io",
+  product_url: "https://velara.io/product",
+  product_summary:
+    "Velara Revenue OS is a real-time pipeline intelligence platform that eliminates CRM data rot, surfaces deal risk before it's fatal, and delivers in-call coaching signals that keep reps on message without post-call regret.",
+  key_differentiators: [
+    "Auto-captures deal activity from email and calendar — zero manual CRM updates",
+    "Forecast accuracy within 4% guaranteed — backed by contractual SLA",
+    "Live in 14 days flat — no implementation fees, no professional services required",
+    "In-call coaching signals surfaced in real time, not post-call",
+    "Native Salesforce and HubSpot bidirectional sync with no middleware",
+  ],
+};
+
 const BASE_URL = process.argv[2];
 if (!BASE_URL) {
   console.error("Usage: node scripts/stress-test.mjs <BASE_URL>");
@@ -150,15 +166,9 @@ const TEST_CASES = [
 ];
 
 async function streamToString(response) {
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let result = "";
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    result += decoder.decode(value, { stream: true });
-  }
-  return result;
+  // response.text() is more reliable than manual ReadableStream consumption
+  // on Node.js v24+ where undici's stream handling can terminate early.
+  return response.text();
 }
 
 async function runCase(testCase, index) {
@@ -173,7 +183,7 @@ async function runCase(testCase, index) {
         "Content-Type": "application/json",
         "x-stress-test-key": process.env.STRESS_TEST_KEY ?? "stress-test-local-only",
       },
-      body: JSON.stringify(testCase.body),
+      body: JSON.stringify({ ...testCase.body, testProfile: TEST_PROFILE }),
     });
 
     if (!response.ok) {
@@ -185,8 +195,9 @@ async function runCase(testCase, index) {
     const output = await streamToString(response);
     const ms = Date.now() - start;
     const hasKickoff = output.includes("INTERACTIVE KICKOFF");
-    process.stdout.write(`OK (${ms}ms, kickoff=${hasKickoff ? "✓" : "✗"})\n`);
-    return { label: testCase.label, status: "OK", output, ms, hasKickoff };
+    const hasProfile = output.includes("Velara");
+    process.stdout.write(`OK (${ms}ms, kickoff=${hasKickoff ? "✓" : "✗"}, profile=${hasProfile ? "✓" : "✗"})\n`);
+    return { label: testCase.label, status: "OK", output, ms, hasKickoff, hasProfile };
   } catch (err) {
     process.stdout.write(`ERROR\n`);
     return { label: testCase.label, status: "ERROR", error: String(err), output: null, ms: Date.now() - start };
@@ -197,19 +208,21 @@ function buildMarkdown(results) {
   const timestamp = new Date().toISOString();
   const passed = results.filter((r) => r.status === "OK").length;
   const kickoffs = results.filter((r) => r.hasKickoff).length;
+  const profileHits = results.filter((r) => r.hasProfile).length;
 
   let md = `# Arsenal Stress Test Results\n\n`;
   md += `**Run:** ${timestamp}  \n`;
   md += `**Endpoint:** ${ENDPOINT}  \n`;
   md += `**Passed:** ${passed}/12  \n`;
-  md += `**Interactive Kickoff present:** ${kickoffs}/12  \n\n`;
+  md += `**Interactive Kickoff present:** ${kickoffs}/12  \n`;
+  md += `**Profile injected (Velara present):** ${profileHits}/12  \n\n`;
   md += `---\n\n`;
 
   for (const [i, r] of results.entries()) {
     const pad = String(i + 1).padStart(2, "0");
     md += `## Case ${pad}: ${r.label}\n\n`;
     md += `**Status:** ${r.status} | **Time:** ${r.ms}ms`;
-    if (r.status === "OK") md += ` | **Kickoff:** ${r.hasKickoff ? "✓ Present" : "✗ Missing"}`;
+    if (r.status === "OK") md += ` | **Kickoff:** ${r.hasKickoff ? "✓ Present" : "✗ Missing"} | **Profile:** ${r.hasProfile ? "✓ Present" : "✗ Missing"}`;
     md += `\n\n`;
 
     if (r.status === "OK") {
@@ -240,7 +253,8 @@ async function main() {
 
   const passed = results.filter((r) => r.status === "OK").length;
   const kickoffs = results.filter((r) => r.hasKickoff).length;
-  console.log(`\nDone. ${passed}/12 passed, ${kickoffs}/12 with kickoff section.`);
+  const profileHits = results.filter((r) => r.hasProfile).length;
+  console.log(`\nDone. ${passed}/12 passed, ${kickoffs}/12 with kickoff section, ${profileHits}/12 with profile injection.`);
   console.log(`Results written to: arsenal-test-results.md`);
 }
 

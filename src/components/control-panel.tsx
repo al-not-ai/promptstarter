@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useCompletion } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,9 @@ interface ControlPanelProps {
   onSliderChange: (sliderId: string, value: number) => void;
   onVariableChange: (name: string, value: string) => void;
   onReset: () => void;
+  restoredOutput: string | null;
+  onGenerationStart: () => void;
+  onGenerationComplete: () => void;
 }
 
 export function ControlPanel({
@@ -27,6 +30,9 @@ export function ControlPanel({
   onSliderChange,
   onVariableChange,
   onReset,
+  restoredOutput,
+  onGenerationStart,
+  onGenerationComplete,
 }: ControlPanelProps) {
   const [rawContext, setRawContext] = useState("");
   const [contextOpen, setContextOpen] = useState(false);
@@ -36,7 +42,17 @@ export function ControlPanel({
     streamProtocol: "text",
   });
 
+  // Detect isLoading: true → false with a non-empty completion to fire onGenerationComplete
+  const prevLoadingRef = useRef(false);
+  useEffect(() => {
+    if (prevLoadingRef.current && !isLoading && completion) {
+      onGenerationComplete();
+    }
+    prevLoadingRef.current = isLoading;
+  }, [isLoading, completion, onGenerationComplete]);
+
   function handleGenerate() {
+    onGenerationStart();
     complete("", {
       body: {
         toolId: activeTool.id,
@@ -174,7 +190,12 @@ export function ControlPanel({
       </Card>
 
       {/* Output — full width below the form */}
-      <TerminalOutput output={completion} isLoading={isLoading} error={error} rawContext={rawContext} />
+      <TerminalOutput
+        output={restoredOutput ?? completion}
+        isLoading={isLoading}
+        error={error}
+        rawContext={rawContext}
+      />
 
     </div>
   );

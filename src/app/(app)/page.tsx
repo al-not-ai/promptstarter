@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/sidebar";
 import { StatusHeader } from "@/components/status-header";
 import { ControlPanel } from "@/components/control-panel";
 import { tools } from "@/lib/tools";
+import type { RestoredGeneration } from "@/lib/types/generation";
 
 function defaultSliderValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
@@ -26,6 +27,8 @@ export default function Home() {
   );
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [restored, setRestored] = useState<RestoredGeneration>(null);
+  const [generationCount, setGenerationCount] = useState(0);
 
   const activeTool = tools.find((t) => t.id === activeToolId)!;
   const firstVarName = activeTool.variables[0]?.name;
@@ -35,6 +38,14 @@ export default function Home() {
     setActiveToolId(toolId);
     setSliderValues(defaultSliderValues(toolId));
     setVariableValues(defaultVariableValues(toolId));
+  }, []);
+
+  const handleRestoreGeneration = useCallback((gen: RestoredGeneration) => {
+    if (!gen) return;
+    setActiveToolId(gen.toolId);
+    setSliderValues(gen.sliderValues);
+    setVariableValues(gen.variableValues);
+    setRestored(gen);
   }, []);
 
   return (
@@ -47,6 +58,8 @@ export default function Home() {
         onToggle={() => setSidebarCollapsed((prev) => !prev)}
         isMobileOpen={mobileNavOpen}
         onMobileClose={() => setMobileNavOpen(false)}
+        onRestoreGeneration={handleRestoreGeneration}
+        refreshKey={generationCount}
       />
 
       <StatusHeader onMenuOpen={() => setMobileNavOpen(true)} />
@@ -71,6 +84,9 @@ export default function Home() {
             setSliderValues(defaultSliderValues(activeToolId));
             setVariableValues(defaultVariableValues(activeToolId));
           }}
+          restoredOutput={restored?.output ?? null}
+          onGenerationStart={() => setRestored(null)}
+          onGenerationComplete={() => setGenerationCount((c) => c + 1)}
         />
       </main>
     </div>

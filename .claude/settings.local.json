@@ -24,7 +24,29 @@
       "mcp__Claude_Preview__preview_start",
       "Bash(cat)",
       "Bash(chmod +x /tmp/check_unused.sh)",
-      "Bash(/tmp/check_unused.sh)"
+      "Bash(/tmp/check_unused.sh)",
+      "Bash(npm run *)",
+      "Bash(echo \"Dev server PID: $!\")",
+      "Bash(curl -s http://localhost:3000/api/generate -X POST -H \"Content-Type: application/json\" -H \"x-stress-test-key: stress-test-local-only\" -d '{\"toolId\":\"pre-call-recon\",\"variableValues\":{\"targetCompany\":\"test\",\"targetPersona\":\"CEO\"},\"sliderValues\":{\"call-objective\":0,\"prospect-posture\":0}}')",
+      "Bash(STRESS_TEST_KEY=stress-test-local-only node scripts/stress-test.mjs http://localhost:3000)",
+      "Bash(curl -s http://localhost:3000/api/generate -X POST -H 'Content-Type: application/json' -H 'x-stress-test-key: stress-test-local-only' -d '{\"toolId\":\"pre-call-recon\",\"variableValues\":{\"targetCompany\":\"HubSpot\",\"targetPersona\":\"VP RevOps\"},\"sliderValues\":{\"call-objective\":0,\"prospect-posture\":0}}' --max-time 30)",
+      "Bash(curl -v http://localhost:3000/api/generate -X POST -H 'Content-Type: application/json' -H 'x-stress-test-key: stress-test-local-only' -d '{\"toolId\":\"pre-call-recon\",\"variableValues\":{\"targetCompany\":\"HubSpot\",\"targetPersona\":\"VP RevOps\"},\"sliderValues\":{\"call-objective\":0,\"prospect-posture\":0}}' --max-time 30)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['version']\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(grep -r \"ANTHROPIC_BASE_URL\\\\|ANTHROPIC_URL\" /Users/al/Desktop/promptstarter-ai/ --include=\"*.env*\" --include=\".env*\" echo \"---\" printenv)",
+      "Bash(env -u ANTHROPIC_BASE_URL npm run dev)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s http://localhost:3000/api/generate -o /dev/null -w \"%{http_code}\")",
+      "Bash(kill 59073)",
+      "Bash(kill 59550)",
+      "Bash(kill 59781)",
+      "Bash(git stash *)",
+      "Bash(kill 61354)",
+      "Read(//usr/local/lib/**)",
+      "Bash(brew list *)",
+      "Bash(kill 61559 npm install)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/next/package.json'\\).version\\)\")",
+      "Bash(lsof -ti:3000)"
     ]
   }
 }

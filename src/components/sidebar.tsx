@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ToolNav } from "@/components/tool-nav";
 import { useProfileSwitcher } from "@/lib/profile-context";
+import { tools } from "@/lib/tools";
+import type { RestoredGeneration } from "@/lib/types/generation";
 
 interface SidebarProps {
   activeToolId: string;
@@ -13,6 +15,8 @@ interface SidebarProps {
   onToggle: () => void;
   isMobileOpen: boolean;
   onMobileClose: () => void;
+  onRestoreGeneration: (gen: RestoredGeneration) => void;
+  refreshKey: number;
 }
 
 export function Sidebar({
@@ -22,6 +26,8 @@ export function Sidebar({
   onToggle,
   isMobileOpen,
   onMobileClose,
+  onRestoreGeneration,
+  refreshKey,
 }: SidebarProps) {
   function handleToolSelect(toolId: string) {
     onToolSelect(toolId);
@@ -107,6 +113,13 @@ export function Sidebar({
           activeToolId={activeToolId}
           onToolSelect={handleToolSelect}
           isCollapsed={isCollapsed && !isMobileOpen}
+        />
+
+        {/* History section */}
+        <HistorySection
+          isCollapsed={isCollapsed && !isMobileOpen}
+          refreshKey={refreshKey}
+          onRestoreGeneration={onRestoreGeneration}
         />
 
         {/* Footer */}
@@ -248,6 +261,134 @@ function ProfileSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
           </Link>
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── History section ──────────────────────────────────────────────────────
+
+type GenerationMeta = {
+  id: string;
+  tool_id: string;
+  variable_values: Record<string, string>;
+  created_at: string;
+};
+
+type GenerationFull = {
+  id: string;
+  tool_id: string;
+  variable_values: Record<string, string>;
+  slider_values: Record<string, number>;
+  output: string;
+  created_at: string;
+};
+
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
+function HistorySection({
+  isCollapsed,
+  refreshKey,
+  onRestoreGeneration,
+}: {
+  isCollapsed: boolean;
+  refreshKey: number;
+  onRestoreGeneration: (gen: RestoredGeneration) => void;
+}) {
+  const [items, setItems] = useState<GenerationMeta[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("/api/generations")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: GenerationMeta[]) => {
+        setItems(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [refreshKey]);
+
+  async function handleClick(id: string) {
+    try {
+      const r = await fetch(`/api/generations/${id}`);
+      if (!r.ok) return;
+      const gen: GenerationFull = await r.json();
+      onRestoreGeneration({
+        toolId: gen.tool_id,
+        variableValues: gen.variable_values,
+        sliderValues: gen.slider_values,
+        output: gen.output,
+      });
+    } catch {
+      // silently ignore — non-fatal
+    }
+  }
+
+  // Hidden when collapsed or no items and not loading
+  if (isCollapsed) return null;
+  if (!loading && items.length === 0) return null;
+
+  const displayItems = items.slice(0, 10);
+
+  return (
+    <div className="shrink-0 border-t border-white/5 px-3 py-3">
+      <p className="font-mono text-[10px] tracking-wider text-zinc-600 uppercase px-1 mb-2">
+        Recent
+      </p>
+
+      <div className="flex flex-col gap-0.5">
+        {loading ? (
+          // Skeleton rows
+          [0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="h-9 rounded-md bg-zinc-900/60 animate-pulse"
+            />
+          ))
+        ) : (
+          displayItems.map((item) => {
+            const tool = tools.find((t) => t.id === item.tool_id);
+            const toolName = tool?.name ?? item.tool_id;
+            // Abbreviated tool name: strip "The " prefix for compactness
+            const shortName = toolName.replace(/^The\s+/i, "");
+            // First variable value as the subtitle
+            const firstVal = Object.values(item.variable_values)[0] ?? "";
+            const subtitle =
+              firstVal.length > 24 ? firstVal.slice(0, 23) + "…" : firstVal;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleClick(item.id)}
+                className="w-full text-left rounded-md px-2 py-1.5 hover:bg-white/[0.04] transition-colors duration-100 group"
+              >
+                <div className="flex items-baseline justify-between gap-2 min-w-0">
+                  <span className="font-mono text-[11px] text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
+                    {shortName}
+                  </span>
+                  <span className="font-mono text-[10px] text-zinc-600 shrink-0">
+                    {timeAgo(item.created_at)}
+                  </span>
+                </div>
+                {subtitle && (
+                  <div className="font-mono text-[10px] text-zinc-600 truncate leading-snug">
+                    {subtitle}
+                  </div>
+                )}
+              </button>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }

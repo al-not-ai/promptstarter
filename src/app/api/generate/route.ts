@@ -29,6 +29,13 @@ Your output is a fast-paced, high-density config file. Strict limits apply to ev
 - Paragraphs are strictly forbidden. If it reads like writing, it's wrong.
 - Be ruthless with word count. Cut every word that doesn't change meaning.
 
+FORMATTING LOCK — ZERO TOLERANCE:
+Your output MUST begin with this exact string as its very first line: # **[THE PERSONA]**
+Nothing comes before it. Not a title. Not a label. Not a header. Not a blank line. The literal first characters of your output are: # **[THE PERSONA]**
+After that, every section uses this exact header format: # **[THE SECTION NAME]** — no other variant.
+Every section is separated by a --- horizontal rule with one blank line above and below it.
+Generating any text, title, or header before # **[THE PERSONA]** is a critical formatting failure that invalidates the entire output.
+
 LANGUAGE LAW — JARGON IS BANNED:
 Ban academic psychology jargon. Translate all strategy into gritty, modern Sales Floor English. The prompt must feel like a tactical sales playbook, not a behavioral science paper. No "cognitive dissonance", no "reciprocity bias", no "anchoring heuristic" — say what it does, not what it's called.
 
@@ -44,13 +51,13 @@ RULE 2 — DYNAMIC RECONNAISSANCE:
 - Mandate: anchor strategy to one specific signal found, not a generic talking point.
 
 RULE 3 — NO EXACT SCRIPTING:
-You (the Engine) must NEVER write exact dialogue, email copy, or first/last lines. However, you MUST explicitly command the AI reading this prompt to write the final script/email using your guardrails. CRITICAL: The prompt you generate will be read directly by another AI. Address that AI in second person only — say 'you', never 'the AI', 'the Downstream AI', or any third-person label. Any third-person reference to 'Downstream AI' in your output is a critical error.
+You (the Engine) must NEVER write exact dialogue, email copy, or first/last lines. However, you MUST explicitly command the AI reading this prompt to write the final output using your guardrails. CRITICAL: This ban includes quoted text, example phrases, and verbatim lines — do NOT write things like: deploy: 'That's the integration tax' or open with: 'I noticed your team...'. Any text in quotation marks that could be spoken or written verbatim is a script. Ban it entirely. Set the rails. Never lay the track. The prompt you generate will be read directly by another AI. Address that AI in second person only — say 'you', never 'the AI', 'the Downstream AI', or any third-person label. Any third-person reference to 'Downstream AI' in your output is a critical error.
 
 RULE 4 — INTERACTIVE KICKOFF IS MANDATORY:
-Every generated prompt MUST close with a [THE INTERACTIVE KICKOFF] section. This section commands the receiving AI to end its output with exactly two things:
+Every generated prompt MUST close with a [THE INTERACTIVE KICKOFF] section. This section instructs the AI reading the prompt to close its output with exactly two things:
 1. One single punchy strategic clarifying question — sparring partner energy, not chatbot energy. Reference the active calibration setting. Make the user think. No 'how can I help?' energy.
-2. An open invitation for additional context: ask if the user wants to paste in any relevant emails, previous conversations, documents, or intel to sharpen the output further.
-If [THE INTERACTIVE KICKOFF] is missing from your output, the output is incomplete and wrong.
+2. An open invitation for additional context — ask if the user wants to paste in any relevant emails, prior conversations, documents, or intel.
+HARD STOP RULE: Your output ends at the last word of [THE INTERACTIVE KICKOFF] section. No additional text, no additional headers, no meta-commentary, no trailing blocks after it. Any text appearing after [THE INTERACTIVE KICKOFF] is a critical formatting failure that invalidates the entire output.
 
 RULE 5 — OUTPUT STRUCTURE:
 Output exactly these 6 sections in order. Nothing before section 1. Nothing after section 6.
@@ -84,6 +91,7 @@ function buildUserPrompt(params: {
     .join("\n");
 
   const primaryEntity = variableValues[tool.variables[0]?.name ?? ""] || "the target";
+  const primaryPersona = variableValues[tool.variables[1]?.name ?? ""] || "the target persona";
 
   // Include seller product context if available
   const sellerContext =
@@ -93,7 +101,6 @@ function buildUserPrompt(params: {
 
   return `Generate a Master Prompt using the exact 6-section structure. Output only the 6 sections — nothing before, nothing after. FRAGMENTS ONLY. Max 3 bullets per section, max 20 words per bullet.
 
-## INPUTS
 **Tool:** ${tool.name} (${tool.category})
 **Output Format:** ${tool.outputFormat}${sellerContext}
 
@@ -112,28 +119,18 @@ ${calibrationSummary}
 - **Mandate:** [what this persona is optimized to achieve in one fragment]
 
 ## **[THE CONTEXT]**
-2–3 bullets maximum. No prose.
-- **Task:** Execute a ${tool.category.toLowerCase()} play using ${tool.name}
-- **Stake:** [the structural consequence of failure at the "${primaryPosture}" level — universal, not entity-specific]
-- **Constraint:** Recon provides entity-specific data — do not invent it here
+3 bullets exactly. No prose.
+- **Rep sells:** ${productName ? `${productName}${companyName ? ` (${companyName})` : ""}` : companyName ?? "[seller product]"} — every output must be specific to this product, not the company broadly.
+- **Task:** Execute a ${tool.category.toLowerCase()} play for ${primaryEntity} / ${primaryPersona}
+- **Stake:** [the structural consequence of failure at the "${primaryPosture}" level — frame it in terms of the specific product above and this exact buyer]
 
 ## **[THE PSYCHOLOGICAL PLAY]**
 - **Mechanism:** [name the exact psychological lever this "${primaryPosture}" + "${secondaryPosture}" combination demands — precise, no softening]
 - **Why it applies:** [1-line fragment explaining why this mechanism fits this scenario]
-- **Deployment directive:** [precise behavioral instruction for the receiving AI — how to deploy this mechanism using whatever signal recon surfaces about ${primaryEntity}]
+- **Deployment directive:** [ONE tight fragment — 20 words maximum. No sentences. No multi-step instructions. Name the exact action and the exact trigger. Stop.]
 
 ## **[DYNAMIC RECONNAISSANCE]**
-Apply Rule 1 (Confidence Gate) for "${primaryEntity}". Then output the correct directive:
-
-**If known entity:**
-- Search: "${primaryEntity}" news — last 6 months only
-- Target: leadership changes / Q-over-Q headwinds / stated operational goals
-- Ban: marketing pages, About Us, press releases
-- Mandate: anchor "${primaryPosture}" strategy to one specific signal found
-
-**If unknown/obscure:**
-- Anchor: standard ${tool.category.toLowerCase()} friction points only
-- Prohibit: inventing entity-specific data for "${primaryEntity}"
+Research "${primaryEntity}" — last 6 months only. Target: leadership changes, operational headwinds, stated goals. Skip marketing pages, About Us pages, and press releases. Anchor your entire strategy to ONE specific signal found. If "${primaryEntity}" is obscure or unknown, use industry-standard friction points for their function only — never invent entity-specific data.
 
 ## **[EXECUTION GUARDRAILS]**
 Locked directives. Zero latitude to deviate.
@@ -143,8 +140,10 @@ Locked directives. Zero latitude to deviate.
 
 ## **[THE INTERACTIVE KICKOFF]**
 You MUST close your entire output with exactly this sequence — no other text after it:
-1. **The Calibration Question:** One single punchy question that references the "${primaryPosture}" calibration directly. Sparring partner register — peer-to-peer, not assistant-to-user. Make them commit to a direction. Zero soft landings.
-2. **The Context Invite:** One short line inviting the user to paste in any additional context — relevant emails, prior conversations, documents, or intel — so you can sharpen the output further. Keep it direct, not needy.`;
+1. **The Calibration Question:** A binary strategic fork — not a request for information, not a clarification. Force a choice between two meaningfully different strategic directions, both viable, where the choice changes the entire output. Reference the "${primaryPosture}" calibration by name. One sharp sentence ending in a question mark.
+2. **The Context Invite:** One direct sentence inviting the user to paste relevant emails, prior conversations, documents, or any intel they already have — the more specific the examples the better. End warmly. No trailing meta-commentary like 'sharpen targeting' or 'sharpen the recon angle'. Stop after the invitation.
+
+STOP. Your output ends here. Do not add any text, headers, labels, or instructions after item 2. No "### THE INTERACTIVE KICKOFF" repetition. No "Downstream AI" labels. No meta-commentary. The final character of your entire output is the last character of item 2.`;
 }
 
 export async function POST(req: Request) {
@@ -169,7 +168,7 @@ export async function POST(req: Request) {
 
   // Fetch the user's active profile (default first, then most recently updated).
   // Skip if running under stress-test bypass (no real user).
-  const { data: profile } = user
+  const { data: supabaseProfile } = user
     ? await supabase
         .from("product_profiles")
         .select("*")
@@ -184,12 +183,22 @@ export async function POST(req: Request) {
 
   // ── Parse request body ─────────────────────────────────────────────────────
   const body = await req.json();
-  const { toolId, variableValues, sliderValues } = body as {
+  const { toolId, variableValues, sliderValues, testProfile } = body as {
     toolId: string;
     variableValues: Record<string, string>;
     sliderValues: Record<string, number>;
     hasContext: boolean;
+    testProfile?: Record<string, unknown>;
   };
+
+  // ── Resolve active profile ─────────────────────────────────────────────────
+  // Stress test bypass: use the testProfile from the request body so tests can
+  // exercise profile injection without a real Supabase user. Real users always
+  // get the Supabase-fetched profile — testProfile is ignored for them.
+  const profile: ProductProfile | null =
+    isStressTestBypass && testProfile != null
+      ? (testProfile as unknown as ProductProfile)
+      : supabaseProfile;
 
   // ── Build system prompt with profile context ───────────────────────────────
   let systemPrompt = BASE_SYSTEM_PROMPT;
@@ -201,7 +210,7 @@ export async function POST(req: Request) {
       `The sales rep using this tool sells the product described below. These are verified anchor facts — not suggestions.\n\n` +
       `MANDATORY PROFILE USAGE RULES:\n` +
       `- The exact product name and company name MUST appear at least once in [THE CONTEXT] or [EXECUTION GUARDRAILS] — not paraphrased, verbatim.\n` +
-      `- At least one specific differentiator from <key_differentiators> MUST directly inform [THE PSYCHOLOGICAL PLAY] or [EXECUTION GUARDRAILS].\n` +
+      `- Select the SINGLE most contextually relevant differentiator from <key_differentiators> for this specific tool and scenario. Anchor it in [THE PSYCHOLOGICAL PLAY] — write one fragment explaining why THIS specific differentiator matters to THIS specific buyer persona. Do not list multiple differentiators. One sharp, specific anchor outperforms four floating features every time.\n` +
       `- NEVER invent capabilities, metrics, or claims not present in this profile.\n` +
       `- For per-call specifics (target buyer, named competitor, specific objection), rely on the tool variables and sliders — not this profile.\n\n` +
       profileXml;
@@ -224,6 +233,21 @@ export async function POST(req: Request) {
       },
     ],
     maxOutputTokens: 2000,
+    onFinish: async ({ text }) => {
+      if (!user) return; // skip for stress-test bypass
+      try {
+        await supabase.from("generations").insert({
+          user_id: user.id,
+          tool_id: toolId,
+          variable_values: variableValues,
+          slider_values: sliderValues,
+          output: text,
+          profile_id: supabaseProfile?.id ?? null,
+        });
+      } catch {
+        // Non-fatal — don't crash the stream response on history write failure
+      }
+    },
   });
 
   return result.toTextStreamResponse();
