@@ -139,11 +139,10 @@ Locked directives. Zero latitude to deviate.
 - **HUMANITY TETHER:** "${primaryPosture}" means peer-to-peer confident — NOT rude, robotic, or sociopathic
 
 ## **[THE INTERACTIVE KICKOFF]**
-You MUST close your entire output with exactly this sequence — no other text after it:
-1. **The Calibration Question:** A binary strategic fork — not a request for information, not a clarification. Force a choice between two meaningfully different strategic directions, both viable, where the choice changes the entire output. Reference the "${primaryPosture}" calibration by name. One sharp sentence ending in a question mark.
-2. **The Context Invite:** One direct sentence inviting the user to paste relevant emails, prior conversations, documents, or any intel they already have — the more specific the examples the better. End warmly. No trailing meta-commentary like 'sharpen targeting' or 'sharpen the recon angle'. Stop after the invitation.
-
-STOP. Your output ends here. Do not add any text, headers, labels, or instructions after item 2. No "### THE INTERACTIVE KICKOFF" repetition. No "Downstream AI" labels. No meta-commentary. The final character of your entire output is the last character of item 2.`;
+You have now completed your recon and built the full brief. Close your entire output with exactly these two things — generated fresh from what you found, not templated:
+1. **One binary strategic question.** Not a clarification request — a fork. Two meaningfully different directions, both viable, where the choice changes your entire approach. Make it specific to the recon signal you actually found and the "${primaryPosture}" posture. One sharp sentence ending in a question mark. The harder it makes the user think, the better.
+2. **One context invite.** One warm sentence asking the user to paste any relevant emails, prior conversations, call notes, or intel they already have.
+Nothing after item 2. No additional headers, no meta-commentary, no repetition of this section. Your final character is the last character of item 2.`;
 }
 
 export async function POST(req: Request) {
