@@ -24,7 +24,7 @@ export const tools: Tool[] = [
     id: "pre-call-recon",
     name: "The Pre-Call Recon Brief",
     category: "Account Research",
-    outputFormat: "1-Page Meeting Prep (Bullets & Talk Tracks)",
+    outputFormat: "Exactly 3 sections: (1) One specific intel signal about this account, (2) Three conversation openers the rep can choose from, (3) Two questions to ask in the first 5 minutes of the call",
     variables: [
       { name: "targetCompany", label: "Target Account", placeholder: "e.g., Shopify, Acme Corp" },
       { name: "targetPersona", label: "Prospect Job Title", placeholder: "e.g., VP of Finance, Founder" },
@@ -33,7 +33,7 @@ export const tools: Tool[] = [
       {
         id: "call-objective",
         label: "Primary Call Objective",
-        steps: ["Soft Discovery (Context)", "Friction Hunting (Pain Points)", "Qualification (Authority/Budget)", "Challenger Pitch (Provocative)"],
+        steps: ["Soft Discovery (Context)", "Uncover Their Problem", "Qualification (Authority/Budget)", "Challenger Pitch (Provocative)"],
       },
       {
         id: "prospect-posture",
@@ -46,7 +46,7 @@ export const tools: Tool[] = [
     id: "objection-defuser",
     name: "The Objection Defuser",
     category: "Tactical Execution",
-    outputFormat: "Direct Response Script",
+    outputFormat: "3-5 sentences the rep can say verbatim or riff on, followed by one follow-up question. Conversational tone, not formal. Actual language, not a framework.",
     variables: [
       { name: "statedObjection", label: "The Objection", placeholder: "e.g., You're too expensive" },
       { name: "productValue", label: "Our Counter-Leverage", placeholder: "e.g., Fastest implementation" },
@@ -68,7 +68,7 @@ export const tools: Tool[] = [
     id: "competitor-battlecard",
     name: "The Competitor Battlecard",
     category: "Account Research",
-    outputFormat: "Talk Track & Trap-Setting Questions",
+    outputFormat: "5 discovery questions numbered 1-5, each followed by a one-line coaching note on why it works and what signal to listen for in the answer. No scripted dialogue. No fake conversations.",
     variables: [
       { name: "competitorName", label: "Incumbent / Competitor", placeholder: "e.g., Salesforce, Oracle" },
       { name: "ourAdvantage", label: "Our Unfair Advantage", placeholder: "e.g., No implementation fees" },
@@ -77,7 +77,7 @@ export const tools: Tool[] = [
       {
         id: "competitive-stance",
         label: "Competitive Stance",
-        steps: ["Subtle Trap-Setting", "Value Over Feature Pivot", "Strategic Differentiation", "Direct Head-to-Head"],
+        steps: ["Expose Weaknesses Quietly", "Value Over Feature Pivot", "Strategic Differentiation", "Direct Head-to-Head"],
       },
       {
         id: "conversation-stage",
@@ -104,7 +104,7 @@ export const tools: Tool[] = [
       {
         id: "value-angle",
         label: "Primary Value Angle",
-        steps: ["Pattern Interrupt", "Operational Efficiency", "Risk Mitigation", "Direct Revenue Growth"],
+        steps: ["Stop Them In Their Tracks", "Operational Efficiency", "Risk Mitigation", "Direct Revenue Growth"],
       },
     ],
   },
