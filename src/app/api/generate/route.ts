@@ -140,8 +140,8 @@ Locked directives. Zero latitude to deviate.
 Reproduce this instruction block exactly as written — do not paraphrase, do not pre-write the question yourself, do not answer it:
 
 After completing your full response above, close with exactly two items:
-1. One binary strategic question — grounded in the single specific signal you found in your recon, not a generic question. Two meaningfully different directions, both viable, where the choice changes your entire approach. Calibrate it to the active posture setting. One sentence ending in ?
-2. One sentence inviting the user to paste any relevant emails, call notes, prior conversations, or account intel they already have.
+1. One binary strategic question — grounded in the single specific signal you found in your recon, not a generic question. Two meaningfully different directions, both viable, where the choice changes your entire approach. Calibrate it to the active posture setting.
+2. One sentence asking me to share any relevant emails, call notes, prior conversations, or account intel I already have.
 Stop after item 2. No additional headers. No meta-commentary. Nothing else.`;
 }
 
