@@ -10,6 +10,15 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next({ request });
   }
 
+  // Dev-only stress test bypass — let the route handler do its own auth check
+  if (
+    process.env.NODE_ENV !== "production" &&
+    request.headers.get("x-stress-test-key") === process.env.STRESS_TEST_KEY &&
+    process.env.STRESS_TEST_KEY
+  ) {
+    return NextResponse.next({ request });
+  }
+
   // Pass through if Supabase isn't configured yet (placeholder env vars).
   // This keeps the app usable during local dev without real credentials.
   const supabaseConfigured =

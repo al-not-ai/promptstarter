@@ -169,7 +169,10 @@ async function runCase(testCase, index) {
   try {
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-stress-test-key": process.env.STRESS_TEST_KEY ?? "stress-test-local-only",
+      },
       body: JSON.stringify(testCase.body),
     });
 
