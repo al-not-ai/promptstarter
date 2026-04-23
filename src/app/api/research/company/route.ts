@@ -1,32 +1,41 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { tavilySearch } from "@/lib/tavily";
 
 /**
  * POST /api/research/company
  *
  * Step 1 of the onboarding wizard — company resolution.
  * User types a company name; we search and return up to 5 candidate matches
- * as "company cards" (name, homepage URL, short description, favicon).
+ * as "company cards" (name, homepage URL, favicon).
  *
  * Body: { query: string }
  * Response: { results: CompanyCandidate[]; timedOut?: boolean }
  *
- * Target latency: < 2s.
+ * Powered by Logo.dev Brand Search — a dedicated brand index that returns
+ * clean { name, domain } records without the Wikipedia/news noise of a
+ * general web search.
+ *
+ * Target latency: < 1s.
  */
 
 export interface CompanyCandidate {
   name: string;
   url: string; // normalized to root domain (protocol + hostname)
-  description: string; // short snippet from Tavily
+  description: string; // Logo.dev doesn't return descriptions — always ""
   faviconUrl: string;
 }
 
-// Hard time budget — if Tavily hangs we bail and surface the fallback input
+// Logo.dev API — both keys come from the same Logo.dev account dashboard.
+// LOGO_DEV_SECRET_KEY  (sk_...)  — server-side only, used as Bearer token
+// NEXT_PUBLIC_LOGO_DEV_TOKEN (pk_...) — public key, safe to expose in CDN URLs
+const LOGO_DEV_SEARCH = "https://api.logo.dev/search";
+const LOGO_DEV_CDN = "https://img.logo.dev";
+
+// Hard time budget — if Logo.dev hangs we bail and surface the fallback input
 const TIMEOUT_MS = 5000;
 
 export async function POST(req: Request) {
-  // Require auth — we don't let anonymous traffic run up Tavily usage
+  // Require auth — don't let anonymous traffic hit the Logo.dev quota
   const supabase = await createClient();
   const {
     data: { user },
@@ -41,25 +50,47 @@ export async function POST(req: Request) {
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const search = await tavilySearch(`${trimmed} company website`, {
-      max_results: 8,
-      search_depth: "basic",
-      signal: controller.signal,
-    });
+    const res = await fetch(
+      `${LOGO_DEV_SEARCH}?q=${encodeURIComponent(trimmed)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.LOGO_DEV_SECRET_KEY}`,
+        },
+        signal: controller.signal,
+      }
+    );
 
-    // Map, filter, dedupe by root domain
+    if (!res.ok) {
+      console.error("Logo.dev search error:", res.status, await res.text());
+      return NextResponse.json(
+        { results: [], error: "Brand search failed" },
+        { status: 500 }
+      );
+    }
+
+    const logoDevResults = (await res.json()) as { name: string; domain: string }[];
+
+    // Map, filter, dedupe by root domain (Logo.dev returns bare domains)
     const candidates: CompanyCandidate[] = [];
     const seenDomains = new Set<string>();
 
-    for (const result of search.results) {
-      const candidate = toCandidate(result);
-      if (!candidate) continue;
+    for (const result of logoDevResults) {
+      const domain = result.domain?.trim();
+      if (!domain) continue;
 
-      const domain = safeHostname(candidate.url);
-      if (!domain || seenDomains.has(domain)) continue;
-      seenDomains.add(domain);
+      const normalized = domain.replace(/^www\./, "");
+      if (seenDomains.has(normalized)) continue;
+      seenDomains.add(normalized);
 
-      candidates.push(candidate);
+      const publicToken = process.env.NEXT_PUBLIC_LOGO_DEV_TOKEN ?? "";
+
+      candidates.push({
+        name: result.name?.trim() || normalized,
+        url: `https://${domain}`,
+        description: "", // Logo.dev doesn't return descriptions
+        faviconUrl: `${LOGO_DEV_CDN}/${domain}?token=${publicToken}&size=128&format=png`,
+      });
+
       if (candidates.length >= 5) break;
     }
 
@@ -75,44 +106,5 @@ export async function POST(req: Request) {
     );
   } finally {
     clearTimeout(timer);
-  }
-}
-
-function toCandidate(result: {
-  title: string;
-  url: string;
-  content: string;
-}): CompanyCandidate | null {
-  try {
-    const parsed = new URL(result.url);
-    const path = parsed.pathname.replace(/\/$/, "");
-
-    // Skip obvious article/blog/news URLs — we want homepages, not coverage
-    if (path && /\/(blog|news|article|post|stories|category|tag|20\d\d)\b/i.test(path)) {
-      return null;
-    }
-
-    const rootUrl = `${parsed.protocol}//${parsed.hostname}`;
-
-    // Title cleanup: "Acme Corp | Industrial Sensors" → "Acme Corp"
-    const rawTitle = (result.title ?? "").trim();
-    const name = rawTitle.split(/\s+[|—–-]\s+/)[0]?.trim() || parsed.hostname;
-
-    const description = (result.content ?? "").replace(/\s+/g, " ").trim().slice(0, 180);
-
-    // Free favicon service — 128px is enough for our card size
-    const faviconUrl = `https://www.google.com/s2/favicons?domain=${parsed.hostname}&sz=128`;
-
-    return { name, url: rootUrl, description, faviconUrl };
-  } catch {
-    return null;
-  }
-}
-
-function safeHostname(url: string): string | null {
-  try {
-    return new URL(url).hostname.replace(/^www\./, "");
-  } catch {
-    return null;
   }
 }
