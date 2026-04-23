@@ -54,9 +54,7 @@ RULE 3 — NO EXACT SCRIPTING:
 You (the Engine) must NEVER write exact dialogue, email copy, or first/last lines. However, you MUST explicitly command the AI reading this prompt to write the final output using your guardrails. CRITICAL: This ban includes quoted text, example phrases, and verbatim lines — do NOT write things like: deploy: 'That's the integration tax' or open with: 'I noticed your team...'. Any text in quotation marks that could be spoken or written verbatim is a script. Ban it entirely. Set the rails. Never lay the track. The prompt you generate will be read directly by another AI. Address that AI in second person only — say 'you', never 'the AI', 'the Downstream AI', or any third-person label. Any third-person reference to 'Downstream AI' in your output is a critical error.
 
 RULE 4 — INTERACTIVE KICKOFF IS MANDATORY:
-Every generated prompt MUST close with a [THE INTERACTIVE KICKOFF] section. This section instructs the AI reading the prompt to close its output with exactly two things:
-1. One single punchy strategic clarifying question — sparring partner energy, not chatbot energy. Reference the active calibration setting. Make the user think. No 'how can I help?' energy.
-2. An open invitation for additional context — ask if the user wants to paste in any relevant emails, prior conversations, documents, or intel.
+Every generated prompt MUST close with a [THE INTERACTIVE KICKOFF] section. This section is an INSTRUCTION BLOCK written for the AI that will read this prompt — not content, not a pre-written question. You must write it as a command to that AI telling it to generate and ask one question after completing its response. You are writing the instruction. The other AI generates the question. Never write the question yourself.
 HARD STOP RULE: Your output ends at the last word of [THE INTERACTIVE KICKOFF] section. No additional text, no additional headers, no meta-commentary, no trailing blocks after it. Any text appearing after [THE INTERACTIVE KICKOFF] is a critical formatting failure that invalidates the entire output.
 
 RULE 5 — OUTPUT STRUCTURE:
@@ -139,10 +137,12 @@ Locked directives. Zero latitude to deviate.
 - **HUMANITY TETHER:** "${primaryPosture}" means peer-to-peer confident — NOT rude, robotic, or sociopathic
 
 ## **[THE INTERACTIVE KICKOFF]**
-You have now completed your recon and built the full brief. Close your entire output with exactly these two things — generated fresh from what you found, not templated:
-1. **One binary strategic question.** Not a clarification request — a fork. Two meaningfully different directions, both viable, where the choice changes your entire approach. Make it specific to the recon signal you actually found and the "${primaryPosture}" posture. One sharp sentence ending in a question mark. The harder it makes the user think, the better.
-2. **One context invite.** One warm sentence asking the user to paste any relevant emails, prior conversations, call notes, or intel they already have.
-Nothing after item 2. No additional headers, no meta-commentary, no repetition of this section. Your final character is the last character of item 2.`;
+Reproduce this instruction block exactly as written — do not paraphrase, do not pre-write the question yourself, do not answer it:
+
+After completing your full response above, close with exactly two items:
+1. One binary strategic question — grounded in the single specific signal you found in your recon, not a generic question. Two meaningfully different directions, both viable, where the choice changes your entire approach. Calibrate it to the active posture setting. One sentence ending in ?
+2. One sentence inviting the user to paste any relevant emails, call notes, prior conversations, or account intel they already have.
+Stop after item 2. No additional headers. No meta-commentary. Nothing else.`;
 }
 
 export async function POST(req: Request) {
