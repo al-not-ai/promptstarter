@@ -3,6 +3,11 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { tools } from "@/lib/tools";
 import { createClient } from "@/lib/supabase/server";
 import { renderProfileAsXML } from "@/lib/profile-xml";
+import {
+  assembleMasterPrompt,
+  STANDARD_RULES_BLOCK,
+  buildDrillDownBlock,
+} from "@/lib/prompt-templates";
 import type { ProductProfile } from "@/lib/types/profile";
 
 const MODEL = "claude-haiku-4-5-20251001";
@@ -16,50 +21,40 @@ const anthropic = createAnthropic({
 });
 
 /**
- * Core strategic framework — tool-agnostic, always included.
- * Profile XML is appended after this if available.
+ * Core engine contract — tool-agnostic, always included.
+ *
+ * V2-templated. The engine writes MISSION + STRUCTURE + GROUNDING only.
+ * STANDARD RULES + DRILL-DOWN OFFER are appended by post-processing in
+ * prompt-templates.ts. See docs/PROMPT_APPROACHES_COMPARISON.md and
+ * docs/V2_TIGHTENED_REVIEW.md for the full decision history, and the
+ * comment at the top of prompt-templates.ts for why those two sections
+ * live outside the engine.
+ *
+ * THREE-ACTOR DISCIPLINE (see AGENTS.md):
+ * The engine writes INSTRUCTIONS to the downstream AI. It never writes
+ * content the downstream is supposed to produce (exact dialogue, email
+ * copy, verbatim questions to the rep). That rule stays — removing it
+ * invites drift the next time models/tools change.
  */
-const BASE_SYSTEM_PROMPT = `You are an Elite B2B Sales Strategist and Prompt Engineer. Your output is a Master Prompt — a tactical controller designed to be pasted directly into ChatGPT or Claude.
+const BASE_SYSTEM_PROMPT = `You are building a Master Prompt the rep will paste into ChatGPT or Claude. Your output is a prompt, not a deliverable. The downstream AI that receives your prompt produces the final sales artifact; you only write instructions to it.
 
-FORMATTING LAW — PROSE IS BANNED. FRAGMENTS ONLY:
-Your output is a fast-paced, high-density config file. Strict limits apply to every section — no exceptions:
-- MAXIMUM 3 bullet points per section
-- MAXIMUM 20 words per bullet point
-- Use short, punchy fragments. No full sentences. No conjunctions. No transitions.
-- Paragraphs are strictly forbidden. If it reads like writing, it's wrong.
-- Be ruthless with word count. Cut every word that doesn't change meaning.
+CORE RULES:
+1. No scripting. Never write exact dialogue, email copy, subject lines, or verbatim opening phrases. Set the rails; never lay the track.
+2. Anti-hallucination is the only hard wall. Every other rule bends in service of it. If the downstream AI lacks specific knowledge, instruct it to anchor to standard industry patterns and flag them as such. Never demand specificity that forces fabrication.
+3. Ambition with fallback. Every quality rule you impose must give a graceful path when information is thin.
+4. Each line earns its place. No voice flourishes.
+5. Address the downstream AI in second person ("you"). When the downstream AI must execute an instruction verbatim with the rep, phrase it in first person from the downstream AI's perspective — "I" = the downstream AI, "you" = the rep. Never "the user". Never "the Downstream AI" in your output.
 
-FORMATTING LOCK — ZERO TOLERANCE:
-Your output MUST begin with this exact string as its very first line: # **[THE PERSONA]**
-Nothing comes before it. Not a title. Not a label. Not a header. Not a blank line. The literal first characters of your output are: # **[THE PERSONA]**
-After that, every section uses this exact header format: # **[THE SECTION NAME]** — no other variant.
-Every section is separated by a --- horizontal rule with one blank line above and below it.
-Generating any text, title, or header before # **[THE PERSONA]** is a critical formatting failure that invalidates the entire output.
+OUTPUT STRUCTURE — 3 sections, in this order, nothing else:
+## MISSION — 3 lines: who the rep is and what role you're playing for them (use the role hint provided), what the deliverable is, and the posture + stage calibration woven into the framing. When the calibration includes a delivery channel or format (email, DM, etc.), note in MISSION that STRUCTURE must include channel-appropriate structural elements.
+## STRUCTURE — numbered sections the downstream AI must produce. One line each describing the substance of that section, what good looks like, what to exclude, and any tool-specific cue. The deliverable is wide-scope; the rep should feel armed, not quizzed. If the calibration includes a delivery channel: scaffold channel-appropriate structural elements (subject + salutation + signoff for emails; hook for DMs; thread sequencing for executive multi-threading).
+## GROUNDING — how to anchor specificity to the rep's inputs and the seller profile, what to do when knowledge is thin, and which buzzwords or jargon to avoid for THIS specific audience. Tie everything to the actual call at hand. Do NOT restate the no-unsourced-numbers rule or the drill-down-position rule — those are appended automatically.
 
-LANGUAGE LAW — JARGON IS BANNED:
-Ban academic psychology jargon. Translate all strategy into gritty, modern Sales Floor English. The prompt must feel like a tactical sales playbook, not a behavioral science paper. No "cognitive dissonance", no "reciprocity bias", no "anchoring heuristic" — say what it does, not what it's called.
+APPENDED AUTOMATICALLY (do NOT restate in your output):
+- A STANDARD RULES block covering no-unsourced-numbers and drill-down position.
+- A DRILL-DOWN OFFER section instructing the downstream AI to identify reasoning gaps and request context after delivering.
 
-RULE 1 — THE CONFIDENCE GATE:
-Evaluate named entities (companies, competitors, people) against your training knowledge. Determine recon posture only — do not inject metrics yourself.
-- **Known entity** (recognized brand, public company, named exec): name it explicitly, target recent operational signals.
-- **Unknown/obscure entity**: anchor to industry friction points. Forbid inventing entity-specific data.
-
-RULE 2 — DYNAMIC RECONNAISSANCE:
-[DYNAMIC RECONNAISSANCE] instructs the receiving AI to conduct live research.
-- Target exclusively: leadership changes, Q-over-Q headwinds, stated operational goals — last 6 months only.
-- Explicitly ban: marketing pages, About Us, press releases.
-- Mandate: anchor strategy to one specific signal found, not a generic talking point.
-
-RULE 3 — NO EXACT SCRIPTING:
-You (the Engine) must NEVER write exact dialogue, email copy, or first/last lines. However, you MUST explicitly command the AI reading this prompt to write the final output using your guardrails. CRITICAL: This ban includes quoted text, example phrases, and verbatim lines — do NOT write things like: deploy: 'That's the integration tax' or open with: 'I noticed your team...'. Any text in quotation marks that could be spoken or written verbatim is a script. Ban it entirely. Set the rails. Never lay the track. The prompt you generate will be read directly by another AI. Address that AI in second person only — say 'you', never 'the AI', 'the Downstream AI', or any third-person label. Any third-person reference to 'Downstream AI' in your output is a critical error.
-
-RULE 4 — INTERACTIVE KICKOFF IS MANDATORY:
-Every generated prompt MUST close with a [THE INTERACTIVE KICKOFF] section. This section is an INSTRUCTION BLOCK written for the AI that will read this prompt — not content, not a pre-written question. You must write it as a command to that AI telling it to generate and ask one question after completing its response. You are writing the instruction. The other AI generates the question. Never write the question yourself.
-HARD STOP RULE: Your output ends at the last word of [THE INTERACTIVE KICKOFF] section. No additional text, no additional headers, no meta-commentary, no trailing blocks after it. Any text appearing after [THE INTERACTIVE KICKOFF] is a critical formatting failure that invalidates the entire output.
-
-RULE 5 — OUTPUT STRUCTURE:
-Output exactly these 6 sections in order. Nothing before section 1. Nothing after section 6.
-**[THE PERSONA]** / **[THE CONTEXT]** / **[THE PSYCHOLOGICAL PLAY]** / **[DYNAMIC RECONNAISSANCE]** / **[EXECUTION GUARDRAILS]** / **[THE INTERACTIVE KICKOFF]**`;
+Output ends at the last line of GROUNDING. Nothing before ## MISSION. Nothing after ## GROUNDING.`;
 
 function buildUserPrompt(params: {
   toolId: string;
@@ -67,8 +62,18 @@ function buildUserPrompt(params: {
   sliderValues: Record<string, number>;
   productName?: string;
   companyName?: string;
+  engineRoleHint: string;
+  includesProfile: boolean;
 }): string {
-  const { toolId, variableValues, sliderValues, productName, companyName } = params;
+  const {
+    toolId,
+    variableValues,
+    sliderValues,
+    productName,
+    companyName,
+    engineRoleHint,
+    includesProfile,
+  } = params;
   const tool = tools.find((t) => t.id === toolId);
   if (!tool) throw new Error(`Unknown tool: ${toolId}`);
 
@@ -77,72 +82,42 @@ function buildUserPrompt(params: {
     selected: s.steps[Math.min(sliderValues[s.id] ?? 0, s.steps.length - 1)],
   }));
 
-  const primaryPosture = sliderSelections[0]?.selected ?? "";
-  const secondaryPosture = sliderSelections[1]?.selected ?? "";
-
   const variableSummary = tool.variables
-    .map((v) => `- **${v.label}:** ${variableValues[v.name] || "(not provided)"}`)
+    .map((v) => `- ${v.label}: ${variableValues[v.name] || "(not provided)"}`)
     .join("\n");
 
   const calibrationSummary = sliderSelections
-    .map((s) => `- **${s.label}:** ${s.selected}`)
+    .map((s) => `- ${s.label}: ${s.selected}`)
     .join("\n");
 
-  const primaryEntity = variableValues[tool.variables[0]?.name ?? ""] || "the target";
-  const primaryPersona = variableValues[tool.variables[1]?.name ?? ""] || "the target persona";
-
-  // Include seller product context if available
-  const sellerContext =
-    productName || companyName
-      ? `\n**Seller's Product:** ${productName ?? companyName} (${companyName ?? ""})`
+  const sellerLine =
+    includesProfile && (productName || companyName)
+      ? `\n**Seller's product:** ${productName ?? companyName}${
+          productName && companyName ? ` (${companyName})` : ""
+        }`
       : "";
 
-  return `Generate a Master Prompt using the exact 6-section structure. Output only the 6 sections — nothing before, nothing after. FRAGMENTS ONLY. Max 3 bullets per section, max 20 words per bullet.
+  // Tool-specific recon framing: the engine must NOT pretend it has access
+  // to live sources (LinkedIn, news archives, SEC filings, etc.). Surface-
+  // level pattern reasoning + drive the rep to paste specifics.
+  const reconReminder =
+    toolId === "pre-call-recon"
+      ? `\n\n**RECON GROUNDING (this tool only):** You have no direct knowledge of this specific prospect company or person — you cannot check LinkedIn, news archives, SEC filings, or any live source. The intel signal in STRUCTURE must either (a) be derived from industry/role patterns flagged as such, or (b) be derived from context the rep has provided in the inputs above. Do not instruct the downstream AI to "source" or "cite" anything it cannot actually source. If sharpening would require account-specific intel, tell the downstream AI to name what would help most and ask the rep for it — do not guarantee the rep will provide it.`
+      : "";
+
+  return `Generate a Master Prompt for this tool run. Follow the 3-section structure in your system rules (MISSION / STRUCTURE / GROUNDING). Do not write a DRILL-DOWN or STANDARD RULES section — those are appended automatically.
 
 **Tool:** ${tool.name} (${tool.category})
-**Output Format:** ${tool.outputFormat}${sellerContext}
+**Engine role for MISSION:** ${engineRoleHint}
+**What the downstream AI must produce:** ${tool.outputFormat}${sellerLine}
 
-**Variables:**
+**Rep's inputs:**
 ${variableSummary}
 
 **Calibration:**
-${calibrationSummary}
+${calibrationSummary}${reconReminder}
 
----
-
-## **[THE PERSONA]**
-2–3 bullets maximum. Define the AI's expert posture:
-- **Role:** [assertive 1-line identity specific to ${tool.name} and "${primaryPosture}" orientation — no generic framing]
-- **Lens:** [the specific strategic framework this persona operates from]
-- **Mandate:** [what this persona is optimized to achieve in one fragment]
-
-## **[THE CONTEXT]**
-3 bullets exactly. No prose.
-- **Rep sells:** ${productName ? `${productName}${companyName ? ` (${companyName})` : ""}` : companyName ?? "[seller product]"} — every output must be specific to this product, not the company broadly.
-- **Task:** Execute a ${tool.category.toLowerCase()} play for ${primaryEntity} / ${primaryPersona}
-- **Stake:** [the structural consequence of failure at the "${primaryPosture}" level — frame it in terms of the specific product above and this exact buyer]
-
-## **[THE PSYCHOLOGICAL PLAY]**
-- **Mechanism:** [name the exact psychological lever this "${primaryPosture}" + "${secondaryPosture}" combination demands — precise, no softening]
-- **Why it applies:** [1-line fragment explaining why this mechanism fits this scenario]
-- **Deployment directive:** [ONE tight fragment — 20 words maximum. No sentences. No multi-step instructions. Name the exact action and the exact trigger. Stop.]
-
-## **[DYNAMIC RECONNAISSANCE]**
-Research "${primaryEntity}" — last 6 months only. Target: leadership changes, operational headwinds, stated goals. Skip marketing pages, About Us pages, and press releases. Anchor your entire strategy to ONE specific signal found. If "${primaryEntity}" is obscure or unknown, use industry-standard friction points for their function only — never invent entity-specific data.
-
-## **[EXECUTION GUARDRAILS]**
-Locked directives. Zero latitude to deviate.
-- **Output format:** ${tool.outputFormat} — no other format acceptable
-- **Posture lock:** "${primaryPosture}" — first word to last, no drift
-- **HUMANITY TETHER:** "${primaryPosture}" means peer-to-peer confident — NOT rude, robotic, or sociopathic
-
-## **[THE INTERACTIVE KICKOFF]**
-Reproduce this instruction block exactly as written — do not paraphrase, do not pre-write the question yourself, do not answer it:
-
-After completing your full response above, close with exactly two items:
-1. One binary strategic question — grounded in the single specific signal you found in your recon, not a generic question. Two meaningfully different directions, both viable, where the choice changes your entire approach. Calibrate it to the active posture setting.
-2. One sentence asking me to share any relevant emails, call notes, prior conversations, or account intel I already have.
-Stop after item 2. No additional headers. No meta-commentary. Nothing else.`;
+Produce the Master Prompt now. Output ends at the last line of GROUNDING.`;
 }
 
 export async function POST(req: Request) {
@@ -190,7 +165,12 @@ export async function POST(req: Request) {
     testProfile?: Record<string, unknown>;
   };
 
-  // ── Resolve active profile ─────────────────────────────────────────────────
+  // ── Resolve tool + active profile ──────────────────────────────────────────
+  const tool = tools.find((t) => t.id === toolId);
+  if (!tool) {
+    return new Response(`Unknown tool: ${toolId}`, { status: 400 });
+  }
+
   // Stress test bypass: use the testProfile from the request body so tests can
   // exercise profile injection without a real Supabase user. Real users always
   // get the Supabase-fetched profile — testProfile is ignored for them.
@@ -199,27 +179,53 @@ export async function POST(req: Request) {
       ? (testProfile as unknown as ProductProfile)
       : supabaseProfile;
 
-  // ── Build system prompt with profile context ───────────────────────────────
+  // ── Build system prompt with (optional) profile context ────────────────────
+  // Profile injection is tool-gated: prospect-focused tools (pre-call-recon)
+  // set includesProfile=false in tools.ts because the seller profile is
+  // low-signal there and nudges the engine toward product-pitch language.
   let systemPrompt = BASE_SYSTEM_PROMPT;
 
-  if (profile) {
+  if (profile && tool.includesProfile) {
     const profileXml = renderProfileAsXML(profile);
     systemPrompt +=
       `\n\n## SELLER PRODUCT PROFILE\n` +
       `The sales rep using this tool sells the product described below. These are verified anchor facts — not suggestions.\n\n` +
       `MANDATORY PROFILE USAGE RULES:\n` +
-      `- The exact product name and company name MUST appear at least once in [THE CONTEXT] or [EXECUTION GUARDRAILS] — not paraphrased, verbatim.\n` +
-      `- Select the SINGLE most contextually relevant differentiator from <key_differentiators> for this specific tool and scenario. Anchor it in [THE PSYCHOLOGICAL PLAY] — write one fragment explaining why THIS specific differentiator matters to THIS specific buyer persona. Do not list multiple differentiators. One sharp, specific anchor outperforms four floating features every time.\n` +
-      `- NEVER invent capabilities, metrics, or claims not present in this profile.\n` +
-      `- For per-call specifics (target buyer, named competitor, specific objection), rely on the tool variables and sliders — not this profile.\n\n` +
+      `- The exact product name (and company name when natural) must appear verbatim at least once in MISSION or STRUCTURE.\n` +
+      `- Pick the SINGLE differentiator from <key_differentiators> most relevant to this specific tool run, and have the downstream AI anchor its strategy to that one. Do not list all differentiators; one sharp anchor beats four floating features.\n` +
+      `- Treat the profile as the only source of truth for capabilities and claims about the seller's product. Never invent capabilities, metrics, integrations, or guarantees not present here.\n` +
+      `- For per-call specifics (target buyer, named competitor, specific objection, trigger event), rely on the rep's inputs above — not this profile.\n\n` +
       profileXml;
   }
 
   // ── Stream the response ────────────────────────────────────────────────────
+  // Prompt caching: the entire systemPrompt (BASE + optional profile block)
+  // is identical across every call from the same user for the same tool
+  // config, so we mark it cacheable. First call pays full price; subsequent
+  // calls within the TTL get the 10× discount on those input tokens.
+  //
+  // Streaming + post-processing: we stream the engine output through to the
+  // client live, then append the templated STANDARD RULES + DRILL-DOWN OFFER
+  // blocks at the end of the stream. The rep sees the engine work as it
+  // happens, then the templated blocks appear at the bottom — same UX,
+  // ~150 fewer engine output tokens billed per call.
   const result = streamText({
     model: anthropic(MODEL),
-    system: systemPrompt,
     messages: [
+      {
+        role: "system",
+        content: systemPrompt,
+        // cacheControl on the system message specifically — that block is
+        // identical across every call from the same user (BASE_SYSTEM_PROMPT
+        // + profile XML changes only when the user updates their profile).
+        // First call writes the cache; subsequent calls within the TTL read
+        // it at 10× discount on those input tokens.
+        providerOptions: {
+          anthropic: {
+            cacheControl: { type: "ephemeral", ttl: "5m" },
+          },
+        },
+      },
       {
         role: "user",
         content: buildUserPrompt({
@@ -228,6 +234,8 @@ export async function POST(req: Request) {
           sliderValues,
           productName: profile?.product_name ?? undefined,
           companyName: profile?.company_name ?? undefined,
+          engineRoleHint: tool.engineRoleHint,
+          includesProfile: tool.includesProfile,
         }),
       },
     ],
@@ -235,12 +243,19 @@ export async function POST(req: Request) {
     onFinish: async ({ text }) => {
       if (!user) return; // skip for stress-test bypass
       try {
+        // Persist the ASSEMBLED master prompt (what the rep actually copies),
+        // not just the engine output — otherwise the history view would be
+        // missing the templated blocks.
+        const fullMasterPrompt = assembleMasterPrompt({
+          engineOutput: text,
+          outputDescriptor: tool.outputDescriptor,
+        });
         await supabase.from("generations").insert({
           user_id: user.id,
           tool_id: toolId,
           variable_values: variableValues,
           slider_values: sliderValues,
-          output: text,
+          output: fullMasterPrompt,
           profile_id: supabaseProfile?.id ?? null,
         });
       } catch {
@@ -249,5 +264,34 @@ export async function POST(req: Request) {
     },
   });
 
-  return result.toTextStreamResponse();
+  // Pipe the engine's text stream through, then emit the templated blocks
+  // after it finishes. Client gets a single continuous text stream — first
+  // the engine work live, then the templated tail appended cleanly.
+  const encoder = new TextEncoder();
+  const templatedTail =
+    "\n\n" +
+    STANDARD_RULES_BLOCK +
+    "\n\n" +
+    buildDrillDownBlock(tool.outputDescriptor) +
+    "\n";
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      try {
+        for await (const chunk of result.textStream) {
+          controller.enqueue(encoder.encode(chunk));
+        }
+        controller.enqueue(encoder.encode(templatedTail));
+        controller.close();
+      } catch (err) {
+        controller.error(err);
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
 }

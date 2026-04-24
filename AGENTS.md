@@ -2,7 +2,20 @@
 
 **What we ship.** The product's output is a *prompt*, not an answer. Users copy the generated prompt and paste it into their own ChatGPT/Claude session. We craft the prompt; the downstream AI generates the content.
 
-**Two actors to keep straight.** *User* = the sales rep using PromptStarter.ai. *Downstream AI* = the LLM the user pastes the generated prompt into.
+**Three actors — never confuse them.**
+
+| Actor | Who they are | Their perspective in the output |
+|---|---|---|
+| **The Engine** | PromptStarter / Claude Haiku — generates the master prompt | Writes instructions *to* the Downstream AI. Addresses it in second person: "you", "your recon", "close your response with". Never "the AI", "the Downstream AI", or any third-person label. |
+| **The Downstream AI** | ChatGPT or Claude — receives the pasted master prompt and executes it | Addresses the Rep directly. Uses "you" for the rep and "I/me" for itself. Example: "Do you have any prior emails on this account you can share with me?" |
+| **The Rep** | The sales professional using PromptStarter | The human audience of the Downstream AI's output. Never addressed by the Engine — only by the Downstream AI. |
+
+**Perspective rules that must never be violated:**
+
+- The Engine writes instructions, not content. It tells the Downstream AI what to generate — it never generates that content itself. If a section instructs the Downstream AI to ask a question, the Engine writes the instruction, not the question.
+- Any instruction the Downstream AI must execute verbatim (e.g. the Interactive Kickoff) must be written in the Downstream AI's voice: "you" = the rep, "me/I" = the Downstream AI. Never "the user" — that is third-person and will make the Downstream AI's output read like a spec, not a conversation.
+- The Engine never speaks in first person as if it were the Downstream AI.
+- Third-person references to "Downstream AI" or "the AI" must never appear in the generated master prompt — only in internal engine rules.
 
 **Profiles are product-scoped, not company-scoped.** A rep at a multi-product company (e.g. KEYENCE) sells one of many products to one of many markets. The profile must match the rep's specific product or product group; company-level facts that don't bear on that product are noise.
 
@@ -12,6 +25,48 @@
 - Never let output feel like Mad Libs. Each generated prompt must feel crafted and hard for the user to produce on their own. Our value is in scaffolding, role assignment, anchor facts, and priming — not in preempting the downstream AI's work.
 
 **Anti-patterns.** Exhaustive research, heavy form-filling, multi-minute onboarding terminals, generic fill-in-the-blanks prompt templates.
+
+# Adding a new tool — checklist
+
+When you add a new tool to `src/lib/tools.ts`, you must set the following
+fields. Don't ad-lib them — they encode rules the engine relies on.
+
+**`includesProfile: boolean`** — Does this tool's deliverable hinge on the
+*seller's* product positioning, or on the *prospect's* situation? Set
+`true` for seller-positioning tools (objection-defuser, competitor-battlecard,
+cold-hook). Set `false` for prospect-situation tools (e.g. pre-call-recon).
+The wrong setting both wastes input tokens and nudges the engine in the wrong
+direction (e.g. injecting the seller profile into a recon brief turns it into
+a product pitch). When in doubt, run the tool both ways in the test rig and
+compare outputs.
+
+**`outputDescriptor: string`** — Short noun phrase used inside the templated
+DRILL-DOWN OFFER block, e.g. "the recon brief", "the 5 discovery questions",
+"the outreach hook". Keep it tight; the templated text reads "After
+delivering ${outputDescriptor}, pause." See `src/lib/prompt-templates.ts`.
+
+**`engineRoleHint: string`** — One-line voice/role hint for the engine when
+it composes MISSION (e.g. "competitive intelligence specialist", "sales
+coach", "cold outreach specialist briefing a rep"). The engine adapts this
+per seller + situation, but a strong hint anchors the framing.
+
+**`outputFormat: string`** — Granular spec of what the downstream must
+produce. The engine copies the substance of this into STRUCTURE, so be
+specific about format, length, and what to exclude.
+
+# Templated tail — what the engine does NOT write
+
+Every master prompt ends with two fixed blocks appended in
+`src/app/api/generate/route.ts` after the engine returns:
+
+1. **STANDARD RULES** — no-unsourced-numbers + deliver-first-probe-second.
+2. **DRILL-DOWN OFFER** — instructs the downstream to surface 2–3 reasoning
+   gaps and make one targeted ask of the rep.
+
+The engine's system prompt forbids it from restating these. If you change
+the templated tail, the system prompt must explicitly call out the new
+section by name (otherwise the engine may duplicate it). See
+`src/lib/prompt-templates.ts` for the source of truth.
 
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
