@@ -194,10 +194,13 @@ async function runCase(testCase, index) {
 
     const output = await streamToString(response);
     const ms = Date.now() - start;
-    const hasKickoff = output.includes("INTERACTIVE KICKOFF");
+    // Templated tail presence: DRILL-DOWN OFFER is appended by route.ts after
+    // the engine finishes. If it's missing, the post-processing step broke.
+    const hasDrillDown = output.includes("## DRILL-DOWN OFFER");
+    const hasGrounding = output.includes("## GROUNDING");
     const hasProfile = output.includes("Velara");
-    process.stdout.write(`OK (${ms}ms, kickoff=${hasKickoff ? "✓" : "✗"}, profile=${hasProfile ? "✓" : "✗"})\n`);
-    return { label: testCase.label, status: "OK", output, ms, hasKickoff, hasProfile };
+    process.stdout.write(`OK (${ms}ms, drill-down=${hasDrillDown ? "✓" : "✗"}, grounding=${hasGrounding ? "✓" : "✗"}, profile=${hasProfile ? "✓" : "✗"})\n`);
+    return { label: testCase.label, status: "OK", output, ms, hasDrillDown, hasGrounding, hasProfile };
   } catch (err) {
     process.stdout.write(`ERROR\n`);
     return { label: testCase.label, status: "ERROR", error: String(err), output: null, ms: Date.now() - start };
@@ -207,14 +210,16 @@ async function runCase(testCase, index) {
 function buildMarkdown(results) {
   const timestamp = new Date().toISOString();
   const passed = results.filter((r) => r.status === "OK").length;
-  const kickoffs = results.filter((r) => r.hasKickoff).length;
+  const drillDowns = results.filter((r) => r.hasDrillDown).length;
+  const groundings = results.filter((r) => r.hasGrounding).length;
   const profileHits = results.filter((r) => r.hasProfile).length;
 
   let md = `# Arsenal Stress Test Results\n\n`;
   md += `**Run:** ${timestamp}  \n`;
   md += `**Endpoint:** ${ENDPOINT}  \n`;
   md += `**Passed:** ${passed}/12  \n`;
-  md += `**Interactive Kickoff present:** ${kickoffs}/12  \n`;
+  md += `**DRILL-DOWN OFFER present (templated tail):** ${drillDowns}/12  \n`;
+  md += `**GROUNDING present (engine output):** ${groundings}/12  \n`;
   md += `**Profile injected (Velara present):** ${profileHits}/12  \n\n`;
   md += `---\n\n`;
 
@@ -222,7 +227,7 @@ function buildMarkdown(results) {
     const pad = String(i + 1).padStart(2, "0");
     md += `## Case ${pad}: ${r.label}\n\n`;
     md += `**Status:** ${r.status} | **Time:** ${r.ms}ms`;
-    if (r.status === "OK") md += ` | **Kickoff:** ${r.hasKickoff ? "✓ Present" : "✗ Missing"} | **Profile:** ${r.hasProfile ? "✓ Present" : "✗ Missing"}`;
+    if (r.status === "OK") md += ` | **Drill-down:** ${r.hasDrillDown ? "✓" : "✗"} | **Grounding:** ${r.hasGrounding ? "✓" : "✗"} | **Profile:** ${r.hasProfile ? "✓" : "✗"}`;
     md += `\n\n`;
 
     if (r.status === "OK") {
@@ -252,9 +257,9 @@ async function main() {
   fs.writeFileSync(outPath, buildMarkdown(results), "utf8");
 
   const passed = results.filter((r) => r.status === "OK").length;
-  const kickoffs = results.filter((r) => r.hasKickoff).length;
+  const drillDowns = results.filter((r) => r.hasDrillDown).length;
   const profileHits = results.filter((r) => r.hasProfile).length;
-  console.log(`\nDone. ${passed}/12 passed, ${kickoffs}/12 with kickoff section, ${profileHits}/12 with profile injection.`);
+  console.log(`\nDone. ${passed}/12 passed, ${drillDowns}/12 with DRILL-DOWN OFFER, ${profileHits}/12 with profile injection.`);
   console.log(`Results written to: arsenal-test-results.md`);
 }
 
