@@ -68,6 +68,37 @@ the templated tail, the system prompt must explicitly call out the new
 section by name (otherwise the engine may duplicate it). See
 `src/lib/prompt-templates.ts` for the source of truth.
 
+# Touching tools.ts — lockstep updates
+
+Changing a tool ID, variable name, or slider ID isn't a single-file edit.
+When you rename/add/remove one, update in lockstep:
+
+- `scripts/stress-test.mjs` — `TEST_CASES` hardcodes tool IDs, variable
+  names, and slider IDs. Silent drift here turns "12/12 green" into
+  "12/12 covering the wrong thing."
+- Any review doc in `docs/` that names the tool by ID (e.g.
+  `docs/V2_TEMPLATED_REVIEW.md`).
+
+The engine itself (`src/app/api/generate/route.ts`) is tool-agnostic and
+reads the schema directly — it does not need to change.
+
+# Token cost accounting
+
+When reporting "cost per click," count engine-side tokens only — the
+Haiku call in `src/app/api/generate/route.ts`. The downstream ChatGPT or
+Claude session runs on the rep's own subscription; we do not pay for
+those tokens. Historical review docs that added engine + downstream
+(e.g. the "Total per-call" column in `docs/V2_TEMPLATED_REVIEW.md`) were
+decision-support math, not our bill.
+
+# docs/archive/ — do not read by default
+
+`docs/archive/` holds historical snapshots from pre-V2-templated phases
+(six-section engine output, Interactive Kickoff, AccessGate, Lemon
+Squeezy stubs). They describe state the code no longer matches. Ignore
+them unless the user explicitly asks — reading them to answer "how does
+X work now?" will mislead.
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
