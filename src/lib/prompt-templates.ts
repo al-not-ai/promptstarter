@@ -7,35 +7,37 @@
  * for zero quality benefit. Both the "standard rules" and the drill-down
  * scaffolding are fixed — only the deliverable descriptor changes. By
  * post-processing these in route.ts, we save engine output AND keep the
- * downstream AI seeing the same rule text every time (consistency across
- * the product).
+ * downstream assistant seeing the same rule text every time.
+ *
+ * VOICE — IMPORTANT:
+ * Both blocks below are written in the REP'S first-person voice, addressing
+ * the downstream assistant. "I" / "me" / "my" = the rep. "you" / "your" =
+ * the assistant. This matches the engine-generated MISSION/STRUCTURE/
+ * GROUNDING above so the full master prompt reads as one continuous brief
+ * from the rep to their AI. If you change voice here, change it in the
+ * engine system prompt too — the seam between engine output and these
+ * templated blocks is where voice mismatches will show.
  *
  * ENGINE CONTRACT:
  * The engine's system prompt tells it NOT to write these sections. They are
  * appended after the engine output, before the master prompt is returned to
  * the rep. If the engine does restate them, we end up with duplication —
  * monitor for this and tighten the system prompt if it happens.
- *
- * THREE-ACTOR DISCIPLINE (see AGENTS.md):
- * The drill-down block is written in the DOWNSTREAM AI's voice — first person
- * ("I", "me"), addressing the rep in second person ("you"). The engine never
- * writes content the downstream is supposed to deliver; per AGENTS.md, the
- * engine writes instructions. This block is instructions (with templated
- * phrasing suggestions baked in) that the downstream AI executes.
  */
 
 /** Fixed rules block — identical across every master prompt, every tool. */
 export const STANDARD_RULES_BLOCK = `## STANDARD RULES
 
-- **No unsourced numbers.** Do not cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in the rep's inputs or the seller profile, or is explicitly flagged as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode of this tool.
-- **Deliver first, probe second.** Produce the complete deliverable before asking the rep anything. Never ask the rep questions before delivering — that turns this back into a form to fill out, which is the anti-pattern we exist to replace.`;
+- **No unsourced numbers.** Don't cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in my inputs or the profile, or you flag it explicitly as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode.
+- **Deliver first, probe second.** Produce the complete deliverable before asking me anything. Don't ask me questions before delivering — that defeats the point.`;
 
 /**
  * Builds the drill-down block — the final section of the master prompt.
  *
- * Written in the downstream AI's voice: "I" is the downstream AI, "you" is
- * the rep. The downstream reads these instructions verbatim and executes
- * them after delivering the main output.
+ * Written in the rep's first-person voice, instructing the assistant: "I" /
+ * "me" / "my" = the rep, "you" / "your" = the assistant. Same voice as the
+ * engine's MISSION/STRUCTURE/GROUNDING above so the prompt reads as one
+ * continuous brief.
  *
  * @param outputDescriptor - Short noun phrase for the deliverable, e.g.,
  *   "the recon brief" or "the 5 discovery questions".
@@ -43,9 +45,9 @@ export const STANDARD_RULES_BLOCK = `## STANDARD RULES
 export function buildDrillDownBlock(outputDescriptor: string): string {
   return `## DRILL-DOWN OFFER
 
-After delivering ${outputDescriptor}, pause. Identify 2–3 places where missing data or your own assumptions shaped what you just wrote — be specific about what you guessed at versus what you actually knew from the rep's inputs or the seller profile. State each gap plainly.
+After delivering ${outputDescriptor}, pause. Identify 2–3 places where missing data or your own assumptions shaped what you wrote — be specific about what you guessed at versus what you actually knew from my inputs or the profile. State each gap plainly.
 
-Then close with one targeted request to the rep: name the single piece of context that would let you sharpen the most consequential gap. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock. If the rep replies with new context, weave it in and revise the deliverable. If they don't, what you already delivered stands.`;
+Then close with one targeted request to me: name the single piece of context that would let you sharpen the most consequential gap. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock. If I reply with new context, weave it in and revise. If I don't, what you delivered stands.`;
 }
 
 /**
