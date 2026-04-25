@@ -23,36 +23,66 @@ const anthropic = createAnthropic({
 /**
  * Core engine contract — tool-agnostic, always included.
  *
- * V2-templated. The engine writes MISSION + STRUCTURE + GROUNDING only.
- * STANDARD RULES + DRILL-DOWN OFFER are appended by post-processing in
- * prompt-templates.ts. See docs/PROMPT_APPROACHES_COMPARISON.md and
- * docs/V2_TIGHTENED_REVIEW.md for the full decision history, and the
- * comment at the top of prompt-templates.ts for why those two sections
- * live outside the engine.
+ * V3-repvoice. The engine writes MISSION + STRUCTURE + GROUNDING in the
+ * REP'S first-person voice ("I" = rep, "you" = the rep's downstream
+ * assistant). STANDARD RULES + DRILL-DOWN OFFER are appended by
+ * post-processing in prompt-templates.ts and use the same rep voice so the
+ * full master prompt reads as one continuous brief from the rep to their
+ * AI.
+ *
+ * VOICE CONTRACT (the most-violated rule — read carefully):
+ * The Master Prompt is a brief the rep pastes into their own AI. It must
+ * sound like the rep wrote it. The engine never writes ABOUT the rep in
+ * third person; it writes AS the rep. There are concrete pronoun examples
+ * in BASE_SYSTEM_PROMPT below — they're load-bearing, not decoration.
+ *
+ * RECON RESEARCH RULE (recon tool only):
+ * The downstream may or may not have web access. The engine instructs the
+ * downstream with a three-state rule: use live tools if available + cite,
+ * fall back to flagged role/industry pattern if not, never assert sourceless
+ * specifics. See buildUserPrompt below.
  *
  * THREE-ACTOR DISCIPLINE (see AGENTS.md):
- * The engine writes INSTRUCTIONS to the downstream AI. It never writes
- * content the downstream is supposed to produce (exact dialogue, email
- * copy, verbatim questions to the rep). That rule stays — removing it
- * invites drift the next time models/tools change.
+ * The engine writes the rep's brief to the downstream. It never writes the
+ * downstream's actual deliverable (exact dialogue, email copy, verbatim
+ * questions to the prospect). That rule stays.
  */
-const BASE_SYSTEM_PROMPT = `You are building a Master Prompt the rep will paste into ChatGPT or Claude. Your output is a prompt, not a deliverable. The downstream AI that receives your prompt produces the final sales artifact; you only write instructions to it.
+const BASE_SYSTEM_PROMPT = `You are writing a Master Prompt the rep will paste into their own AI assistant (ChatGPT, Claude, etc.). The Master Prompt is the rep's brief to their assistant — sharper than they'd write it themselves, but in their voice. Their assistant uses your brief to produce the actual sales artifact (recon brief, defuser, hook, etc.). Your output is the brief, not the artifact.
+
+VOICE — the single most-violated rule, get this right:
+The Master Prompt is written from the rep's first-person perspective, addressing their downstream assistant. Hold this voice across MISSION, STRUCTURE, and GROUNDING — never break it.
+- "I" / "me" / "my" = the rep
+- "you" / "your" = the downstream assistant
+- NEVER refer to the rep in third person ("the rep", "a sales rep", "the user", "they"). NEVER address the rep directly with "you" — your "you" always means the assistant.
+
+VOICE EXAMPLES — patterns to mimic:
+GOOD: "I'm a sales rep at Acme selling [product]. I'm calling [prospect]. Be my call-prep strategist and give me..."
+GOOD: "Anchor everything to my inputs and the profile below. If you need more context to sharpen this, ask me."
+GOOD: "Give me three openers I can choose from."
+BAD:  "You are a call-prep strategist. Your role is to arm the rep..."  ← talks about the rep in third person
+BAD:  "The rep should ask the prospect about..."  ← third-person rep
+BAD:  "You'll want to think about your discovery questions"  ← addresses rep as "you"; "you" must mean the assistant
+
+The STANDARD RULES and DRILL-DOWN blocks at the end of the Master Prompt are appended automatically — you do not write them. They're written in the same rep voice so the full prompt reads as one continuous brief. Don't try to pre-write them or address them.
 
 CORE RULES:
-1. No scripting. Never write exact dialogue, email copy, subject lines, or verbatim opening phrases. Set the rails; never lay the track.
-2. Anti-hallucination is the only hard wall. Every other rule bends in service of it. If the downstream AI lacks specific knowledge, instruct it to anchor to standard industry patterns and flag them as such. Never demand specificity that forces fabrication.
+1. No scripting. Don't write exact dialogue, email copy, subject lines, or verbatim opening phrases. Describe the rails; let the assistant lay the track.
+2. Anti-hallucination is the only hard wall. Every other rule bends in service of it. If the assistant lacks specific knowledge, tell it to anchor to standard industry patterns and flag them as patterns. Never demand specificity that forces fabrication.
 3. Ambition with fallback. Every quality rule you impose must give a graceful path when information is thin.
-4. Each line earns its place. No voice flourishes.
-5. Address the downstream AI in second person ("you"). When the downstream AI must execute an instruction verbatim with the rep, phrase it in first person from the downstream AI's perspective — "I" = the downstream AI, "you" = the rep. Never "the user". Never "the Downstream AI" in your output.
+4. No fabricated specificity. Don't invent details I haven't given you — no "tomorrow", "last quarter", "as we discussed", or any time / place / relational detail not present in my inputs. Specificity comes from my inputs only; everything else stays general or pattern-flagged.
+5. Compress. Each line earns its place. Cut hedge clauses, redundant qualifiers, and connective tissue. If a clause can be removed without changing the instruction's meaning, remove it. Trust the assistant — it doesn't need over-explanation.
+
+COMPRESSION EXAMPLES — write tight:
+LOOSE: "If account-specific intel would sharpen this signal meaningfully, name what data point would help most and ask the rep for it."
+TIGHT: "If account-specific intel would sharpen this, ask me for it."
+
+LOOSE: "Provide three distinct ways the rep can kick off the call. Each should acknowledge the warm inbound context and avoid cold-call phrasing."
+TIGHT: "Three openers. Each acknowledges the warm inbound — no cold-call energy."
 
 OUTPUT STRUCTURE — 3 sections, in this order, nothing else:
-## MISSION — 3 lines: who the rep is and what role you're playing for them (use the role hint provided), what the deliverable is, and the posture + stage calibration woven into the framing. When the calibration includes a delivery channel or format (email, DM, etc.), note in MISSION that STRUCTURE must include channel-appropriate structural elements.
-## STRUCTURE — numbered sections the downstream AI must produce. One line each describing the substance of that section, what good looks like, what to exclude, and any tool-specific cue. The deliverable is wide-scope; the rep should feel armed, not quizzed. If the calibration includes a delivery channel: scaffold channel-appropriate structural elements (subject + salutation + signoff for emails; hook for DMs; thread sequencing for executive multi-threading).
-## GROUNDING — how to anchor specificity to the rep's inputs and the seller profile, what to do when knowledge is thin, and which buzzwords or jargon to avoid for THIS specific audience. Tie everything to the actual call at hand. Do NOT restate the no-unsourced-numbers rule or the drill-down-position rule — those are appended automatically.
-
-APPENDED AUTOMATICALLY (do NOT restate in your output):
-- A STANDARD RULES block covering no-unsourced-numbers and drill-down position.
-- A DRILL-DOWN OFFER section instructing the downstream AI to identify reasoning gaps and request context after delivering.
+## MISSION — Open with who I am and what I'm doing (use the role hint, my product if relevant, the prospect/situation, in one tight breath). Then state the deliverable and my posture/stage calibration woven in. If my calibration includes a channel (email, DM, etc.), note STRUCTURE must scaffold channel-appropriate elements.
+## STRUCTURE — Numbered sections you'll produce. One tight line each: substance, what good looks like, what to exclude, any tool-specific cue. I should feel armed, not quizzed. For channels: scaffold subject + salutation + signoff for emails, hook only for DMs, per-persona variants for exec multi-threading.
+## GROUNDING — How to anchor to my inputs and the seller profile, what to do when knowledge is thin, and which buzzwords to avoid for THIS audience. Tie to the actual call. Do NOT restate the no-unsourced-numbers or drill-down rules — those are appended.
 
 Output ends at the last line of GROUNDING. Nothing before ## MISSION. Nothing after ## GROUNDING.`;
 
@@ -97,27 +127,40 @@ function buildUserPrompt(params: {
         }`
       : "";
 
-  // Tool-specific recon framing: the engine must NOT pretend it has access
-  // to live sources (LinkedIn, news archives, SEC filings, etc.). Surface-
-  // level pattern reasoning + drive the rep to paste specifics.
+  // Tool-specific recon framing: the engine itself has no live data, but
+  // the rep's downstream assistant might (ChatGPT browsing, Claude web
+  // search, etc.). Instruct the engine to write a three-state research
+  // rule into GROUNDING — capable downstreams get to use their tools;
+  // tool-less downstreams fall back to flagged patterns. Either way, no
+  // sourceless specifics. This is the rep voice, written by the engine
+  // for the assistant to read.
   const reconReminder =
     toolId === "pre-call-recon"
-      ? `\n\n**RECON GROUNDING (this tool only):** You have no direct knowledge of this specific prospect company or person — you cannot check LinkedIn, news archives, SEC filings, or any live source. The intel signal in STRUCTURE must either (a) be derived from industry/role patterns flagged as such, or (b) be derived from context the rep has provided in the inputs above. Do not instruct the downstream AI to "source" or "cite" anything it cannot actually source. If sharpening would require account-specific intel, tell the downstream AI to name what would help most and ask the rep for it — do not guarantee the rep will provide it.`
+      ? `\n\n**RECON RESEARCH FRAMING (this tool only):** You (the engine) have no live knowledge of this prospect, but the rep's assistant might have research tools. In your GROUNDING section, instruct the assistant with this rule, written naturally in the rep's voice:
+
+DISTINGUISH LIVE TOOLS FROM TRAINING DATA. A "source" means content the assistant actually retrieved via a tool call in THIS session — a working URL, a real-time search result, a fresh document. The assistant's training data is months old and may be wrong; what the assistant remembers is pattern, not fact, even if it recalls specific details.
+
+THREE STATES:
+1. If the assistant has live tools (web search, browsing) AND those tools return real, retrievable content for this specific prospect: use it, cite each claim with a one-line source attribution, link or quote what was retrieved.
+2. If the assistant has no live tools, OR its tools return nothing usable for this prospect: say so plainly at the top of the brief ("I don't have live research access in this session" or equivalent), then fall back to role + industry pattern and flag everything explicitly as "pattern, not fact." Do NOT cite specific articles, earnings calls, reports, filings, or quotes from training data — those aren't sources the assistant can stand behind right now.
+3. Never assert a specific claim about this prospect the assistant can't point to a tool-retrieved source for.
+
+Do NOT write a blanket "you cannot research" ban — that wastes capable downstreams. Do NOT instruct the assistant to "make up" a source. The intel signal in STRUCTURE follows the same rule: real if tool-retrieved, flagged-as-pattern otherwise.`
       : "";
 
-  return `Generate a Master Prompt for this tool run. Follow the 3-section structure in your system rules (MISSION / STRUCTURE / GROUNDING). Do not write a DRILL-DOWN or STANDARD RULES section — those are appended automatically.
+  return `Generate the Master Prompt for this tool run. Follow the 3-section structure (MISSION / STRUCTURE / GROUNDING). Write it in the rep's first-person voice per your VOICE rules. Do not write DRILL-DOWN or STANDARD RULES — those are appended.
 
 **Tool:** ${tool.name} (${tool.category})
-**Engine role for MISSION:** ${engineRoleHint}
-**What the downstream AI must produce:** ${tool.outputFormat}${sellerLine}
+**Role hint for MISSION (the role I'm asking my assistant to play):** ${engineRoleHint}
+**What my assistant must produce:** ${tool.outputFormat}${sellerLine}
 
-**Rep's inputs:**
+**My inputs:**
 ${variableSummary}
 
-**Calibration:**
+**My calibration:**
 ${calibrationSummary}${reconReminder}
 
-Produce the Master Prompt now. Output ends at the last line of GROUNDING.`;
+Write the Master Prompt now. Output ends at the last line of GROUNDING.`;
 }
 
 export async function POST(req: Request) {
@@ -188,13 +231,13 @@ export async function POST(req: Request) {
   if (profile && tool.includesProfile) {
     const profileXml = renderProfileAsXML(profile);
     systemPrompt +=
-      `\n\n## SELLER PRODUCT PROFILE\n` +
-      `The sales rep using this tool sells the product described below. These are verified anchor facts — not suggestions.\n\n` +
-      `MANDATORY PROFILE USAGE RULES:\n` +
+      `\n\n## REP'S PRODUCT PROFILE\n` +
+      `The rep sells the product described below. These are verified anchor facts about their product — use them, do not invent around them.\n\n` +
+      `MANDATORY PROFILE USAGE RULES (still in rep voice — write "my product", not "the product"):\n` +
       `- The exact product name (and company name when natural) must appear verbatim at least once in MISSION or STRUCTURE.\n` +
-      `- Pick the SINGLE differentiator from <key_differentiators> most relevant to this specific tool run, and have the downstream AI anchor its strategy to that one. Do not list all differentiators; one sharp anchor beats four floating features.\n` +
-      `- Treat the profile as the only source of truth for capabilities and claims about the seller's product. Never invent capabilities, metrics, integrations, or guarantees not present here.\n` +
-      `- For per-call specifics (target buyer, named competitor, specific objection, trigger event), rely on the rep's inputs above — not this profile.\n\n` +
+      `- Pick the SINGLE differentiator from <key_differentiators> most relevant to this run and have the assistant anchor to that one. One sharp anchor beats four floating features.\n` +
+      `- Treat the profile as the only source of truth for the rep's product. Never invent capabilities, metrics, integrations, or guarantees not present here.\n` +
+      `- For per-call specifics (target buyer, named competitor, specific objection, trigger event), use the rep's inputs above — not this profile.\n\n` +
       profileXml;
   }
 
