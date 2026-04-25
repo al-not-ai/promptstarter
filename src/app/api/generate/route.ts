@@ -6,6 +6,7 @@ import { renderProfileAsXML } from "@/lib/profile-xml";
 import {
   assembleMasterPrompt,
   STANDARD_RULES_BLOCK,
+  RECON_RESEARCH_BLOCK,
   buildDrillDownBlock,
 } from "@/lib/prompt-templates";
 import type { ProductProfile } from "@/lib/types/profile";
@@ -63,7 +64,7 @@ BAD:  "You are a call-prep strategist. Your role is to arm the rep..."  ← talk
 BAD:  "The rep should ask the prospect about..."  ← third-person rep
 BAD:  "You'll want to think about your discovery questions"  ← addresses rep as "you"; "you" must mean the assistant
 
-The STANDARD RULES and DRILL-DOWN blocks at the end of the Master Prompt are appended automatically — you do not write them. They're written in the same rep voice so the full prompt reads as one continuous brief. Don't try to pre-write them or address them.
+The STANDARD RULES, RESEARCH PROTOCOL (recon only), and DRILL-DOWN blocks at the end of the Master Prompt are appended automatically — you do not write them. They're written in the same rep voice so the full prompt reads as one continuous brief. Don't try to pre-write them or address them.
 
 CORE RULES:
 1. No scripting. Don't write exact dialogue, email copy, subject lines, or verbatim opening phrases. Describe the rails; let the assistant lay the track.
@@ -71,6 +72,7 @@ CORE RULES:
 3. Ambition with fallback. Every quality rule you impose must give a graceful path when information is thin.
 4. No fabricated specificity. Don't invent details I haven't given you — no "tomorrow", "last quarter", "as we discussed", or any time / place / relational detail not present in my inputs. Specificity comes from my inputs only; everything else stays general or pattern-flagged.
 5. Compress. Each line earns its place. Cut hedge clauses, redundant qualifiers, and connective tissue. If a clause can be removed without changing the instruction's meaning, remove it. Trust the assistant — it doesn't need over-explanation.
+6. Format for scan. The rep glances at this before pasting. Use bullets where they sharpen. Reserve prose for MISSION (where rep voice needs flow). Avoid wall-of-text paragraphs in STRUCTURE and GROUNDING.
 
 COMPRESSION EXAMPLES — write tight:
 LOOSE: "If account-specific intel would sharpen this signal meaningfully, name what data point would help most and ask the rep for it."
@@ -79,10 +81,15 @@ TIGHT: "If account-specific intel would sharpen this, ask me for it."
 LOOSE: "Provide three distinct ways the rep can kick off the call. Each should acknowledge the warm inbound context and avoid cold-call phrasing."
 TIGHT: "Three openers. Each acknowledges the warm inbound — no cold-call energy."
 
+LOOSE (paragraph in GROUNDING): "Avoid jargon tied to Tesla's proprietary roadmap, speculation about market position, or buzzwords that assume familiarity with internal org structure. Ground everything in what an engineer role typically owns."
+TIGHT (bullets):
+- Avoid: insider-only jargon, market speculation, buzzwords assuming org-chart knowledge.
+- Anchor to: what the role typically owns, warm-inbound posture.
+
 OUTPUT STRUCTURE — 3 sections, in this order, nothing else:
-## MISSION — Open with who I am and what I'm doing (use the role hint, my product if relevant, the prospect/situation, in one tight breath). Then state the deliverable and my posture/stage calibration woven in. If my calibration includes a channel (email, DM, etc.), note STRUCTURE must scaffold channel-appropriate elements.
-## STRUCTURE — Numbered sections you'll produce. One tight line each: substance, what good looks like, what to exclude, any tool-specific cue. I should feel armed, not quizzed. For channels: scaffold subject + salutation + signoff for emails, hook only for DMs, per-persona variants for exec multi-threading.
-## GROUNDING — How to anchor to my inputs and the seller profile, what to do when knowledge is thin, and which buzzwords to avoid for THIS audience. Tie to the actual call. Do NOT restate the no-unsourced-numbers or drill-down rules — those are appended.
+## MISSION — 2-3 short sentences, prose. Open with who I am and what I'm doing (use the role hint, my product if relevant, the prospect/situation in one tight breath). Then state the deliverable and my posture/stage calibration woven in. If my calibration includes a channel (email, DM, etc.), note STRUCTURE must scaffold channel-appropriate elements.
+## STRUCTURE — Numbered sections you'll produce. ONE-LINE LEDE per item, then optional 2-3 sub-bullets only when they sharpen substance (what to include, what to exclude, what good looks like). No paragraph-form items. For channels: scaffold subject + salutation + signoff for emails, hook only for DMs, per-persona variants for exec multi-threading.
+## GROUNDING — Bulleted list. Anchor to my inputs and the profile, fallback when thin, buzzwords to avoid for THIS audience. No long paragraphs. Tie to the actual call. Do NOT restate the no-unsourced-numbers rule, the drill-down rule, or (for recon) the research protocol — those are appended.
 
 Output ends at the last line of GROUNDING. Nothing before ## MISSION. Nothing after ## GROUNDING.`;
 
@@ -136,16 +143,7 @@ function buildUserPrompt(params: {
   // for the assistant to read.
   const reconReminder =
     toolId === "pre-call-recon"
-      ? `\n\n**RECON RESEARCH FRAMING (this tool only):** You (the engine) have no live knowledge of this prospect, but the rep's assistant might have research tools. In your GROUNDING section, instruct the assistant with this rule, written naturally in the rep's voice:
-
-DISTINGUISH LIVE TOOLS FROM TRAINING DATA. A "source" means content the assistant actually retrieved via a tool call in THIS session — a working URL, a real-time search result, a fresh document. The assistant's training data is months old and may be wrong; what the assistant remembers is pattern, not fact, even if it recalls specific details.
-
-THREE STATES:
-1. If the assistant has live tools (web search, browsing) AND those tools return real, retrievable content for this specific prospect: use it, cite each claim with a one-line source attribution, link or quote what was retrieved.
-2. If the assistant has no live tools, OR its tools return nothing usable for this prospect: say so plainly at the top of the brief ("I don't have live research access in this session" or equivalent), then fall back to role + industry pattern and flag everything explicitly as "pattern, not fact." Do NOT cite specific articles, earnings calls, reports, filings, or quotes from training data — those aren't sources the assistant can stand behind right now.
-3. Never assert a specific claim about this prospect the assistant can't point to a tool-retrieved source for.
-
-Do NOT write a blanket "you cannot research" ban — that wastes capable downstreams. Do NOT instruct the assistant to "make up" a source. The intel signal in STRUCTURE follows the same rule: real if tool-retrieved, flagged-as-pattern otherwise.`
+      ? `\n\n**RECON-SPECIFIC NOTE:** A RESEARCH PROTOCOL block is appended automatically after this prompt with tool-vs-training-data sourcing rules. Do NOT write research instructions inside GROUNDING. In STRUCTURE for the intel signal, you can reference it implicitly (e.g., "follow the research protocol below").`
       : "";
 
   return `Generate the Master Prompt for this tool run. Follow the 3-section structure (MISSION / STRUCTURE / GROUNDING). Write it in the rep's first-person voice per your VOICE rules. Do not write DRILL-DOWN or STANDARD RULES — those are appended.
@@ -292,6 +290,7 @@ export async function POST(req: Request) {
         const fullMasterPrompt = assembleMasterPrompt({
           engineOutput: text,
           outputDescriptor: tool.outputDescriptor,
+          toolId,
         });
         await supabase.from("generations").insert({
           user_id: user.id,
@@ -311,9 +310,12 @@ export async function POST(req: Request) {
   // after it finishes. Client gets a single continuous text stream — first
   // the engine work live, then the templated tail appended cleanly.
   const encoder = new TextEncoder();
+  const reconResearchTail =
+    toolId === "pre-call-recon" ? "\n\n" + RECON_RESEARCH_BLOCK : "";
   const templatedTail =
     "\n\n" +
     STANDARD_RULES_BLOCK +
+    reconResearchTail +
     "\n\n" +
     buildDrillDownBlock(tool.outputDescriptor) +
     "\n";
