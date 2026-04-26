@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Check } from "lucide-react";
+import { AlertTriangle, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PromptHandoff } from "@/components/prompt-handoff";
 
@@ -10,9 +10,18 @@ interface TerminalOutputProps {
   isLoading: boolean;
   error: Error | undefined;
   rawContext?: string;
+  onRetry?: () => void;
 }
 
-export function TerminalOutput({ output, isLoading, error, rawContext }: TerminalOutputProps) {
+function friendlyError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes("fetch") || m.includes("network")) return "Connection lost — check your internet and try again.";
+  if (m.includes("429") || m.includes("rate limit")) return "Too many requests — wait a moment and try again.";
+  if (m.includes("500") || m.includes("server")) return "The generator hit an error on our end. Try again.";
+  return "Something went wrong. Try again.";
+}
+
+export function TerminalOutput({ output, isLoading, error, rawContext, onRetry }: TerminalOutputProps) {
   const isEmpty = !output && !isLoading && !error;
   const [hasCopied, setHasCopied] = useState(false);
   const [sweepKey, setSweepKey] = useState<number | null>(null);
@@ -134,12 +143,26 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
         )}
 
         {error && (
-          <p className="font-mono text-xs text-red-400/80">
-            Error: {error.message}
-          </p>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={16} className="text-red-400/70 shrink-0" />
+              <p className="font-mono text-xs text-red-400/80">
+                {friendlyError(error.message)}
+              </p>
+            </div>
+            {onRetry && (
+              <button
+                type="button"
+                onClick={onRetry}
+                className="self-start font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-sm border border-red-400/40 text-red-400 hover:bg-red-400/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
+              >
+                Try Again
+              </button>
+            )}
+          </div>
         )}
 
-        {output && (
+        {!error && output && (
           <pre className="font-mono text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed">
             {output}
             {isLoading && (
@@ -151,7 +174,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
           </pre>
         )}
 
-        {isLoading && !output && (
+        {!error && isLoading && !output && (
           <span
             className="inline-block w-[7px] h-[14px] bg-primary animate-pulse"
             style={{ boxShadow: "0 0 8px rgba(255,51,0,0.8)" }}
