@@ -360,6 +360,21 @@ function RailHistorySection({
     }
   }, []);
 
+  // Flush any pending (undo-window) deletes when the page is torn down.
+  // pagehide fires on refresh, tab close, and bfcache navigation — more
+  // reliable than beforeunload on mobile Safari. keepalive lets the request
+  // outlive the page.
+  useEffect(() => {
+    function onPageHide() {
+      for (const [id] of pendingDeletes.current) {
+        fetch(`/api/generations/${id}`, { method: "DELETE", keepalive: true }).catch(() => {});
+      }
+      pendingDeletes.current.clear();
+    }
+    window.addEventListener("pagehide", onPageHide);
+    return () => window.removeEventListener("pagehide", onPageHide);
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     fetch("/api/generations")
