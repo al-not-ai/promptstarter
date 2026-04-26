@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PromptHandoff } from "@/components/prompt-handoff";
@@ -16,6 +16,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
   const isEmpty = !output && !isLoading && !error;
   const [hasCopied, setHasCopied] = useState(false);
   const [sweepKey, setSweepKey] = useState<number | null>(null);
+  const copyButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Reset on new output (re-generation or history restore)
   useEffect(() => {
@@ -55,7 +56,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
     <div
       key={sweepKey ?? "idle"}
       className={cn(
-        "w-full border border-white/10 bg-black/40 backdrop-blur-md rounded-lg overflow-hidden",
+        "w-full border border-white/10 bg-black/40 backdrop-blur-md rounded-lg",
         sweepKey ? "animate-copy-shutter animate-copy-ring" : ""
       )}
     >
@@ -76,22 +77,31 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
             </span>
           )}
           {output && !isLoading && (
-            <button
-              key={sweepKey ?? "btn-idle"}
-              onClick={handleCopy}
-              className={cn(
-                "font-mono text-[10px] uppercase tracking-widest transition-all duration-200 px-3 py-1.5 rounded-sm border flex items-center gap-1.5",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50",
-                hasCopied
-                  ? "border-[#FF3300]/60 bg-[#FF3300]/10 text-[#FF3300]"
-                  : "border-[#FF3300]/40 text-[#FF3300] hover:bg-[#FF3300]/10",
-                sweepKey ? "animate-copy-haptic" : ""
-              )}
-              style={{ boxShadow: hasCopied ? "0 0 14px rgba(255,51,0,0.3)" : "0 0 8px rgba(255,51,0,0.15)" }}
-            >
-              {hasCopied && <Check size={12} />}
-              <span>{hasCopied ? "Copied — clipboard ready" : (rawContext?.trim() ? "Copy + Context" : "Copy")}</span>
-            </button>
+            <div className="relative">
+              <button
+                ref={copyButtonRef}
+                key={sweepKey ?? "btn-idle"}
+                onClick={handleCopy}
+                className={cn(
+                  "font-mono text-[10px] uppercase tracking-widest transition-all duration-200 px-3 py-1.5 rounded-sm border flex items-center gap-1.5",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50",
+                  hasCopied
+                    ? "border-[#FF3300]/60 bg-[#FF3300]/10 text-[#FF3300]"
+                    : "border-[#FF3300]/40 text-[#FF3300] hover:bg-[#FF3300]/10",
+                  sweepKey ? "animate-copy-haptic" : ""
+                )}
+                style={{ boxShadow: hasCopied ? "0 0 14px rgba(255,51,0,0.3)" : "0 0 8px rgba(255,51,0,0.15)" }}
+              >
+                {hasCopied && <Check size={12} />}
+                <span>{hasCopied ? "Copied — clipboard ready" : (rawContext?.trim() ? "Copy + Context" : "Copy")}</span>
+              </button>
+              <PromptHandoff
+                visible={hasCopied}
+                onDismiss={() => setHasCopied(false)}
+                pulseKey={sweepKey}
+                copyButtonRef={copyButtonRef}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -149,8 +159,6 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
         )}
       </div>
 
-      {/* Handoff panel — slides in below terminal body after copy */}
-      <PromptHandoff visible={hasCopied} />
     </div>
   );
 }
