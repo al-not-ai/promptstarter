@@ -188,6 +188,7 @@ export function ControlPanel({
         isLoading={isLoading}
         error={error}
         rawContext={rawContext}
+        onRetry={handleGenerate}
       />
 
     </div>
