@@ -32,8 +32,8 @@ export function AppRail({
   onPinChange,
 }: AppRailProps) {
   const [hoverExpanded, setHoverExpanded] = useState(false);
-  const hoverInTimer = useRef<ReturnType<typeof setTimeout>>();
-  const hoverOutTimer = useRef<ReturnType<typeof setTimeout>>();
+  const hoverInTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverOutTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isExpanded = hoverExpanded || isPinned;
 
