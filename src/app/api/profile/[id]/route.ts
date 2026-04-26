@@ -120,3 +120,93 @@ export async function PATCH(
 
   return NextResponse.json({ profile: updated as ProductProfile });
 }
+
+/**
+ * DELETE /api/profile/[id]
+ *
+ * Soft-deletes the profile and hard-deletes all generations linked to it.
+ * Blocks if the profile is the user's only active one (redirect to /onboarding
+ * would be confusing; deleting the last profile is almost always a mistake).
+ * Auto-promotes a new default when the deleted profile was the default.
+ */
+export async function DELETE(
+  _req: NextRequest,
+  ctx: { params: Promise<{ id: string }> }
+) {
+  const { id } = await ctx.params;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return new Response("Unauthorized", { status: 401 });
+
+  // Verify the profile exists and belongs to this user
+  const { data: profile } = await supabase
+    .from("product_profiles")
+    .select("id, is_default")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .is("deleted_at", null)
+    .single();
+
+  if (!profile) {
+    return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+  }
+
+  // Block delete-to-zero — the (app) layout redirects profileless users to
+  // /onboarding, so a zero-profile state would be a confusing dead end.
+  const { count: remainingCount } = await supabase
+    .from("product_profiles")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .is("deleted_at", null)
+    .neq("id", id);
+
+  if ((remainingCount ?? 0) === 0) {
+    return NextResponse.json(
+      {
+        error:
+          "You need at least one product profile. Create another first.",
+      },
+      { status: 400 }
+    );
+  }
+
+  // Hard-delete all generations tied to this profile
+  await supabase
+    .from("generations")
+    .delete()
+    .eq("profile_id", id)
+    .eq("user_id", user.id);
+
+  // Soft-delete the profile
+  await supabase
+    .from("product_profiles")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  // If the deleted profile was the default, promote the most-recently-updated
+  // remaining active profile so the layout always has a default to land on.
+  if (profile.is_default) {
+    const { data: next } = await supabase
+      .from("product_profiles")
+      .select("id")
+      .eq("user_id", user.id)
+      .is("deleted_at", null)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (next) {
+      await supabase
+        .from("product_profiles")
+        .update({ is_default: true })
+        .eq("id", next.id)
+        .eq("user_id", user.id);
+    }
+  }
+
+  return new Response(null, { status: 204 });
+}

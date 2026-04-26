@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { X, ChevronDown, Check, Plus, Pin, PinOff, ArrowRight } from "lucide-react";
+import { X, ChevronDown, Check, Plus, Pin, PinOff, ArrowRight, Users } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -293,6 +293,16 @@ function DrawerProfileSwitcher() {
               );
             })}
           </div>
+          <Link
+            href="/profiles"
+            onClick={() => setOpen(false)}
+            className="block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+          >
+            <span className="inline-flex items-center gap-2">
+              <Users className="w-3.5 h-3.5 text-zinc-500" />
+              Manage profiles
+            </span>
+          </Link>
           <Link
             href="/onboarding"
             onClick={() => setOpen(false)}
