@@ -1,12 +1,9 @@
-export type OutputSource = "cached" | "restored";
-
 export type FormCacheEntry = {
   variableValues: Record<string, string>;
   sliderValues: Record<string, number>;
   rawContext: string;
   contextOpen: boolean;
   output: string;
-  outputSource: OutputSource;
   updatedAt: number;
 };
 

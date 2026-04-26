@@ -23,7 +23,6 @@ interface ControlPanelProps {
   onReset: () => void;
   onNew: () => void;
   restoredOutput: string;
-  isRestored: boolean;
   onGenerationStart: () => void;
   onGenerationComplete: (output: string) => void;
 }
@@ -42,7 +41,6 @@ export function ControlPanel({
   onReset,
   onNew,
   restoredOutput,
-  isRestored,
   onGenerationStart,
   onGenerationComplete,
 }: ControlPanelProps) {
@@ -94,6 +92,7 @@ export function ControlPanel({
                 <Input
                   value={variableValues[variable.name] ?? ""}
                   onChange={(e) => onVariableChange(variable.name, e.target.value)}
+                  onFocus={(e) => e.currentTarget.select()}
                   className="font-mono bg-zinc-900 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-primary h-[40px] text-sm"
                   placeholder={variable.placeholder}
                 />
@@ -191,6 +190,7 @@ export function ControlPanel({
             <textarea
               value={rawContext}
               onChange={(e) => onRawContextChange(e.target.value)}
+              onFocus={(e) => e.currentTarget.select()}
               placeholder="Paste email threads, call notes, LinkedIn profiles, or any prospect context here..."
               rows={4}
               className="w-full font-mono text-xs bg-zinc-900 border border-white/10 rounded-sm px-3 py-2.5 text-white placeholder:text-zinc-600 resize-none focus:outline-none focus:border-primary/30 transition-colors duration-150"
@@ -199,13 +199,6 @@ export function ControlPanel({
 
         </CardContent>
       </Card>
-
-      {/* Restored marker */}
-      {isRestored && (
-        <p className="font-mono text-xs text-zinc-500">
-          Restored from earlier — Generate to refresh
-        </p>
-      )}
 
       {/* Output — full width below the form */}
       <TerminalOutput
