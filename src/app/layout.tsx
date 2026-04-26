@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -28,7 +29,10 @@ export default function RootLayout({
       lang="en"
       className={cn("dark antialiased font-sans", geist.variable, geistMono.variable, spaceGrotesk.variable)}
     >
-      <body className="min-h-[100dvh] flex flex-col">{children}</body>
+      <body className="min-h-[100dvh] flex flex-col">
+        {children}
+        <Toaster theme="dark" position="bottom-right" />
+      </body>
     </html>
   );
 }
