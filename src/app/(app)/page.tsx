@@ -11,10 +11,8 @@ import {
   getCache,
   setCache,
   clearCache,
-  type OutputSource,
 } from "@/lib/form-cache";
 import type { RestoredGeneration } from "@/lib/types/generation";
-import type { GenerationMeta } from "@/components/app-rail";
 
 const RAIL_PIN_KEY = "promptstarter:rail-pinned";
 
@@ -43,9 +41,8 @@ function HomeInner() {
   // Lifted from ControlPanel so they can be cached across tool switches
   const [rawContext, setRawContext] = useState("");
   const [contextOpen, setContextOpen] = useState(false);
-  // Tracks the last complete output (restored or generated) for display + caching
+  // Tracks the last complete output for display + caching
   const [currentOutput, setCurrentOutput] = useState("");
-  const [outputSource, setOutputSource] = useState<OutputSource | null>(null);
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [generationCount, setGenerationCount] = useState(0);
@@ -81,7 +78,6 @@ function HomeInner() {
           setRawContext("");
           setContextOpen(false);
           setCurrentOutput(gen.output);
-          setOutputSource("restored");
         })
         .catch(() => {});
       return;
@@ -95,26 +91,7 @@ function HomeInner() {
       setRawContext(cached.rawContext);
       setContextOpen(cached.contextOpen);
       setCurrentOutput(cached.output);
-      setOutputSource(cached.outputSource);
-      return;
     }
-
-    // Nothing cached — try to rehydrate from the most recent generation
-    fetch(
-      `/api/generations?profileId=${activeProfileId}&limit=1&toolId=${tools[0].id}`
-    )
-      .then((r) => (r.ok ? r.json() : []))
-      .then(async (rows: GenerationMeta[]) => {
-        if (!rows.length) return;
-        const gr = await fetch(`/api/generations/${rows[0].id}`);
-        if (!gr.ok) return;
-        const gen = await gr.json();
-        setVariableValues(gen.variable_values);
-        setSliderValues(gen.slider_values);
-        setCurrentOutput(gen.output);
-        setOutputSource("restored");
-      })
-      .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProfileId]); // activeProfileId is the gate; searchParams stable at mount
 
@@ -134,7 +111,6 @@ function HomeInner() {
       rawContext,
       contextOpen,
       output: currentOutput,
-      outputSource: outputSource ?? "cached",
       updatedAt: Date.now(),
     });
   }, [
@@ -143,7 +119,6 @@ function HomeInner() {
     rawContext,
     contextOpen,
     currentOutput,
-    outputSource,
     activeToolId,
     activeProfileId,
   ]);
@@ -151,7 +126,7 @@ function HomeInner() {
   // ── Tool selection: load from cache or rehydrate from history ─────────────
 
   const handleToolSelect = useCallback(
-    async (toolId: string) => {
+    (toolId: string) => {
       setActiveToolId(toolId);
 
       if (!activeProfileId) {
@@ -160,7 +135,6 @@ function HomeInner() {
         setRawContext("");
         setContextOpen(false);
         setCurrentOutput("");
-        setOutputSource(null);
         return;
       }
 
@@ -171,35 +145,15 @@ function HomeInner() {
         setRawContext(cached.rawContext);
         setContextOpen(cached.contextOpen);
         setCurrentOutput(cached.output);
-        setOutputSource(cached.outputSource);
         return;
       }
 
-      // Reset to defaults then try to rehydrate from history
+      // No cache — start fresh
       setVariableValues(defaultVariableValues(toolId));
       setSliderValues(defaultSliderValues(toolId));
       setRawContext("");
       setContextOpen(false);
       setCurrentOutput("");
-      setOutputSource(null);
-
-      try {
-        const r = await fetch(
-          `/api/generations?profileId=${activeProfileId}&limit=1&toolId=${toolId}`
-        );
-        if (!r.ok) return;
-        const rows: GenerationMeta[] = await r.json();
-        if (!rows.length) return;
-        const gr = await fetch(`/api/generations/${rows[0].id}`);
-        if (!gr.ok) return;
-        const gen = await gr.json();
-        setVariableValues(gen.variable_values);
-        setSliderValues(gen.slider_values);
-        setCurrentOutput(gen.output);
-        setOutputSource("restored");
-      } catch {
-        // silently ignore — empty state is fine
-      }
     },
     [activeProfileId]
   );
@@ -214,7 +168,6 @@ function HomeInner() {
     setRawContext("");
     setContextOpen(false);
     setCurrentOutput(gen.output);
-    setOutputSource("restored");
   }, []);
 
   // ── Reset: clears inputs only, leaves output + cache intact ───────────────
@@ -235,21 +188,15 @@ function HomeInner() {
     setRawContext("");
     setContextOpen(false);
     setCurrentOutput("");
-    setOutputSource(null);
     if (activeProfileId) clearCache(activeProfileId, activeToolId);
   }, [activeToolId, activeProfileId]);
 
   // ── Generation lifecycle ───────────────────────────────────────────────────
 
-  const handleGenerationStart = useCallback(() => {
-    // Only clear the "Restored from earlier" marker; don't wipe currentOutput
-    // (ControlPanel's live `completion` takes display priority while streaming)
-    setOutputSource(null);
-  }, []);
+  const handleGenerationStart = useCallback(() => {}, []);
 
   const handleGenerationComplete = useCallback((output: string) => {
     setCurrentOutput(output);
-    setOutputSource("cached");
     setGenerationCount((c) => c + 1);
   }, []);
 
@@ -308,7 +255,6 @@ function HomeInner() {
           onReset={handleReset}
           onNew={handleNew}
           restoredOutput={currentOutput}
-          isRestored={outputSource === "restored"}
           onGenerationStart={handleGenerationStart}
           onGenerationComplete={handleGenerationComplete}
         />
