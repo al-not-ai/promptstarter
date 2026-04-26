@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { AppRail } from "@/components/app-rail";
 import { ControlPanel } from "@/components/control-panel";
@@ -19,7 +20,10 @@ function defaultVariableValues(toolId: string): Record<string, string> {
   return Object.fromEntries(tool.variables.map((v) => [v.name, ""]));
 }
 
-export default function Home() {
+// Separated so useSearchParams is inside a Suspense boundary
+function HomeInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [activeToolId, setActiveToolId] = useState(tools[0].id);
   const [sliderValues, setSliderValues] = useState<Record<string, number>>(
     defaultSliderValues(tools[0].id)
@@ -30,7 +34,6 @@ export default function Home() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [restored, setRestored] = useState<RestoredGeneration>(null);
   const [generationCount, setGenerationCount] = useState(0);
-  // Default false; hydrated from localStorage after mount to avoid SSR mismatch
   const [railPinned, setRailPinned] = useState(false);
 
   useEffect(() => {
@@ -40,6 +43,32 @@ export default function Home() {
       // localStorage unavailable
     }
   }, []);
+
+  // Handle ?restore=<id> — fetch generation and rehydrate form
+  useEffect(() => {
+    const restoreId = searchParams.get("restore");
+    if (!restoreId) return;
+
+    // Clear param immediately so back-navigation doesn't re-trigger
+    router.replace("/", { scroll: false });
+
+    fetch(`/api/generations/${restoreId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((gen) => {
+        if (!gen) return;
+        setActiveToolId(gen.tool_id);
+        setSliderValues(gen.slider_values);
+        setVariableValues(gen.variable_values);
+        setRestored({
+          toolId: gen.tool_id,
+          variableValues: gen.variable_values,
+          sliderValues: gen.slider_values,
+          output: gen.output,
+        });
+      })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once on mount — searchParams is stable at mount time
 
   const activeTool = tools.find((t) => t.id === activeToolId)!;
   const firstVarName = activeTool.variables[0]?.name;
@@ -61,7 +90,6 @@ export default function Home() {
 
   return (
     <div className="grid-bg relative flex min-h-[100dvh] flex-col bg-background overflow-x-hidden">
-
       <TopBar onMenuOpen={() => setMobileNavOpen(true)} />
 
       <AppRail
@@ -106,5 +134,13 @@ export default function Home() {
         />
       </main>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense>
+      <HomeInner />
+    </Suspense>
   );
 }

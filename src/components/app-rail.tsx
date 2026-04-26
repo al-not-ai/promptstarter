@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { X, ChevronDown, Check, Plus, Pin, PinOff } from "lucide-react";
+import { X, ChevronDown, Check, Plus, Pin, PinOff, ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 import Link from "next/link";
 import { ToolNav } from "@/components/tool-nav";
 import { useProfileSwitcher } from "@/lib/profile-context";
@@ -308,7 +309,7 @@ function DrawerProfileSwitcher() {
 
 // ─── History section ──────────────────────────────────────────────────────────
 
-type GenerationMeta = {
+export type GenerationMeta = {
   id: string;
   tool_id: string;
   variable_values: Record<string, string>;
@@ -324,7 +325,7 @@ type GenerationFull = {
   created_at: string;
 };
 
-function timeAgo(dateStr: string): string {
+export function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const m = Math.floor(diff / 60000);
   if (m < 1) return "just now";
@@ -343,6 +344,9 @@ function RailHistorySection({
 }) {
   const [items, setItems] = useState<GenerationMeta[]>([]);
   const [loading, setLoading] = useState(true);
+  const pendingDeletes = useRef<
+    Map<string, { item: GenerationMeta; timer: ReturnType<typeof setTimeout> }>
+  >(new Map());
 
   useEffect(() => {
     setLoading(true);
@@ -374,16 +378,58 @@ function RailHistorySection({
     [onRestoreGeneration]
   );
 
+  const handleDelete = useCallback(
+    (e: React.MouseEvent, id: string) => {
+      e.stopPropagation();
+      const item = items.find((i) => i.id === id);
+      if (!item) return;
+
+      // Optimistic removal
+      setItems((prev) => prev.filter((i) => i.id !== id));
+
+      // Schedule actual server delete after 5 s
+      const timer = setTimeout(() => {
+        pendingDeletes.current.delete(id);
+        fetch(`/api/generations/${id}`, { method: "DELETE" }).catch(() => {});
+      }, 5000);
+
+      pendingDeletes.current.set(id, { item, timer });
+
+      toast("Generation deleted", {
+        duration: 5000,
+        action: {
+          label: "Undo",
+          onClick: () => {
+            const pending = pendingDeletes.current.get(id);
+            if (!pending) return;
+            clearTimeout(pending.timer);
+            pendingDeletes.current.delete(id);
+            setItems((prev) =>
+              [...prev, pending.item].sort(
+                (a, b) =>
+                  new Date(b.created_at).getTime() -
+                  new Date(a.created_at).getTime()
+              )
+            );
+          },
+        },
+      });
+    },
+    [items]
+  );
+
   if (!loading && items.length === 0) return null;
 
-  const displayItems = items.slice(0, 10);
+  const displayItems = items.slice(0, 5);
 
   return (
     <div className="shrink-0 border-t border-white/5 px-3 py-3">
       <p className="font-mono text-[10px] tracking-wider text-zinc-600 uppercase px-1 mb-2">
         Recent
       </p>
-      <div className="flex flex-col gap-0.5">
+
+      {/* Capped list — max ~5 rows, scrollable if subtitles make them taller */}
+      <div className="flex flex-col gap-0.5 max-h-[220px] overflow-y-auto">
         {loading ? (
           [0, 1, 2].map((i) => (
             <div key={i} className="h-9 rounded-md bg-zinc-900/60 animate-pulse" />
@@ -391,20 +437,18 @@ function RailHistorySection({
         ) : (
           displayItems.map((item) => {
             const tool = tools.find((t) => t.id === item.tool_id);
-            const toolName = tool?.name ?? item.tool_id;
-            const shortName = toolName.replace(/^The\s+/i, "");
+            const shortName = (tool?.name ?? item.tool_id).replace(/^The\s+/i, "");
             const firstVal = Object.values(item.variable_values)[0] ?? "";
-            const subtitle =
-              firstVal.length > 24 ? firstVal.slice(0, 23) + "…" : firstVal;
+            const subtitle = firstVal.length > 24 ? firstVal.slice(0, 23) + "…" : firstVal;
 
             return (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => handleClick(item.id)}
-                className="w-full text-left rounded-md px-2 py-1.5 hover:bg-white/[0.04] transition-colors duration-100 group"
+                className="w-full text-left rounded-md px-2 py-1.5 hover:bg-white/[0.04] transition-colors duration-100 group relative"
               >
-                <div className="flex items-baseline justify-between gap-2 min-w-0">
+                <div className="flex items-baseline justify-between gap-2 min-w-0 pr-6">
                   <span className="font-mono text-[11px] text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
                     {shortName}
                   </span>
@@ -413,15 +457,36 @@ function RailHistorySection({
                   </span>
                 </div>
                 {subtitle && (
-                  <div className="font-mono text-[10px] text-zinc-600 truncate leading-snug">
+                  <div className="font-mono text-[10px] text-zinc-600 truncate leading-snug pr-6">
                     {subtitle}
                   </div>
                 )}
+                {/* Delete button — hover-reveal on desktop, always visible on touch */}
+                <button
+                  type="button"
+                  onClick={(e) => handleDelete(e, item.id)}
+                  aria-label="Delete"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded text-zinc-600 hover:text-red-400 hover:bg-white/[0.06] transition-colors duration-100
+                    opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
+                >
+                  <X size={11} />
+                </button>
               </button>
             );
           })
         )}
       </div>
+
+      {/* Show all link */}
+      {!loading && items.length > 0 && (
+        <Link
+          href="/history"
+          className="mt-2 flex items-center gap-1 px-1 font-mono text-[10px] text-zinc-600 hover:text-zinc-300 transition-colors duration-100"
+        >
+          Show all
+          <ArrowRight size={10} />
+        </Link>
+      )}
     </div>
   );
 }
