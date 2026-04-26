@@ -52,7 +52,13 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
 
   /* ── Active state (loading / output / error) ── */
   return (
-    <div className="w-full border border-white/10 bg-black/40 backdrop-blur-md rounded-lg overflow-hidden">
+    <div
+      key={sweepKey ?? "idle"}
+      className={cn(
+        "w-full border border-white/10 bg-black/40 backdrop-blur-md rounded-lg overflow-hidden",
+        sweepKey ? "animate-copy-shutter animate-copy-ring" : ""
+      )}
+    >
       {/* Header bar */}
       <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.02]">
         <span
@@ -71,13 +77,15 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
           )}
           {output && !isLoading && (
             <button
+              key={sweepKey ?? "btn-idle"}
               onClick={handleCopy}
               className={cn(
                 "font-mono text-[10px] uppercase tracking-widest transition-all duration-200 px-3 py-1.5 rounded-sm border flex items-center gap-1.5",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50",
                 hasCopied
                   ? "border-[#FF3300]/60 bg-[#FF3300]/10 text-[#FF3300]"
-                  : "border-[#FF3300]/40 text-[#FF3300] hover:bg-[#FF3300]/10"
+                  : "border-[#FF3300]/40 text-[#FF3300] hover:bg-[#FF3300]/10",
+                sweepKey ? "animate-copy-haptic" : ""
               )}
               style={{ boxShadow: hasCopied ? "0 0 14px rgba(255,51,0,0.3)" : "0 0 8px rgba(255,51,0,0.15)" }}
             >
@@ -88,7 +96,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
         </div>
       </div>
 
-      {/* Body — sweep overlay + content */}
+      {/* Body — flash + sweep overlays + content */}
       <div
         className="relative px-5 py-5 max-h-[520px] overflow-y-auto"
         style={{
@@ -97,14 +105,22 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
         }}
       >
         {sweepKey && (
-          <div
-            key={sweepKey}
-            className="absolute inset-0 pointer-events-none animate-sweep z-10"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, rgba(255,51,0,0.18) 45%, rgba(255,51,0,0.28) 50%, rgba(255,51,0,0.18) 55%, transparent 100%)",
-            }}
-          />
+          <>
+            {/* Brand sweep — beat 2 */}
+            <div
+              key={`sweep-${sweepKey}`}
+              className="absolute inset-0 pointer-events-none animate-sweep z-10"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(255,51,0,0.32) 45%, rgba(255,51,0,0.5) 50%, rgba(255,51,0,0.32) 55%, transparent 100%)",
+              }}
+            />
+            {/* White flashbulb — beat 1 */}
+            <div
+              key={`flash-${sweepKey}`}
+              className="absolute inset-0 pointer-events-none animate-copy-flash z-20 bg-white"
+            />
+          </>
         )}
 
         {error && (
