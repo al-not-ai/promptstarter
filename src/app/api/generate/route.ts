@@ -73,6 +73,7 @@ CORE RULES:
 4. No fabricated specificity. Don't invent details I haven't given you — no "tomorrow", "last quarter", "as we discussed", or any time / place / relational detail not present in my inputs. Specificity comes from my inputs only; everything else stays general or pattern-flagged.
 5. Compress. Each line earns its place. Cut hedge clauses, redundant qualifiers, and connective tissue. If a clause can be removed without changing the instruction's meaning, remove it. Trust the assistant — it doesn't need over-explanation.
 6. Format for scan. The rep glances at this before pasting. Use bullets where they sharpen. Reserve prose for MISSION (where rep voice needs flow). Avoid wall-of-text paragraphs in STRUCTURE and GROUNDING.
+7. No placeholder tokens. Never emit literal bracketed placeholder tokens in MISSION, STRUCTURE, or GROUNDING — no [company], [product], [name], [role], [date], or any other [xxx] gap. If a detail isn't in my inputs or the profile, omit the reference entirely or write around it. A sentence with a missing detail is better than a sentence with a literal "[company]" in it.
 
 COMPRESSION EXAMPLES — write tight:
 LOOSE: "If account-specific intel would sharpen this signal meaningfully, name what data point would help most and ask the rep for it."
@@ -128,7 +129,7 @@ function buildUserPrompt(params: {
     .join("\n");
 
   const sellerLine =
-    includesProfile && (productName || companyName)
+    (productName || companyName)
       ? `\n**Seller's product:** ${productName ?? companyName}${
           productName && companyName ? ` (${companyName})` : ""
         }`
@@ -143,7 +144,9 @@ function buildUserPrompt(params: {
   // for the assistant to read.
   const reconReminder =
     toolId === "pre-call-recon"
-      ? `\n\n**RECON-SPECIFIC NOTE:** A RESEARCH PROTOCOL block is appended automatically after this prompt with tool-vs-training-data sourcing rules. Do NOT write research instructions inside GROUNDING. In STRUCTURE for the intel signal, you can reference it implicitly (e.g., "follow the research protocol below").`
+      ? `\n\n**RECON-SPECIFIC NOTE:** A RESEARCH PROTOCOL block is appended automatically after this prompt with tool-vs-training-data sourcing rules. Do NOT write research instructions inside GROUNDING. In STRUCTURE for the intel signal, you can reference it implicitly (e.g., "follow the research protocol below").
+
+**Recon framing rule:** This is prospect research, not product positioning. The "Seller's product" line above is context for who I am and what industry my recon should tilt toward — NOT the deliverable's anchor. Do not pitch my product, do not anchor discovery questions to my product's capabilities, do not frame the prospect as a "lead." The deliverable is about understanding the prospect. My product appears in the brief only if naturally needed to set my role context.`
       : "";
 
   return `Generate the Master Prompt for this tool run. Follow the 3-section structure (MISSION / STRUCTURE / GROUNDING). Write it in the rep's first-person voice per your VOICE rules. Do not write DRILL-DOWN or STANDARD RULES — those are appended.
