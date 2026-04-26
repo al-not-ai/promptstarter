@@ -31,10 +31,10 @@ export function PromptHandoff({ visible }: PromptHandoffProps) {
     <div
       aria-hidden={!visible}
       className={cn(
-        "overflow-hidden transition-all duration-300 ease-out",
+        "overflow-hidden transition-all duration-[400ms] ease-out",
         visible
-          ? "max-h-[260px] opacity-100 mt-3"
-          : "max-h-0 opacity-0 mt-0 pointer-events-none"
+          ? "max-h-[260px] opacity-100 mt-3 delay-[200ms]"
+          : "max-h-0 opacity-0 mt-0 pointer-events-none delay-0"
       )}
     >
       <div className="rounded-lg border border-[#FF3300]/30 bg-[#FF3300]/[0.04] backdrop-blur-md px-5 py-4">
