@@ -31,14 +31,23 @@
 When you add a new tool to `src/lib/tools.ts`, you must set the following
 fields. Don't ad-lib them — they encode rules the engine relies on.
 
-**`includesProfile: boolean`** — Does this tool's deliverable hinge on the
-*seller's* product positioning, or on the *prospect's* situation? Set
-`true` for seller-positioning tools (objection-defuser, competitor-battlecard,
-cold-hook). Set `false` for prospect-situation tools (e.g. pre-call-recon).
-The wrong setting both wastes input tokens and nudges the engine in the wrong
-direction (e.g. injecting the seller profile into a recon brief turns it into
-a product pitch). When in doubt, run the tool both ways in the test rig and
-compare outputs.
+**`includesProfile: boolean`** — Controls whether the *full* product profile
+XML (positioning, key differentiators, value props, ICP, etc.) is injected
+into the engine's system prompt. Set `true` for seller-positioning tools
+(objection-defuser, competitor-battlecard, cold-hook). Set `false` for
+prospect-situation tools (pre-call-recon). The wrong setting both wastes
+input tokens and nudges the engine in the wrong direction (e.g. injecting
+the full profile XML into a recon brief turns it into a product pitch).
+
+**What `includesProfile: false` does NOT do.** The lightweight
+"Seller's product: ${product} (${company})" line in the user prompt is
+**always** passed when profile data exists, regardless of this flag. The
+engine always knows who the rep is — it just doesn't get the heavy
+positioning block when this flag is false. For recon specifically, a
+recon-framing rule is appended to the user prompt instructing the engine
+to use rep identity as context only, not as the deliverable's anchor.
+
+When in doubt, run the tool both ways in the test rig and compare outputs.
 
 **`outputDescriptor: string`** — Short noun phrase used inside the templated
 DRILL-DOWN OFFER block, e.g. "the recon brief", "the 5 discovery questions",
