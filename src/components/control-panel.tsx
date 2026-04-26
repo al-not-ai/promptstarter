@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useCompletion } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,8 +20,6 @@ interface ControlPanelProps {
   onRawContextChange: (v: string) => void;
   contextOpen: boolean;
   onContextOpenChange: (v: boolean) => void;
-  onReset: () => void;
-  onNew: () => void;
   restoredOutput: string;
   onGenerationStart: () => void;
   onGenerationComplete: (output: string) => void;
@@ -38,8 +36,6 @@ export function ControlPanel({
   onRawContextChange,
   contextOpen,
   onContextOpenChange,
-  onReset,
-  onNew,
   restoredOutput,
   onGenerationStart,
   onGenerationComplete,
@@ -157,32 +153,14 @@ export function ControlPanel({
               />
             </button>
 
-            {/* Right: New + Reset + Generate */}
-            <div className="flex gap-2 w-full sm:w-auto">
-              <Button
-                variant="outline"
-                onClick={onNew}
-                title="Start fresh (clears inputs and output)"
-                className="font-mono text-xs border-white/10 bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white h-[40px] px-3"
-              >
-                <Plus size={14} />
-              </Button>
-              <Button
-                variant="outline"
-                onClick={onReset}
-                className="font-mono text-xs border-white/10 bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white h-[40px] px-4"
-              >
-                Reset
-              </Button>
-              <Button
-                className="w-auto min-w-max whitespace-nowrap px-6 font-mono text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
-                disabled={!isReady || isLoading}
-                onClick={handleGenerate}
-                style={isReady && !isLoading ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" } : {}}
-              >
-                {isLoading ? "Generating…" : isReady ? "Ignite Play" : "Fill Required Fields"}
-              </Button>
-            </div>
+            <Button
+              className="w-auto min-w-max whitespace-nowrap px-6 font-mono text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
+              disabled={!isReady || isLoading}
+              onClick={handleGenerate}
+              style={isReady && !isLoading ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" } : {}}
+            >
+              {isLoading ? "Generating…" : isReady ? "Ignite Play" : "Fill Required Fields"}
+            </Button>
           </div>
 
           {/* Context textarea — shown below action row when open */}

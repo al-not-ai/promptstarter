@@ -10,7 +10,6 @@ import { useProfileSwitcher } from "@/lib/profile-context";
 import {
   getCache,
   setCache,
-  clearCache,
 } from "@/lib/form-cache";
 import type { RestoredGeneration } from "@/lib/types/generation";
 
@@ -170,27 +169,6 @@ function HomeInner() {
     setCurrentOutput(gen.output);
   }, []);
 
-  // ── Reset: clears inputs only, leaves output + cache intact ───────────────
-
-  const handleReset = useCallback(() => {
-    setVariableValues(defaultVariableValues(activeToolId));
-    setSliderValues(defaultSliderValues(activeToolId));
-    setRawContext("");
-    setContextOpen(false);
-    // Output and cache are intentionally untouched
-  }, [activeToolId]);
-
-  // ── New: clears everything including output and cache entry ───────────────
-
-  const handleNew = useCallback(() => {
-    setVariableValues(defaultVariableValues(activeToolId));
-    setSliderValues(defaultSliderValues(activeToolId));
-    setRawContext("");
-    setContextOpen(false);
-    setCurrentOutput("");
-    if (activeProfileId) clearCache(activeProfileId, activeToolId);
-  }, [activeToolId, activeProfileId]);
-
   // ── Generation lifecycle ───────────────────────────────────────────────────
 
   const handleGenerationStart = useCallback(() => {}, []);
@@ -252,8 +230,6 @@ function HomeInner() {
           onRawContextChange={setRawContext}
           contextOpen={contextOpen}
           onContextOpenChange={setContextOpen}
-          onReset={handleReset}
-          onNew={handleNew}
           restoredOutput={currentOutput}
           onGenerationStart={handleGenerationStart}
           onGenerationComplete={handleGenerationComplete}
