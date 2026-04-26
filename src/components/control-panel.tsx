@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { ChevronDown, Plus } from "lucide-react";
 import { useCompletion } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +16,16 @@ interface ControlPanelProps {
   isReady: boolean;
   onSliderChange: (sliderId: string, value: number) => void;
   onVariableChange: (name: string, value: string) => void;
+  rawContext: string;
+  onRawContextChange: (v: string) => void;
+  contextOpen: boolean;
+  onContextOpenChange: (v: boolean) => void;
   onReset: () => void;
-  restoredOutput: string | null;
+  onNew: () => void;
+  restoredOutput: string;
+  isRestored: boolean;
   onGenerationStart: () => void;
-  onGenerationComplete: () => void;
+  onGenerationComplete: (output: string) => void;
 }
 
 export function ControlPanel({
@@ -29,14 +35,17 @@ export function ControlPanel({
   isReady,
   onSliderChange,
   onVariableChange,
+  rawContext,
+  onRawContextChange,
+  contextOpen,
+  onContextOpenChange,
   onReset,
+  onNew,
   restoredOutput,
+  isRestored,
   onGenerationStart,
   onGenerationComplete,
 }: ControlPanelProps) {
-  const [rawContext, setRawContext] = useState("");
-  const [contextOpen, setContextOpen] = useState(false);
-
   const { complete, completion, isLoading, error } = useCompletion({
     api: "/api/generate",
     streamProtocol: "text",
@@ -46,7 +55,7 @@ export function ControlPanel({
   const prevLoadingRef = useRef(false);
   useEffect(() => {
     if (prevLoadingRef.current && !isLoading && completion) {
-      onGenerationComplete();
+      onGenerationComplete(completion);
     }
     prevLoadingRef.current = isLoading;
   }, [isLoading, completion, onGenerationComplete]);
@@ -61,12 +70,6 @@ export function ControlPanel({
         hasContext: rawContext.trim().length > 0,
       },
     });
-  }
-
-  function handleReset() {
-    setRawContext("");
-    setContextOpen(false);
-    onReset();
   }
 
   return (
@@ -140,7 +143,7 @@ export function ControlPanel({
             {/* Left: context toggle */}
             <button
               type="button"
-              onClick={() => setContextOpen((prev) => !prev)}
+              onClick={() => onContextOpenChange(!contextOpen)}
               className="flex items-center gap-1.5 group shrink-0"
             >
               <span className="font-mono text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors duration-150 font-medium">
@@ -155,11 +158,19 @@ export function ControlPanel({
               />
             </button>
 
-            {/* Right: Reset + Generate */}
+            {/* Right: New + Reset + Generate */}
             <div className="flex gap-2 w-full sm:w-auto">
               <Button
                 variant="outline"
-                onClick={handleReset}
+                onClick={onNew}
+                title="Start fresh (clears inputs and output)"
+                className="font-mono text-xs border-white/10 bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white h-[40px] px-3"
+              >
+                <Plus size={14} />
+              </Button>
+              <Button
+                variant="outline"
+                onClick={onReset}
                 className="font-mono text-xs border-white/10 bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white h-[40px] px-4"
               >
                 Reset
@@ -179,7 +190,7 @@ export function ControlPanel({
           {contextOpen && (
             <textarea
               value={rawContext}
-              onChange={(e) => setRawContext(e.target.value)}
+              onChange={(e) => onRawContextChange(e.target.value)}
               placeholder="Paste email threads, call notes, LinkedIn profiles, or any prospect context here..."
               rows={4}
               className="w-full font-mono text-xs bg-zinc-900 border border-white/10 rounded-sm px-3 py-2.5 text-white placeholder:text-zinc-600 resize-none focus:outline-none focus:border-primary/30 transition-colors duration-150"
@@ -189,9 +200,16 @@ export function ControlPanel({
         </CardContent>
       </Card>
 
+      {/* Restored marker */}
+      {isRestored && (
+        <p className="font-mono text-xs text-zinc-500">
+          Restored from earlier — Generate to refresh
+        </p>
+      )}
+
       {/* Output — full width below the form */}
       <TerminalOutput
-        output={restoredOutput ?? completion}
+        output={completion || restoredOutput}
         isLoading={isLoading}
         error={error}
         rawContext={rawContext}

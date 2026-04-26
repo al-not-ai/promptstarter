@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import type { ProductProfile } from "@/lib/types/profile";
+import { clearProfileCaches } from "@/lib/form-cache";
 
 /**
  * Profile context.
@@ -42,6 +43,9 @@ export function ProfileProvider({
       // Guard: ignore switches to unknown / already-active
       if (id === activeProfileId) return;
       if (!profiles.some((p) => p.id === id)) return;
+      // Clear cached form state for the outgoing profile so a workspace
+      // switch always starts fresh on the new profile's tools.
+      if (activeProfileId) clearProfileCaches(activeProfileId);
       setActiveProfileIdState(id);
 
       // Persist selection as the server-side default so it survives reloads.
