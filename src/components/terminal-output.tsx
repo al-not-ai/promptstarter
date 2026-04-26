@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { PromptHandoff } from "@/components/prompt-handoff";
 
 interface TerminalOutputProps {
   output: string;
@@ -11,24 +14,28 @@ interface TerminalOutputProps {
 
 export function TerminalOutput({ output, isLoading, error, rawContext }: TerminalOutputProps) {
   const isEmpty = !output && !isLoading && !error;
-  const [copied, setCopied] = useState(false);
+  const [hasCopied, setHasCopied] = useState(false);
+  const [sweepKey, setSweepKey] = useState<number | null>(null);
+
+  // Reset on new output (re-generation or history restore)
+  useEffect(() => {
+    setHasCopied(false);
+    setSweepKey(null);
+  }, [output]);
 
   function handleCopy() {
     if (!output) return;
     const hasContext = Boolean(rawContext?.trim());
 
-    // Append prospect context if the user pasted notes — staples their intel
-    // onto the end of the master prompt so the downstream AI has full context.
-    // This lands AFTER the appended STANDARD RULES + DRILL-DOWN OFFER blocks,
-    // which is intentional: the rules and drill-down apply to the deliverable,
-    // prospect notes are additional fuel the downstream can reach for.
+    // Append prospect context if present — lands after STANDARD RULES + DRILL-DOWN
+    // so the engine's rules apply to the deliverable; prospect notes are additional fuel.
     const intel = hasContext
       ? `\n\n---\n\n## PROSPECT CONTEXT\n\n${rawContext!.trim()}`
       : "";
 
     navigator.clipboard.writeText(output + intel).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setHasCopied(true);
+      setSweepKey(Date.now());
     });
   }
 
@@ -65,23 +72,41 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
           {output && !isLoading && (
             <button
               onClick={handleCopy}
-              className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-150 px-2 py-1 rounded-sm border border-white/10 hover:border-primary/40 hover:bg-primary/5"
-              style={copied ? { color: "rgb(255,51,0)", borderColor: "rgba(255,51,0,0.4)" } : { color: "rgba(113,113,122,0.7)" }}
+              className={cn(
+                "font-mono text-[10px] uppercase tracking-widest transition-all duration-200 px-3 py-1.5 rounded-sm border flex items-center gap-1.5",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50",
+                hasCopied
+                  ? "border-[#FF3300]/60 bg-[#FF3300]/10 text-[#FF3300]"
+                  : "border-[#FF3300]/40 text-[#FF3300] hover:bg-[#FF3300]/10"
+              )}
+              style={{ boxShadow: hasCopied ? "0 0 14px rgba(255,51,0,0.3)" : "0 0 8px rgba(255,51,0,0.15)" }}
             >
-              {copied ? "Copied ✓" : rawContext?.trim() ? "Copy + Context" : "Copy"}
+              {hasCopied && <Check size={12} />}
+              <span>{hasCopied ? "Copied — clipboard ready" : (rawContext?.trim() ? "Copy + Context" : "Copy")}</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Body — auto-expands with content */}
+      {/* Body — sweep overlay + content */}
       <div
-        className="px-5 py-5 max-h-[520px] overflow-y-auto"
+        className="relative px-5 py-5 max-h-[520px] overflow-y-auto"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "rgba(255,51,0,0.15) transparent",
         }}
       >
+        {sweepKey && (
+          <div
+            key={sweepKey}
+            className="absolute inset-0 pointer-events-none animate-sweep z-10"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(255,51,0,0.18) 45%, rgba(255,51,0,0.28) 50%, rgba(255,51,0,0.18) 55%, transparent 100%)",
+            }}
+          />
+        )}
+
         {error && (
           <p className="font-mono text-xs text-red-400/80">
             Error: {error.message}
@@ -107,6 +132,9 @@ export function TerminalOutput({ output, isLoading, error, rawContext }: Termina
           />
         )}
       </div>
+
+      {/* Handoff panel — slides in below terminal body after copy */}
+      <PromptHandoff visible={hasCopied} />
     </div>
   );
 }

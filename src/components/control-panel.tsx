@@ -159,9 +159,13 @@ export function ControlPanel({
               onClick={handleGenerate}
               style={isReady && !isLoading ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" } : {}}
             >
-              {isLoading ? "Generating…" : isReady ? "Ignite Play" : "Fill Required Fields"}
+              {isLoading ? "Generating…" : isReady ? "Generate Prompt" : "Fill Required Fields"}
             </Button>
           </div>
+
+          <p className="font-mono text-[10px] text-zinc-500 text-right -mt-2 pr-1">
+            You paste it into your AI tool.
+          </p>
 
           {/* Context textarea — shown below action row when open */}
           {contextOpen && (
