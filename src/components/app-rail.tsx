@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { X, ChevronDown, Check, Plus, Pin, PinOff, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { ToolNav } from "@/components/tool-nav";
 import { useProfileSwitcher } from "@/lib/profile-context";
 import { tools } from "@/lib/tools";
@@ -109,37 +110,38 @@ export function AppRail({
 
         {/* Pin toggle + footer */}
         <div className="mt-auto shrink-0 border-t border-white/5">
-          {/* Pin button — always visible */}
+          {/* Pin button — unified layout, icon stays in column */}
           <button
             onClick={togglePin}
             aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
             title={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
-            className={`
-              flex items-center w-full px-4 py-3
-              text-zinc-600 hover:text-zinc-300 hover:bg-white/[0.03]
-              transition-colors duration-150
-              ${isExpanded ? "gap-2.5" : "justify-center"}
-            `}
+            className="flex items-center w-full px-5 gap-3 py-3 text-zinc-600 hover:text-zinc-300 hover:bg-white/[0.03] transition-colors duration-150"
           >
-            {isPinned
-              ? <PinOff className="w-4 h-4 shrink-0" />
-              : <Pin className="w-4 h-4 shrink-0" />
-            }
-            {isExpanded && (
-              <span className="font-mono text-[11px] whitespace-nowrap">
-                {isPinned ? "Unpin sidebar" : "Pin sidebar"}
-              </span>
-            )}
+            <span className="flex shrink-0 items-center justify-center w-5">
+              {isPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
+            </span>
+            <span
+              className={cn(
+                "font-mono text-[11px] whitespace-nowrap transition-opacity duration-200",
+                isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
+              )}
+            >
+              {isPinned ? "Unpin sidebar" : "Pin sidebar"}
+            </span>
           </button>
 
-          {/* Version stamp — only when expanded */}
-          {isExpanded && (
-            <div className="px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-              <p className="font-mono text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap">
-                Promptstarter V1.0
-              </p>
-            </div>
-          )}
+          {/* Version stamp — always in DOM, fades with opacity */}
+          <div className="px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <p
+              className={cn(
+                "font-mono text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap",
+                "transition-opacity duration-200",
+                isExpanded ? "opacity-100" : "opacity-0"
+              )}
+            >
+              Promptstarter V1.0
+            </p>
+          </div>
         </div>
       </aside>
 
