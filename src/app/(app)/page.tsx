@@ -1,12 +1,20 @@
 "use client";
 
-import { useState, useCallback, useEffect, Suspense } from "react";
+import { useState, useCallback, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { AppRail } from "@/components/app-rail";
 import { ControlPanel } from "@/components/control-panel";
 import { tools } from "@/lib/tools";
+import { useProfileSwitcher } from "@/lib/profile-context";
+import {
+  getCache,
+  setCache,
+  clearCache,
+  type OutputSource,
+} from "@/lib/form-cache";
 import type { RestoredGeneration } from "@/lib/types/generation";
+import type { GenerationMeta } from "@/components/app-rail";
 
 const RAIL_PIN_KEY = "promptstarter:rail-pinned";
 
@@ -20,10 +28,11 @@ function defaultVariableValues(toolId: string): Record<string, string> {
   return Object.fromEntries(tool.variables.map((v) => [v.name, ""]));
 }
 
-// Separated so useSearchParams is inside a Suspense boundary
 function HomeInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { activeProfileId } = useProfileSwitcher();
+
   const [activeToolId, setActiveToolId] = useState(tools[0].id);
   const [sliderValues, setSliderValues] = useState<Record<string, number>>(
     defaultSliderValues(tools[0].id)
@@ -31,10 +40,20 @@ function HomeInner() {
   const [variableValues, setVariableValues] = useState<Record<string, string>>(
     defaultVariableValues(tools[0].id)
   );
+  // Lifted from ControlPanel so they can be cached across tool switches
+  const [rawContext, setRawContext] = useState("");
+  const [contextOpen, setContextOpen] = useState(false);
+  // Tracks the last complete output (restored or generated) for display + caching
+  const [currentOutput, setCurrentOutput] = useState("");
+  const [outputSource, setOutputSource] = useState<OutputSource | null>(null);
+
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [restored, setRestored] = useState<RestoredGeneration>(null);
   const [generationCount, setGenerationCount] = useState(0);
   const [railPinned, setRailPinned] = useState(false);
+
+  // ── One-time initialisation: load rail pin + handle ?restore / cache ───────
+
+  const initialized = useRef(false);
 
   useEffect(() => {
     try {
@@ -44,49 +63,203 @@ function HomeInner() {
     }
   }, []);
 
-  // Handle ?restore=<id> — fetch generation and rehydrate form
   useEffect(() => {
+    if (initialized.current || !activeProfileId) return;
+    initialized.current = true;
+
+    // ?restore=<id> takes priority over everything
     const restoreId = searchParams.get("restore");
-    if (!restoreId) return;
+    if (restoreId) {
+      router.replace("/", { scroll: false });
+      fetch(`/api/generations/${restoreId}`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((gen) => {
+          if (!gen) return;
+          setActiveToolId(gen.tool_id);
+          setSliderValues(gen.slider_values);
+          setVariableValues(gen.variable_values);
+          setRawContext("");
+          setContextOpen(false);
+          setCurrentOutput(gen.output);
+          setOutputSource("restored");
+        })
+        .catch(() => {});
+      return;
+    }
 
-    // Clear param immediately so back-navigation doesn't re-trigger
-    router.replace("/", { scroll: false });
+    // Try sessionStorage cache for the initial tool
+    const cached = getCache(activeProfileId, tools[0].id);
+    if (cached) {
+      setVariableValues(cached.variableValues);
+      setSliderValues(cached.sliderValues);
+      setRawContext(cached.rawContext);
+      setContextOpen(cached.contextOpen);
+      setCurrentOutput(cached.output);
+      setOutputSource(cached.outputSource);
+      return;
+    }
 
-    fetch(`/api/generations/${restoreId}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((gen) => {
-        if (!gen) return;
-        setActiveToolId(gen.tool_id);
-        setSliderValues(gen.slider_values);
+    // Nothing cached — try to rehydrate from the most recent generation
+    fetch(
+      `/api/generations?profileId=${activeProfileId}&limit=1&toolId=${tools[0].id}`
+    )
+      .then((r) => (r.ok ? r.json() : []))
+      .then(async (rows: GenerationMeta[]) => {
+        if (!rows.length) return;
+        const gr = await fetch(`/api/generations/${rows[0].id}`);
+        if (!gr.ok) return;
+        const gen = await gr.json();
         setVariableValues(gen.variable_values);
-        setRestored({
-          toolId: gen.tool_id,
-          variableValues: gen.variable_values,
-          sliderValues: gen.slider_values,
-          output: gen.output,
-        });
+        setSliderValues(gen.slider_values);
+        setCurrentOutput(gen.output);
+        setOutputSource("restored");
       })
       .catch(() => {});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once on mount — searchParams is stable at mount time
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProfileId]); // activeProfileId is the gate; searchParams stable at mount
 
-  const activeTool = tools.find((t) => t.id === activeToolId)!;
-  const firstVarName = activeTool.variables[0]?.name;
-  const isReady = Boolean(firstVarName && variableValues[firstVarName]?.trim().length > 0);
+  // ── Persist form + output to sessionStorage on every meaningful change ─────
 
-  const handleToolSelect = useCallback((toolId: string) => {
-    setActiveToolId(toolId);
-    setSliderValues(defaultSliderValues(toolId));
-    setVariableValues(defaultVariableValues(toolId));
-  }, []);
+  useEffect(() => {
+    if (!activeProfileId) return;
+    const hasInput =
+      Object.values(variableValues).some((v) => v.trim()) ||
+      rawContext.trim().length > 0 ||
+      Object.values(sliderValues).some((v) => v !== 0);
+    if (!hasInput && !currentOutput) return; // nothing worth caching
+
+    setCache(activeProfileId, activeToolId, {
+      variableValues,
+      sliderValues,
+      rawContext,
+      contextOpen,
+      output: currentOutput,
+      outputSource: outputSource ?? "cached",
+      updatedAt: Date.now(),
+    });
+  }, [
+    variableValues,
+    sliderValues,
+    rawContext,
+    contextOpen,
+    currentOutput,
+    outputSource,
+    activeToolId,
+    activeProfileId,
+  ]);
+
+  // ── Tool selection: load from cache or rehydrate from history ─────────────
+
+  const handleToolSelect = useCallback(
+    async (toolId: string) => {
+      setActiveToolId(toolId);
+
+      if (!activeProfileId) {
+        setVariableValues(defaultVariableValues(toolId));
+        setSliderValues(defaultSliderValues(toolId));
+        setRawContext("");
+        setContextOpen(false);
+        setCurrentOutput("");
+        setOutputSource(null);
+        return;
+      }
+
+      const cached = getCache(activeProfileId, toolId);
+      if (cached) {
+        setVariableValues(cached.variableValues);
+        setSliderValues(cached.sliderValues);
+        setRawContext(cached.rawContext);
+        setContextOpen(cached.contextOpen);
+        setCurrentOutput(cached.output);
+        setOutputSource(cached.outputSource);
+        return;
+      }
+
+      // Reset to defaults then try to rehydrate from history
+      setVariableValues(defaultVariableValues(toolId));
+      setSliderValues(defaultSliderValues(toolId));
+      setRawContext("");
+      setContextOpen(false);
+      setCurrentOutput("");
+      setOutputSource(null);
+
+      try {
+        const r = await fetch(
+          `/api/generations?profileId=${activeProfileId}&limit=1&toolId=${toolId}`
+        );
+        if (!r.ok) return;
+        const rows: GenerationMeta[] = await r.json();
+        if (!rows.length) return;
+        const gr = await fetch(`/api/generations/${rows[0].id}`);
+        if (!gr.ok) return;
+        const gen = await gr.json();
+        setVariableValues(gen.variable_values);
+        setSliderValues(gen.slider_values);
+        setCurrentOutput(gen.output);
+        setOutputSource("restored");
+      } catch {
+        // silently ignore — empty state is fine
+      }
+    },
+    [activeProfileId]
+  );
+
+  // ── Restore from rail / history click ─────────────────────────────────────
 
   const handleRestoreGeneration = useCallback((gen: RestoredGeneration) => {
     if (!gen) return;
     setActiveToolId(gen.toolId);
     setSliderValues(gen.sliderValues);
     setVariableValues(gen.variableValues);
-    setRestored(gen);
+    setRawContext("");
+    setContextOpen(false);
+    setCurrentOutput(gen.output);
+    setOutputSource("restored");
   }, []);
+
+  // ── Reset: clears inputs only, leaves output + cache intact ───────────────
+
+  const handleReset = useCallback(() => {
+    setVariableValues(defaultVariableValues(activeToolId));
+    setSliderValues(defaultSliderValues(activeToolId));
+    setRawContext("");
+    setContextOpen(false);
+    // Output and cache are intentionally untouched
+  }, [activeToolId]);
+
+  // ── New: clears everything including output and cache entry ───────────────
+
+  const handleNew = useCallback(() => {
+    setVariableValues(defaultVariableValues(activeToolId));
+    setSliderValues(defaultSliderValues(activeToolId));
+    setRawContext("");
+    setContextOpen(false);
+    setCurrentOutput("");
+    setOutputSource(null);
+    if (activeProfileId) clearCache(activeProfileId, activeToolId);
+  }, [activeToolId, activeProfileId]);
+
+  // ── Generation lifecycle ───────────────────────────────────────────────────
+
+  const handleGenerationStart = useCallback(() => {
+    // Only clear the "Restored from earlier" marker; don't wipe currentOutput
+    // (ControlPanel's live `completion` takes display priority while streaming)
+    setOutputSource(null);
+  }, []);
+
+  const handleGenerationComplete = useCallback((output: string) => {
+    setCurrentOutput(output);
+    setOutputSource("cached");
+    setGenerationCount((c) => c + 1);
+  }, []);
+
+  // ── Derived ───────────────────────────────────────────────────────────────
+
+  const activeTool = tools.find((t) => t.id === activeToolId)!;
+  const firstVarName = activeTool.variables[0]?.name;
+  const isReady = Boolean(
+    firstVarName && variableValues[firstVarName]?.trim().length > 0
+  );
 
   return (
     <div className="grid-bg relative flex min-h-[100dvh] flex-col bg-background overflow-x-hidden">
@@ -113,7 +286,11 @@ function HomeInner() {
           ${railPinned ? "md:ml-60" : "md:ml-16"}
         `}
       >
+        {/* key={activeToolId} remounts ControlPanel on tool switch, which resets
+            useCompletion's internal `completion` string so stale output from
+            the previous tool never bleeds through. */}
         <ControlPanel
+          key={activeToolId}
           activeTool={activeTool}
           sliderValues={sliderValues}
           variableValues={variableValues}
@@ -124,13 +301,16 @@ function HomeInner() {
           onVariableChange={(name, value) =>
             setVariableValues((prev) => ({ ...prev, [name]: value }))
           }
-          onReset={() => {
-            setSliderValues(defaultSliderValues(activeToolId));
-            setVariableValues(defaultVariableValues(activeToolId));
-          }}
-          restoredOutput={restored?.output ?? null}
-          onGenerationStart={() => setRestored(null)}
-          onGenerationComplete={() => setGenerationCount((c) => c + 1)}
+          rawContext={rawContext}
+          onRawContextChange={setRawContext}
+          contextOpen={contextOpen}
+          onContextOpenChange={setContextOpen}
+          onReset={handleReset}
+          onNew={handleNew}
+          restoredOutput={currentOutput}
+          isRestored={outputSource === "restored"}
+          onGenerationStart={handleGenerationStart}
+          onGenerationComplete={handleGenerationComplete}
         />
       </main>
     </div>

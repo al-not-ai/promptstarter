@@ -22,6 +22,11 @@ export async function GET(req: Request) {
     query = query.eq("profile_id", profileId);
   }
 
+  const toolId = url.searchParams.get("toolId");
+  if (toolId) {
+    query = query.eq("tool_id", toolId);
+  }
+
   const { data, error } = await query;
   if (error) return new Response("Error", { status: 500 });
   return Response.json(data ?? []);
