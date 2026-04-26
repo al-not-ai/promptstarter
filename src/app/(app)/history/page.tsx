@@ -68,6 +68,25 @@ export default function HistoryPage() {
       .catch(() => setLoading(false));
   }, [profile]);
 
+  // Flush pending deletes if the page is torn down before the undo window
+  // expires. Uses a single bulk request so large bulk-selections don't fan out
+  // into N individual requests. keepalive lets the fetch outlive the page.
+  useEffect(() => {
+    function onPageHide() {
+      const ids = Array.from(pendingDeletes.current.keys());
+      if (ids.length === 0) return;
+      fetch("/api/generations", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids }),
+        keepalive: true,
+      }).catch(() => {});
+      pendingDeletes.current.clear();
+    }
+    window.addEventListener("pagehide", onPageHide);
+    return () => window.removeEventListener("pagehide", onPageHide);
+  }, []);
+
   // ── Single delete with undo ──────────────────────────────────────────────────
 
   const handleDelete = useCallback(
