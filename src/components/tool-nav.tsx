@@ -48,10 +48,10 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
   }
 
   return (
-    <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-6">
+    <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-4">
       {TOOL_CATEGORIES.map(({ category, tools }) => (
         <div key={category}>
-          <p className="px-3 mb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
+          <p className="px-3 mb-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
             {category}
           </p>
           <ul className="space-y-0.5">
@@ -62,8 +62,8 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
                   <button
                     onClick={() => onToolSelect(tool.id)}
                     className={cn(
-                      "w-full text-left px-3 py-3 rounded-sm font-mono text-sm tracking-normal transition-colors duration-150",
-                      "border-l-2 min-h-[44px]",
+                      "w-full text-left px-3 py-3 md:py-2 rounded-sm font-mono text-sm md:text-[13px] tracking-normal transition-colors duration-150",
+                      "border-l-2 min-h-[44px] md:min-h-[34px]",
                       isActive
                         ? "border-primary text-foreground bg-white/[0.04]"
                         : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/[0.02]"

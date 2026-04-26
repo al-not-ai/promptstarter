@@ -335,6 +335,8 @@ export function timeAgo(dateStr: string): string {
   return `${Math.floor(h / 24)}d ago`;
 }
 
+const HISTORY_OPEN_KEY = "rail-history-open";
+
 function RailHistorySection({
   refreshKey,
   onRestoreGeneration,
@@ -344,9 +346,19 @@ function RailHistorySection({
 }) {
   const [items, setItems] = useState<GenerationMeta[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const pendingDeletes = useRef<
     Map<string, { item: GenerationMeta; timer: ReturnType<typeof setTimeout> }>
   >(new Map());
+
+  // Hydrate open state from localStorage
+  useEffect(() => {
+    try {
+      setIsOpen(localStorage.getItem(HISTORY_OPEN_KEY) === "true");
+    } catch {
+      // localStorage unavailable — stay closed
+    }
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -358,6 +370,16 @@ function RailHistorySection({
       })
       .catch(() => setLoading(false));
   }, [refreshKey]);
+
+  function toggleOpen() {
+    const next = !isOpen;
+    setIsOpen(next);
+    try {
+      localStorage.setItem(HISTORY_OPEN_KEY, String(next));
+    } catch {
+      // ignore
+    }
+  }
 
   const handleClick = useCallback(
     async (id: string) => {
@@ -384,10 +406,8 @@ function RailHistorySection({
       const item = items.find((i) => i.id === id);
       if (!item) return;
 
-      // Optimistic removal
       setItems((prev) => prev.filter((i) => i.id !== id));
 
-      // Schedule actual server delete after 5 s
       const timer = setTimeout(() => {
         pendingDeletes.current.delete(id);
         fetch(`/api/generations/${id}`, { method: "DELETE" }).catch(() => {});
@@ -418,74 +438,90 @@ function RailHistorySection({
     [items]
   );
 
+  // Hide entirely when empty and not loading
   if (!loading && items.length === 0) return null;
 
   const displayItems = items.slice(0, 5);
 
   return (
-    <div className="shrink-0 border-t border-white/5 px-3 py-3">
-      <p className="font-mono text-[10px] tracking-wider text-zinc-600 uppercase px-1 mb-2">
-        Recent
-      </p>
+    <div className="shrink-0 border-t border-white/5 px-3 py-1">
+      {/* Collapse toggle header */}
+      <button
+        type="button"
+        onClick={toggleOpen}
+        className="flex w-full items-center justify-between px-1 min-h-[44px] md:min-h-[32px] group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF3300]/50 rounded"
+      >
+        <span className="font-mono text-[10px] tracking-wider text-zinc-600 uppercase group-hover:text-zinc-400 transition-colors duration-150">
+          Recent{!loading && items.length > 0 ? ` · ${items.length}` : ""}
+        </span>
+        <ChevronDown
+          size={12}
+          className={`text-zinc-600 group-hover:text-zinc-400 transition-all duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
 
-      {/* Capped list — max ~5 rows, scrollable if subtitles make them taller */}
-      <div className="flex flex-col gap-0.5 max-h-[220px] overflow-y-auto">
-        {loading ? (
-          [0, 1, 2].map((i) => (
-            <div key={i} className="h-9 rounded-md bg-zinc-900/60 animate-pulse" />
-          ))
-        ) : (
-          displayItems.map((item) => {
-            const tool = tools.find((t) => t.id === item.tool_id);
-            const shortName = (tool?.name ?? item.tool_id).replace(/^The\s+/i, "");
-            const firstVal = Object.values(item.variable_values)[0] ?? "";
-            const subtitle = firstVal.length > 24 ? firstVal.slice(0, 23) + "…" : firstVal;
+      {/* Expandable list */}
+      {isOpen && (
+        <>
+          <div className="flex flex-col gap-0.5 max-h-[220px] overflow-y-auto pb-1">
+            {loading ? (
+              [0, 1, 2].map((i) => (
+                <div key={i} className="h-9 rounded-md bg-zinc-900/60 animate-pulse" />
+              ))
+            ) : (
+              displayItems.map((item) => {
+                const tool = tools.find((t) => t.id === item.tool_id);
+                const shortName = (tool?.name ?? item.tool_id).replace(/^The\s+/i, "");
+                const firstVal = Object.values(item.variable_values)[0] ?? "";
+                const subtitle = firstVal.length > 24 ? firstVal.slice(0, 23) + "…" : firstVal;
 
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleClick(item.id)}
-                className="w-full text-left rounded-md px-2 py-1.5 hover:bg-white/[0.04] transition-colors duration-100 group relative"
-              >
-                <div className="flex items-baseline justify-between gap-2 min-w-0 pr-6">
-                  <span className="font-mono text-[11px] text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
-                    {shortName}
-                  </span>
-                  <span className="font-mono text-[10px] text-zinc-600 shrink-0">
-                    {timeAgo(item.created_at)}
-                  </span>
-                </div>
-                {subtitle && (
-                  <div className="font-mono text-[10px] text-zinc-600 truncate leading-snug pr-6">
-                    {subtitle}
-                  </div>
-                )}
-                {/* Delete button — hover-reveal on desktop, always visible on touch */}
-                <button
-                  type="button"
-                  onClick={(e) => handleDelete(e, item.id)}
-                  aria-label="Delete"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded text-zinc-600 hover:text-red-400 hover:bg-white/[0.06] transition-colors duration-100
-                    opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
-                >
-                  <X size={11} />
-                </button>
-              </button>
-            );
-          })
-        )}
-      </div>
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleClick(item.id)}
+                    className="w-full text-left rounded-md px-2 py-1.5 hover:bg-white/[0.04] transition-colors duration-100 group relative"
+                  >
+                    <div className="flex items-baseline justify-between gap-2 min-w-0 pr-6">
+                      <span className="font-mono text-[11px] text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
+                        {shortName}
+                      </span>
+                      <span className="font-mono text-[10px] text-zinc-600 shrink-0">
+                        {timeAgo(item.created_at)}
+                      </span>
+                    </div>
+                    {subtitle && (
+                      <div className="font-mono text-[10px] text-zinc-600 truncate leading-snug pr-6">
+                        {subtitle}
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={(e) => handleDelete(e, item.id)}
+                      aria-label="Delete"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded text-zinc-600 hover:text-red-400 hover:bg-white/[0.06] transition-colors duration-100
+                        opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
+                    >
+                      <X size={11} />
+                    </button>
+                  </button>
+                );
+              })
+            )}
+          </div>
 
-      {/* Show all link */}
-      {!loading && items.length > 0 && (
-        <Link
-          href="/history"
-          className="mt-2 flex items-center gap-1 px-1 font-mono text-[10px] text-zinc-600 hover:text-zinc-300 transition-colors duration-100"
-        >
-          Show all
-          <ArrowRight size={10} />
-        </Link>
+          {!loading && items.length > 0 && (
+            <Link
+              href="/history"
+              className="mt-1 mb-1 flex items-center gap-1 px-1 font-mono text-[10px] text-zinc-600 hover:text-zinc-300 transition-colors duration-100"
+            >
+              Show all
+              <ArrowRight size={10} />
+            </Link>
+          )}
+        </>
       )}
     </div>
   );
