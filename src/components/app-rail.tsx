@@ -1,133 +1,193 @@
 "use client";
 
-import { X, ChevronLeft, ChevronRight, ChevronDown, Plus, Check } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { X, ChevronDown, Check, Plus, Pin, PinOff } from "lucide-react";
 import Link from "next/link";
 import { ToolNav } from "@/components/tool-nav";
 import { useProfileSwitcher } from "@/lib/profile-context";
 import { tools } from "@/lib/tools";
 import type { RestoredGeneration } from "@/lib/types/generation";
 
-interface SidebarProps {
+const RAIL_PIN_KEY = "promptstarter:rail-pinned";
+
+interface AppRailProps {
   activeToolId: string;
   onToolSelect: (toolId: string) => void;
-  isCollapsed: boolean;
-  onToggle: () => void;
   isMobileOpen: boolean;
   onMobileClose: () => void;
   onRestoreGeneration: (gen: RestoredGeneration) => void;
   refreshKey: number;
+  isPinned: boolean;
+  onPinChange: (pinned: boolean) => void;
 }
 
-export function Sidebar({
+export function AppRail({
   activeToolId,
   onToolSelect,
-  isCollapsed,
-  onToggle,
   isMobileOpen,
   onMobileClose,
   onRestoreGeneration,
   refreshKey,
-}: SidebarProps) {
+  isPinned,
+  onPinChange,
+}: AppRailProps) {
+  const [hoverExpanded, setHoverExpanded] = useState(false);
+  const hoverInTimer = useRef<ReturnType<typeof setTimeout>>();
+  const hoverOutTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  const isExpanded = hoverExpanded || isPinned;
+
+  function handleMouseEnter() {
+    if (isPinned) return;
+    clearTimeout(hoverOutTimer.current);
+    hoverInTimer.current = setTimeout(() => setHoverExpanded(true), 150);
+  }
+
+  function handleMouseLeave() {
+    if (isPinned) return;
+    clearTimeout(hoverInTimer.current);
+    hoverOutTimer.current = setTimeout(() => setHoverExpanded(false), 100);
+  }
+
   function handleToolSelect(toolId: string) {
     onToolSelect(toolId);
-    // Slight delay so the user sees the selection before the drawer slides away
     setTimeout(onMobileClose, 150);
+  }
+
+  function togglePin() {
+    const next = !isPinned;
+    onPinChange(next);
+    try {
+      localStorage.setItem(RAIL_PIN_KEY, String(next));
+    } catch {
+      // localStorage unavailable — no-op
+    }
+    if (next) {
+      // When pinning, collapse hover state (pin takes over)
+      setHoverExpanded(false);
+    }
   }
 
   return (
     <>
-      {/* Mobile backdrop — always in DOM, fades with opacity */}
+      {/* Mobile backdrop */}
       <div
-        className={`fixed inset-0 z-[95] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[75] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
           isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={onMobileClose}
         aria-hidden="true"
       />
 
-      {/* Sidebar — always in DOM, slides with transform */}
+      {/* ── Desktop rail ────────────────────────────────────── */}
       <aside
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className={`
-          flex flex-col fixed top-0 left-0 z-[100] h-[100dvh]
-          w-72 border-r border-zinc-800 bg-[#070707]
-          transition-[transform,width] duration-300 ease-in-out
-          overflow-visible overscroll-contain
-          ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-          ${isCollapsed ? "md:w-20" : "md:w-72"}
+          hidden md:flex flex-col fixed left-0 top-14 z-[80]
+          h-[calc(100dvh-56px)]
+          border-r border-zinc-800 bg-[#070707]
+          transition-[width] duration-200 ease-in-out
+          overflow-hidden
+          ${isExpanded ? "w-60" : "w-16"}
+          ${isPinned ? "" : "shadow-[2px_0_20px_-5px_rgba(0,0,0,0.6)]"}
         `}
       >
-        {/* Desktop floating toggle pill */}
-        <button
-          onClick={onToggle}
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 h-6 w-6 bg-[#0a0a0a] border border-zinc-800 rounded-full items-center justify-center cursor-pointer hover:bg-zinc-900 hover:border-zinc-500 text-zinc-500 hover:text-zinc-300 transition-all duration-150"
-        >
-          {isCollapsed
-            ? <ChevronRight className="w-3.5 h-3.5" />
-            : <ChevronLeft className="w-3.5 h-3.5" />}
-        </button>
+        <ToolNav
+          activeToolId={activeToolId}
+          onToolSelect={onToolSelect}
+          isCollapsed={!isExpanded}
+        />
 
-        {/* Header */}
-        <div className="flex h-16 shrink-0 items-center border-b border-white/8 px-4 overflow-hidden">
-          <div
-            className={`flex flex-1 items-center transition-all duration-300 ease-in-out ${
-              isCollapsed ? "md:justify-center gap-2" : "gap-2"
-            }`}
+        {isExpanded && (
+          <RailHistorySection
+            refreshKey={refreshKey}
+            onRestoreGeneration={onRestoreGeneration}
+          />
+        )}
+
+        {/* Pin toggle + footer */}
+        <div className="mt-auto shrink-0 border-t border-white/5">
+          {/* Pin button — always visible */}
+          <button
+            onClick={togglePin}
+            aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
+            title={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
+            className={`
+              flex items-center w-full px-4 py-3
+              text-zinc-600 hover:text-zinc-300 hover:bg-white/[0.03]
+              transition-colors duration-150
+              ${isExpanded ? "gap-2.5" : "justify-center"}
+            `}
           >
-            <img
-              src="/icon-dark.svg"
-              alt=""
-              aria-hidden="true"
-              className={`shrink-0 transition-all duration-300 ease-in-out origin-center ${
-                isCollapsed ? "md:w-9 md:h-9 md:scale-110 w-8 h-8" : "w-8 h-8"
-              }`}
-              style={{ filter: "drop-shadow(0 0 8px rgba(255,51,0,0.45))" }}
-            />
-            {/* translate-y-[2px] corrects optical alignment with bottom-heavy flame */}
-            <div
-              className={`font-tech flex items-center leading-none tracking-tight whitespace-nowrap translate-y-[2px] transition-all duration-300 ease-in-out overflow-hidden ${
-                isCollapsed ? "md:w-0 md:opacity-0 opacity-100" : "opacity-100"
-              }`}
-            >
-              <span className="text-white font-extrabold text-xl">PromptStarter</span>
-              <span className="text-[#FF3300] font-bold text-xl">.ai</span>
-            </div>
-          </div>
+            {isPinned
+              ? <PinOff className="w-4 h-4 shrink-0" />
+              : <Pin className="w-4 h-4 shrink-0" />
+            }
+            {isExpanded && (
+              <span className="font-mono text-[11px] whitespace-nowrap">
+                {isPinned ? "Unpin sidebar" : "Pin sidebar"}
+              </span>
+            )}
+          </button>
 
-          {/* Mobile close button — 44px touch target */}
+          {/* Version stamp — only when expanded */}
+          {isExpanded && (
+            <div className="px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+              <p className="font-mono text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap">
+                Promptstarter V1.0
+              </p>
+            </div>
+          )}
+        </div>
+      </aside>
+
+      {/* ── Mobile drawer ───────────────────────────────────── */}
+      <aside
+        className={`
+          flex md:hidden flex-col fixed left-0 top-14 z-[80]
+          h-[calc(100dvh-56px)] w-72
+          border-r border-zinc-800 bg-[#070707]
+          transition-transform duration-300 ease-in-out
+          overflow-visible overscroll-contain
+          ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        {/* Mobile close button row */}
+        <div className="flex h-12 shrink-0 items-center justify-between border-b border-white/8 px-4">
+          <span className="font-mono text-xs text-zinc-500 uppercase tracking-wider">
+            Menu
+          </span>
           <button
             onClick={onMobileClose}
             aria-label="Close navigation"
-            className="md:hidden flex items-center justify-center h-11 w-11 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150 shrink-0"
+            className="flex items-center justify-center h-11 w-11 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150 shrink-0 -mr-2"
           >
             <X size={16} />
           </button>
         </div>
 
-        {/* Profile switcher — active product profile with dropdown */}
-        <ProfileSwitcher isCollapsed={isCollapsed && !isMobileOpen} />
+        {/* Profile switcher at top of drawer */}
+        <DrawerProfileSwitcher />
 
         {/* Tool navigation */}
         <ToolNav
           activeToolId={activeToolId}
           onToolSelect={handleToolSelect}
-          isCollapsed={isCollapsed && !isMobileOpen}
+          isCollapsed={false}
         />
 
-        {/* History section */}
-        <HistorySection
-          isCollapsed={isCollapsed && !isMobileOpen}
+        {/* History */}
+        <RailHistorySection
           refreshKey={refreshKey}
-          onRestoreGeneration={onRestoreGeneration}
+          onRestoreGeneration={(gen) => {
+            onRestoreGeneration(gen);
+            setTimeout(onMobileClose, 150);
+          }}
         />
 
         {/* Footer */}
-        <div
-          className={`mt-auto shrink-0 border-t border-white/8 px-4 py-4 overflow-hidden transition-all duration-300 pb-[max(1rem,env(safe-area-inset-bottom))] ${
-            isCollapsed ? "md:opacity-0 md:pointer-events-none opacity-100" : "opacity-100"
-          }`}
-        >
+        <div className="mt-auto shrink-0 border-t border-white/8 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <p className="font-mono text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap">
             Promptstarter V1.0
           </p>
@@ -137,15 +197,14 @@ export function Sidebar({
   );
 }
 
-// ─── Profile switcher ─────────────────────────────────────────────────────
+// ─── Drawer profile switcher (mobile) ────────────────────────────────────────
 
-function ProfileSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
+function DrawerProfileSwitcher() {
   const { profiles, activeProfileId, setActiveProfileId } = useProfileSwitcher();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  // Close on outside click or Escape
   useEffect(() => {
     if (!open) return;
     function onDown(e: MouseEvent) {
@@ -164,20 +223,11 @@ function ProfileSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
     };
   }, [open]);
 
-  // Collapse the menu if the sidebar itself collapses under us
-  useEffect(() => {
-    if (isCollapsed) setOpen(false);
-  }, [isCollapsed]);
-
   const active = profiles.find((p) => p.id === activeProfileId) ?? null;
   if (!active) return null;
 
   return (
-    <div
-      className={`shrink-0 border-b border-white/5 relative overflow-visible transition-all duration-300 ease-in-out ${
-        isCollapsed ? "md:max-h-0 md:py-0 md:opacity-0 pointer-events-auto" : "opacity-100"
-      }`}
-    >
+    <div className="shrink-0 border-b border-white/5 relative overflow-visible">
       <button
         ref={triggerRef}
         onClick={() => setOpen((v) => !v)}
@@ -222,9 +272,7 @@ function ProfileSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
                     setOpen(false);
                   }}
                   className={`w-full text-left px-3 py-2 flex items-start gap-2 transition-colors duration-100 ${
-                    isActive
-                      ? "bg-[#FF3300]/10"
-                      : "hover:bg-white/[0.04]"
+                    isActive ? "bg-[#FF3300]/10" : "hover:bg-white/[0.04]"
                   } ${isResearching || isFailed ? "opacity-40 cursor-not-allowed" : ""}`}
                 >
                   <div className="min-w-0 flex-1">
@@ -233,22 +281,15 @@ function ProfileSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
                     </div>
                     <div className="font-mono text-xs text-zinc-300 truncate">
                       {p.product_name}
-                      {isResearching && (
-                        <span className="ml-2 text-zinc-600">• researching…</span>
-                      )}
-                      {isFailed && (
-                        <span className="ml-2 text-red-400/80">• failed</span>
-                      )}
+                      {isResearching && <span className="ml-2 text-zinc-600">• researching…</span>}
+                      {isFailed && <span className="ml-2 text-red-400/80">• failed</span>}
                     </div>
                   </div>
-                  {isActive && (
-                    <Check className="w-3.5 h-3.5 text-[#FF3300] shrink-0 mt-1" />
-                  )}
+                  {isActive && <Check className="w-3.5 h-3.5 text-[#FF3300] shrink-0 mt-1" />}
                 </button>
               );
             })}
           </div>
-
           <Link
             href="/onboarding"
             onClick={() => setOpen(false)}
@@ -265,7 +306,7 @@ function ProfileSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
   );
 }
 
-// ─── History section ──────────────────────────────────────────────────────
+// ─── History section ──────────────────────────────────────────────────────────
 
 type GenerationMeta = {
   id: string;
@@ -293,12 +334,10 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(h / 24)}d ago`;
 }
 
-function HistorySection({
-  isCollapsed,
+function RailHistorySection({
   refreshKey,
   onRestoreGeneration,
 }: {
-  isCollapsed: boolean;
   refreshKey: number;
   onRestoreGeneration: (gen: RestoredGeneration) => void;
 }) {
@@ -316,24 +355,25 @@ function HistorySection({
       .catch(() => setLoading(false));
   }, [refreshKey]);
 
-  async function handleClick(id: string) {
-    try {
-      const r = await fetch(`/api/generations/${id}`);
-      if (!r.ok) return;
-      const gen: GenerationFull = await r.json();
-      onRestoreGeneration({
-        toolId: gen.tool_id,
-        variableValues: gen.variable_values,
-        sliderValues: gen.slider_values,
-        output: gen.output,
-      });
-    } catch {
-      // silently ignore — non-fatal
-    }
-  }
+  const handleClick = useCallback(
+    async (id: string) => {
+      try {
+        const r = await fetch(`/api/generations/${id}`);
+        if (!r.ok) return;
+        const gen: GenerationFull = await r.json();
+        onRestoreGeneration({
+          toolId: gen.tool_id,
+          variableValues: gen.variable_values,
+          sliderValues: gen.slider_values,
+          output: gen.output,
+        });
+      } catch {
+        // silently ignore — non-fatal
+      }
+    },
+    [onRestoreGeneration]
+  );
 
-  // Hidden when collapsed or no items and not loading
-  if (isCollapsed) return null;
   if (!loading && items.length === 0) return null;
 
   const displayItems = items.slice(0, 10);
@@ -343,23 +383,16 @@ function HistorySection({
       <p className="font-mono text-[10px] tracking-wider text-zinc-600 uppercase px-1 mb-2">
         Recent
       </p>
-
       <div className="flex flex-col gap-0.5">
         {loading ? (
-          // Skeleton rows
           [0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="h-9 rounded-md bg-zinc-900/60 animate-pulse"
-            />
+            <div key={i} className="h-9 rounded-md bg-zinc-900/60 animate-pulse" />
           ))
         ) : (
           displayItems.map((item) => {
             const tool = tools.find((t) => t.id === item.tool_id);
             const toolName = tool?.name ?? item.tool_id;
-            // Abbreviated tool name: strip "The " prefix for compactness
             const shortName = toolName.replace(/^The\s+/i, "");
-            // First variable value as the subtitle
             const firstVal = Object.values(item.variable_values)[0] ?? "";
             const subtitle =
               firstVal.length > 24 ? firstVal.slice(0, 23) + "…" : firstVal;

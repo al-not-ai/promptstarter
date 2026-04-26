@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Sidebar } from "@/components/sidebar";
-import { StatusHeader } from "@/components/status-header";
+import { useState, useCallback, useEffect } from "react";
+import { TopBar } from "@/components/top-bar";
+import { AppRail } from "@/components/app-rail";
 import { ControlPanel } from "@/components/control-panel";
 import { tools } from "@/lib/tools";
 import type { RestoredGeneration } from "@/lib/types/generation";
+
+const RAIL_PIN_KEY = "promptstarter:rail-pinned";
 
 function defaultSliderValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
@@ -25,10 +27,19 @@ export default function Home() {
   const [variableValues, setVariableValues] = useState<Record<string, string>>(
     defaultVariableValues(tools[0].id)
   );
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [restored, setRestored] = useState<RestoredGeneration>(null);
   const [generationCount, setGenerationCount] = useState(0);
+  // Default false; hydrated from localStorage after mount to avoid SSR mismatch
+  const [railPinned, setRailPinned] = useState(false);
+
+  useEffect(() => {
+    try {
+      setRailPinned(localStorage.getItem(RAIL_PIN_KEY) === "true");
+    } catch {
+      // localStorage unavailable
+    }
+  }, []);
 
   const activeTool = tools.find((t) => t.id === activeToolId)!;
   const firstVarName = activeTool.variables[0]?.name;
@@ -51,23 +62,28 @@ export default function Home() {
   return (
     <div className="grid-bg relative flex min-h-[100dvh] flex-col bg-background overflow-x-hidden">
 
-      <Sidebar
+      <TopBar onMenuOpen={() => setMobileNavOpen(true)} />
+
+      <AppRail
         activeToolId={activeToolId}
         onToolSelect={handleToolSelect}
-        isCollapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed((prev) => !prev)}
         isMobileOpen={mobileNavOpen}
         onMobileClose={() => setMobileNavOpen(false)}
         onRestoreGeneration={handleRestoreGeneration}
         refreshKey={generationCount}
+        isPinned={railPinned}
+        onPinChange={setRailPinned}
       />
 
-      <StatusHeader onMenuOpen={() => setMobileNavOpen(true)} />
-
       <main
-        className={`flex flex-1 items-start justify-center px-4 md:px-8 pt-20 md:pt-6 pb-16 transition-[margin-left] duration-300 ease-in-out ${
-          sidebarCollapsed ? "md:ml-20" : "md:ml-72"
-        }`}
+        className={`
+          flex flex-1 items-start justify-center
+          px-4 md:px-8
+          pt-20 md:pt-20
+          pb-16
+          transition-[margin-left] duration-200 ease-in-out
+          ${railPinned ? "md:ml-60" : "md:ml-16"}
+        `}
       >
         <ControlPanel
           activeTool={activeTool}
