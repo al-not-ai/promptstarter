@@ -69,7 +69,7 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
                     <span
                       aria-hidden={isCollapsed}
                       className={cn(
-                        "font-mono text-sm md:text-[13px] whitespace-nowrap text-left",
+                        "font-mono text-sm md:text-[13px] truncate min-w-0 text-left",
                         "transition-[opacity,transform] duration-200",
                         isCollapsed
                           ? "opacity-0 -translate-x-1 pointer-events-none"
@@ -77,7 +77,7 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
                       )}
                       style={isActive ? { textShadow: "0 0 12px rgba(255,51,0,0.2)" } : undefined}
                     >
-                      {tool.name}
+                      {tool.name.replace(/^The\s+/, "")}
                     </span>
                   </button>
                 </li>
