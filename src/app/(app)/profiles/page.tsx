@@ -53,9 +53,9 @@ export default function ProfilesPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-background pt-14">
+    <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Page header */}
-      <div className="sticky top-14 z-10 border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
+      <div className="sticky top-0 z-[90] border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link

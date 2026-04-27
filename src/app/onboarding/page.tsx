@@ -55,6 +55,7 @@ function OnboardingInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("returnTo");
+  const isReturning = !!returnTo;
 
   const [state, setState] = useState<WizardState>(initialState);
   const [existingProfiles, setExistingProfiles] = useState<ProductProfile[] | null>(null);
@@ -68,8 +69,8 @@ function OnboardingInner() {
       .catch(() => setExistingProfiles([]));
   }, []);
 
-  const hasExistingProfiles =
-    existingProfiles !== null && existingProfiles.length > 0;
+  // Sync: layout and CTA copy driven by returnTo param, not async fetch.
+  const hasExistingProfiles = isReturning;
 
   const goTo = useCallback((step: Step) => {
     setState((s) => ({ ...s, step }));
@@ -151,7 +152,7 @@ function OnboardingInner() {
             <span className="text-[#FF3300] font-bold text-lg">.ai</span>
           </div>
         </div>
-        {hasExistingProfiles && (
+        {isReturning && (
           <Link
             href={returnTo ?? "/profiles"}
             className="flex items-center min-h-[44px] px-2 font-mono text-xs text-zinc-500 hover:text-white transition-colors duration-150"
@@ -161,27 +162,33 @@ function OnboardingInner() {
         )}
       </div>
 
-      {!hasExistingProfiles ? (
+      {!isReturning ? (
         /* First-timer: centered layout */
         <main className="grid-bg min-h-[100dvh] flex flex-col items-center justify-center p-4 pt-[calc(3.5rem+1rem)] pb-[max(1rem,env(safe-area-inset-bottom))]">
           <div className="w-full max-w-[520px] space-y-5">
-            <Header step={state.step} />
+            <Header step={state.step} isReturning={false} />
             {wizardCard}
           </div>
         </main>
       ) : (
         /* Returning user: two-pane on md+ */
-        <main className="grid-bg min-h-[100dvh] flex flex-col items-center justify-center p-4 pt-[calc(3.5rem+1rem)] pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <main className="grid-bg min-h-[100dvh] flex flex-col items-start p-4 pt-[calc(3.5rem+1rem)] pb-[max(1rem,env(safe-area-inset-bottom))]">
           <div className="max-w-[820px] mx-auto w-full flex flex-col md:flex-row gap-6 items-start">
-            {/* Left panel — desktop only */}
-            {existingProfiles && (
-              <div className="hidden md:block w-[260px] shrink-0">
+            {/* Left panel — desktop only, shimmers until fetch resolves */}
+            <div className="hidden md:block w-[260px] shrink-0 pt-8">
+              {existingProfiles === null ? (
+                <div className="sticky top-[80px] self-start space-y-2">
+                  {[0, 1, 2].map((i) => (
+                    <div key={i} className="h-20 rounded-lg bg-white/[0.04] animate-pulse" />
+                  ))}
+                </div>
+              ) : (
                 <ExistingProfilesPanel existingProfiles={existingProfiles} />
-              </div>
-            )}
-            {/* Right: wizard */}
-            <div className="flex-1 min-w-0 space-y-5">
-              <Header step={state.step} />
+              )}
+            </div>
+            {/* Right: wizard — full-width on mobile */}
+            <div className="w-full md:flex-1 min-w-0 space-y-5">
+              <Header step={state.step} isReturning={true} />
               {wizardCard}
             </div>
           </div>
@@ -235,22 +242,24 @@ function ExistingProfilesPanel({
 
 // ─── Header ───────────────────────────────────────────────────────────────
 
-function Header({ step }: { step: Step }) {
+function Header({ step, isReturning }: { step: Step; isReturning: boolean }) {
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-center gap-2">
-        <img
-          src="/icon-dark.svg"
-          alt=""
-          aria-hidden="true"
-          className="w-8 h-8 shrink-0"
-          style={{ filter: "drop-shadow(0 0 8px rgba(255,51,0,0.45))" }}
-        />
-        <div className="font-tech flex items-center leading-none tracking-tight translate-y-[2px]">
-          <span className="text-white font-extrabold text-xl">PromptStarter</span>
-          <span className="text-[#FF3300] font-bold text-xl">.ai</span>
+      {!isReturning && (
+        <div className="flex items-center justify-center gap-2">
+          <img
+            src="/icon-dark.svg"
+            alt=""
+            aria-hidden="true"
+            className="w-8 h-8 shrink-0"
+            style={{ filter: "drop-shadow(0 0 8px rgba(255,51,0,0.45))" }}
+          />
+          <div className="font-tech flex items-center leading-none tracking-tight translate-y-[2px]">
+            <span className="text-white font-extrabold text-xl">PromptStarter</span>
+            <span className="text-[#FF3300] font-bold text-xl">.ai</span>
+          </div>
         </div>
-      </div>
+      )}
       <div className="flex items-center justify-center gap-1.5">
         {[1, 2, 3].map((i) => (
           <div
