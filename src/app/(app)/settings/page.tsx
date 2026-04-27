@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Check } from "lucide-react";
+import { SecondaryTopBar } from "@/components/secondary-top-bar";
 import { cn } from "@/lib/utils";
 import {
   DOWNSTREAM_AIS,
@@ -12,6 +13,7 @@ import {
 } from "@/lib/downstream-ai";
 
 export default function SettingsPage() {
+  const router = useRouter();
   const [preferred, setPreferred] = useState<DownstreamAIId | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -26,21 +28,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-background pt-14">
-      <div className="sticky top-14 z-10 border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
-        <div className="max-w-3xl mx-auto px-4 md:px-6 py-3 flex items-center gap-3">
-          <Link
-            href="/"
-            className="flex items-center justify-center h-8 w-8 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150"
-            aria-label="Back"
-          >
-            <ArrowLeft size={16} />
-          </Link>
-          <h1 className="font-mono text-sm font-bold text-white">Settings</h1>
-        </div>
-      </div>
+    <div className="flex flex-col min-h-[100dvh] bg-background">
+      <SecondaryTopBar title="Settings" onBack={() => router.back()} />
 
-      <div className="max-w-3xl mx-auto w-full px-4 md:px-6 py-8 flex flex-col gap-8">
+      <div className="max-w-3xl mx-auto w-full px-4 md:px-6 pt-14 py-8 flex flex-col gap-8">
         <section>
           <h2 className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-2">
             Default AI

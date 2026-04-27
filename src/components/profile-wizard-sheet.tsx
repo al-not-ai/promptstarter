@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { ProfileWizard } from "@/components/profile-wizard";
@@ -12,12 +13,26 @@ interface ProfileWizardSheetProps {
 }
 
 export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardSheetProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   return (
     <Sheet open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <SheetContent
-        side="right"
+        side={isMobile ? "bottom" : "right"}
         showCloseButton={false}
-        className="w-full sm:w-[560px] p-0 flex flex-col bg-[#0a0a0a] border-l border-white/10"
+        className={
+          isMobile
+            ? "h-[92dvh] w-full p-0 flex flex-col bg-[#0a0a0a] border-t border-white/10 rounded-t-xl"
+            : "w-full sm:w-[560px] p-0 flex flex-col bg-[#0a0a0a] border-l border-white/10"
+        }
       >
         {/* Sheet header row */}
         <div className="h-12 shrink-0 flex items-center justify-between px-4 border-b border-white/[0.08]">

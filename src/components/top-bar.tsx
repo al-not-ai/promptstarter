@@ -214,7 +214,7 @@ function DesktopProfileSwitcher({ onAddProfile }: { onAddProfile?: () => void })
 
 // ─── User avatar menu ─────────────────────────────────────────────────────────
 
-function UserMenu() {
+export function UserMenu() {
   const [open, setOpen] = useState(false);
   const [initials, setInitials] = useState("?");
   const triggerRef = useRef<HTMLButtonElement | null>(null);

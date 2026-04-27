@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { X, Trash2, ArrowLeft } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useProfile } from "@/lib/profile-context";
+import { SecondaryTopBar } from "@/components/secondary-top-bar";
 import { tools } from "@/lib/tools";
 import { timeAgo, type GenerationMeta } from "@/components/app-rail";
 
@@ -223,54 +224,35 @@ export default function HistoryPage() {
   const groups = groupByDay(items);
 
   return (
-    <div
-      className={`flex flex-col min-h-[100dvh] bg-background pt-14`}
-    >
-      {/* Page header */}
-      <div className="sticky top-14 z-10 border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
-        <div className="max-w-3xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center justify-center h-8 w-8 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150"
-              aria-label="Back"
+    <div className="flex flex-col min-h-[100dvh] bg-background">
+      <SecondaryTopBar title="History" onBack={() => router.back()} />
+
+      {/* Bulk-select toolbar — secondary sticky strip, only when items selected */}
+      {selected.size > 0 && (
+        <div className="fixed top-14 left-0 right-0 z-[80] border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
+          <div className="max-w-3xl mx-auto px-4 md:px-6 py-2 flex items-center gap-3">
+            <span className="font-mono text-xs text-zinc-400">
+              {selected.size} selected
+            </span>
+            <button
+              onClick={handleBulkDelete}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs text-red-400 border border-red-400/30 hover:bg-red-400/10 transition-colors duration-150"
             >
-              <ArrowLeft size={16} />
-            </Link>
-            <h1 className="font-mono text-sm font-bold text-white">History</h1>
-            {!loading && (
-              <span className="font-mono text-xs text-zinc-600">
-                {items.length} generation{items.length !== 1 ? "s" : ""}
-              </span>
-            )}
+              <Trash2 size={12} />
+              Delete
+            </button>
+            <button
+              onClick={() => setSelected(new Set())}
+              className="font-mono text-xs text-zinc-500 hover:text-white transition-colors duration-150"
+            >
+              Cancel
+            </button>
           </div>
-
-          {/* Bulk-select toolbar */}
-          {selected.size > 0 && (
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-xs text-zinc-400">
-                {selected.size} selected
-              </span>
-              <button
-                onClick={handleBulkDelete}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs text-red-400 border border-red-400/30 hover:bg-red-400/10 transition-colors duration-150"
-              >
-                <Trash2 size={12} />
-                Delete
-              </button>
-              <button
-                onClick={() => setSelected(new Set())}
-                className="font-mono text-xs text-zinc-500 hover:text-white transition-colors duration-150"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
         </div>
-      </div>
+      )}
 
-      {/* Content */}
-      <div className="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 flex flex-col gap-8">
+      {/* Content — extra top margin when bulk toolbar is visible */}
+      <div className={`max-w-3xl mx-auto w-full px-4 md:px-6 pt-14 py-6 flex flex-col gap-8 ${selected.size > 0 ? "mt-10" : ""}`}>
         {loading ? (
           <div className="flex flex-col gap-1">
             {[...Array(6)].map((_, i) => (
