@@ -76,7 +76,7 @@ export default function ProfilesPage() {
           {/* Add profile CTA */}
           <div>
             <Link
-              href="/onboarding"
+              href="/onboarding?returnTo=/profiles"
               className={cn(
                 "hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-md border font-mono text-xs font-semibold",
                 "border-[#FF3300]/40 text-[#FF3300] bg-[#FF3300]/[0.06] hover:bg-[#FF3300]/[0.12]",
@@ -87,7 +87,7 @@ export default function ProfilesPage() {
               Add product profile
             </Link>
             <Link
-              href="/onboarding"
+              href="/onboarding?returnTo=/profiles"
               aria-label="Add product profile"
               className={cn(
                 "sm:hidden flex items-center justify-center min-h-[44px] min-w-[44px] rounded-md",

@@ -1,7 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Star } from "lucide-react";
 import type { ProductProfile } from "@/lib/types/profile";
 import type { CompanyCandidate } from "@/app/api/research/company/route";
 import type { ProductGroup } from "@/app/api/research/products/route";
@@ -42,8 +44,32 @@ const initialState: WizardState = {
 };
 
 export default function OnboardingPage() {
+  return (
+    <Suspense>
+      <OnboardingInner />
+    </Suspense>
+  );
+}
+
+function OnboardingInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo");
+
   const [state, setState] = useState<WizardState>(initialState);
+  const [existingProfiles, setExistingProfiles] = useState<ProductProfile[] | null>(null);
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((r) => (r.ok ? r.json() : { profiles: [] }))
+      .then((data: { profiles: ProductProfile[] }) =>
+        setExistingProfiles(data.profiles ?? [])
+      )
+      .catch(() => setExistingProfiles([]));
+  }, []);
+
+  const hasExistingProfiles =
+    existingProfiles !== null && existingProfiles.length > 0;
 
   const goTo = useCallback((step: Step) => {
     setState((s) => ({ ...s, step }));
@@ -78,39 +104,132 @@ export default function OnboardingPage() {
 
   const onProfileReady = useCallback(
     (profile: ProductProfile) => {
-      // Small celebratory beat before jumping to the Command Center.
-      setTimeout(() => router.push("/"), 400);
+      setTimeout(() => router.push(returnTo ?? "/"), 400);
       setState((s) => ({ ...s, profile }));
     },
-    [router]
+    [router, returnTo]
+  );
+
+  const wizardCard = (
+    <div className="rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-sm p-6 space-y-5">
+      {state.step === 1 && <StepCompany onPick={onCompanyPicked} />}
+      {state.step === 2 && state.company && (
+        <StepProducts
+          company={state.company}
+          onBack={() => goTo(1)}
+          onPick={onProductPicked}
+        />
+      )}
+      {state.step === 3 && state.company && state.productUrl && (
+        <StepExtract
+          company={state.company}
+          productUrl={state.productUrl}
+          productGroupName={state.productGroupName}
+          onBack={() => goTo(2)}
+          onDone={onProfileReady}
+          hasExistingProfiles={hasExistingProfiles}
+        />
+      )}
+    </div>
   );
 
   return (
-    <main className="grid-bg min-h-[100dvh] flex flex-col items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-      <div className="w-full max-w-[520px] space-y-5">
-        <Header step={state.step} />
-
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-sm p-6 space-y-5">
-          {state.step === 1 && <StepCompany onPick={onCompanyPicked} />}
-          {state.step === 2 && state.company && (
-            <StepProducts
-              company={state.company}
-              onBack={() => goTo(1)}
-              onPick={onProductPicked}
-            />
-          )}
-          {state.step === 3 && state.company && state.productUrl && (
-            <StepExtract
-              company={state.company}
-              productUrl={state.productUrl}
-              productGroupName={state.productGroupName}
-              onBack={() => goTo(2)}
-              onDone={onProfileReady}
-            />
-          )}
+    <>
+      {/* Fixed top bar */}
+      <div className="fixed top-0 left-0 right-0 z-[90] h-14 flex items-center justify-between px-4 border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icon-dark.svg"
+            alt=""
+            aria-hidden="true"
+            className="w-7 h-7 shrink-0"
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,51,0,0.45))" }}
+          />
+          <div className="font-tech flex items-center leading-none tracking-tight translate-y-[2px]">
+            <span className="text-white font-extrabold text-lg">PromptStarter</span>
+            <span className="text-[#FF3300] font-bold text-lg">.ai</span>
+          </div>
         </div>
+        {hasExistingProfiles && (
+          <Link
+            href={returnTo ?? "/profiles"}
+            className="flex items-center min-h-[44px] px-2 font-mono text-xs text-zinc-500 hover:text-white transition-colors duration-150"
+          >
+            ← Back
+          </Link>
+        )}
       </div>
-    </main>
+
+      {!hasExistingProfiles ? (
+        /* First-timer: centered layout */
+        <main className="grid-bg min-h-[100dvh] flex flex-col items-center justify-center p-4 pt-[calc(3.5rem+1rem)] pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div className="w-full max-w-[520px] space-y-5">
+            <Header step={state.step} />
+            {wizardCard}
+          </div>
+        </main>
+      ) : (
+        /* Returning user: two-pane on md+ */
+        <main className="grid-bg min-h-[100dvh] flex flex-col items-center justify-center p-4 pt-[calc(3.5rem+1rem)] pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div className="max-w-[820px] mx-auto w-full flex flex-col md:flex-row gap-6 items-start">
+            {/* Left panel — desktop only */}
+            {existingProfiles && (
+              <div className="hidden md:block w-[260px] shrink-0">
+                <ExistingProfilesPanel existingProfiles={existingProfiles} />
+              </div>
+            )}
+            {/* Right: wizard */}
+            <div className="flex-1 min-w-0 space-y-5">
+              <Header step={state.step} />
+              {wizardCard}
+            </div>
+          </div>
+        </main>
+      )}
+    </>
+  );
+}
+
+// ─── Existing profiles panel (returning user, desktop left column) ─────────
+
+function ExistingProfilesPanel({
+  existingProfiles,
+}: {
+  existingProfiles: ProductProfile[];
+}) {
+  return (
+    <div className="sticky top-[80px] self-start">
+      <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-600 mb-3">
+        Your profiles
+      </p>
+      <div className="space-y-2">
+        {existingProfiles.map((profile) => (
+          <div
+            key={profile.id}
+            className="rounded-lg border border-white/10 bg-white/[0.02] p-3"
+          >
+            <div className="font-mono text-[10px] text-[#FF3300]/70 uppercase tracking-wider truncate">
+              {profile.company_name}
+            </div>
+            <div className="font-mono text-sm font-semibold text-white truncate flex items-center gap-1">
+              <span className="truncate">{profile.product_name}</span>
+              {profile.is_default && (
+                <Star
+                  size={11}
+                  className="fill-[#FF3300] text-[#FF3300] shrink-0"
+                />
+              )}
+            </div>
+            {profile.product_summary && (
+              <div className="font-mono text-[11px] text-zinc-500 truncate mt-0.5">
+                {profile.product_summary}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -586,12 +705,14 @@ function StepExtract({
   productGroupName,
   onBack,
   onDone,
+  hasExistingProfiles,
 }: {
   company: { name: string; url: string };
   productUrl: string;
   productGroupName: string | null;
   onBack: () => void;
   onDone: (profile: ProductProfile) => void;
+  hasExistingProfiles: boolean;
 }) {
   const [status, setStatus] = useState<"loading" | "review" | "error" | "saving">(
     "loading"
@@ -863,7 +984,11 @@ function StepExtract({
               : {}
           }
         >
-          {status === "saving" ? "Saving…" : "Looks good — take me in →"}
+          {status === "saving"
+            ? "Saving…"
+            : hasExistingProfiles
+            ? "Save profile →"
+            : "Looks good — take me in →"}
         </button>
       </div>
     </div>

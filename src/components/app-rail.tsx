@@ -304,7 +304,7 @@ function DrawerProfileSwitcher() {
             </span>
           </Link>
           <Link
-            href="/onboarding"
+            href="/onboarding?returnTo=/profiles"
             onClick={() => setOpen(false)}
             className="block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
