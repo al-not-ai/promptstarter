@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { X, ChevronDown, Check, Plus, Pin, PinOff, ArrowRight, Users } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ToolNav } from "@/components/tool-nav";
 import { useProfileSwitcher } from "@/lib/profile-context";
@@ -21,6 +22,7 @@ interface AppRailProps {
   refreshKey: number;
   isPinned: boolean;
   onPinChange: (pinned: boolean) => void;
+  onAddProfile?: () => void;
 }
 
 export function AppRail({
@@ -32,6 +34,7 @@ export function AppRail({
   refreshKey,
   isPinned,
   onPinChange,
+  onAddProfile,
 }: AppRailProps) {
   const [hoverExpanded, setHoverExpanded] = useState(false);
   const hoverInTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -171,7 +174,7 @@ export function AppRail({
         </div>
 
         {/* Profile switcher at top of drawer */}
-        <DrawerProfileSwitcher />
+        <DrawerProfileSwitcher onAddProfile={onAddProfile} onMobileClose={onMobileClose} />
 
         {/* Tool navigation */}
         <ToolNav
@@ -202,8 +205,15 @@ export function AppRail({
 
 // ─── Drawer profile switcher (mobile) ────────────────────────────────────────
 
-function DrawerProfileSwitcher() {
+function DrawerProfileSwitcher({
+  onAddProfile,
+  onMobileClose,
+}: {
+  onAddProfile?: () => void;
+  onMobileClose?: () => void;
+}) {
   const { profiles, activeProfileId, setActiveProfileId } = useProfileSwitcher();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -303,16 +313,24 @@ function DrawerProfileSwitcher() {
               Manage profiles
             </span>
           </Link>
-          <Link
-            href="/onboarding?returnTo=/profiles"
-            onClick={() => setOpen(false)}
-            className="block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              if (onAddProfile) {
+                onMobileClose?.();
+                onAddProfile();
+              } else {
+                router.push("/?openWizard=true");
+              }
+            }}
+            className="w-full text-left block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
             <span className="inline-flex items-center gap-2">
               <Plus className="w-3.5 h-3.5 text-[#FF3300]" />
               Add product profile
             </span>
-          </Link>
+          </button>
         </div>
       )}
     </div>

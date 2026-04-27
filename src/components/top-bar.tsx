@@ -19,9 +19,10 @@ import { createClient } from "@/lib/supabase/client";
 interface TopBarProps {
   isMobileOpen: boolean;
   onMenuToggle: () => void;
+  onAddProfile?: () => void;
 }
 
-export function TopBar({ isMobileOpen, onMenuToggle }: TopBarProps) {
+export function TopBar({ isMobileOpen, onMenuToggle, onAddProfile }: TopBarProps) {
   return (
     <header className="fixed top-0 left-0 right-0 z-[90] h-14 flex items-center border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
 
@@ -47,7 +48,7 @@ export function TopBar({ isMobileOpen, onMenuToggle }: TopBarProps) {
 
         {/* Profile switcher */}
         <div className="px-3">
-          <DesktopProfileSwitcher />
+          <DesktopProfileSwitcher onAddProfile={onAddProfile} />
         </div>
 
         {/* Center spacer — future cmd-K search */}
@@ -96,8 +97,9 @@ export function TopBar({ isMobileOpen, onMenuToggle }: TopBarProps) {
 
 // ─── Desktop profile switcher ─────────────────────────────────────────────────
 
-function DesktopProfileSwitcher() {
+function DesktopProfileSwitcher({ onAddProfile }: { onAddProfile?: () => void }) {
   const { profiles, activeProfileId, setActiveProfileId } = useProfileSwitcher();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -187,16 +189,23 @@ function DesktopProfileSwitcher() {
               );
             })}
           </div>
-          <Link
-            href="/onboarding?returnTo=/profiles"
-            onClick={() => setOpen(false)}
-            className="block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              if (onAddProfile) {
+                onAddProfile();
+              } else {
+                router.push("/?openWizard=true");
+              }
+            }}
+            className="w-full text-left block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
             <span className="inline-flex items-center gap-2">
               <Plus className="w-3.5 h-3.5 text-[#FF3300]" />
               Add product profile
             </span>
-          </Link>
+          </button>
         </div>
       )}
     </div>

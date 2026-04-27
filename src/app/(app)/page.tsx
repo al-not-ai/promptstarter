@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { AppRail } from "@/components/app-rail";
 import { ControlPanel } from "@/components/control-panel";
+import { ProfileWizardSheet } from "@/components/profile-wizard-sheet";
 import { tools } from "@/lib/tools";
 import { useProfileSwitcher } from "@/lib/profile-context";
 import {
@@ -12,6 +13,7 @@ import {
   setCache,
 } from "@/lib/form-cache";
 import type { RestoredGeneration } from "@/lib/types/generation";
+import type { ProductProfile } from "@/lib/types/profile";
 
 const RAIL_PIN_KEY = "promptstarter:rail-pinned";
 
@@ -37,17 +39,16 @@ function HomeInner() {
   const [variableValues, setVariableValues] = useState<Record<string, string>>(
     defaultVariableValues(tools[0].id)
   );
-  // Lifted from ControlPanel so they can be cached across tool switches
   const [rawContext, setRawContext] = useState("");
   const [contextOpen, setContextOpen] = useState(false);
-  // Tracks the last complete output for display + caching
   const [currentOutput, setCurrentOutput] = useState("");
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [generationCount, setGenerationCount] = useState(0);
   const [railPinned, setRailPinned] = useState(false);
+  const [wizardOpen, setWizardOpen] = useState(false);
 
-  // ── One-time initialisation: load rail pin + handle ?restore / cache ───────
+  // ── One-time initialisation: load rail pin + handle ?restore / ?openWizard / cache ──
 
   const initialized = useRef(false);
 
@@ -59,11 +60,19 @@ function HomeInner() {
     }
   }, []);
 
+  // Handle ?openWizard=true search param
+  useEffect(() => {
+    if (searchParams.get("openWizard") === "true") {
+      setWizardOpen(true);
+      router.replace("/", { scroll: false });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once on mount; searchParams stable at mount
+
   useEffect(() => {
     if (initialized.current || !activeProfileId) return;
     initialized.current = true;
 
-    // ?restore=<id> takes priority over everything
     const restoreId = searchParams.get("restore");
     if (restoreId) {
       router.replace("/", { scroll: false });
@@ -82,7 +91,6 @@ function HomeInner() {
       return;
     }
 
-    // Try sessionStorage cache for the initial tool
     const cached = getCache(activeProfileId, tools[0].id);
     if (cached) {
       setVariableValues(cached.variableValues);
@@ -92,9 +100,9 @@ function HomeInner() {
       setCurrentOutput(cached.output);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeProfileId]); // activeProfileId is the gate; searchParams stable at mount
+  }, [activeProfileId]);
 
-  // ── Persist form + output to sessionStorage on every meaningful change ─────
+  // ── Persist form + output to sessionStorage ────────────────────────────────
 
   useEffect(() => {
     if (!activeProfileId) return;
@@ -102,7 +110,7 @@ function HomeInner() {
       Object.values(variableValues).some((v) => v.trim()) ||
       rawContext.trim().length > 0 ||
       Object.values(sliderValues).some((v) => v !== 0);
-    if (!hasInput && !currentOutput) return; // nothing worth caching
+    if (!hasInput && !currentOutput) return;
 
     setCache(activeProfileId, activeToolId, {
       variableValues,
@@ -122,7 +130,7 @@ function HomeInner() {
     activeProfileId,
   ]);
 
-  // ── Tool selection: load from cache or rehydrate from history ─────────────
+  // ── Tool selection ─────────────────────────────────────────────────────────
 
   const handleToolSelect = useCallback(
     (toolId: string) => {
@@ -147,7 +155,6 @@ function HomeInner() {
         return;
       }
 
-      // No cache — start fresh
       setVariableValues(defaultVariableValues(toolId));
       setSliderValues(defaultSliderValues(toolId));
       setRawContext("");
@@ -178,6 +185,13 @@ function HomeInner() {
     setGenerationCount((c) => c + 1);
   }, []);
 
+  // ── Wizard callbacks ───────────────────────────────────────────────────────
+
+  const handleWizardComplete = useCallback((_profile: ProductProfile) => {
+    setWizardOpen(false);
+    router.refresh();
+  }, [router]);
+
   // ── Derived ───────────────────────────────────────────────────────────────
 
   const activeTool = tools.find((t) => t.id === activeToolId)!;
@@ -188,7 +202,11 @@ function HomeInner() {
 
   return (
     <div className="grid-bg relative flex min-h-[100dvh] flex-col bg-background overflow-x-hidden">
-      <TopBar isMobileOpen={mobileNavOpen} onMenuToggle={() => setMobileNavOpen((v) => !v)} />
+      <TopBar
+        isMobileOpen={mobileNavOpen}
+        onMenuToggle={() => setMobileNavOpen((v) => !v)}
+        onAddProfile={() => setWizardOpen(true)}
+      />
 
       <AppRail
         activeToolId={activeToolId}
@@ -199,6 +217,7 @@ function HomeInner() {
         refreshKey={generationCount}
         isPinned={railPinned}
         onPinChange={setRailPinned}
+        onAddProfile={() => setWizardOpen(true)}
       />
 
       <main
@@ -211,9 +230,6 @@ function HomeInner() {
           ${railPinned ? "md:ml-60" : "md:ml-16"}
         `}
       >
-        {/* key={activeToolId} remounts ControlPanel on tool switch, which resets
-            useCompletion's internal `completion` string so stale output from
-            the previous tool never bleeds through. */}
         <ControlPanel
           key={activeToolId}
           activeTool={activeTool}
@@ -235,6 +251,12 @@ function HomeInner() {
           onGenerationComplete={handleGenerationComplete}
         />
       </main>
+
+      <ProfileWizardSheet
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        onComplete={handleWizardComplete}
+      />
     </div>
   );
 }

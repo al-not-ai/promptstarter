@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Star, Pencil, Trash2 } from "lucide-react";
+import { ProfileWizardSheet } from "@/components/profile-wizard-sheet";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useProfileSwitcher } from "@/lib/profile-context";
@@ -29,6 +30,7 @@ export default function ProfilesPage() {
   const [editingProfile, setEditingProfile] = useState<ProductProfile | null>(null);
   const [deletingProfile, setDeletingProfile] = useState<ProductProfile | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [wizardOpen, setWizardOpen] = useState(false);
 
   const sorted = [...profiles]
     .filter((p) => !p.deleted_at)
@@ -57,26 +59,44 @@ export default function ProfilesPage() {
       {/* Page header */}
       <div className="sticky top-0 z-[90] border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
+          {/* Left: mobile shows logo + title; desktop shows back arrow + title + count */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              aria-label="Back"
-              className="flex items-center justify-center h-8 w-8 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150"
-            >
-              <ArrowLeft size={16} />
-            </Link>
-            <h1 className="font-mono text-sm font-bold text-white">Product profiles</h1>
-            {sorted.length > 0 && (
-              <span className="font-mono text-xs text-zinc-600">
-                {sorted.length} profile{sorted.length !== 1 ? "s" : ""}
-              </span>
-            )}
+            {/* Mobile: logo icon + title */}
+            <div className="flex md:hidden items-center gap-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icon-dark.svg"
+                alt=""
+                aria-hidden="true"
+                className="w-5 h-5 shrink-0"
+                style={{ filter: "drop-shadow(0 0 6px rgba(255,51,0,0.45))" }}
+              />
+              <h1 className="font-mono text-sm font-bold text-white">Product profiles</h1>
+            </div>
+
+            {/* Desktop: back arrow + title + count */}
+            <div className="hidden md:flex items-center gap-3">
+              <Link
+                href="/"
+                aria-label="Back"
+                className="flex items-center justify-center h-8 w-8 rounded-md text-zinc-500 hover:text-white hover:bg-white/5 transition-colors duration-150"
+              >
+                <ArrowLeft size={16} />
+              </Link>
+              <h1 className="font-mono text-sm font-bold text-white">Product profiles</h1>
+              {sorted.length > 0 && (
+                <span className="font-mono text-xs text-zinc-600">
+                  {sorted.length} profile{sorted.length !== 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Add profile CTA */}
           <div>
-            <Link
-              href="/onboarding?returnTo=/profiles"
+            <button
+              type="button"
+              onClick={() => setWizardOpen(true)}
               className={cn(
                 "hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-md border font-mono text-xs font-semibold",
                 "border-[#FF3300]/40 text-[#FF3300] bg-[#FF3300]/[0.06] hover:bg-[#FF3300]/[0.12]",
@@ -85,9 +105,10 @@ export default function ProfilesPage() {
             >
               <Plus size={13} />
               Add product profile
-            </Link>
-            <Link
-              href="/onboarding?returnTo=/profiles"
+            </button>
+            <button
+              type="button"
+              onClick={() => setWizardOpen(true)}
               aria-label="Add product profile"
               className={cn(
                 "sm:hidden flex items-center justify-center min-h-[44px] min-w-[44px] rounded-md",
@@ -96,7 +117,7 @@ export default function ProfilesPage() {
               )}
             >
               <Plus size={18} />
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -106,12 +127,13 @@ export default function ProfilesPage() {
         {sorted.length === 0 ? (
           <div className="py-20 text-center">
             <p className="font-mono text-sm text-zinc-600">No profiles yet.</p>
-            <Link
-              href="/onboarding"
+            <button
+              type="button"
+              onClick={() => setWizardOpen(true)}
               className="mt-3 inline-block font-mono text-xs text-[#FF3300]/70 hover:text-[#FF3300] transition-colors duration-150"
             >
               Create your first profile →
-            </Link>
+            </button>
           </div>
         ) : (
           sorted.map((profile) => (
@@ -153,6 +175,15 @@ export default function ProfilesPage() {
           }}
         />
       )}
+
+      <ProfileWizardSheet
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        onComplete={() => {
+          setWizardOpen(false);
+          router.refresh();
+        }}
+      />
     </div>
   );
 }
