@@ -188,7 +188,7 @@ function HomeInner() {
 
   return (
     <div className="grid-bg relative flex min-h-[100dvh] flex-col bg-background overflow-x-hidden">
-      <TopBar onMenuOpen={() => setMobileNavOpen(true)} />
+      <TopBar isMobileOpen={mobileNavOpen} onMenuToggle={() => setMobileNavOpen((v) => !v)} />
 
       <AppRail
         activeToolId={activeToolId}

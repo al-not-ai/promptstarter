@@ -10,19 +10,18 @@ import {
   Users,
   LogOut,
   Menu,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useProfileSwitcher } from "@/lib/profile-context";
 import { createClient } from "@/lib/supabase/client";
 
 interface TopBarProps {
-  onMenuOpen: () => void;
+  isMobileOpen: boolean;
+  onMenuToggle: () => void;
 }
 
-export function TopBar({ onMenuOpen }: TopBarProps) {
-  const { activeProfileId, profiles } = useProfileSwitcher();
-  const activeProfile = profiles.find((p) => p.id === activeProfileId) ?? null;
-
+export function TopBar({ isMobileOpen, onMenuToggle }: TopBarProps) {
   return (
     <header className="fixed top-0 left-0 right-0 z-[90] h-14 flex items-center border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
 
@@ -62,35 +61,31 @@ export function TopBar({ onMenuOpen }: TopBarProps) {
 
       {/* ── Mobile layout ──────────────────────────────────── */}
       <div className="flex md:hidden flex-1 items-center justify-between px-2">
-        {/* Hamburger */}
+        {/* Left: hamburger toggle */}
         <button
-          onClick={onMenuOpen}
-          aria-label="Open navigation"
+          onClick={onMenuToggle}
+          aria-label={isMobileOpen ? "Close navigation" : "Open navigation"}
           className="flex items-center justify-center h-11 w-11 rounded-md text-zinc-400 hover:text-white hover:bg-white/5 transition-colors duration-150 shrink-0"
         >
-          <Menu size={20} />
+          {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
 
-        {/* Profile name — tap opens drawer */}
-        <button
-          onClick={onMenuOpen}
-          className="flex flex-col items-center min-w-0 px-2"
-        >
-          {activeProfile ? (
-            <>
-              <span className="font-mono text-[10px] tracking-wider text-[#FF3300]/70 uppercase truncate max-w-[160px]">
-                {activeProfile.company_name}
-              </span>
-              <span className="font-mono text-xs text-zinc-300 truncate max-w-[160px]">
-                {activeProfile.product_name}
-              </span>
-            </>
-          ) : (
-            <span className="font-mono text-xs text-zinc-500">PromptStarter.ai</span>
-          )}
-        </button>
+        {/* Center: brand lockup */}
+        <div className="flex items-center gap-2 shrink-0">
+          <img
+            src="/icon-dark.svg"
+            alt=""
+            aria-hidden="true"
+            className="w-6 h-6 shrink-0"
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,51,0,0.45))" }}
+          />
+          <div className="font-tech flex items-center leading-none tracking-tight translate-y-[2px]">
+            <span className="text-white font-extrabold text-base">PromptStarter</span>
+            <span className="text-[#FF3300] font-bold text-base">.ai</span>
+          </div>
+        </div>
 
-        {/* Avatar */}
+        {/* Right: user avatar */}
         <div className="shrink-0">
           <UserMenu />
         </div>

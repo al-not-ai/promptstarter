@@ -117,7 +117,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry }
 
       {/* Body — flash + sweep overlays + content */}
       <div
-        className="relative px-5 py-5 max-h-[520px] overflow-y-auto"
+        className="relative px-5 py-5 md:max-h-[520px] md:overflow-y-auto"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "rgba(255,51,0,0.15) transparent",
