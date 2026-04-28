@@ -25,18 +25,23 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
 
   useEffect(() => {
     if (!open) return;
-    const scrollY = window.scrollY;
-    document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
+
+    // Prevent background scroll on desktop
+    const html = document.documentElement;
+    const prevOverflow = html.style.overflow;
+    html.style.overflow = "hidden";
+
+    // Prevent background scroll on iOS Safari (touchmove blocking)
+    const preventTouchMove = (e: TouchEvent) => {
+      const target = e.target as Element | null;
+      if (target?.closest("[data-wizard-scroll]")) return;
+      e.preventDefault();
+    };
+    document.addEventListener("touchmove", preventTouchMove, { passive: false });
+
     return () => {
-      document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.width = "";
-      const top = document.body.style.top;
-      document.body.style.top = "";
-      window.scrollTo(0, parseInt(top || "0") * -1);
+      html.style.overflow = prevOverflow;
+      document.removeEventListener("touchmove", preventTouchMove);
     };
   }, [open]);
 
@@ -67,7 +72,7 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
         </div>
 
         {/* Scrollable wizard content */}
-        <div className="flex-1 overflow-y-auto overscroll-contain scroll-smooth px-6 py-6">
+        <div data-wizard-scroll="true" className="flex-1 overflow-y-auto overscroll-contain scroll-smooth px-6 py-6">
           <ProfileWizard
             isReturning={true}
             onComplete={onComplete}

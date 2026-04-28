@@ -38,7 +38,6 @@ export default async function AppLayout({
   const { data: rows } = await supabase
     .from("product_profiles")
     .select("*")
-    .is("deleted_at", null)
     .eq("user_id", user.id)
     .order("is_default", { ascending: false })
     .order("updated_at", { ascending: false });

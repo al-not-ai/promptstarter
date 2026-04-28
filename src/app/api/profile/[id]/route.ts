@@ -125,8 +125,8 @@ export async function PATCH(
 /**
  * DELETE /api/profile/[id]
  *
- * Soft-deletes the profile and hard-deletes all generations linked to it.
- * Blocks if the profile is the user's only active one (redirect to /onboarding
+ * Hard-deletes the profile and all generations linked to it.
+ * Blocks if the profile is the user's only one (redirect to /onboarding
  * would be confusing; deleting the last profile is almost always a mistake).
  * Auto-promotes a new default when the deleted profile was the default.
  */
@@ -148,7 +148,6 @@ export async function DELETE(
     .select("id, is_default")
     .eq("id", id)
     .eq("user_id", user.id)
-    .is("deleted_at", null)
     .single();
 
   if (!profile) {
@@ -161,7 +160,6 @@ export async function DELETE(
     .from("product_profiles")
     .select("id", { count: "exact", head: true })
     .eq("user_id", user.id)
-    .is("deleted_at", null)
     .neq("id", id);
 
   if ((remainingCount ?? 0) === 0) {
@@ -181,15 +179,15 @@ export async function DELETE(
     .eq("profile_id", id)
     .eq("user_id", user.id);
 
-  // Soft-delete the profile
-  const { error: softDeleteError } = await supabase
+  // Hard-delete the profile
+  const { error: hardDeleteError } = await supabase
     .from("product_profiles")
-    .update({ deleted_at: new Date().toISOString() })
+    .delete()
     .eq("id", id)
     .eq("user_id", user.id);
 
-  if (softDeleteError) {
-    console.error("Soft-delete failed:", softDeleteError);
+  if (hardDeleteError) {
+    console.error("Profile hard-delete failed:", hardDeleteError);
     return NextResponse.json(
       { error: "Failed to delete profile. Try again." },
       { status: 500 }
@@ -197,13 +195,12 @@ export async function DELETE(
   }
 
   // If the deleted profile was the default, promote the most-recently-updated
-  // remaining active profile so the layout always has a default to land on.
+  // remaining profile so the layout always has a default to land on.
   if (profile.is_default) {
     const { data: next } = await supabase
       .from("product_profiles")
       .select("id")
       .eq("user_id", user.id)
-      .is("deleted_at", null)
       .order("updated_at", { ascending: false })
       .limit(1)
       .single();
