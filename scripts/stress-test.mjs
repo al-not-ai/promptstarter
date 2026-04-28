@@ -35,7 +35,7 @@ const ENDPOINT = `${BASE_URL}/api/generate`;
 const TEST_CASES = [
   // ─── PRE-CALL RECON (3 cases) ──────────────────────────────────────────────
   {
-    label: "Pre-Call Recon #1 — HubSpot / Warm inbound / Soft discovery",
+    label: "Pre-Call Recon #1 — HubSpot / Warm & Interested / Gather Background Context",
     body: {
       toolId: "pre-call-recon",
       variableValues: { targetCompany: "HubSpot", targetPersona: "VP of Revenue Operations" },
@@ -43,7 +43,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Pre-Call Recon #2 — Stripe / Skeptical CFO / Authority hunt",
+    label: "Pre-Call Recon #2 — Stripe / Skeptical & Guarded / Test Budget & Authority",
     body: {
       toolId: "pre-call-recon",
       variableValues: { targetCompany: "Stripe", targetPersona: "CFO" },
@@ -51,7 +51,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Pre-Call Recon #3 — Series A startup / Hostile founder / Hypothesis pitch",
+    label: "Pre-Call Recon #3 — Series A startup / Forced to Attend / Challenge Their Status Quo",
     body: {
       toolId: "pre-call-recon",
       variableValues: { targetCompany: "Verdn (Series A fintech)", targetPersona: "Co-Founder & CEO" },
@@ -61,7 +61,7 @@ const TEST_CASES = [
 
   // ─── OBJECTION DEFUSER (3 cases) ───────────────────────────────────────────
   {
-    label: "Objection Defuser #1 — Too expensive / Empathic / No ask",
+    label: "Objection Defuser #1 — Too expensive / Empathize & Pivot / Buy Time, No Commitment",
     body: {
       toolId: "objection-defuser",
       variableValues: {
@@ -72,7 +72,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Objection Defuser #2 — Bad timing / ROI-focused / Alternative choice close",
+    label: "Objection Defuser #2 — Bad timing / Stick to ROI / Offer Two Alternatives",
     body: {
       toolId: "objection-defuser",
       variableValues: {
@@ -83,7 +83,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Objection Defuser #3 — Needs committee approval / Direct / Hard close",
+    label: "Objection Defuser #3 — Needs committee approval / Push Back Directly / Push for Firm Commitment",
     body: {
       toolId: "objection-defuser",
       variableValues: {
@@ -96,7 +96,7 @@ const TEST_CASES = [
 
   // ─── COMPETITOR BATTLECARD (3 cases) ───────────────────────────────────────
   {
-    label: "Battlecard #1 — vs Salesforce / Subtle trap-setting / Early discovery",
+    label: "Battlecard #1 — vs Salesforce / Drop Subtle Doubts / First Conversation",
     body: {
       toolId: "competitor-battlecard",
       variableValues: {
@@ -107,7 +107,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Battlecard #2 — vs Gong / Strategic differentiation / Business case",
+    label: "Battlecard #2 — vs Gong / Hit a Feature Gap / Building the Business Case",
     body: {
       toolId: "competitor-battlecard",
       variableValues: {
@@ -118,7 +118,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Battlecard #3 — vs HubSpot / Direct head-to-head / Final selection",
+    label: "Battlecard #3 — vs HubSpot / Go Head-to-Head / Final Vendor Selection",
     body: {
       toolId: "competitor-battlecard",
       variableValues: {
@@ -131,7 +131,7 @@ const TEST_CASES = [
 
   // ─── COLD HOOK (3 cases) ────────────────────────────────────────────────────
   {
-    label: "Cold Hook #1 — LinkedIn DM / Ego angle / Just posted a thought leadership piece",
+    label: "Cold Hook #1 — LinkedIn DM / Save Time / Just posted a thought leadership piece",
     body: {
       toolId: "cold-hook",
       variableValues: {
@@ -142,7 +142,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Cold Hook #2 — Casual email / Efficiency angle / Competitor just had a data breach",
+    label: "Cold Hook #2 — Email — Casual / Cut Cost / Competitor just had a data breach",
     body: {
       toolId: "cold-hook",
       variableValues: {
@@ -153,7 +153,7 @@ const TEST_CASES = [
     },
   },
   {
-    label: "Cold Hook #3 — Executive multi-thread / Revenue angle / Missed quarterly target",
+    label: "Cold Hook #3 — Email — C-Suite / Grow Revenue / Missed quarterly target",
     body: {
       toolId: "cold-hook",
       variableValues: {

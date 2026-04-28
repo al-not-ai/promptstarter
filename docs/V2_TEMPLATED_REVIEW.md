@@ -34,8 +34,8 @@ post-processed templated tail). Coverage:
 - 3 objection-defuser (build/Wiz/budget freeze) across consultative,
   challenging, and analytical postures
 - 3 competitor-battlecard (Salesforce early, Wiz final, Outreach mid)
-- 4 cold-hook — one per channel (LinkedIn DM, Casual Email, Formal Email,
-  Executive Multi-Threading)
+- 4 cold-hook — one per channel (LinkedIn DM, Email — Casual, Email — Formal,
+  Email — C-Suite)
 
 Outputs: `outputs/v2-templated/*.master.md` and `*.downstream.md`.
 
@@ -76,33 +76,33 @@ correctly per AGENTS.md. No "the user" or "the AI" violations.
 
 Visible variation across slider combos:
 
-- 02-recon (Hostile/Challenger): Opener A specifically disarms forced
+- 02-recon (Forced to Attend / Challenge Their Status Quo): Opener A specifically disarms forced
   attendance ("I know these calls land in your calendar whether you want
   them there or not"). 04-recon (Neutral/Qualification) has no such
   disarm — opens with "I'm curious how you think about pipeline confidence."
 - 06-objection (Direct Challenging / Hard Close): downstream closes with
   "would you be open to a working session with your team this week?" —
   presumptive, action-oriented.
-- 05-objection (Consultative / No Ask): downstream's follow-up is a soft
+- 05-objection (Empathize & Pivot / Buy Time, No Commitment): downstream's follow-up is a soft
   question about timeline, no close attempt.
 - 11-hook (LinkedIn DM): no subject line, conversational "Hey Marcus" open,
   one-line ask. Length ~80 words.
-- 13-hook (Formal Email to CFO): subject line, "Dear [CFO Name]", "Best
+- 13-hook (Email — Formal to CFO): subject line, "Dear [CFO Name]", "Best
   regards", body anchored to the 10-K filing language.
 
 Posture sliders meaningfully shift the deliverable's shape and tone.
 
 ### Channel-aware STRUCTURE — PASS
 
-- 12 (Casual Email, mid-market CTO): engine scaffolded subject + casual
+- 12 (Email — Casual, mid-market CTO): engine scaffolded subject + casual
   salutation (first name only) + signoff (first name only). Downstream
   delivered all three with appropriate informal tone.
-- 13 (Formal Email, Fortune 500 CFO): engine scaffolded subject + formal
+- 13 (Email — Formal, Fortune 500 CFO): engine scaffolded subject + formal
   salutation ("Dear [CFO Name]") + formal signoff ("Best regards"). Downstream
   delivered formal Dear/Best regards.
 - 11 (LinkedIn DM): engine scaffolded hook + insight + soft ask, NO
   subject/salutation/signoff. Downstream matched.
-- 14 (Exec Multi-Threading): engine scaffolded a CRO-tuned variant + a
+- 14 (Email — C-Suite): engine scaffolded a CRO-tuned variant + a
   COO-tuned variant + a single CTA. Downstream delivered both variants with
   distinct framings ("quota confidence" for CRO, "FP&A planning" for COO).
 
