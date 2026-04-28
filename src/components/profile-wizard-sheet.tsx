@@ -23,6 +23,23 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
     return () => mq.removeEventListener("change", handler);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const scrollY = window.scrollY;
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      const top = document.body.style.top;
+      document.body.style.top = "";
+      window.scrollTo(0, parseInt(top || "0") * -1);
+    };
+  }, [open]);
+
   return (
     <Sheet open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <SheetContent

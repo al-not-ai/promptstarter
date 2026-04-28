@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { ProductProfile, ResearchStatus } from "@/lib/types/profile";
 
@@ -181,11 +182,19 @@ export async function DELETE(
     .eq("user_id", user.id);
 
   // Soft-delete the profile
-  await supabase
+  const { error: softDeleteError } = await supabase
     .from("product_profiles")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("user_id", user.id);
+
+  if (softDeleteError) {
+    console.error("Soft-delete failed:", softDeleteError);
+    return NextResponse.json(
+      { error: "Failed to delete profile. Try again." },
+      { status: 500 }
+    );
+  }
 
   // If the deleted profile was the default, promote the most-recently-updated
   // remaining active profile so the layout always has a default to land on.
@@ -207,6 +216,8 @@ export async function DELETE(
         .eq("user_id", user.id);
     }
   }
+
+  revalidatePath("/", "layout");
 
   return new Response(null, { status: 204 });
 }
