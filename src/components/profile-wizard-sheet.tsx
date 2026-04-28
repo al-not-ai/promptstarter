@@ -30,7 +30,7 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
         showCloseButton={false}
         className={
           isMobile
-            ? "h-[92dvh] w-full p-0 flex flex-col bg-[#0a0a0a] border-t border-white/10 rounded-t-xl"
+            ? "h-[100dvh] w-full p-0 flex flex-col bg-[#0a0a0a] border-t border-white/10 rounded-t-xl"
             : "w-full sm:w-[560px] p-0 flex flex-col bg-[#0a0a0a] border-l border-white/10"
         }
       >
@@ -50,7 +50,7 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
         </div>
 
         {/* Scrollable wizard content */}
-        <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain scroll-smooth px-6 py-6">
           <ProfileWizard
             isReturning={true}
             onComplete={onComplete}

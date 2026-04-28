@@ -31,9 +31,10 @@ export default function ProfilesPage() {
   const [deletingProfile, setDeletingProfile] = useState<ProductProfile | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
 
   const sorted = [...profiles]
-    .filter((p) => !p.deleted_at)
+    .filter((p) => !p.deleted_at && !deletedIds.has(p.id))
     .sort((a, b) => {
       if (a.is_default !== b.is_default) return a.is_default ? -1 : 1;
       return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
@@ -92,7 +93,7 @@ export default function ProfilesPage() {
       />
 
       {/* Card list */}
-      <div className="max-w-3xl mx-auto w-full px-4 md:px-6 pt-14 py-6 flex flex-col gap-3">
+      <div className="max-w-3xl mx-auto w-full px-4 md:px-6 pt-20 pb-6 flex flex-col gap-3">
         {sorted.length === 0 ? (
           <div className="py-20 text-center">
             <p className="font-mono text-sm text-zinc-600">No profiles yet.</p>
@@ -138,6 +139,7 @@ export default function ProfilesPage() {
           profile={deletingProfile}
           onClose={() => setDeletingProfile(null)}
           onDeleted={() => {
+            setDeletedIds((prev) => new Set(prev).add(deletingProfile.id));
             setDeletingProfile(null);
             toast("Profile deleted");
             router.refresh();
@@ -562,7 +564,7 @@ function DeleteDialog({ profile, onClose, onDeleted }: DeleteDialogProps) {
                 Permanently delete{" "}
                 <strong className="text-white">{profile.product_name}</strong> and{" "}
                 <strong className="text-white">{n}</strong> saved generation
-                {n !== 1 ? "s" : ""} linked to it. This can&apos;t be undone.
+                {n !== 1 ? "s" : ""}{" "}linked to it. This can&apos;t be undone.
               </p>
             )}
           </div>
