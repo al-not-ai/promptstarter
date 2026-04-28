@@ -70,7 +70,7 @@ CORE RULES:
 1. No scripting. Don't write exact dialogue, email copy, subject lines, or verbatim opening phrases. Describe the rails; let the assistant lay the track.
 2. Anti-hallucination is the only hard wall. Every other rule bends in service of it. If the assistant lacks specific knowledge, tell it to anchor to standard industry patterns and flag them as patterns. Never demand specificity that forces fabrication.
 3. Ambition with fallback. Every quality rule you impose must give a graceful path when information is thin.
-4. No fabricated specificity. Don't invent details I haven't given you — no "tomorrow", "last quarter", "as we discussed", or any time / place / relational detail not present in my inputs. Specificity comes from my inputs only; everything else stays general or pattern-flagged.
+4. No fabricated specificity. Don't invent details I haven't given you — no "tomorrow", "last quarter", "as we discussed", no statistics, percentages, dollar figures, or headcounts not in my inputs, and no other detail I didn't supply. If an input says "missed target," write "missed target" — not a specific percentage. Specificity comes from my inputs only.
 5. Compress. Each line earns its place. Cut hedge clauses, redundant qualifiers, and connective tissue. If a clause can be removed without changing the instruction's meaning, remove it. Trust the assistant — it doesn't need over-explanation.
 6. Format for scan. The rep glances at this before pasting. Use bullets where they sharpen. Reserve prose for MISSION (where rep voice needs flow). Avoid wall-of-text paragraphs in STRUCTURE and GROUNDING.
 7. No placeholder tokens. Never emit literal bracketed placeholder tokens in MISSION, STRUCTURE, or GROUNDING — no [company], [product], [name], [role], [date], or any other [xxx] gap. If a detail isn't in my inputs or the profile, omit the reference entirely or write around it. A sentence with a missing detail is better than a sentence with a literal "[company]" in it.
@@ -81,11 +81,6 @@ TIGHT: "If account-specific intel would sharpen this, ask me for it."
 
 LOOSE: "Provide three distinct ways the rep can kick off the call. Each should acknowledge the warm inbound context and avoid cold-call phrasing."
 TIGHT: "Three openers. Each acknowledges the warm inbound — no cold-call energy."
-
-LOOSE (paragraph in GROUNDING): "Avoid jargon tied to Tesla's proprietary roadmap, speculation about market position, or buzzwords that assume familiarity with internal org structure. Ground everything in what an engineer role typically owns."
-TIGHT (bullets):
-- Avoid: insider-only jargon, market speculation, buzzwords assuming org-chart knowledge.
-- Anchor to: what the role typically owns, warm-inbound posture.
 
 OUTPUT STRUCTURE — 3 sections, in this order, nothing else:
 ## MISSION — 2-3 short sentences, prose. Open with who I am and what I'm doing (use the role hint, my product if relevant, the prospect/situation in one tight breath). Then state the deliverable and my posture/stage calibration woven in. If my calibration includes a channel (email, DM, etc.), note STRUCTURE must scaffold channel-appropriate elements.
@@ -329,6 +324,12 @@ export async function POST(req: Request) {
           controller.enqueue(encoder.encode(chunk));
         }
         controller.enqueue(encoder.encode(templatedTail));
+        // Append token usage for stress-test runs only — stripped by the test script.
+        if (isStressTestBypass) {
+          const usage = await result.usage;
+          const usageLine = `\n[STRESS_TEST_USAGE:${JSON.stringify({ inputTokens: usage.inputTokens, outputTokens: usage.outputTokens })}]`;
+          controller.enqueue(encoder.encode(usageLine));
+        }
         controller.close();
       } catch (err) {
         controller.error(err);

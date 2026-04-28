@@ -151,6 +151,132 @@ export const tools: Tool[] = [
       },
     ],
   },
+
+  // ── ADVANCED TOOLS ──────────────────────────────────────────────────────────
+
+  {
+    id: "follow-up-forward",
+    name: "The Follow-Up Forward",
+    category: "Active Deals",
+    outputFormat: `TWO assets, each with a clear heading:
+
+ASSET 1 — FOLLOW-UP EMAIL (rep → prospect): 3–4 short paragraphs. Opens with the single biggest aha or pain they surfaced — not "Great chatting today." References one specific call moment from my notes. Closes with one concrete next step. Avoid: pleasantry openers, feature-benefit lists, marketing copy, "per our conversation."
+
+ASSET 2 — FORWARD-READY RECAP (prospect → their internal decision-maker): 5–7 scannable bullets, one sentence each, written so the prospect could have authored it — no rep language, no vendor branding. Cover in order: problem in their words → what they observed → fit to their stated priority → two concrete proof points → proposed next step. Avoid: rep's name, product marketing copy, dollar amounts not in my inputs.`,
+    outputDescriptor: "the follow-up email and forward-ready recap",
+    engineRoleHint: "post-meeting strategist producing a forward-ready recap the prospect can send internally without editing",
+    includesProfile: true,
+    variables: [
+      {
+        name: "callNotes",
+        label: "Notes from the Call",
+        placeholder: "e.g., Discussed reporting bottleneck. Showed live demo. Mark loved automation feature.",
+      },
+      {
+        name: "biggestAha",
+        label: "The Single Biggest Aha or Pain They Surfaced",
+        placeholder: "e.g., Their team spends 6 hours a week on manual reporting",
+      },
+    ],
+    sliders: [
+      {
+        id: "buying-role",
+        label: "Their Buying Role",
+        steps: ["Operational User", "Department Manager", "VP / Director", "C-Suite"],
+      },
+      {
+        id: "call-mood",
+        label: "Mood Coming Out of the Call",
+        steps: ["Skeptical", "Mildly Interested", "Bought-In", "Already Selling Internally"],
+      },
+    ],
+  },
+
+  {
+    id: "deal-reviver",
+    name: "The Deal Reviver",
+    category: "Pipeline",
+    outputFormat: `THREE-TOUCH REVIVAL SEQUENCE — each touch as its own labeled sub-section:
+
+TOUCH 1 — EMAIL: Subject line + 3 short paragraphs. Opens with a specific, earned reason to reach out tied to the revival angle — not "just checking in." Closes with a low-friction ask (a reply, a 15-min call, or a simple yes/no). Avoid: "circle back," desperation signals, referencing how long they've been quiet.
+
+TOUCH 2 — LINKEDIN DM: 2–3 sentences max. Hook must be distinct from the email opener. No link, no attachment ask. Reads human — not a forwarded version of the email.
+
+TOUCH 3 — VOICEMAIL SCRIPT (label "if applicable"): 20–30 seconds when spoken aloud. Leads with a real reason for the call in the first 5 words. Leaves one question for the prospect to sit with — no explicit callback demand. Avoid: "just wanted to touch base," restating the email.`,
+    outputDescriptor: "the 3-touch revival sequence",
+    engineRoleHint: "cold revival specialist crafting a multi-touch re-engagement sequence with a real reason to reach out",
+    includesProfile: true,
+    variables: [
+      {
+        name: "prospectCompany",
+        label: "Prospect & Company",
+        placeholder: "e.g., Dave at Delta Corp",
+      },
+      {
+        name: "wentCold",
+        label: "Where the Conversation Went Cold",
+        placeholder: "e.g., They were worried about integration time",
+      },
+    ],
+    sliders: [
+      {
+        id: "silence-duration",
+        label: "How Long They've Been Quiet",
+        steps: ["A Few Days", "2–4 Weeks", "1–3 Months", "3+ Months / Cold"],
+      },
+      {
+        id: "revival-angle",
+        label: "Revival Angle",
+        steps: ["New Data or Signal", "Product or Feature Update", "Outside Helpful Resource", `The "Last Try" Email`],
+      },
+    ],
+  },
+
+  {
+    id: "cfo-pitch",
+    name: "The CFO Pitch",
+    category: "Active Deals",
+    outputFormat: `A one-page financial brief written as if the prospect's internal champion authored it to their own finance decision-maker. "We" refers to the prospect's company, never the vendor's. Structured for a 90-second skim.
+
+FOUR SECTIONS:
+1. THE PROBLEM (2–3 bullets): The pain in the champion's own words, anchored to my input. No marketing language.
+2. FINANCIAL CASE (3–4 bullets): Translate the financial case angle into concrete business impact using the annual cost I've provided. Flag any assumed multipliers explicitly ("assuming X hours saved per week...").
+3. WHAT WE EVALUATED (1–2 bullets): What the champion observed during the evaluation — behavioral and specific, not a feature list.
+4. THE ASK (1 bullet): The specific approval or next step the reader needs to take.
+
+Avoid throughout: vendor branding, "industry-leading," "robust," "cutting-edge," the rep's company name anywhere in the body, any dollar amounts beyond what I've supplied.`,
+    outputDescriptor: "the CFO-ready business case",
+    // Fourth-actor note: this brief is forwarded by the rep's champion (inside the
+    // prospect company) to the prospect's CFO. The downstream AI writes the brief
+    // IN the champion's voice — "we" = the prospect company, not the rep's. The
+    // engineRoleHint makes this explicit so MISSION frames the deliverable correctly.
+    engineRoleHint: "financial-justification strategist composing a brief the rep's champion will forward to their CFO — write it entirely in the champion's voice, as if the champion authored it internally, not as a vendor document",
+    includesProfile: true,
+    variables: [
+      {
+        name: "painPoint",
+        label: "Pain Point in Their Words",
+        placeholder: "e.g., Manual reporting is causing inconsistent month-end numbers",
+      },
+      {
+        name: "annualCost",
+        label: "Annual Cost of Our Solution",
+        placeholder: "e.g., $24,000/year",
+      },
+    ],
+    sliders: [
+      {
+        id: "financial-case",
+        label: "Financial Case",
+        steps: ["Save Labor Hours", "Speed Up Revenue", "Cut Hard Costs", "Reduce Risk / Compliance"],
+      },
+      {
+        id: "reader-audience",
+        label: "Who's Reading This",
+        steps: ["Champion (selling it for them)", "CFO Directly", "CEO / COO", "Procurement"],
+      },
+    ],
+  },
 ];
 
 export const TOOL_CATEGORIES = Array.from(
