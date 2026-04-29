@@ -1,6 +1,6 @@
 # Arsenal Stress Test Results
 
-**Run:** 2026-04-28T23:50:33.345Z  
+**Run:** 2026-04-29T01:56:23.633Z  
 **Endpoint:** http://localhost:3000/api/generate  
 **Passed:** 22/22  
 **DRILL-DOWN OFFER present (templated tail):** 22/22  
@@ -15,63 +15,61 @@
 
 | Metric | Value |
 |---|---|
-| Total run cost | $0.0826 |
+| Total run cost | $0.0842 |
 | Total input tokens | 45,938 |
-| Total output tokens | 11,466 |
-| Median per-case cost | $0.0039 |
-| Highest cost case | Case 08 — Battlecard #2 ($0.0049) |
-| Lowest cost case | Case 10 — Cold Hook #1 ($0.0030) |
+| Total output tokens | 11,850 |
+| Median per-case cost | $0.0038 |
+| Highest cost case | Case 18 — Deal Reviver #2 ($0.0048) |
+| Lowest cost case | Case 13 — Cold Hook #4 ($0.0029) |
 
 ### Per-tool breakdown
 
 | Tool | Cases | Input Tokens | Output Tokens | Total Cost |
 |---|---|---|---|---|
-| Pre-Call Recon | 3 | 5,208 | 1,405 | $0.0098 |
-| Objection Defuser | 3 | 6,191 | 1,149 | $0.0095 |
-| Battlecard | 3 | 6,148 | 1,951 | $0.0127 |
-| Cold Hook | 4 | 8,070 | 1,604 | $0.0129 |
-| Follow-Up Forward | 3 | 6,728 | 1,702 | $0.0122 |
-| Deal Reviver | 3 | 6,762 | 1,901 | $0.0130 |
-| CFO Pitch | 3 | 6,831 | 1,754 | $0.0125 |
-| **Total** | **22** | **45,938** | **11,466** | **$0.0826** |
+| Pre-Call Recon | 3 | 5,208 | 1,478 | $0.0101 |
+| Objection Defuser | 3 | 6,191 | 1,422 | $0.0106 |
+| Battlecard | 3 | 6,148 | 1,775 | $0.0120 |
+| Cold Hook | 4 | 8,070 | 1,540 | $0.0126 |
+| Follow-Up Forward | 3 | 6,728 | 1,682 | $0.0121 |
+| Deal Reviver | 3 | 6,762 | 2,052 | $0.0136 |
+| CFO Pitch | 3 | 6,831 | 1,901 | $0.0131 |
+| **Total** | **22** | **45,938** | **11,850** | **$0.0842** |
 
 ---
 
 ## Case 01: Pre-Call Recon #1 — HubSpot / Warm & Interested / Gather Background Context
 
-**Status:** OK | **Time:** 6023ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 1734 | **Output tokens:** 425 | **Cost:** $0.0031
+**Status:** OK | **Time:** 7099ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 1734 | **Output tokens:** 500 | **Cost:** $0.0034
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Revenue OS. I'm calling the VP of Revenue Operations at HubSpot — a warm inbound. My goal is to gather background context on how they operate and think. Brief me before the call with one sharp intel signal, three openers I can choose from, and two early questions to anchor the first five minutes.
+I'm a sales rep at Velara selling Revenue OS, and I'm calling the VP of Revenue Operations at HubSpot cold — but they've signaled warm interest. Before I dial, brief me as my call-prep strategist: give me one sharp intel signal about this account, three openers I can choose from, and two discovery questions to anchor the first five minutes and keep momentum.
 
 ## STRUCTURE
 
-1. One intel signal about HubSpot's revenue ops footprint.
-   - Anchor to public signals or standard patterns in the space.
-   - Flag what's sourced vs. pattern-based per the research protocol below.
-   - One sentence, actionable for conversation tone — not a biography.
+1. **One Intel Signal**
+   - A single, high-confidence observation about HubSpot's revenue operations posture, strategy, or recent moves that explains *why* this person might care to talk to me now.
+   - Follow the research protocol below to source and flag your confidence level.
 
-2. Three conversation openers.
-   - Each acknowledges the warm inbound, no cold-call energy.
-   - Vary the angle: one grounded in their role, one in their company context, one in the reason they reached out.
-   - Short enough to say naturally; I'll adapt phrasing in the moment.
+2. **Three Conversation Openers**
+   - Each acknowledges the warm-interest signal — no cold-call energy.
+   - Varied in tone: one can reference the signal directly, one can lead with curiosity about their role, one can nod to a broader industry pattern.
+   - Keep each to 1–2 sentences max; I'll adapt phrasing on the call.
 
-3. Two discovery questions for the first five minutes.
-   - Open-ended. Designed to surface how they think about revenue operations, not to pitch.
-   - One tilted toward their current state, one toward their constraints or goals.
-   - No product assumptions baked in.
+3. **Two Discovery Questions for the First 5 Minutes**
+   - Questions that let *them* talk and reveal their current state, challenges, or priorities — not questions that lead toward my product.
+   - Each should feel natural after the opener and signal I'm genuinely trying to understand their world.
 
 ## GROUNDING
 
-- HubSpot is a public company, mature revenue org — expect sophistication and skepticism of vendor narratives.
-- VP of Revenue Ops owns forecasting, data integrity, and ops infrastructure — likely under pressure to scale systems without headcount.
-- They reached out warm, so they're signaling openness; lean into curiosity, not urgency.
-- Avoid "best practices," "next-gen," or "market-leading" — language that signals you're selling, not learning.
-- This call is about them, not about Velara or what we do. Stay in listen mode.
+- HubSpot is a high-scale, public, venture-backed platform company — assume they're sophisticated, well-resourced, and skeptical of vendor noise.
+- VP of Revenue Operations sits between sales leadership and operational/systems infrastructure — they care about data quality, forecast accuracy, rep productivity, and systems integration.
+- Warm interest is genuine; this isn't a cold-call salvage. Treat it as a real conversation, not a pitch.
+- Avoid revenue operations jargon clichés ("alignment," "visibility," "single source of truth," "breaking down silos") unless they introduce it first.
+- If recon data is thin on this specific account moment, anchor to what you know about the role and the industry, flag it as a pattern, and let me ask follow-up questions if I need sharper intel.
 
 ## STANDARD RULES
 
@@ -99,37 +97,33 @@ After delivering the recon brief, pause and:
 
 ## Case 02: Pre-Call Recon #2 — Stripe / Skeptical & Guarded / Test Budget & Authority
 
-**Status:** OK | **Time:** 7699ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 1732 | **Output tokens:** 512 | **Cost:** $0.0034
+**Status:** OK | **Time:** 7048ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 1732 | **Output tokens:** 494 | **Cost:** $0.0034
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling our Revenue OS to enterprise finance teams. I'm calling the CFO at Stripe cold — he's skeptical and guarded, and I'm testing whether he has budget and real authority to move. Be my call-prep strategist and give me one sharp intel signal about this account, three openers I can choose from, and two questions to ask in the first five minutes that will surface whether this conversation has legs.
+I'm a sales rep at Velara selling Revenue OS to enterprise finance leaders. I'm calling the CFO at Stripe cold tomorrow. I need you to be my call-prep strategist — give me one sharp recon signal about this account, three openers I can choose from, and two discovery questions I can ask in the first five minutes that will help me test whether they have budget and real authority to move. I'm walking in skeptical and guarded, so assume I'll need to earn credibility fast.
 
 ## STRUCTURE
 
-1. **One intel signal about Stripe's CFO.**
-   - Follow the research protocol below to surface one piece of account or role-specific intel that would credibly inform your opener and show you've done basic homework.
-   - Avoid generic CFO insights; anchor to Stripe specifically if possible.
+1. One Intel Signal
+   - A specific, defensible observation about Stripe's finance function or current posture that signals budget constraints, organizational change, or decision-making friction. Follow the research protocol below to source this. Flag if the signal is pattern-based vs. account-specific.
 
-2. **Three conversation openers.**
-   - Each should fit a cold call to a skeptical CFO — no warmth signal, no prior relationship.
-   - Vary the angle: one can lead with a relevant business trigger, one with a challenge-framed observation, one with a direct value hypothesis.
-   - Keep each to one or two sentences; give me the shape, not the script.
+2. Three Openers
+   - Each acknowledges cold outreach without apology; avoids product-first framing; positions you as thoughtful about their world, not yours. Give me three distinct angles to choose from based on how much warmth/directness I want to lead with.
 
-3. **Two discovery questions for the first 5 minutes.**
-   - First question should open the door and establish whether budget and decision-making authority exist.
-   - Second question should deepen into the specific pain or constraint that would make him lean in.
-   - Frame as genuine questions, not product qualification; avoid leading him toward your solution.
+3. Two Discovery Questions for Minute 1–5
+   - Open-ended, designed to surface budget reality and authority scope. Avoid yes/no traps. Each should invite them to talk about their function and constraints — not about Velara or what you think they need.
 
 ## GROUNDING
 
-- **Stripe context:** CFO at a high-growth fintech company — likely managing rapid scaling, investor expectations, and complex revenue operations. He will be time-poor and skeptical of unsolicited outreach.
-- **Skeptical & Guarded posture:** Don't assume warmth or curiosity. Lead with credibility and specificity — vagueness will shut him down immediately. Brevity is respect.
-- **Budget & Authority test:** Your questions should flush whether he controls or influences budget decisions AND whether he's empowered to explore new tools without committee approval. Don't ask "Do you have budget?" — surface it through business reality.
-- **Avoid:** Industry jargon, hyperbole, assumptions about his priorities, generic CFO talking points, any pitch language.
+- Stripe: fintech, post-IPO, fast-scaling. CFO likely managing rapid growth, profitability pressure, investor expectations, and cross-functional ops complexity.
+- Skeptical + Guarded posture = assume they're filtering noise and protecting time. Don't ask permission to continue; assume competence. Earn trust by asking something they haven't heard from vendors.
+- Budget Authority question is not "Do you have budget?" — it's exploratory. You're testing appetite and veto power in the first call, not closing budget by minute five.
+- Avoid: product-speak, assumptions about their tech stack, jargon about "revenue optimization" or "predictability" without context.
+- No cold-call melodrama (e.g., "I know you're busy") — assume professionalism and get to signal.
 
 ## STANDARD RULES
 
@@ -157,39 +151,38 @@ After delivering the recon brief, pause and:
 
 ## Case 03: Pre-Call Recon #3 — Series A startup / Forced to Attend / Challenge Their Status Quo
 
-**Status:** OK | **Time:** 6220ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 1742 | **Output tokens:** 468 | **Cost:** $0.0033
+**Status:** OK | **Time:** 6308ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 1742 | **Output tokens:** 484 | **Cost:** $0.0033
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-
-I'm a sales rep at Velara calling the Co-Founder & CEO of Verdn (Series A fintech) cold. My goal is to challenge their status quo on this call, but I'm walking in knowing they were forced to attend — so I need sharp intel and openers that cut through reluctance without triggering defensiveness. Give me one specific intel signal about this account, three conversation starters I can choose from, and two opening questions that land in the first five minutes.
+I'm a sales rep at Velara calling the Co-Founder & CEO of Verdn (Series A fintech) cold. My goal is to challenge their status quo on this call, but they're forced to attend — so I need to land fast and earn their attention despite resistance. Give me a pre-call brief: one sharp intel signal about this account, three openers I can choose from, and two questions to ask in the first five minutes that will make them want to engage.
 
 ## STRUCTURE
+1. **One Intel Signal**
+   - One specific, defensible observation about Verdn or its market position that signals why this call matters now
+   - Follow the research protocol below to source it
+   - Avoid generic startup observations; anchor to something that raises a flag or creates urgency
 
-1. One intel signal about Verdn that creates a specific angle for this call.
-   - Follow the research protocol below to source and validate this.
-   - Frame it as a pattern or tension, not a criticism — something that makes the conversation feel earned, not random.
+2. **Three Conversation Openers**
+   - Each acknowledges the forced-attendance dynamic without calling it out directly
+   - No cold-call energy; each should feel like a reason I'm calling *them* specifically
+   - Vary the angle: one around market pressure, one around a peer signal, one around their own trajectory
 
-2. Three conversation openers I can choose from.
-   - Each should acknowledge the forced-attendance context without calling it out directly.
-   - No cold-call energy. Each should feel like we have a reason to be talking.
-   - Vary the angle — one can anchor to their stage/growth, one to a market pattern, one to a specific decision or tension you've surfaced.
-
-3. Two opening questions for the first five minutes.
-   - Both should be genuine curiosity, not disguised product questions.
-   - First should open the door to their current thinking; second should probe into a specific tension or decision ahead.
-   - Avoid yes/no questions. Each should invite them to talk.
+3. **Two Discovery Questions for the First 5 Minutes**
+   - Each should nudge them toward naming a problem or tension, not toward my product
+   - Designed to work even if they're guarded; frame as curiosity about their world, not diagnosis
+   - One tied to the intel signal; one broader to their stage/role
 
 ## GROUNDING
-
-- Verdn is Series A fintech — expect scrappiness, rapid iteration, and pressure to scale. Avoid "enterprise maturity" framing.
-- Co-Founder & CEO means they own both product and revenue decisions. They're busy and skeptical of outsider input.
-- Forced attendance = skepticism baked in. Earn credibility through specificity, not enthusiasm.
-- This call is about understanding their world, not positioning Velara. Let that clarity sit underneath.
-- Avoid fintech jargon that feels like you're performing; avoid "optimization," "best practices," "cutting-edge."
+- Series A fintech: expect founder focus on unit economics, customer acquisition, and runway clarity — not platform consolidation yet
+- Co-Founder & CEO: owner mentality; skeptical of vendor pitches; moves fast and has limited patience for exploratory calls
+- "Forced to attend" means low prior interest — don't assume they know who Velara is or why you're calling; earn the assumption
+- "Challenge status quo" is the frame — position as a peer raising a market observation, not as a vendor
+- Avoid fintech jargon overload or regulatory red flags unless your intel signal demands it
+- No assumptions about their tech stack, customer base, or revenue model — let the questions surface it
 
 ## STANDARD RULES
 
@@ -217,31 +210,33 @@ After delivering the recon brief, pause and:
 
 ## Case 04: Objection Defuser #1 — Too expensive / Empathize & Pivot / Buy Time, No Commitment
 
-**Status:** OK | **Time:** 5267ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2065 | **Output tokens:** 379 | **Cost:** $0.0032
+**Status:** OK | **Time:** 7242ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2065 | **Output tokens:** 517 | **Cost:** $0.0037
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep on an active deal with Velara Revenue OS, and I just hit the "you're too expensive — we can build this in-house" objection mid-call. I need you to be my sales coach right now. Give me 3-5 sentences I can say verbatim or riff on that empathize with the build argument but pivot hard to our speed advantage — the real cost is time, not software. Follow it with one sharp follow-up question that keeps them talking and buys me time to land the next conversation without asking for a close.
+I'm a sales rep in an active deal with Velara Revenue OS, and I just hit the "you're too expensive — we'll build it in-house" objection mid-call. I need you to be my sales coach right now. Give me 3-5 sentences I can say verbatim or riff on — conversational, not stiff — that empathize with their cost concern, pivot to the real trade-off (our 3-week implementation versus their 9-month build), and set up a low-friction next step without asking for the close. Follow with one sharp follow-up question to keep them talking.
 
 ## STRUCTURE
-1. Empathetic reframe (3-5 sentences).
-   - Acknowledge the build option is real and viable — don't dismiss it.
-   - Pivot to the hidden cost: 9-month build vs. our 14-day live start.
-   - Keep it conversational, not scripted. Language I'd actually say.
+1. **Your defuse lines (3-5 sentences, conversational tone).**
+   - Lead with genuine empathy on the build-vs-buy math, not defensiveness.
+   - Pivot hard to the implementation timeline — that's our edge, not price.
+   - Anchor to real cost of delay (their team, opportunity cost, risk), not our feature list.
+   - Stay conversational; these are words I'd actually say, not a script.
 
-2. Follow-up question (one sentence).
-   - Opens the door to "let's dig into timeline," not "let's close this."
-   - Surfaces whether they've already scoped the build or are still exploring.
+2. **Follow-up question (single, open-ended).**
+   - Keep them talking; surface what "build" really means operationally for them.
+   - No yes/no closes; aim for buy time, not commitment.
 
 ## GROUNDING
-- "Too expensive" often masks timeline anxiety — they may not have 9 months, even if they won't say it.
-- Our 14-day implementation is a differentiator; don't bury it.
-- Avoid defensive language ("it's not that much," "you get what you pay for"). Stay curious.
-- Don't ask for the deal. Ask for the conversation.
-- Velara Revenue OS is the product — use it if natural, but don't force the name into this response.
+- Their objection is literal cost + confidence in internal build. Don't litigate the price; litigate the timeline and what it costs them to wait.
+- My strongest lever is speed: Velara Revenue OS goes live in 14 days, no implementation fees. Their build cycle is 9 months. That gap is the defuse.
+- Empathize & Pivot means: "I get it, building is cheaper on paper" → (pivot) → "but here's what 9 months actually costs you while we're live."
+- Push for buy time only — a follow-up call, a deeper conversation with their tech team, a pilot timeline. No "sign the contract" energy.
+- Avoid ROI math, cost-benefit tables, or feature comparisons. They're not listening for that mid-objection.
+- Avoid sounding defensive or dismissive of their build option. They're serious about it; treat it seriously.
 
 ## STANDARD RULES
 
@@ -263,31 +258,33 @@ After delivering the defuser response and follow-up question, pause and:
 
 ## Case 05: Objection Defuser #2 — Bad timing / Stick to ROI / Offer Two Alternatives
 
-**Status:** OK | **Time:** 6131ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2065 | **Output tokens:** 414 | **Cost:** $0.0033
+**Status:** OK | **Time:** 6417ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2065 | **Output tokens:** 452 | **Cost:** $0.0035
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I just hit a reorg objection mid-call — prospect says now is not a good time because they just went through organizational change. Be my in-call coach: give me 3-5 sentences I can say right now (verbatim or riff), grounded in ROI, that reframe the reorg as a reason *to* move forward, not delay. Then one follow-up question to keep momentum.
+I'm a sales rep in an active deal with a prospect who just pushed back on timing due to a recent reorg. I need you to be my in-call coach and give me 3-5 sentences I can say *right now* — conversational, not stiff — that reframe the reorg as a reason *to* move, not delay. Anchor hard to rep ramp time and ROI, then land a follow-up question that opens the door to two alternatives for next steps.
 
 ## STRUCTURE
-1. Opening acknowledgment + pivot
-   - Validate the reorg friction, then immediately anchor to rep ramp and deal velocity as the ROI tailwind during transitions.
+1. Defuser (3-5 sentences, conversational tone)
+   - Acknowledge the reorg without dwelling on it
+   - Flip the timing: reorg = peak window for rep productivity gains, not a reason to wait
+   - Lead with the 40% rep ramp reduction and what that unlocks during transition chaos
+   - Land on ROI or resource efficiency — what matters to *them* in this moment
 
-2. Language for the rep to say
-   - 3-5 conversational sentences. Actual words, not a framework. Use our 40% rep ramp lift as the concrete lever. No jargon.
-
-3. Follow-up question to push for Two Alternatives
-   - One question that moves the prospect toward picking a path (timeline A or B) rather than stalling.
+2. Follow-up question
+   - One question that naturally sets up either "quick pilot/trial" or "async review + decision timeline"
+   - No yes/no questions — open the door to movement
 
 ## GROUNDING
-- Reorg = chaos + data inconsistency + rep friction. Velara Revenue OS cuts through that by auto-capturing deal activity and surfacing real-time signals. That's the ROI story here.
-- The 40% rep ramp lift is our strongest counter to "bad timing" — tie it directly to their transition pain.
-- Two Alternatives: sketch a 2-week pilot start or a full rollout kickoff. Don't ask "does next week work?" — offer a choice.
-- Conversational tone. Rep should sound like a peer who gets reorgs, not a closer forcing urgency.
-- Avoid: "Let's revisit in Q2," "reorg will settle down," promises about timeline, any unverified metrics on their transition.
+- This prospect is mid-reorg and already stressed; don't add process friction. Speed and simplicity are the play.
+- The 40% rep ramp cut is real and verified — it's our strongest lever here. Use it without hedging.
+- Avoid generic "let's stay in touch" language. Push for a concrete next move (two paths, rep chooses).
+- Don't mention implementation complexity, integration risk, or any friction. Reorg = they need *less* friction, not more talk.
+- Velara Revenue OS eliminates manual CRM updates and gets live in 14 days — if you need to hint at speed/simplicity, those are your anchors. Don't lead with them; they support the ROI play.
+- Conversational tone means contractions, short sentences, no corporate polish. Sound like a coach, not a pitch deck.
 
 ## STANDARD RULES
 
@@ -309,25 +306,35 @@ After delivering the defuser response and follow-up question, pause and:
 
 ## Case 06: Objection Defuser #3 — Needs committee approval / Push Back Directly / Push for Firm Commitment
 
-**Status:** OK | **Time:** 4858ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2061 | **Output tokens:** 356 | **Cost:** $0.0031
+**Status:** OK | **Time:** 6419ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2061 | **Output tokens:** 453 | **Cost:** $0.0035
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform. I'm in a live call with a prospect who just hit me with a committee objection. Be my sales coach: give me 3-5 sentences I can say verbatim or riff on that push back directly without sounding defensive, anchor to our 30-day pilot with single-sig approval, and land a firm commitment on next steps before we hang up.
+I'm a sales rep in an active deal with Velara Revenue OS, and my prospect just hit me with a committee objection. I need you to be my in-call coach: give me 3–5 sentences I can say right now (conversational, natural — not a script framework) that push back directly on the committee delay, anchor to our 30-day pilot with single-signature approval, and move us toward a firm commitment. Keep it conversational and lethal.
 
 ## STRUCTURE
-1. **Opening counter (3-5 sentences)** — Acknowledge the committee reality, but reframe it as solved by our pilot model. Don't sound frustrated or pushy; sound like you've heard this before and have a clean path through it. Anchor to single-signature approval and 30-day risk-free window.
 
-2. **Follow-up question** — One sharp question that locks in a firm commitment (date, person, action) without leaving room for "let me think about it." Target their next move, not their feelings.
+1. **The Defuser (3–5 sentences, verbatim or riff-able)**
+   - Push back on the committee gate — name the cost of delay without being preachy
+   - Anchor hard to the 30-day pilot as the de-risk play (one signature, no committee required, see results fast)
+   - Reframe the ask: committee can see proof in 30 days, not theorize now
+   - Tone: direct, confident, not defensive
+
+2. **The Commitment Hook (one sharp follow-up question)**
+   - Force a binary choice: pilot start or no — don't leave room for "let me think"
+   - Prime for "yes" by making the question assumptive (implies pilot is moving forward)
 
 ## GROUNDING
-- Their objection is real; don't minimize it. The strength here is that our 30-day pilot removes committee friction — they can prove value before selling the full vision.
-- "Firm commitment" means a specific date, owner, or next meeting scheduled before the call ends. No soft closes.
-- Avoid defensive language ("You don't need to," "It's not that complicated"). Stay confident and outcome-focused.
-- This is a direct-push calibration — lean into the pilot as the decision-shortcut, not a consolation prize.
+
+- Committee objection is real but almost always a stall — the pilot burns that down by proving value in 30 days with zero risk to them
+- Single-signature approval means the prospect can unblock this without consensus (don't let them hide behind org structure)
+- "Firm commitment" here = signed pilot agreement with a start date locked in
+- Velara Revenue OS gets deals live in 14 days — use that pace as your ally (they'll see signals fast)
+- Avoid: lengthy ROI pitches, multiple decision-maker scenarios, "let's schedule a follow-up" phrasing
+- This prospect is close enough to object; they're not a tire-kicker — treat them as a buyer with friction, not a skeptic
 
 ## STANDARD RULES
 
@@ -349,45 +356,45 @@ After delivering the defuser response and follow-up question, pause and:
 
 ## Case 07: Battlecard #1 — vs Salesforce / Drop Subtle Doubts / First Conversation
 
-**Status:** OK | **Time:** 7694ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2046 | **Output tokens:** 568 | **Cost:** $0.0039
+**Status:** OK | **Time:** 7908ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2046 | **Output tokens:** 688 | **Cost:** $0.0044
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I'm on a first conversation with a prospect likely using Salesforce, and I need to uncover friction around implementation complexity and time-to-value without naming Salesforce as the enemy. Be my competitive intelligence specialist: give me five discovery questions that surface pain points where my speed and simplicity win — no implementation fees, live in three weeks — and coach me on what to listen for in each answer.
+
+I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that eliminates CRM data rot and surfaces deal risk before it's fatal. I'm on a first conversation with a prospect who's likely running Salesforce, and I need to uncover friction with their current setup without positioning myself as the enemy. Be my competitive intelligence specialist: give me five discovery questions that surface pain points Salesforce typically creates, then coach me on why each one works and what signal to listen for in their answer.
 
 ## STRUCTURE
 
-1. Question on implementation burden
-   - Listen for mentions of lengthy timelines, setup complexity, or resource drain during rollout.
-   - Signal that matters: whether they've felt friction getting a system live or worry about it delaying their next cycle.
+1. **Question 1: Data freshness and manual lift**
+   - Listen for: complaints about reps not updating CRM, forecasts that drift mid-cycle, or time spent on data hygiene vs. selling.
+   - Why it works: Velara auto-captures deal activity from email and calendar — this question exposes the manual tax Salesforce demands.
 
-2. Question on ongoing CRM maintenance
-   - Listen for frustration around manual data entry, reps avoiding the system, or forecasting lag.
-   - Signal that matters: whether they see CRM upkeep as a friction point today, not someday.
+2. **Question 2: Forecast reliability**
+   - Listen for: admissions that pipeline visibility changes week to week, missed forecasts, or distrust in numbers when execs ask for them.
+   - Why it works: We guarantee forecast accuracy within 4% backed by SLA — their answer signals whether forecast confidence is broken.
 
-3. Question on forecast accuracy and trust
-   - Listen for skepticism about pipeline visibility or complaints that forecasts don't match reality.
-   - Signal that matters: how much they rely on their current system for prediction vs. gut feel or external workarounds.
+3. **Question 3: Implementation burden and timeline**
+   - Listen for: mentions of months-long rollouts, expensive consultants, or staged go-lives; hesitation to change systems.
+   - Why it works: We live in 3 weeks with no implementation fees or professional services — this question reveals their sunk-cost pain.
 
-4. Question on speed of adoption across the team
-   - Listen for stories about slow rollouts, training bottlenecks, or reps resisting new tools.
-   - Signal that matters: whether speed of go-live and ease of use are decision criteria for them.
+4. **Question 4: In-call visibility and coaching**
+   - Listen for: lack of real-time signals during calls, post-call regret over missed cues, or reps flying blind on deal status.
+   - Why it works: Velara surfaces in-call coaching signals in real time — their answer shows whether they're reactive or proactive on deal momentum.
 
-5. Question on hidden costs and resource allocation
-   - Listen for mentions of consulting fees, implementation staff, or ongoing vendor support contracts.
-   - Signal that matters: whether they've been burned by surprise costs or resource overhead, making simplicity a buying lever.
+5. **Question 5: Integration friction and data sync**
+   - Listen for: resentment about middleware, manual syncing between tools, or data living in silos across their stack.
+   - Why it works: We offer native bidirectional sync with no middleware — this question exposes integration tax they're paying.
 
 ## GROUNDING
 
-- Anchor all questions to their current workflow, not mine. Never say "with Velara" or "unlike Salesforce."
-- These are discovery questions — each one surfaces a friction point I can address later without positioning myself as anti-competitor.
-- First conversation means they may not volunteer pain. Ask open-ended, let them land on the frustration naturally.
-- Salesforce is the incumbent here; they may defend it or minimize complaints. Stay curious, not combative.
-- Speed (three weeks, no implementation fees) is my sharp edge. Let their answers reveal where speed matters to them before I mention it.
-- If they don't surface a specific pain in their answer, don't invent one — move to the next question or ask a follow-up anchor to their actual reality.
+- Anchor every question to a real Salesforce friction point, not a Velara feature pitch. The question itself should feel diagnostic, not promotional.
+- These are first-conversation openers — curiosity-driven, not accusatory. Never say "Salesforce is broken" or name the incumbent as the problem.
+- Listen for hesitation, vagueness, or defensive tone in their answers — those are your signals that friction exists.
+- Avoid industry jargon that distances you from their actual workflow. Stay close to how they talk about their day-to-day (data entry, forecast calls, call prep).
+- If the prospect volunteers that they're on Salesforce, you've got permission to dig deeper. If they haven't mentioned their CRM yet, lead with questions about the pain, not the platform.
 
 ## STANDARD RULES
 
@@ -409,46 +416,36 @@ After delivering the 5 discovery questions and coaching notes, pause and:
 
 ## Case 08: Battlecard #2 — vs Gong / Hit a Feature Gap / Building the Business Case
 
-**Status:** OK | **Time:** 11148ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2051 | **Output tokens:** 803 | **Cost:** $0.0049
+**Status:** OK | **Time:** 6621ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2051 | **Output tokens:** 497 | **Cost:** $0.0036
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that surfaces deal risk and in-call coaching signals while deals are still winnable. I'm in a discovery call with a prospect who's been exploring Gong, and we're in the business-case-building stage. I need you to be my competitive intelligence specialist: arm me with five discovery questions that uncover friction with post-call-only coaching without naming Gong as the enemy. The questions should expose the gap between what they're getting (analysis after the call is over) and what they actually need (signals during the call, when they can still act). Let the prospect reveal the pain organically.
+I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform. I'm prepping for a discovery call with a prospect who's likely using Gong, and I need to uncover where post-call analysis leaves them exposed. My assistant is my competitive intelligence specialist. Give me five discovery questions that surface the friction between reactive insight and real-time coaching, without naming Gong as the villain. I'm building the business case, so each question should expose a gap they're living with — not an attack on their tool.
 
 ## STRUCTURE
 
-1. **Question 1: The Reactive Trap**
-   - Opens with their current process around real-time visibility during active calls — what they know *while* the call is happening vs. what they learn after.
-   - Listen for: silence, hedging, or admission that they discover issues in post-call review (too late to course-correct).
+1. Five numbered discovery questions — one-line coaching note below each.
+   - Each question surfaces a real-time vs. post-call gap without mentioning Gong by name.
+   - Coaching note: why this question matters and what answer signals deal risk or friction.
+   - No scripted dialogue. No "you should ask" — write the actual question I can ask.
 
-2. **Question 2: The Coaching Timing Gap**
-   - Surfaces whether they're getting guidance when reps can still use it — during the conversation vs. in retrospect.
-   - Listen for: vagueness about in-call support, or they'll describe only post-call feedback loops.
+2. Listen-for signals — bulleted callouts per question.
+   - Red flags that indicate they're stuck in reactive cycles.
+   - Green flags that show openness to real-time intervention.
 
-3. **Question 3: The Forecast Confidence Leak**
-   - Probes whether they trust their pipeline visibility before the deal craters or if they're learning about risk after momentum is lost.
-   - Listen for: anxiety about forecast surprises, deals they thought were solid until they weren't, or reliance on manual CRM updates.
-
-4. **Question 4: The Rep Friction Point**
-   - Explores whether reps are overwhelmed by *how much* analysis they're getting post-call and whether it feels actionable in the moment or like busy work.
-   - Listen for: frustration with data volume, "we get reports but reps don't change behavior," or tools that feel external to the actual sales motion.
-
-5. **Question 5: The Cost of Waiting**
-   - Asks what happens to deals when they discover friction or misalignment *after* the call — how much reps have to undo or recover.
-   - Listen for: deal slip, longer cycles, reps going off-script, or the need for re-engagement that shouldn't have been necessary.
+3. Pivot notes — how to thread the conversation back to Velara's real-time edge.
+   - One sentence per question; tie their friction directly to in-call coaching, not post-call review.
 
 ## GROUNDING
 
-- **Anchor to the real-time gap:** Gong is a post-call player — your edge is signals *during* the call. Every question should naturally expose the gap between post-call analysis and in-call coaching.
-- **No competitor naming:** Don't say "Gong doesn't do this." Let the prospect describe their current tool's limitations as they talk through their workflow — they'll name it if it comes up naturally.
-- **Feature Gap lens:** You're hitting the timing delta, not feature breadth. Frame around *when* insights arrive, not how many insights they get.
-- **Business Case context:** They're evaluating trade-offs — probe what's broken enough to justify a change and what they'd measure to prove a solution works.
-- **Listen hard:** The coaching note is *not* a script to interrupt with. It's a signal flagged for you to pursue deeper or pivot if the answer surprises you.
-- **Avoid:** Buzzwords like "AI-powered," "real-time intelligence," "deal momentum." Stick to plain language about their actual process: calls, coaching, deals moving or stalling.
+- Anchor to the real-time vs. post-call gap. Gong excels at recorded insight; the friction is timing — deals break mid-call, not on the review.
+- This prospect is building the business case, so they're evaluating trade-offs. Lead with operational pain (reps missing cues, deals slipping in real time) not feature lists.
+- Avoid: "Unlike Gong," "Gong doesn't," "We're better than Gong." Never name the competitor as the foil.
+- Avoid: buzzwords like "AI-powered," "next-gen," "game-changer." Use plain language tied to deal outcomes.
+- If I haven't given you a specific CRM, industry, or deal size, don't assume one. Write questions tight enough to work across verticals and deal stages.
 
 ## STANDARD RULES
 
@@ -470,39 +467,40 @@ After delivering the 5 discovery questions and coaching notes, pause and:
 
 ## Case 09: Battlecard #3 — vs HubSpot / Go Head-to-Head / Final Vendor Selection
 
-**Status:** OK | **Time:** 7315ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2051 | **Output tokens:** 580 | **Cost:** $0.0040
+**Status:** OK | **Time:** 7177ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2051 | **Output tokens:** 590 | **Cost:** $0.0040
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara pitching Velara Revenue OS to a prospect in final vendor selection, and I know they're evaluating HubSpot CRM. I need you to be my competitive intelligence specialist and arm me with discovery questions that surface friction in their HubSpot workflow — specifically around our core advantage: native revenue intelligence without third-party integrations. Don't name HubSpot as the enemy; let their answers reveal the gap. Give me five questions, each with a one-line coaching note on what signal I'm listening for.
+I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform. I'm in final vendor selection against HubSpot CRM and need to uncover friction points the prospect hasn't named yet. Be my competitive intelligence specialist and arm me with discovery questions that expose where HubSpot falls short without positioning it as the enemy — I want the prospect to surface the gap themselves.
 
 ## STRUCTURE
 
-1. **Question 1: CRM data accuracy pain**
-   - Listen for: complaints about manual updates, deals slipping through cracks, forecast surprises mid-month, or time spent chasing data instead of selling.
+1. **Five discovery questions (numbered 1–5).**
+   - Each question targets a specific operational friction likely to surface native revenue intelligence as the differentiator.
+   - Follow each question with a one-line coaching note: why it works + what signal to listen for in their answer.
+   - No scripted dialogue. Frame as open-ended questions I can ask naturally; I'll land them in my words.
 
-2. **Question 2: Pipeline visibility latency**
-   - Listen for: delays in surfacing deal risk, post-call discovery of stalled deals, or reliance on email threads to piece together momentum.
+2. **Anchor each question to a real gap.**
+   - One should probe manual data entry burden (email/calendar sync).
+   - One should probe forecast visibility and accuracy.
+   - One should probe in-call decision-making support.
+   - One should probe implementation friction and time-to-value.
+   - One should probe integration sprawl or third-party dependency.
 
-3. **Question 3: Visibility into what's actually moving deal stage**
-   - Listen for: frustration about guessing what activity truly advances deals, lack of email-to-stage attribution, or uncertainty about buyer engagement signals.
-
-4. **Question 4: Integration burden and maintenance overhead**
-   - Listen for: mentions of glue tools, third-party bolt-ons, sync failures, or time spent maintaining connectors instead of using them.
-
-5. **Question 5: Forecast fidelity and confidence**
-   - Listen for: confidence gaps in predictions, unplanned misses, or inability to explain forecast swings to leadership.
+3. **Listen-for callouts on each.**
+   - Flag language that signals pain ("we spend hours," "our reps won't update," "forecasts are off," "we're stitching together tools").
+   - Calibrate coaching notes to final-stage buying — the prospect is comparing vendors, so your note should point to what answer suggests HubSpot is the weaker choice.
 
 ## GROUNDING
 
-- Our edge is native revenue intelligence baked into the OS — no middleware, no maintenance tax. Let their answers prove HubSpot alone doesn't deliver this.
-- Final vendor selection = they're comparing. Land questions that expose the switching cost of staying with HubSpot (rework, tool sprawl, data delays) without framing it as a weakness. Let them see it themselves.
-- Anchor to real friction: manual CRM work, forecast surprises, pipeline blindness. These are universal — not Velara-specific sales language.
-- Avoid: competitive shade, feature checklist tone, or anything that sounds like "HubSpot can't do X." Your job is uncovering their actual operational pain, not prosecuting a case.
-- If they answer with "HubSpot does that," don't defend. Pivot to: *"How's it working for your team in practice?"* — watch for the gap between capability and reality.
+- **Competitor anchor:** HubSpot CRM is the comparison. Our edge is native revenue intelligence — no middleware, no third-party integrations.
+- **Stage calibration:** Final vendor selection. The prospect has likely kicked the tires on both platforms. Questions should feel like due diligence, not discovery — they're deciding, not learning.
+- **Head-to-head posture:** Never say "HubSpot doesn't do X." Instead, ask questions that let the prospect admit friction with their current setup or their understanding of what HubSpot requires operationally.
+- **Avoid buzzwords for this audience:** Skip "AI-powered," "intelligent," "modern," "best-of-breed," or other hollow category language. Prospect is past that — speak to concrete operational gaps.
+- **No invented specifics:** Don't reference HubSpot features, pricing, implementation timelines, or limitations I haven't given you. Anchor to the gap (native revenue intelligence) and let the question do the work.
 
 ## STANDARD RULES
 
@@ -524,27 +522,25 @@ After delivering the 5 discovery questions and coaching notes, pause and:
 
 ## Case 10: Cold Hook #1 — LinkedIn DM / Save Time / Just posted a thought leadership piece
 
-**Status:** OK | **Time:** 5536ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2014 | **Output tokens:** 353 | **Cost:** $0.0030
+**Status:** OK | **Time:** 5618ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2014 | **Output tokens:** 386 | **Cost:** $0.0032
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform. I'm reaching out cold to Marcus Reid on LinkedIn after he posted on pipeline efficiency. I need a short-form hook (under 100 words) that earns 90 seconds of attention by connecting his public signal to a specific problem I solve, without sounding like I'm chasing the post. Keep it conversational, DM-native, and anchor to time-saving — that's the headline value that lands with busy ops leaders.
+I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that kills manual CRM work and surfaces deal risk before it blows up. I'm reaching out cold to Marcus Reid on LinkedIn after he posted about pipeline efficiency. I need you to write a DM hook under 100 words that lands on his recent post, nods to the signal it sends, and earns 90 seconds of his attention. Anchor to the time-savings angle — that's my opening wedge here.
 
 ## STRUCTURE
-1. Opening line that references his signal without flattery — make the connection feel like recognition, not fandom.
-2. One sharp insight or tension tied to pipeline efficiency that lands for someone his audience (likely ops or revenue leaders) feels daily.
-3. Soft ask that doesn't demand a call — something he can say yes to in a reply or a click.
-4. Keep tone peer-to-peer and benefit-forward; avoid product jargon and urgency language.
+1. Hook — Open with a genuine micro-callback to his post (specific enough to show you read it, not generic). Surface the time problem underneath pipeline efficiency without naming CRM busywork yet.
+2. Bridge — One sentence that connects his problem to a concrete outcome (reps not chasing stale data, deals staying visible, forecasts that don't drift).
+3. Close — Soft ask for a brief sync. No pressure, no call booking link. Leave the next move in his court.
 
 ## GROUNDING
-- He posted on pipeline efficiency — use that as anchor, not as flattery fodder.
-- Time-saving is the headline value; tie the hook to speed or manual work he's likely aware of.
-- LinkedIn DM voice: direct, conversational, no corporate polish.
-- Flag any assumption about his role or company; anchor only to the post signal.
-- Avoid: "I saw your post", "loved your article", "interested in learning more", "let's hop on a call", "game-changing", industry jargon.
+- Specificity: His post got 8k likes — that's the fact. Use it or reference the signal (high engagement on pipeline talk). Don't invent stats about pipeline decay or CRM data rot; those live in the bridge only as pattern-level observations.
+- Tone: Peer-to-peer, curious, not salesy. He just published thought leadership — meet him as someone who noticed, not someone selling.
+- Avoid: Generic "saw your post" openers, feature dumping, jargon (Revenue OS, SLA, bidirectional sync). Keep it human.
+- Anchor: Time savings is the headline. Everything else folds into that frame.
 
 ## STANDARD RULES
 
@@ -566,28 +562,32 @@ After delivering the outreach hook, pause and:
 
 ## Case 11: Cold Hook #2 — Email — Casual / Cut Cost / Competitor just had a data breach
 
-**Status:** OK | **Time:** 6640ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2023 | **Output tokens:** 473 | **Cost:** $0.0035
+**Status:** OK | **Time:** 5149ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2023 | **Output tokens:** 393 | **Cost:** $0.0032
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that kills manual CRM updates and surfaces deal risk before it costs you. I'm cold-emailing Priya Nair following her company's recent security incident with their current vendor. My job is to earn 90 seconds of attention and land a conversation. I'm positioning Velara as a smarter, lower-friction alternative that works out of the box — cost as the edge, but trust the hook to do the work.
+I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that auto-captures deal activity and surfaces coaching signals live. I'm reaching out cold to Priya Nair via email following Outreach.io's recent security incident. Write a short-form outreach (under 100 words) that hooks on cost savings and positions my platform as a faster, simpler alternative — casual tone, zero hard sell.
 
 ## STRUCTURE
-1. **Subject line** — One punchy phrase that nods to the trigger (security/vendor disruption) without being pushy or presumptuous.
-
-2. **Body (under 100 words)** — Hook on the incident (don't dwell on it; pivot fast), land the value shift (what they gain by switching, not what went wrong), and close with a single, soft ask. Tone: casual, peer-level, not corporate. No "solutions," no "synergies." Treat the hook as permission to talk, not a lecture.
-
-3. **Signature** — Name, title, company, one link (Velara Revenue OS product page). Skip the "let's schedule" CTA; let curiosity pull them.
+1. Subject line — one sharp reason to open, anchored to cost or simplicity; no clickbait.
+2. Salutation — her first name only.
+3. Body — 3–4 sentences max.
+   - Open with the trigger (security incident) as permission to reach out; don't overstate it.
+   - Pivot to a single, credible cost angle (implementation speed or reduced overhead).
+   - Name Velara Revenue OS one time; let capability speak louder than feature list.
+   - Soften close — curiosity, not urgency.
+4. Signoff — first name, casual.
 
 ## GROUNDING
-- Anchor to the trigger: vendor incident is the opening, not the pitch. The move is to Velara's speed and simplicity (lives in 14 days, zero implementation fees).
-- One differentiator only: fast time-to-value with native Salesforce/HubSpot sync — no middleware, no setup tax.
-- Avoid "security" talk or vendor-bashing. Don't name Outreach.io directly. Stay above the incident; imply upgrade, not escape.
-- Casual email means short lines, conversational rhythm, no jargon. "Pipeline intelligence" and "CRM" are fine; skip "revenue OS" label-speak in the body.
-- Cost headline is the permission structure — but the hook wins on ease and speed, not price. Lead with simplicity.
+- Priya is a buyer rattled by vendor risk; lead with "simpler" and "faster," not features.
+- The security incident is your opener permission — use it once, then move forward.
+- Cost angle: anchor to speed-to-value (live in 14 days, no implementation fees) or reduced manual work, not abstract savings figures.
+- Casual tone means contractions, shorter sentences, no corporate jargon.
+- Do not mention Outreach.io by name after the open; don't play defense.
+- No stats, no "other clients," no unverified claims about security posture.
 
 ## STANDARD RULES
 
@@ -609,27 +609,29 @@ After delivering the outreach hook, pause and:
 
 ## Case 12: Cold Hook #3 — Email — C-Suite / Grow Revenue / Missed quarterly target
 
-**Status:** OK | **Time:** 5547ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2024 | **Output tokens:** 377 | **Cost:** $0.0031
+**Status:** OK | **Time:** 6404ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2024 | **Output tokens:** 447 | **Cost:** $0.0034
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS to David Kowalski, a C-suite exec whose company missed Q3 ARR target by 18% (disclosed in their earnings call). I need you to write a short-form cold email under 100 words that earns 90 seconds of attention and plants a hook around revenue recovery — no generic openers, no "I noticed your company," no false urgency. Land it in his inbox as a peer insight, not a pitch.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm cold-emailing David Kowalski about a missed Q3 ARR target. My job is to write a tight outreach message (under 100 words) that breaks through — no generic "I noticed you missed target" energy, no hard sell. I need you to craft a hook that makes him curious enough to take 90 seconds on a response, grounded in the specific miss and what it signals about his pipeline visibility.
 
 ## STRUCTURE
-1. Subject line — specific to the miss (Q3 ARR gap), curiosity without clickbait.
-2. Salutation — direct to David by name, no title-drop.
-3. Body — Three sentences max. Open with the trigger (the miss). Anchor to one sharp insight about *why* pipeline visibility breaks down after a miss. Close with a single, low-friction next step (brief call, not a deck).
-4. Signature — Title, company (Velara), link to velara.io.
+1. **Subject line** — Sharp, one-line, no urgency markers or clickbait. Tie to the ARR miss as the frame, not Velara.
+
+2. **Body (under 100 words total)** — Open with the trigger (the miss), then one sharp implication about what that tells you about deal visibility. Close with a low-friction next step (not a meeting ask yet — just curiosity).
+
+3. **Signature** — Your name, title, Velara, and a link to velara.io. Nothing else.
 
 ## GROUNDING
-- The 18% miss is the only number you have — own it, don't soften it or invent context around it.
-- C-suite reads for signal, not noise. Skip product names, feature lists, and "see how others..." social proof.
-- The hook is *visibility* — after a miss, teams scramble to patch forecasts without fixing the root (opaque pipeline). Land that tension, not the solution.
-- Avoid: "synergy," "partner," "best practices," "next-generation," anything that smells like template mail.
-- One call to action only. One.
+- Anchor hard to the 18% miss. That's the only specificity you have — make it work.
+- The miss signals forecast blindness or pipeline quality issues; pick one and lean in. Don't list both.
+- Avoid "pipeline intelligence" jargon — David won't care about the category. Talk about what the miss means operationally.
+- No mention of Salesforce, HubSpot, integrations, auto-capture, or in-call coaching — those are internal features, not his problem.
+- David is C-Suite, post-miss, likely defensive. Tone: forensic, not congratulatory. You're a peer observing a pattern, not a vendor smelling blood.
+- No stats, guarantees, or "proven" claims — anchor only to the disclosed 18% miss and standard industry context (e.g., "missed targets usually stem from X").
 
 ## STANDARD RULES
 
@@ -651,30 +653,26 @@ After delivering the outreach hook, pause and:
 
 ## Case 13: Cold Hook #4 — LinkedIn DM / Grow Revenue / Sparse trigger (D1 fabrication sentinel)
 
-**Status:** OK | **Time:** 5736ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2009 | **Output tokens:** 401 | **Cost:** $0.0032
+**Status:** OK | **Time:** 4346ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2009 | **Output tokens:** 314 | **Cost:** $0.0029
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS—a real-time pipeline intelligence platform that kills CRM data rot and surfaces deal risk before it tanks forecasts. I'm reaching out cold to Jordan Mehta via LinkedIn DM after they missed last quarter. Be my cold outreach specialist and write a hook that lands in 90 seconds or less, punches on the revenue growth angle, and earns a reply without sounding salesy.
+I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that surfaces deal risk before it kills forecast. Jordan Mehta missed their last quarter, and I'm cold-reaching via LinkedIn DM to earn 90 seconds of attention. Write me a short-form hook (under 100 words) that lands without pitch — anchor to their miss and position what I solve.
 
 ## STRUCTURE
-1. **Hook (under 100 words total)**
-   - Open with the missed quarter as the tension point—don't bury it, lean into it
-   - Pivot immediately to what's fixable now (forecast visibility, deal risk signals, pipeline confidence)
-   - One sharp reason why Velara Revenue OS fits: we surface deal risk in real time, not in hindsight
-   - Close on a low-friction next step (call, 10 min, no pressure rhythm)
-   - LinkedIn DM tone: conversational, direct, zero corporate stiffness
+1. Hook (single punchy line) — opens on the miss, not the product; make Jordan feel seen.
+2. Bridge (one sentence max) — connect the miss to the real problem underneath (forecast breakage, pipeline opacity, or deal risk that shipped undetected).
+3. Signoff (one line) — soft ask for a conversation; no "let's sync" or calendar spam language.
 
 ## GROUNDING
-- Anchor to the missed quarter as the context; don't invent why or what happened—use "missed last quarter" exactly as stated
-- "Grow Revenue" is the headline value—thread it through the close (faster forecasts → fewer surprises → revenue moves)
-- Velara Revenue OS must be named; the auto-capture and real-time deal-risk differentiators are your strongest levers here
-- Avoid: generic "pipeline health" talk, vague ROI promises, buzzwords like "unlock" or "empower"
-- Jordan is cold—no warm inbound, no prior relationship—so earn curiosity, don't assume familiarity
-- Keep it punchy; LinkedIn DMs that feel long kill response rate
+- Missed last quarter is the only trigger I have; don't invent percentages, named deals, or specifics beyond what I've given you.
+- No product name or features in the hook or bridge — this is about *their* problem, not my solution.
+- DM voice: direct, conversational, no corporate gloss.
+- Avoid buzzwords like "innovative," "cutting-edge," "disrupt," or "synergy."
+- Keep the tone peer-to-peer; I'm problem-curious, not vendor-pushy.
 
 ## STANDARD RULES
 
@@ -696,29 +694,35 @@ After delivering the outreach hook, pause and:
 
 ## Case 14: Follow-Up Forward #1 — Skeptical / Department Manager / basic call notes
 
-**Status:** OK | **Time:** 7127ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2231 | **Output tokens:** 530 | **Cost:** $0.0039
+**Status:** OK | **Time:** 7085ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2231 | **Output tokens:** 561 | **Cost:** $0.0040
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I just finished a call with a prospect (department manager, HubSpot shop) who surfaced a concrete pain: their ops team burns 8 hours a week on manual pipeline updates. They're skeptical but engaged. I need you to be my post-meeting strategist and produce two assets: a follow-up email I send them that anchors to the biggest moment from the call, and a forward-ready recap they can send to their internal decision-maker without editing a word.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished a call with a prospect (department manager, skeptical energy) who spends 8 hours a week on manual pipeline updates and uses HubSpot. I need you to produce two follow-up assets: a rep-to-prospect email anchored to their biggest pain point and one specific moment from the call, and a forward-ready internal recap they can send to their decision-maker without editing—written in their voice, not mine.
 
 ## STRUCTURE
 
-1. **Follow-Up Email (Rep → Prospect)** — Opens with their ops time bleed, not pleasantries. References the HubSpot integration moment from the demo. Closes with one clear next step. No feature lists, no "per our conversation," no marketing language.
+1. **Follow-Up Email (Rep → Prospect)**
+   - Open with the 8-hour manual update burden as the aha, not pleasantries.
+   - Reference one specific call moment: the HubSpot integration question Sarah raised or the dashboard demo you walked through.
+   - Close with one concrete next step (no vague "let's sync again").
+   - Three to four short paragraphs. No feature lists, no "per our conversation," no marketing language.
 
-2. **Forward-Ready Recap (Prospect → Their Decision-Maker)** — Five to seven bullets in prospect voice. Sequence: their pipeline-update problem in their own words → what they observed in the demo → why it matters to their stated priority → two concrete proof points → one proposed next step. Strip rep name, product branding, any dollar figures I didn't mention. Write as if they're pitching internally.
+2. **Forward-Ready Recap (Prospect → Their Decision-Maker)**
+   - Five to seven scannable bullets, one sentence each, written as if the prospect authored it—no rep voice, no Velara branding.
+   - Flow: problem statement → what they saw in the demo → how it maps to their stated priority → two concrete proof points → proposed next step.
+   - Exclude: my name, product marketing copy, any dollar amounts you don't have from my inputs.
 
 ## GROUNDING
 
-- **The aha is real:** 8 hours a week on manual CRM updates. That's the anchor. Everything threads back to time reclaimed.
-- **One call moment to reference:** HubSpot integration. They asked about it; you saw it live. That's your specificity — don't invent other moments.
-- **Their posture:** Skeptical. Don't oversell. Lead with pragmatism (time saved, native sync, no implementation overhead), not enthusiasm.
-- **Prospect voice in Asset 2 is critical:** No "Velara," no rep's name, no "solution," no marketing speak. Write as if they're summarizing for a peer or exec who wasn't on the call.
-- **Next step must be concrete:** Not "let's chat again" — something they can action or decide on (a follow-up meeting, a pilot scope, a stakeholder intro, etc.).
-- **Avoid:** Congratulatory tone, feature-benefit tables, invented call moments, percentages or timelines I didn't supply, "as discussed," CYA language.
+- The call surfaced one clear pain: 8 hours a week lost to manual CRM work. Anchor both assets there—it's their language, their cost.
+- Sarah asked about HubSpot integration. Velara Revenue OS has native bidirectional sync with HubSpot—no middleware. That's your proof point; use it cleanly in both assets.
+- Skeptical mood = don't oversell. The email should feel like I'm reflecting back what *they* said, not pitching. The recap should read like a sober, fact-based business case, not enthusiasm.
+- The dashboard demo is your specific call moment. Reference it concretely in the email (what she actually saw or asked about), but keep it brief.
+- Write the recap in peer language—how a department manager would brief their CFO or VP, not how a vendor would brief a buyer. No "Velara eliminates data rot" speak; instead, "manual updates drop because the system captures activity automatically."
 
 ## STANDARD RULES
 
@@ -740,36 +744,36 @@ After delivering the follow-up email and forward-ready recap, pause and:
 
 ## Case 15: Follow-Up Forward #2 — Bought-In / VP & Director / detailed call notes
 
-**Status:** OK | **Time:** 6796ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2251 | **Output tokens:** 586 | **Cost:** $0.0041
+**Status:** OK | **Time:** 7054ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2251 | **Output tokens:** 529 | **Cost:** $0.0039
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I just finished a discovery call with a VP / Director-level prospect (James) who surfaced a critical forecast accuracy problem — their pipeline data is stale by board time, driving a 60% forecast accuracy rate and missed targets. He's bought-in and wants to pilot in April. I need you to produce two assets that let him evangelize internally without touching them: a follow-up email from me that anchors to his pain and one specific moment from our call, and a forward-ready recap he can send to his decision-maker that sounds like it came from him, not from a vendor.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished discovery with a VP/Director who surfaced a forecast accuracy problem — their pipeline data goes stale before it hits the board, tanking visibility. They're bought-in and want to pilot in April. I need you to produce two follow-up assets: a rep-to-prospect email that opens with their pain and anchors to one specific moment from my call, and a forward-ready recap they can send their internal stakeholders without editing — written in their voice, not mine.
 
 ## STRUCTURE
 
 1. **Follow-Up Email (Rep → Prospect)**
-   - Open with the forecast accuracy problem he surfaced — the single aha, in his words, not marketing language.
-   - Reference one specific call moment from my notes (the Q2 forecast problem he showed on screen).
-   - One concrete next step tied to his April pilot ask — no vague "let's sync."
-   - Three to four short paragraphs. No pleasantry openers, feature-benefit lists, or "per our conversation" filler.
+   - Open with the forecast accuracy problem they named, not pleasantries.
+   - Ground one sentence in a specific call moment from my notes (James nodding, the Q2 forecast conversation, the screen share).
+   - Close with one clear next step tied to their April pilot window.
+   - No feature lists, no "per our conversation," no marketing copy.
 
-2. **Forward-Ready Recap (Prospect → His Decision-Maker)**
-   - Five to seven bullets, one sentence each. Written so James could have authored it.
-   - Flow: problem in his words → what he observed in our call → fit to his stated priority → two concrete proof points → proposed next step.
-   - No rep name, no Velara branding, no dollar amounts outside my inputs.
-   - Scannable, tight language — no vendor-speak.
+2. **Forward-Ready Recap (Prospect → Their Internal Stakeholders)**
+   - Five to seven bullets, each one sentence. Written as if they authored it — no rep name, no vendor branding.
+   - **Order:** problem statement in their words → what they observed during the call → connection to their stated priority → two proof points (what Velara Revenue OS does that matters to them) → proposed next step.
+   - Avoid dollar amounts, product marketing language, and any detail I didn't supply.
 
 ## GROUNDING
 
-- **Anchor to the call specifics:** His Q2 forecast problem shown on screen, the 60% accuracy rate, his April pilot timeline.
-- **One sharp angle:** Stale pipeline data is the root cause of missed targets and broken forecasts. Stay on that thread — don't dilute with feature lists.
-- **Proof points are behavioral, not statistical:** What he observed (nodding, sharing the Q2 screen, asking about April) and the problem he named (60% accuracy, data staleness) — these are your proof. Don't invent metrics or case studies.
-- **The recap is internal currency:** James sends this up to his decision-maker. It should feel like his own thinking, not a vendor summary. Use his language and priority framing.
-- **Avoid:** Product names in the recap (except if naturally critical), percentage improvements we haven't proven, timelines beyond April, any detail not in my inputs.
+- Their pain is forecast accuracy at 60% — stale pipeline data. That's the anchor. One sharp point beats feature sprawl.
+- James was visibly engaged (nodding throughout) and screenshared the Q2 forecast problem. Reference that specificity.
+- They want to pilot in April — that's the concrete next step.
+- Write the recap so a VP/Director reading it internally sounds credible, not like a sales handoff. No "Velara," no "Revenue OS," no vendor posture.
+- If I didn't supply a specific proof point (e.g., forecast accuracy SLA, auto-capture from email/calendar, speed to deployment), anchor to standard patterns in their space — missed targets due to manual CRM work, forecast misses eating credibility with the board.
+- No dollar figures or headcount unless I named them.
 
 ## STANDARD RULES
 
@@ -791,37 +795,38 @@ After delivering the follow-up email and forward-ready recap, pause and:
 
 ## Case 16: Follow-Up Forward #3 — Already Selling Internally / C-Suite / champion context
 
-**Status:** OK | **Time:** 7781ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2246 | **Output tokens:** 586 | **Cost:** $0.0041
+**Status:** OK | **Time:** 8274ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2246 | **Output tokens:** 592 | **Cost:** $0.0042
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS to a CEO who just surfaced a real pain: a lost deal last quarter because deal risk wasn't flagged in time. He's already selling internally — wants to forward something to his CFO. I need you to produce two assets: a follow-up email from me that anchors to that deal-risk moment and the 14-day implementation speed, plus a forward-ready recap he can send to his CFO without editing. Both should feel like natural next steps, not sales collateral.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished a 30-min call with a CEO who wants to send something to his CFO and is already selling internally on what we discussed. Be my post-meeting strategist and produce two assets: a follow-up email I'll send him today that opens with the deal-risk insight (tied to the deal they lost last quarter because their CRM didn't flag it), and a forward-ready recap he can send to his CFO without editing—written in his voice, not mine, so it lands as his own thinking.
 
 ## STRUCTURE
-
 1. **Follow-Up Email (Rep → CEO)**
-   - Open with the deal-risk gap he named, not pleasantries
-   - Reference one specific moment from the call (the lost deal, the CRM blind spot)
-   - Ground the 14-day speed as a direct answer to his timeline concern
-   - Close with one concrete next step (e.g., a time to sync with CFO, a brief demo slot, a doc to review)
-   - Tone: peer-level, outcome-focused — not vendor pitch
+   - Open: The deal-risk blind spot they surfaced (lost deal last quarter, CRM didn't catch it)—make this the whole first line, no pleasantries
+   - One specific call moment: Reference something concrete they said about that lost deal or their current pipeline risk
+   - Close: The 14-day implementation path (they loved this, anchor it as the immediate next move)
+   - Tone: Understands their urgency, respects their CFO conversation, no product-speak
 
 2. **Forward-Ready Recap (CEO → CFO)**
-   - Five to seven bullets, scannable, one sentence each
-   - Order: problem statement in his words → what he observed in the call → how Velara Revenue OS fits his stated priority → two proof points (the 14-day live speed and auto-capture of deal activity are anchors here) → proposed next step
-   - Write it as if the CEO authored it — no "the vendor told us," no rep name, no product marketing language
-   - Skip dollar amounts, specific headcount, product feature lists
+   - Five to seven bullets, one sentence each, in this order:
+     - Their problem stated in their own words (deal risk blindness in the CRM)
+     - What they observed on the call (a moment or insight that made it real)
+     - How it maps to what matters to them (speed, forecasting clarity, or pipeline confidence)
+     - Two proof points: one from the call, one from standard industry pattern anchored to their situation
+     - Next step: one concrete action with no jargon
+   - Tone: Written as if the CEO authored it—no rep names, no Velara branding, no dollar figures I didn't supply, no marketing language
 
 ## GROUNDING
-
-- **The single anchor:** the lost deal and the CRM blindness that caused it — that's the pain that got him to say yes to the call and now wants to move fast
-- **Why 14-day implementation matters here:** it's the CEO's answer to internal skeptics (likely the CFO) who worry about resource drain; speed removes friction
-- **Avoid for this audience:** technical jargon, "real-time pipeline intelligence" buzzwords, case-study generics, false urgency ("limited-time offer")
-- **What's true and what to skip:** He loves the 14-day story — use it. No stats, no percentages, no competitor names unless he named one. If he mentioned CFO objections or timeline pressures, anchor there; if not, let the 14-day speed speak for itself
-- **Tone calibration:** These are C-suite decision-makers already moving — match their momentum, no hand-holding
+- Anchor every moment and insight to what the CEO said on the call—no invented call details
+- The deal-risk problem is the throughline: lost deal last quarter because the CRM didn't surface risk in time
+- The 14-day implementation is their stated love point—lead with speed and friction-free rollout
+- The recap is for a CFO: assume they care about forecast accuracy, implementation burden, and pipeline visibility—not feature lists
+- Avoid: "per our conversation," "as discussed," any stat or percentage I didn't supply, rep name or title in the forward-ready recap, product screenshots or marketing terminology, false specificity about their pipeline
+- Write both assets so the CEO can send the recap unchanged—his signature, his thinking
 
 ## STANDARD RULES
 
@@ -843,34 +848,42 @@ After delivering the follow-up email and forward-ready recap, pause and:
 
 ## Case 17: Deal Reviver #1 — A Few Days quiet / New Data or Signal
 
-**Status:** OK | **Time:** 6856ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2253 | **Output tokens:** 571 | **Cost:** $0.0041
+**Status:** OK | **Time:** 8766ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2253 | **Output tokens:** 707 | **Cost:** $0.0046
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I'm reviving a stalled deal with Rachel at Meridian Analytics — she went quiet after saying she needed to loop in her VP of Sales. I've got a fresh reason to reach out tied to a new data or signal angle. Build me a three-touch re-engagement sequence (email, LinkedIn DM, voicemail) that lands the reason to reconnect, avoids desperation energy, and creates a low-friction path back into conversation.
+I'm a cold revival specialist running a multi-touch re-engagement sequence on Rachel at Meridian Analytics. She's stalled pending VP of Sales input, and I have a fresh reason to surface her now—a data signal or capability angle tied to Velara Revenue OS that reframes why this conversation matters again, starting now. Give me three distinct touches (email, LinkedIn DM, voicemail) that each land a different hook, feel earned rather than desperate, and land low-friction asks.
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line: One line, earned and specific — tied to the new data/signal angle, not "checking in"
-   - Body: Three short paragraphs. Lead with the specific reason to reach out (the new data or signal). Middle paragraph: brief bridge to why it matters for her world. Close: low-friction ask — reply, 15-min call, or yes/no question. No "circle back" language, no references to silence.
+   - Subject line that signals a new insight or development (not a re-check or follow-up marker).
+   - Opening paragraph: Lead with the specific reason I'm writing now—tied to the revival angle and Velara Revenue OS—in the first two sentences. This is *not* "circling back"; it's a legit trigger.
+   - Middle paragraph: Anchor to Rachel's original stall (VP alignment needed) and show how what's new shortens that conversation or removes friction from it.
+   - Closing paragraph: Single, low-friction ask—a 15-min call, a quick reply, or a simple yes/no. No CTA stacking.
+   - Tone: Warm, specific, no apology for the time gap.
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - Two to three sentences max. Hook must feel distinct from the email opener — don't forward the email energy. No links, no attachment asks. Reads natural and human.
+   - 2–3 sentences max. Opener must feel distinct from the email hook—don't just repackage the subject line.
+   - No links, no attachment asks, no forwarded email energy.
+   - Reads like a human thought, not a templated blast.
 
 3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
-   - Label as voicemail script. Twenty to thirty seconds when spoken aloud. First five words: the real reason for the call. Mid-message: leave one open question for her to sit with. No "just wanted to touch base," no callback demand, no email restatement.
+   - 20–30 seconds when read aloud naturally.
+   - First 5 words: Name the real reason for the call—no "just checking in."
+   - Close with one open question for Rachel to sit with; no explicit callback demand or "call me back ASAP" energy.
+   - Avoids restating the email or generic reconnect language.
 
 ## GROUNDING
 
-- Rachel's blocker was clear (VP of Sales sign-off needed) — the new signal or data point is your legitimate reason to loop back in, not a workaround.
-- Meridian Analytics context: assume mid-market analytics shop unless you tell me otherwise. Anchor language to her world if you have account intel.
-- Velara Revenue OS auto-captures pipeline activity and surfaces deal risk in real time — this is the single thread to pull if the new signal relates to forecast accuracy, pipeline visibility, or deal stage movement.
-- Avoid: generic "wanted to follow up," "see if you're still interested," timing references ("it's been X days"), or impatience signals.
-- Tone: peer-level, reason-driven, respectful of her process. She's not ghosting; she's waiting on her VP. Treat the new signal as a genuine business input, not a pretext.
+- **Rachel's stall point:** VP of Sales alignment was the blocker. The new angle should make that conversation *easier* or *faster*, not harder.
+- **Revival angle is data/signal.** Anchor to what's new—a capability, a market signal, a competitive shift, or a specific insight tied to pipeline health that Velara solves—not time passing.
+- **Velara Revenue OS core value here:** Auto-capture, forecast accuracy, or in-call coaching signals—pick the one that matters most to a VP of Sales approval conversation. One sharp anchor beats feature spray.
+- **Avoid:** Desperation signals ("miss you," "it's been a while," "let's reconnect"), apologies for the gap, vague pleasantries, or anything that feels like a cold follow-up rather than a reason to talk *now*.
+- **Tone for Meridian Analytics:** Professional, data-minded, no hype. Rachel works at an analytics company—speak to business outcomes and intelligence, not noise.
 
 ## STANDARD RULES
 
@@ -892,43 +905,46 @@ After delivering the 3-touch revival sequence, pause and:
 
 ## Case 18: Deal Reviver #2 — 1–3 Months quiet / Product or Feature Update
 
-**Status:** OK | **Time:** 8592ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2258 | **Output tokens:** 702 | **Cost:** $0.0046
+**Status:** OK | **Time:** 8976ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2258 | **Output tokens:** 749 | **Cost:** $0.0048
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching back out to Ben at Cascade Logistics after we stalled on integration complexity — his concern was whether the platform would sync cleanly with their ERP. I need you to craft a three-touch revival sequence that gives me a real, earned reason to re-engage (anchored to a product or feature update), then gets me back in the door without sounding desperate or like I'm just checking in.
+I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform. I'm reviving Ben at Cascade Logistics after we stalled on integration concerns around our ERP sync. Be my cold revival specialist and craft a three-touch re-engagement sequence that leads with a genuine product update tied to that specific blocker, then escalates touch-to-touch without sounding desperate or apologetic. Each touch should feel earned and distinct.
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line that signals a genuine reason to reconnect, not a re-check-in.
-   - Open by naming the specific blocker (ERP sync) and acknowledge it as valid, then pivot to what's changed or what we've learned.
-   - Three short paragraphs: reason to reach out → relevance to Ben's situation → low-friction ask (reply, 15-min call, or simple yes/no).
-   - Avoid: "circle back," "just wanted to," "been a while," or any desperation signals.
+   - Subject line that signals a real reason to reconnect (product update, capability release, or shift in how we solve the ERP sync problem) — not "checking in"
+   - Open with the specific blocker Ben raised (integration complexity, ERP sync) and anchor the body to what's changed or newly available that addresses it
+   - 3 short paragraphs: (1) the update + why it matters to him, (2) proof or validation (customer example pattern, capability detail, or concrete outcome pattern), (3) low-friction ask (reply with a yes/no, 15-min call, or quick question back)
+   - Tone: confident and helpful, not regretful about the silence
+   - Avoid: "circle back," "just checking in," "we missed you," time-focused language
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - Hook must be distinct from the email opener — don't repeat the integration angle verbatim.
-   - 2–3 sentences max. Conversational, not a forwarded email fragment.
-   - No links, no asks for attachments or calendar links.
-   - Reads human.
+   - 2–3 sentences max
+   - Hook must be distinct from the email opener — don't forward the email in DM form
+   - Lead with something concrete and personal (a detail about Cascade's space, a pattern you've seen, or a shift in how we work)
+   - No links, no attachment asks, no calendar links
+   - Tone: conversational, like you're thinking of him specifically
 
-3. **TOUCH 3 — VOICEMAIL SCRIPT** *(if applicable)*
-   - Label it clearly.
-   - 20–30 seconds when spoken aloud.
-   - Open with a real reason for the call in the first 5 words — lead with the update or insight, not "hey, just calling to..."
-   - Leave one question for Ben to think about; don't demand a callback.
-   - Avoid: "just wanted to touch base," repeating the email, or "give me a call back."
+3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
+   - 20–30 seconds when spoken aloud
+   - First 5 words must state the real reason for the call (the update, the capability, the insight) — no "just wanted to touch base"
+   - Body: brief context on why you're calling now
+   - Close: one genuine question or thought for him to sit with — not a callback demand or CTA
+   - Tone: warm, direct, curious
 
 ## GROUNDING
 
-- Ben's blocker was ERP sync — the revival angle must either solve that concern directly or show we've moved past it (e.g., new integration capability, new use case that doesn't require full ERP sync, or a customer win in logistics using our platform with their ERP stack).
-- Velara Revenue OS auto-captures deal activity from email and calendar with zero manual CRM updates and syncs natively with Salesforce and HubSpot — if Ben's ERP is one of those or integrates with them, anchor to that path. If his ERP is custom or proprietary, focus on how the platform works alongside it without requiring deep integration.
-- Don't invent a specific feature update or timeline if I haven't given you one — instead, frame the reason to reconnect around a real capability or use case that addresses his original concern.
-- For a logistics company like Cascade, pipeline velocity and deal visibility matter; consider how real-time pipeline intelligence (our core value) reduces the friction he was worried about.
-- Avoid generic startup language ("cutting-edge," "best-in-class," "transformative"). Keep it practical.
+- The blocker was integration complexity / ERP sync uncertainty — anchor every touch to a concrete shift there (new capability, a customer who solved it, a technical detail that wasn't available before)
+- Ben is at Cascade Logistics — make sure the update or angle feels relevant to logistics/supply chain operations if possible
+- This is a 1–3 month cold window — don't reference the duration, don't apologize for silence, just land the reason to reconnect now
+- Velara Revenue OS auto-captures deal activity and syncs natively with Salesforce and HubSpot — if ERP sync comes up, anchor to native integrations and what that enables (zero manual CRM updates, real-time data flow)
+- Avoid: "reconnect," "circle back," "following up," "just wanted to reach out," urgency language, vague benefits
+- For the product update angle: use a real capability or a truthful shift in how Velara handles integrations (no invented features)
 
 ## STANDARD RULES
 
@@ -950,42 +966,39 @@ After delivering the 3-touch revival sequence, pause and:
 
 ## Case 19: Deal Reviver #3 — 3+ Months Cold / The Last Try Email
 
-**Status:** OK | **Time:** 7645ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2251 | **Output tokens:** 628 | **Cost:** $0.0043
+**Status:** OK | **Time:** 7647ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2251 | **Output tokens:** 596 | **Cost:** $0.0042
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling the Velara Revenue OS. I'm reviving a cold pipeline opportunity with Nina at Thornfield Capital — we hit a budget freeze in January and she's been dark for three months. I need you to be my cold revival specialist and craft a three-touch re-engagement sequence with a real, earned reason to reach out. Each touch should feel like a genuine reason to reconnect, not a desperation play. This is my last try with her before I move on.
+I'm a sales rep at Velara selling Velara Revenue OS to Nina at Thornfield Capital. The conversation stalled in January when she cited a budget freeze. It's now been three months of silence. I need you to be my cold revival specialist and craft a three-touch re-engagement sequence that gives me a real, earned reason to reach out — not a generic "checking in" play. Each touch should feel distinct and purposeful. This is my last attempt before I move on, so the framing should reflect that without sounding desperate.
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line that signals relevance without urgency
-   - Earned hook in the first line (not "checking in" — anchor to a real trigger: market shift, budget thaw timing, or a new capability that changes the math on her problem)
-   - 3 short paragraphs max: context, the reason I'm reaching out now, low-friction ask (reply, 15-min call, or yes/no question)
-   - Avoid: "circle back," time references ("it's been a while"), desperation, multiple asks
+   - Subject: Earned hook tied to the budget context or deal stall reason — not "just checking in"
+   - Body: Three short paragraphs. Opener anchors the reason for reaching out (something has shifted, or a specific insight fits her situation). Middle grounds that insight to her world. Close offers a low-friction next step (reply, 15-min call, yes/no question).
+   - Avoid: "circle back," "at your earliest convenience," any reference to the length of silence
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - 2–3 sentences, distinct hook from the email opener (don't repurpose the email angle)
-   - Conversational tone — reads like a human, not a forwarded message
-   - No links, no attachment asks, no CTA
-   - If I mention Velara Revenue OS, keep it light — let curiosity do the work
+   - Hook distinct from the email opener — fresh angle, not a repackaged version
+   - 2–3 sentences max. Conversational tone, no links or attachment requests.
 
-3. **TOUCH 3 — VOICEMAIL SCRIPT** (label "if applicable")
-   - 20–30 seconds when spoken naturally
-   - Real reason for the call in the first 5 words
-   - One question that sits with her after I hang up — no explicit callback demand
-   - Avoid: "just wanted to touch base," restating the email, pressure close
+3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
+   - 20–30 seconds when read aloud
+   - First 5 words: Lead with the real reason for the call
+   - Body: Deliver the reason, then leave one open question for her to sit with
+   - Avoid: "just wanted to touch base," restating email content, explicit callback demand
 
 ## GROUNDING
 
-- Budget freeze was the objection in January — assume it hasn't lifted, but don't reference the freeze directly in the asks. Lean into what's changed since January or why now matters.
-- Three months dark means skepticism is earned. Each touch should respect that she's not waiting for me — I'm earning the reconnect.
-- Velara Revenue OS eliminates manual CRM updates and surfaces forecast accuracy that matters in budget cycles. If her pain ties to visibility into pipeline health post-freeze, that's a natural anchor.
-- "Last try" posture: don't make this feel like a funeral — make it feel like a final, high-respect offer to talk. If she doesn't bite, I'm done.
-- Avoid industry jargon ("synergy," "touch base," "circle back," "unlock value"). Speak like a peer who respects her time.
+- Thornfield Capital likely operates with cycle-driven budget gates — the January freeze may have thawed or shifted. Play to that rhythm, not against it.
+- Nina cited budget as the stall; don't challenge that or imply it was a soft no. Accept it as true and anchor the revival to a new variable (timeline shift, competitive pressure, new use case fit).
+- Velara Revenue OS auto-captures deal activity from email and calendar, eliminating manual CRM work — if Thornfield runs a tight operations team, this reduces friction on her buy-in.
+- Avoid: "budget approved," "market conditions changed," any statistic or metric I didn't supply. Work with what's real: a three-month silence and a January budget cite.
+- This is a final touch sequence. The tone should be respectful, concise, and give her an out — not pushy.
 
 ## STANDARD RULES
 
@@ -1007,42 +1020,41 @@ After delivering the 3-touch revival sequence, pause and:
 
 ## Case 20: CFO Pitch #1 — Generic pain / Save Labor Hours / Champion audience
 
-**Status:** OK | **Time:** 6412ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2266 | **Output tokens:** 516 | **Cost:** $0.0039
+**Status:** OK | **Time:** 6518ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2266 | **Output tokens:** 557 | **Cost:** $0.0040
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I have an active deal where my champion wants to get their CFO to approve moving forward. Write a one-page financial brief that my champion can forward internally — entirely in their voice, as if they authored it themselves for their CFO. The brief should make the case for the investment by translating saved labor hours into concrete business impact. "We" is always the prospect's company, never the vendor.
+I'm a sales rep at Velara selling Velara Revenue OS to a prospect who's already evaluating us. My champion is forwarding a one-page financial brief to their CFO. You're writing that brief entirely in the champion's voice — as if they authored it internally to justify the deal. "We" is always their company, never the vendor. The goal is a 90-second skim that translates labor savings into business impact.
 
 ## STRUCTURE
 
-1. **THE PROBLEM (2–3 bullets)**
-   - Ground in the champion's own words: "manual data entry" is eating time and creating friction
-   - Paint the operational drag without marketing language — what does this cost the team in lost focus?
+1. **THE PROBLEM** — 2–3 bullets in the champion's own words.
+   - Root the pain in manual data entry and CRM friction.
+   - No marketing language; speak like an internal advocate.
 
-2. **FINANCIAL CASE (3–4 bullets)**
-   - Lead with the annual investment: $18,000
-   - Translate labor savings into tangible business value — hours reclaimed per week, what those hours unlock (forecasting accuracy, pipeline health, rep coaching)
-   - Flag every assumption explicitly ("assuming X hours per week freed up...")
-   - Close with a net impact statement
+2. **FINANCIAL CASE** — 3–4 bullets translating annual cost to concrete business impact.
+   - Anchor to the $18,000 annual cost I've provided.
+   - Quantify labor hours saved per week based on what manual CRM work currently consumes.
+   - Flag your assumption explicitly (e.g., "assuming X hours freed per rep per week").
+   - Frame the payback or net benefit in business terms (productivity, deal velocity, quota attainment).
 
-3. **WHAT WE EVALUATED (1–2 bullets)**
-   - Describe what the champion observed during the pilot or trial — behavioral observations, not feature lists
-   - One bullet on how the tool captures activity automatically; one on what real-time visibility revealed about our pipeline or forecast accuracy
+3. **WHAT WE EVALUATED** — 1–2 bullets capturing behavioral observation during the trial.
+   - Specific, observed outcome (e.g., "saw reps spend 40 minutes less per deal on data hygiene").
+   - Skip feature lists; anchor to what the team actually noticed.
 
-4. **THE ASK (1 bullet)**
-   - Specific next step: approval to move forward, signature authority needed, timeline to deployment — whatever unblocks the deal
+4. **THE ASK** — 1 bullet stating the exact approval or next step needed.
 
 ## GROUNDING
 
-- The champion is the author — no mention of Velara by name in the body, no vendor branding, no "industry-leading" or "cutting-edge" language
-- "We" and "our" refer to the prospect's company; never to the vendor
-- No dollar amounts except the $18,000 annual cost I provided
-- Anchor labor-hour savings to the actual pain: manual data entry consumes time that could go to forecast accuracy, deal intelligence, and rep coaching
-- Avoid feature-list language; focus on what the champion saw happen during evaluation (time freed, visibility gained, forecast tightened)
-- One-page format — dense enough to skim in 90 seconds
+- The champion is writing to their CFO — assume financial literacy and impatience with soft ROI language.
+- Labor savings is the financial case. Assume the rep's current team burns time on manual updates and pipeline visibility gaps; the brief quantifies freed hours and their impact.
+- No vendor branding anywhere in the body; no mention of Velara by name. Reference "the tool" or "this approach" if needed.
+- Do not invent hours saved, payback periods, or impact percentages. Anchor savings to the $18,000 annual cost and ask me for current manual-work hours if you need to calculate ROI. If thin, flag the assumption and move on.
+- Avoid "industry-leading," "robust," "cutting-edge," or any marketing descriptor.
+- Written for a 90-second scan. One page, tight prose, no fluff.
 
 ## STANDARD RULES
 
@@ -1064,41 +1076,38 @@ After delivering the CFO-ready business case, pause and:
 
 ## Case 21: CFO Pitch #2 — Specific pain with numbers / Cut Hard Costs / CFO Directly
 
-**Status:** OK | **Time:** 7739ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2283 | **Output tokens:** 595 | **Cost:** $0.0042
+**Status:** OK | **Time:** 8310ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2283 | **Output tokens:** 661 | **Cost:** $0.0045
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. My champion at the prospect is ready to brief their CFO on a deal to cut manual CRM reconciliation work. I need you to write a one-page financial brief — structured and toned as if my champion authored it internally to their own finance leader, not as vendor pitch. "We" = their company throughout. Make it skimmable in 90 seconds and anchor every number to what I've provided.
+I'm a sales rep at Velara selling Velara Revenue OS to a prospect's ops and finance leadership. My champion is about to forward a one-page financial brief to their CFO — and I need you to write that brief *in the champion's voice*, as if they authored it internally. "We" means their company. The brief must justify the spend on hard-cost savings alone, skim-friendly in 90 seconds, and land with enough specificity to move a CFO to approve.
 
 ## STRUCTURE
 
-1. THE PROBLEM — 2–3 bullets in the champion's voice, grounded in the specific labor drain I've identified.
-   - Anchor to: 4 ops analysts, 15 hours per week each, the actual work (manual CRM reconciliation)
-   - Tone: Internal frustration, not vendor-speak — no marketing language
-   - No feature-forward framing
+1. **THE PROBLEM — 2–3 bullets.**
+   - Anchor to the 4 ops analysts and the 15 hours per week manually reconciling CRM data. Use the champion's language: what does this tax feel like operationally and on headcount? No vendor framing.
 
-2. FINANCIAL CASE — 3–4 bullets translating the business impact into concrete savings using the $200K annual labor cost and $24K annual solution cost I've provided.
-   - Lead with the hard-cost reduction (labor hours freed up)
-   - Explicitly flag any multiplier or assumption I'm baking in ("assuming X hours saved per week nets Y FTE capacity...")
-   - Do not invent savings beyond labor reallocation — stick to what's defensible
-   - No invented percentages, productivity boosts, or revenue uplift
+2. **FINANCIAL CASE — 3–4 bullets.**
+   - Lead with the $200K annual labor cost I've flagged. Then translate to impact: what does eliminating that manual reconciliation unlock (analyst capacity redeployed, cycle-time gains, forecast cleanliness, whatever the champion observed)?
+   - Flag assumptions explicitly (e.g., "assuming X hours freed per analyst per week..."). Do not invent multipliers or secondary benefits beyond the labor recapture.
+   - Close with net cost: $24K annual spend against $200K labor savings = the math the CFO needs.
 
-3. WHAT WE EVALUATED — 1–2 bullets describing what the champion actually observed during the evaluation.
-   - Behavioral and specific (e.g., "saw real-time data sync eliminate the Friday reconciliation cycle," not "robust automation")
-   - No feature list; focus on observed impact during trial
+3. **WHAT WE EVALUATED — 1–2 bullets.**
+   - Behavioral specifics only. What did the champion *see* during the pilot or trial? (Example: "Our team ran a three-week eval and watched the system auto-capture deal activity from email and calendar with zero manual CRM entry." Not a feature list — an observation.)
 
-4. THE ASK — 1 bullet, crystal-clear next step (approval, budget allocation, etc.).
+4. **THE ASK — 1 bullet.**
+   - Single, concrete next step. What approval or decision does the CFO need to make?
 
 ## GROUNDING
 
-- Every dollar figure and hour count comes from my inputs only: $200K annual labor, $24K annual cost, 4 analysts, 15 hours/week each. No other numbers invented.
-- "We" and "our" = the prospect's company. Vendor name and rep company stay out of the body entirely.
-- CFO reads this in 90 seconds; cut every connective clause and hedge. Each bullet earns its line.
-- Avoid: "industry-leading," "robust," "cutting-edge," vendor branding, any savings or upside not anchored to the $200K labor cost I named.
-- Champion's voice is internal and direct — peer-to-peer, not sales-to-buyer. No "we're excited to partner" energy.
+- This brief reads as the champion's internal memo, not a vendor pitch. No Velara branding, no product name, no "we recommend this solution." The champion is solving their own problem.
+- "We" = the prospect's company. "Our team," "our analysts," "our data" — never "your company" or "your team."
+- Hard costs only: the $200K labor burden and the $24K annual cost. No secondary ROI, no soft savings, no upside multipliers unless the champion explicitly observed them during eval.
+- Specificity anchors to the inputs I've given you. If I haven't supplied a dollar figure, a timeline, or a metric, do not invent one. If the champion observed additional value, ask me what it was.
+- Avoid: "industry-leading," "robust," "cutting-edge," vendor jargon, any mention of the vendor's company. The brief is about *our* problem and *our* math, not about *their* product.
 
 ## STANDARD RULES
 
@@ -1120,43 +1129,43 @@ After delivering the CFO-ready business case, pause and:
 
 ## Case 22: CFO Pitch #3 — Risk angle / Reduce Risk & Compliance / CEO & COO
 
-**Status:** OK | **Time:** 8755ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2282 | **Output tokens:** 643 | **Cost:** $0.0044
+**Status:** OK | **Time:** 8860ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **Input tokens:** 2282 | **Output tokens:** 683 | **Cost:** $0.0046
 
 <details>
 <summary>Generated Master Prompt</summary>
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara. I have an active deal where my champion has agreed to carry a financial brief to their CFO/finance stakeholder. I need you to write this brief entirely in my champion's voice—as if they authored it internally to justify a decision to their CFO. The brief lands as internal conviction, not vendor pitch. It's one page, designed for a 90-second skim by a CEO or COO who cares about forecast accuracy and board credibility.
+I'm a sales rep at Velara selling Velara Revenue OS into an active deal. My champion is prepping to forward a financial brief to their CFO or finance stakeholder — the brief needs to sound like it came from inside their own company, written by someone who evaluated us and is now making the case internally. Your job is to write that brief in the champion's voice, as if they authored it themselves. It's one page, skimmable in 90 seconds, anchored entirely to their stated pain (forecast misses vs. board commitments) and the annual cost I'm providing. No vendor voice, no Velara branding in the body, no marketing language — just their problem, the math, what they saw, and what they need approved.
 
 ## STRUCTURE
 
 1. **THE PROBLEM** (2–3 bullets)
-   - Anchor to the specific pain: inaccurate pipeline forecasts and the business consequence (missed board commitments, the 30% miss last quarter).
-   - Language is internal and direct—no softening, no vendor framing.
+   - Ground in the champion's own words: forecast accuracy miss (30% off last quarter) and the board commitment fallout
+   - No jargon, no softening — state it as a business risk
 
 2. **FINANCIAL CASE** (3–4 bullets)
-   - Translate the $36,000 annual cost into concrete business value tied to forecast accuracy and risk reduction.
-   - Flag any time-savings or efficiency assumptions you make explicitly (e.g., "assuming X hours per week no longer spent on manual forecast reconciliation...").
-   - Lead with the risk angle: what's the cost of being wrong by 30% again? Revenue leakage, board credibility, missed targets.
+   - Translate the stated annual cost into concrete business impact tied to forecast risk reduction
+   - Assume standard rep productivity lift or forecast accuracy margin recovery tied to deal risk visibility; flag the assumption explicitly
+   - Tie back to the board commitment risk they named — how this shifts that outcome
+   - Keep dollar math tight; only use the $36K annual cost I've supplied
 
 3. **WHAT WE EVALUATED** (1–2 bullets)
-   - Behavioral specifics from the champion's vantage point during the trial or demo—what did they *see* happen, not feature names.
-   - Focus on real-time visibility and how it changed the way they think about pipeline health.
-   - Avoid feature lists; anchor to observed impact.
+   - What the champion personally observed during the trial or demo — behavioral, specific, not a feature recitation
+   - Focus on real-time deal visibility and how it changes daily workflow (not post-call regret, not CRM busy-work)
 
 4. **THE ASK** (1 bullet)
-   - One clear approval or next step: budget sign-off, pilot extension, rollout timeline, etc.
-   - Tone: internal stakeholder to stakeholder, not vendor request.
+   - Single, specific approval or next step (pilot sign-off, budget carve-out, board-readiness timeline)
+   - Written as if the champion is asking their finance stakeholder, not the vendor asking the champion
 
 ## GROUNDING
 
-- Champion's voice throughout: "we," "our," "us" = the prospect. Never refer to the vendor, Velara, or the rep by name in the body.
-- No vendor branding, no marketing language ("industry-leading," "robust," "cutting-edge," "transformative").
-- Specificity: Use only the inputs I've given you. The $36,000 annual cost and the 30% forecast miss are your anchors. Do not invent additional metrics, timelines, headcount, or dollar figures.
-- Forecast accuracy is the sharp angle here—tie risk and compliance back to board expectations and forecast credibility.
-- CEO/COO lens: Assume the reader cares about board commitments, forecast risk, and operational credibility. Lead with that, not feature depth.
-- No post-implementation timelines, no "day one ROI" claims without support. Stick to the case at hand.
+- Champion's pain is forecast accuracy and board credibility — anchor every sentence to risk reduction and pipeline trust, not feature adoption
+- "$36,000 annually" is the only cost figure to use; any multipliers (rep hours, deal value, close-rate lift) must be explicit assumptions, not claimed facts
+- No mention of Velara, vendor name, or any product branding in the body — the brief reads as internal financial analysis, not a forwarded pitch
+- "We" = the prospect's company; never slip into "they" or "the vendor" — the champion is writing about their own team and decision
+- Avoid: "industry-leading," "robust," "cutting-edge," "proven," "seamless," post-call coaching phrasing — stick to business terms (forecast risk, deal visibility, board compliance, pipeline trust)
+- CEO/COO reading this cares about board credibility, forecast reliability, and risk mitigation — lead with those, not implementation ease or user adoption
 
 ## STANDARD RULES
 

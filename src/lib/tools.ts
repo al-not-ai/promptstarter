@@ -14,6 +14,8 @@ export type Tool = {
   id: string;
   name: string;
   category: string;
+  /** 'core' tools are available to all users; 'pro' tools require a Pro subscription. */
+  tier: 'core' | 'pro';
   /**
    * Full, granular spec of what the downstream AI must produce. Used by the
    * engine when composing the STRUCTURE section.
@@ -46,6 +48,13 @@ export type Tool = {
   includesProfile: boolean;
   variables: ToolVariable[];
   sliders: ToolSlider[];
+  /** Pro tools only: pre-filled inputs shown in locked/preview mode. */
+  lockedPreviewInputs?: {
+    variableValues: Record<string, string>;
+    sliderValues: Record<string, number>;
+  };
+  /** Pro tools only: placeholder output shown when Core user clicks "See a Sample Output". */
+  sampleOutput?: string;
 };
 
 export const tools: Tool[] = [
@@ -53,6 +62,7 @@ export const tools: Tool[] = [
     id: "pre-call-recon",
     name: "The Pre-Call Recon Brief",
     category: "Call Prep",
+    tier: 'core',
     outputFormat: "Exactly 3 sections: (1) One specific intel signal about this account, (2) Three conversation openers the rep can choose from, (3) Two questions to ask in the first 5 minutes of the call",
     outputDescriptor: "the recon brief",
     engineRoleHint: "call-prep strategist briefing a rep before a cold conversation",
@@ -80,6 +90,7 @@ export const tools: Tool[] = [
     id: "objection-defuser",
     name: "The Objection Defuser",
     category: "Active Deals",
+    tier: 'core',
     outputFormat: "3-5 sentences the rep can say verbatim or riff on, followed by one follow-up question. Conversational tone, not formal. Actual language, not a framework.",
     outputDescriptor: "the defuser response and follow-up question",
     engineRoleHint: "sales coach helping the rep navigate a live objection in-conversation",
@@ -105,6 +116,7 @@ export const tools: Tool[] = [
     id: "competitor-battlecard",
     name: "The Competitor Battlecard",
     category: "Call Prep",
+    tier: 'core',
     outputFormat: "5 discovery questions numbered 1-5, each followed by a one-line coaching note on why it works and what signal to listen for in the answer. No scripted dialogue. No fake conversations.",
     outputDescriptor: "the 5 discovery questions and coaching notes",
     engineRoleHint: "competitive intelligence specialist arming the rep to uncover friction without naming the incumbent as the enemy",
@@ -130,6 +142,7 @@ export const tools: Tool[] = [
     id: "cold-hook",
     name: "The Cold Hook",
     category: "Outreach",
+    tier: 'core',
     outputFormat: "Short-form Outreach (Under 100 words)",
     outputDescriptor: "the outreach hook",
     engineRoleHint: "cold outreach specialist writing on behalf of the rep to earn 90 seconds of attention",
@@ -152,12 +165,28 @@ export const tools: Tool[] = [
     ],
   },
 
-  // ── ADVANCED TOOLS ──────────────────────────────────────────────────────────
+  // ── PRO TOOLS ────────────────────────────────────────────────────────────────
+  //
+  // ⚠️  PRE-LAUNCH CHECKLIST — SAMPLE OUTPUTS
+  //
+  // The sampleOutput strings below are placeholders. Before launching the upgrade
+  // flow to real users, run a full-scale stress test across all tools with a wide
+  // variety of real rep inputs, review the outputs, and curate the single best
+  // output per Pro tool to replace these placeholders.
+  //
+  // Criteria for a good sample: rich inputs that make the multi-asset structure
+  // shine, no Velara-specific branding the new user won't recognize, clean
+  // engine output with no fabrication flags. Pick the case you'd be proudest
+  // to show a prospect.
+  //
+  // Do not ship the upgrade/paywall flow to real users with placeholder text
+  // visible in the "See a Sample Output" preview.
 
   {
     id: "follow-up-forward",
     name: "The Follow-Up Forward",
     category: "Active Deals",
+    tier: 'pro',
     outputFormat: `TWO assets, each with a clear heading:
 
 ASSET 1 — FOLLOW-UP EMAIL (rep → prospect): 3–4 short paragraphs. Opens with the single biggest aha or pain they surfaced — not "Great chatting today." References one specific call moment from my notes. Closes with one concrete next step. Avoid: pleasantry openers, feature-benefit lists, marketing copy, "per our conversation."
@@ -190,12 +219,21 @@ ASSET 2 — FORWARD-READY RECAP (prospect → their internal decision-maker): 5�
         steps: ["Skeptical", "Mildly Interested", "Bought-In", "Already Selling Internally"],
       },
     ],
+    lockedPreviewInputs: {
+      variableValues: {
+        callNotes: "Walked through live dashboard. Rachel flagged that her team rebuilds the same pipeline report every Monday — 3 hours gone. She lit up when I showed the scheduled export. Her boss joined late, asked about SOC 2.",
+        biggestAha: "They're losing a full team-day per week to a report that could auto-send itself",
+      },
+      sliderValues: { "buying-role": 2, "call-mood": 2 },
+    },
+    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
   },
 
   {
     id: "deal-reviver",
     name: "The Deal Reviver",
     category: "Pipeline",
+    tier: 'pro',
     outputFormat: `THREE-TOUCH REVIVAL SEQUENCE — each touch as its own labeled sub-section:
 
 TOUCH 1 — EMAIL: Subject line + 3 short paragraphs. Opens with a specific, earned reason to reach out tied to the revival angle — not "just checking in." Closes with a low-friction ask (a reply, a 15-min call, or a simple yes/no). Avoid: "circle back," desperation signals, referencing how long they've been quiet.
@@ -230,12 +268,21 @@ TOUCH 3 — VOICEMAIL SCRIPT (label "if applicable"): 20–30 seconds when spoke
         steps: ["New Data or Signal", "Product or Feature Update", "Outside Helpful Resource", `The "Last Try" Email`],
       },
     ],
+    lockedPreviewInputs: {
+      variableValues: {
+        prospectCompany: "Jordan at Nexus Logistics",
+        wentCold: "Liked the demo but said Q3 budget was locked — wanted to revisit in Q4",
+      },
+      sliderValues: { "silence-duration": 1, "revival-angle": 0 },
+    },
+    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
   },
 
   {
     id: "cfo-pitch",
     name: "The CFO Pitch",
     category: "Active Deals",
+    tier: 'pro',
     outputFormat: `A one-page financial brief written as if the prospect's internal champion authored it to their own finance decision-maker. "We" refers to the prospect's company, never the vendor's. Structured for a 90-second skim.
 
 FOUR SECTIONS:
@@ -276,6 +323,14 @@ Avoid throughout: vendor branding, "industry-leading," "robust," "cutting-edge,"
         steps: ["Champion (selling it for them)", "CFO Directly", "CEO / COO", "Procurement"],
       },
     ],
+    lockedPreviewInputs: {
+      variableValues: {
+        painPoint: "Our AR team is manually reconciling invoices against three different systems — we're closing the books 6 days late every quarter",
+        annualCost: "$36,000/year",
+      },
+      sliderValues: { "financial-case": 0, "reader-audience": 1 },
+    },
+    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
   },
 ];
 

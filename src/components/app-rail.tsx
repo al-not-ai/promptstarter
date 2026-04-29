@@ -23,6 +23,7 @@ interface AppRailProps {
   isPinned: boolean;
   onPinChange: (pinned: boolean) => void;
   onAddProfile?: () => void;
+  userTier?: 'core' | 'pro';
 }
 
 export function AppRail({
@@ -35,6 +36,7 @@ export function AppRail({
   isPinned,
   onPinChange,
   onAddProfile,
+  userTier = 'core',
 }: AppRailProps) {
   const [hoverExpanded, setHoverExpanded] = useState(false);
   const hoverInTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -102,6 +104,7 @@ export function AppRail({
           activeToolId={activeToolId}
           onToolSelect={onToolSelect}
           isCollapsed={!isExpanded}
+          userTier={userTier}
         />
 
         {isExpanded && (
@@ -181,6 +184,7 @@ export function AppRail({
           activeToolId={activeToolId}
           onToolSelect={handleToolSelect}
           isCollapsed={false}
+          userTier={userTier}
         />
 
         {/* History */}

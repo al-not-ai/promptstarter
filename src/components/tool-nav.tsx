@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone, ShieldCheck, BarChart2, Zap, type LucideIcon } from "lucide-react";
+import { Phone, ShieldCheck, BarChart2, Zap, MessageSquare, RotateCcw, DollarSign, Lock, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TOOL_CATEGORIES } from "@/lib/tools";
 
@@ -8,6 +8,7 @@ interface ToolNavProps {
   activeToolId: string;
   onToolSelect: (toolId: string) => void;
   isCollapsed?: boolean;
+  userTier?: 'core' | 'pro';
 }
 
 const TOOL_ICONS: Record<string, LucideIcon> = {
@@ -15,9 +16,12 @@ const TOOL_ICONS: Record<string, LucideIcon> = {
   "objection-defuser":      ShieldCheck,
   "competitor-battlecard":  BarChart2,
   "cold-hook":              Zap,
+  "follow-up-forward":      MessageSquare,
+  "deal-reviver":           RotateCcw,
+  "cfo-pitch":              DollarSign,
 };
 
-export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: ToolNavProps) {
+export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false, userTier = 'core' }: ToolNavProps) {
   return (
     <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
       {TOOL_CATEGORIES.map(({ category, tools }) => (
@@ -35,6 +39,7 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
             {tools.map((tool) => {
               const isActive = tool.id === activeToolId;
               const Icon = TOOL_ICONS[tool.id] ?? Zap;
+              const isLocked = tool.tier === 'pro' && userTier === 'core';
               return (
                 <li key={tool.id}>
                   <button
@@ -69,7 +74,7 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
                     <span
                       aria-hidden={isCollapsed}
                       className={cn(
-                        "font-mono text-sm md:text-[13px] truncate min-w-0 text-left",
+                        "font-mono text-sm md:text-[13px] truncate min-w-0 text-left flex items-center gap-1.5",
                         "transition-[opacity,transform] duration-200",
                         isCollapsed
                           ? "opacity-0 -translate-x-1 pointer-events-none"
@@ -77,7 +82,10 @@ export function ToolNav({ activeToolId, onToolSelect, isCollapsed = false }: Too
                       )}
                       style={isActive ? { textShadow: "0 0 12px rgba(255,51,0,0.2)" } : undefined}
                     >
-                      {tool.name.replace(/^The\s+/, "")}
+                      <span className="truncate">{tool.name.replace(/^The\s+/, "")}</span>
+                      {isLocked && (
+                        <Lock size={11} className="shrink-0 text-zinc-600" />
+                      )}
                     </span>
                   </button>
                 </li>

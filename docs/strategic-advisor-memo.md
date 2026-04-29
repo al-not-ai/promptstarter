@@ -185,7 +185,7 @@ A note on perspective for this tool: it generates a brief that the *prospect's c
 
 ## Decision 4 — Tier Naming
 
-**Recommendation: Quota / Closer. Drop President's Club.**
+**Recommendation: Core / Pro. Drop President's Club.**
 
 Gemini 2 is right that "President's Club" is psychologically wrong for the audience, but its alternative ("Accelerator" / "Pro") is bland — the kind of name a focus group lands on. You can do better.
 
@@ -193,17 +193,17 @@ The argument against President's Club is real and important. President's Club is
 
 But "Accelerator" is forgettable corporate-speak, and "Pro" is what every SaaS app uses. Both fail Gemini 1's own test: tier names should resonate in sales-native vernacular and feel like an identity upgrade.
 
-**"Closer" threads the needle.** It's:
+**"Pro" threads the needle.** It's:
 - Sales-native (every rep recognizes it; nobody Googles it)
 - Identity-aligned but achievable (you become a closer, you weren't born one)
 - Outcome-anchored (it names what the product is supposed to make you do)
 - Not exclusionary (anyone can become a closer; it's a *behavior*, not a *trip*)
 
-Quota / Closer also reads cleanly together: the lower tier keeps you at quota, the upper tier makes you a closer. There's a verb buried in there. President's Club has no verb — it's just a place you've already arrived at.
+Core / Pro also reads cleanly together: the lower tier keeps you at quota, the upper tier makes you a closer. There's a verb buried in there. President's Club has no verb — it's just a place you've already arrived at.
 
-If you want a backup option: **Quota / Commission** also works (lower tier covers your floor, upper tier expands the upside). Slightly less aspirational than "Closer" but more financially literal. I'd still pick Closer.
+If you want a backup option: **Core / Commission** also works (lower tier covers your floor, upper tier expands the upside). Slightly less aspirational than "Pro" but more financially literal. I'd still pick Pro.
 
-Drop the word "Tier" from the UI entirely. "Quota" and "Closer" stand on their own. "Closer Tier" is overworked.
+Drop the word "Tier" from the UI entirely. "Core" and "Pro" stand on their own. "Pro Tier" is overworked.
 
 ---
 
@@ -215,9 +215,9 @@ Three highest-leverage moves, ranked. The first one is the unlock and Gemini 1 m
 
 The highest-converting upsell happens *inside* a Core tool's output, at the exact moment the rep would benefit from an Advanced tool. Concrete pattern:
 
-- After Objection Defuser fires: "Most deals with this objection go quiet within 7 days. Want a Deal Reviver pre-built in your library? *Upgrade to Closer.*"
-- After Pre-Call Recon Brief fires: "Want this as a forward-ready CFO Pitch after the call? *Upgrade to Closer.*"
-- After Cold Hook fires (with high seniority selected): "Multi-touch sequence for this same prospect? *Upgrade to Closer.*"
+- After Objection Defuser fires: "Most deals with this objection go quiet within 7 days. Want a Deal Reviver pre-built in your library? *Upgrade to Pro.*"
+- After Pre-Call Recon Brief fires: "Want this as a forward-ready CFO Pitch after the call? *Upgrade to Pro.*"
+- After Cold Hook fires (with high seniority selected): "Multi-touch sequence for this same prospect? *Upgrade to Pro.*"
 
 This works because the rep is already in a state of "this output is good, I'm going to use it" — the dopamine of generation is fresh. That's the moment to surface a related Advanced tool. It's contextually relevant rather than abstract ("upgrade for more tools").
 
@@ -229,7 +229,7 @@ This is also where engine-cost-only economics work in your favor: triggering an 
 
 Gemini 1's "Reverse Trial" instinct is correct, but their version (let users fill out the entire form, then paywall at Generate) is a dark pattern that will earn you a Reddit thread. Cleaner version:
 
-- Show the 3 Advanced tools in the nav with a small badge indicating Closer-tier
+- Show the 3 Advanced tools in the nav with a small badge indicating Pro-tier
 - Click → tool form renders in disabled/preview state with example inputs visible
 - A prominent "See a Sample Output" button generates a *canned* example (not a real generation against their inputs) showing what the tool produces
 - Generate button is greyed and routes to upgrade
@@ -240,11 +240,11 @@ This preserves the FOMO mechanism Gemini 1 wanted (reps see what they're missing
 
 Gemini 1's anchoring logic is correct and standard. Three plans:
 
-- Quota Monthly — e.g., $29/mo
-- Closer Monthly — e.g., $79/mo *(deliberately uncomfortable; the decoy)*
-- **Closer Annual — e.g., $39/mo, billed $468/year**
+- Core Monthly — e.g., $29/mo
+- Pro Monthly — e.g., $79/mo *(deliberately uncomfortable; the decoy)*
+- **Pro Annual — e.g., $39/mo, billed $468/year**
 
-The rep's eye lands on the third option because the per-month equivalent is barely above the Quota tier and nowhere near the Closer Monthly. The compromise effect kicks in. Display the annual price both ways: "$39/mo" big, "$468 once a year" small.
+The rep's eye lands on the third option because the per-month equivalent is barely above the Core tier and nowhere near the Pro Monthly. The compromise effect kicks in. Display the annual price both ways: "$39/mo" big, "$468 once a year" small.
 
 ### Honorable mention (don't put it in the top 3)
 
@@ -299,7 +299,7 @@ That moat is real but it needs to be *named* in the marketing copy. Right now ne
 ## TL;DR for implementation order
 
 1. Ship the corrected Core 4 tool labels (Decision 2) — pure config change, ~1 hour in `tools.ts` plus stress-test updates.
-2. Rename tiers to Quota / Closer (Decision 4) — pure copy change.
+2. Rename tiers to Core / Pro (Decision 4) — pure copy change.
 3. Build the 3 Advanced tools (Decision 3) in this order: Follow-Up Forward → Deal Reviver → CFO Pitch (highest frequency first to drive trial usage).
 4. Wire in-flow upgrade triggers (Decision 5, #1) — appended to Core tool templated tails.
 5. Build the visible-but-locked nav state (Decision 5, #2) — UI work, half-day.

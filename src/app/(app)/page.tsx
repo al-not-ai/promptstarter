@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { AppRail } from "@/components/app-rail";
 import { ControlPanel } from "@/components/control-panel";
+import { UpgradeTrigger } from "@/components/upgrade-trigger";
 import { ProfileWizardSheet } from "@/components/profile-wizard-sheet";
 import { tools } from "@/lib/tools";
 import { useProfileSwitcher } from "@/lib/profile-context";
@@ -47,6 +48,7 @@ function HomeInner() {
   const [generationCount, setGenerationCount] = useState(0);
   const [railPinned, setRailPinned] = useState(false);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [userTier, setUserTier] = useState<'core' | 'pro'>('core');
 
   // ── One-time initialisation: load rail pin + handle ?restore / ?openWizard / cache ──
 
@@ -58,6 +60,13 @@ function HomeInner() {
     } catch {
       // localStorage unavailable
     }
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/user/tier')
+      .then(r => r.ok ? r.json() : { tier: 'core' })
+      .then(data => setUserTier(data.tier))
+      .catch(() => {}); // fail safe — stays 'core'
   }, []);
 
   // Handle ?openWizard=true search param
@@ -218,6 +227,7 @@ function HomeInner() {
         isPinned={railPinned}
         onPinChange={setRailPinned}
         onAddProfile={() => setWizardOpen(true)}
+        userTier={userTier}
       />
 
       <main
@@ -249,6 +259,12 @@ function HomeInner() {
           restoredOutput={currentOutput}
           onGenerationStart={handleGenerationStart}
           onGenerationComplete={handleGenerationComplete}
+          userTier={userTier}
+        />
+        <UpgradeTrigger
+          toolId={activeToolId}
+          userTier={userTier}
+          hasOutput={Boolean(currentOutput)}
         />
       </main>
 

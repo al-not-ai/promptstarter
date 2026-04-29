@@ -218,6 +218,24 @@ export async function POST(req: Request) {
       ? (testProfile as unknown as ProductProfile)
       : supabaseProfile;
 
+  // ── Tier gate ──────────────────────────────────────────────────────────────
+  const { data: userSettings } = user
+    ? await supabase
+        .from('user_settings')
+        .select('tier')
+        .eq('user_id', user.id)
+        .maybeSingle()
+    : { data: null };
+
+  const userTier = (userSettings?.tier ?? 'core') as 'core' | 'pro';
+
+  if (tool.tier === 'pro' && userTier === 'core' && !isStressTestBypass) {
+    return Response.json(
+      { error: 'tier_required', requiredTier: 'pro', toolId: tool.id },
+      { status: 403 }
+    );
+  }
+
   // ── Build system prompt with (optional) profile context ────────────────────
   // Profile injection is tool-gated: prospect-focused tools (pre-call-recon)
   // set includesProfile=false in tools.ts because the seller profile is
