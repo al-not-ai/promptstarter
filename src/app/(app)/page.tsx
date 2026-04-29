@@ -49,6 +49,7 @@ function HomeInner() {
   const [railPinned, setRailPinned] = useState(false);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [userTier, setUserTier] = useState<'core' | 'pro'>('core');
+  const [welcomeBanner, setWelcomeBanner] = useState(false);
 
   // ── One-time initialisation: load rail pin + handle ?restore / ?openWizard / cache ──
 
@@ -77,6 +78,17 @@ function HomeInner() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // run once on mount; searchParams stable at mount
+
+  // Handle ?welcome=true — strip from URL on mount, show banner briefly
+  useEffect(() => {
+    if (searchParams.get("welcome") === "true") {
+      router.replace("/", { scroll: false });
+      setWelcomeBanner(true);
+      const t = setTimeout(() => setWelcomeBanner(false), 5000);
+      return () => clearTimeout(t);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once on mount
 
   useEffect(() => {
     if (initialized.current || !activeProfileId) return;
@@ -216,6 +228,28 @@ function HomeInner() {
         onMenuToggle={() => setMobileNavOpen((v) => !v)}
         onAddProfile={() => setWizardOpen(true)}
       />
+
+      {/* Welcome banner — shown once after successful Pro upgrade */}
+      {welcomeBanner && (
+        <div className="fixed top-14 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+          <div
+            className="pointer-events-auto flex items-center gap-3 bg-zinc-900 border border-[#FF3300]/40 rounded-md px-4 py-3 shadow-lg"
+            style={{ boxShadow: "0 0 24px rgba(255,51,0,0.2)" }}
+          >
+            <span className="font-mono text-sm text-zinc-200">
+              Welcome to Pro. All 7 tools are now unlocked.
+            </span>
+            <button
+              type="button"
+              onClick={() => setWelcomeBanner(false)}
+              className="font-mono text-xs text-zinc-500 hover:text-zinc-300 transition-colors duration-150 ml-1"
+              aria-label="Dismiss"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       <AppRail
         activeToolId={activeToolId}

@@ -90,7 +90,7 @@ export const tools: Tool[] = [
     id: "objection-defuser",
     name: "The Objection Defuser",
     category: "Active Deals",
-    tier: 'core',
+    tier: 'pro',
     outputFormat: "3-5 sentences the rep can say verbatim or riff on, followed by one follow-up question. Conversational tone, not formal. Actual language, not a framework.",
     outputDescriptor: "the defuser response and follow-up question",
     engineRoleHint: "sales coach helping the rep navigate a live objection in-conversation",
@@ -111,12 +111,20 @@ export const tools: Tool[] = [
         steps: ["Buy Time, No Commitment", "Ask for Soft Agreement", "Offer Two Alternatives", "Push for Firm Commitment"],
       },
     ],
+    lockedPreviewInputs: {
+      variableValues: {
+        statedObjection: "We already have something that does this — I don't think we need another tool",
+        productValue: "Cuts manual reconciliation from 6 hours to 20 minutes per week",
+      },
+      sliderValues: { "response-posture": 2, "next-step-aggression": 1 },
+    },
+    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
   },
   {
     id: "competitor-battlecard",
     name: "The Competitor Battlecard",
     category: "Call Prep",
-    tier: 'core',
+    tier: 'pro',
     outputFormat: "5 discovery questions numbered 1-5, each followed by a one-line coaching note on why it works and what signal to listen for in the answer. No scripted dialogue. No fake conversations.",
     outputDescriptor: "the 5 discovery questions and coaching notes",
     engineRoleHint: "competitive intelligence specialist arming the rep to uncover friction without naming the incumbent as the enemy",
@@ -137,12 +145,20 @@ export const tools: Tool[] = [
         steps: ["First Conversation", "Solution Discovery", "Building the Business Case", "Final Vendor Selection"],
       },
     ],
+    lockedPreviewInputs: {
+      variableValues: {
+        competitorName: "Salesforce",
+        ourAdvantage: "No implementation fees, live in 48 hours vs. 6-month rollout",
+      },
+      sliderValues: { "competitive-stance": 1, "conversation-stage": 1 },
+    },
+    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
   },
   {
     id: "cold-hook",
     name: "The Cold Hook",
     category: "Outreach",
-    tier: 'core',
+    tier: 'pro',
     outputFormat: "Short-form Outreach (Under 100 words)",
     outputDescriptor: "the outreach hook",
     engineRoleHint: "cold outreach specialist writing on behalf of the rep to earn 90 seconds of attention",
@@ -163,6 +179,14 @@ export const tools: Tool[] = [
         steps: ["Save Time", "Cut Cost", "Reduce Risk", "Grow Revenue"],
       },
     ],
+    lockedPreviewInputs: {
+      variableValues: {
+        prospectName: "Jamie Chen, VP of Operations",
+        triggerEvent: "Their company just announced a 20% headcount reduction in ops",
+      },
+      sliderValues: { "outreach-channel": 1, "value-angle": 0 },
+    },
+    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
   },
 
   // ── PRO TOOLS ────────────────────────────────────────────────────────────────

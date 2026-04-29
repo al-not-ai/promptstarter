@@ -16,11 +16,38 @@ export default function SettingsPage() {
   const router = useRouter();
   const [preferred, setPreferred] = useState<DownstreamAIId | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [tier, setTier] = useState<'core' | 'pro'>('core');
+  const [generationCount, setGenerationCount] = useState<number | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
     setPreferred(getPreferredAI());
     setLoaded(true);
   }, []);
+
+  useEffect(() => {
+    fetch('/api/user/tier')
+      .then(r => r.ok ? r.json() : { tier: 'core' })
+      .then(d => setTier(d.tier))
+      .catch(() => {});
+    fetch('/api/user/generation-count')
+      .then(r => r.ok ? r.json() : { count: null })
+      .then(d => setGenerationCount(d.count ?? null))
+      .catch(() => {});
+  }, []);
+
+  async function handlePortal() {
+    setPortalLoading(true);
+    try {
+      const res = await fetch('/api/stripe/portal', { method: 'POST' });
+      if (res.ok) {
+        const { url } = await res.json();
+        if (url) window.location.href = url;
+      }
+    } finally {
+      setPortalLoading(false);
+    }
+  }
 
   function choose(id: DownstreamAIId | null) {
     setPreferredAI(id);
@@ -68,6 +95,48 @@ export default function SettingsPage() {
             >
               Clear default
             </button>
+          )}
+        </section>
+
+        {/* Subscription section */}
+        <section>
+          <h2 className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-4">
+            Subscription
+          </h2>
+          {tier === 'core' ? (
+            <div className="flex flex-col gap-3">
+              <p className="font-mono text-sm text-zinc-300">
+                Free Plan — Pre-Call Recon Brief only
+              </p>
+              <a
+                href="/upgrade"
+                className="inline-flex items-center font-mono text-sm font-semibold text-[#FF3300] hover:text-[#e02d00] transition-colors duration-150"
+              >
+                Upgrade to Pro →
+              </a>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <p className="font-mono text-sm text-zinc-300 font-semibold">Pro Plan</p>
+              {generationCount !== null && (
+                <p className="font-mono text-sm text-zinc-400">
+                  You have generated {generationCount} prompt{generationCount === 1 ? '' : 's'} total.
+                </p>
+              )}
+              {generationCount !== null && generationCount < 16 && (
+                <p className="font-mono text-xs text-zinc-500 leading-relaxed">
+                  You are within the money-back guarantee window. Not satisfied? Reply to your receipt email for a full refund.
+                </p>
+              )}
+              <button
+                type="button"
+                onClick={handlePortal}
+                disabled={portalLoading}
+                className="inline-flex items-center font-mono text-sm text-zinc-400 hover:text-zinc-200 underline underline-offset-4 transition-colors duration-150 disabled:opacity-50 w-fit"
+              >
+                {portalLoading ? 'Redirecting…' : 'Manage Subscription'}
+              </button>
+            </div>
           )}
         </section>
       </div>

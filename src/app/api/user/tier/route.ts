@@ -1,6 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
+  // Override: grant everyone Pro during pre-launch testing.
+  // Remove BYPASS_TIER from .env.local when Stripe is wired up.
+  if (process.env.BYPASS_TIER === 'true') {
+    return Response.json({ tier: 'pro' });
+  }
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return Response.json({ tier: 'core' });
