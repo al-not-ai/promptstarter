@@ -1,4 +1,5 @@
-import { stripe } from '@/lib/stripe';
+import Stripe from 'stripe';
+import { getStripe } from '@/lib/stripe';
 import { createClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
   // Build checkout session params. If the user already has a Stripe customer
   // record from a previous subscription, reuse it to avoid creating duplicate
   // customer objects in Stripe.
-  const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
+  const sessionParams: Stripe.Checkout.SessionCreateParams = {
     mode: 'subscription',
     payment_method_types: ['card'],
     line_items: [{ price: priceId, quantity: 1 }],
@@ -55,6 +56,6 @@ export async function POST(req: Request) {
     sessionParams.customer_email = user.email ?? undefined;
   }
 
-  const session = await stripe.checkout.sessions.create(sessionParams);
+  const session = await getStripe().checkout.sessions.create(sessionParams);
   return Response.json({ url: session.url });
 }

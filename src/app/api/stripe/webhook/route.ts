@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 
 export async function POST(req: Request) {
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   // checkout.session.completed event and unlock Pro for free.
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!

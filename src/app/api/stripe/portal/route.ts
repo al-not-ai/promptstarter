@@ -1,4 +1,4 @@
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import { createClient } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
   const origin = req.headers.get('origin') ?? 'http://localhost:3000';
 
-  const portalSession = await stripe.billingPortal.sessions.create({
+  const portalSession = await getStripe().billingPortal.sessions.create({
     customer: settings.stripe_customer_id,
     return_url: `${origin}/settings`,
   });
