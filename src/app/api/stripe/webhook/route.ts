@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { getStripe } from '@/lib/stripe';
-import { supabaseAdmin } from '@/lib/supabase/admin';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
 
 export async function POST(req: Request) {
   // Read raw body — must be text, not parsed JSON.
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       return new Response('Missing user_id in metadata', { status: 400 });
     }
 
-    const { error } = await supabaseAdmin
+    const { error } = await getSupabaseAdmin()
       .from('user_settings')
       .update({
         tier: 'pro',
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     const subscription = event.data.object as Stripe.Subscription;
     const customerId = subscription.customer as string;
 
-    const { error } = await supabaseAdmin
+    const { error } = await getSupabaseAdmin()
       .from('user_settings')
       .update({
         tier: 'core',
