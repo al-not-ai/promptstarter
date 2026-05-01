@@ -6,7 +6,7 @@ import type { ProductProfile } from "@/lib/types/profile";
 /**
  * Authenticated app shell layout.
  *
- * Runs on every request to the Command Center (/) and any future
+ * Runs on every request to /dashboard and any future
  * /app/[profileId] routes. Responsibilities:
  *   1. Confirm the user is authenticated (defense-in-depth on top of proxy)
  *   2. Fetch ALL of the user's active profiles (for the switcher)

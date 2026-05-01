@@ -72,7 +72,7 @@ export default function UpgradePage() {
           {/* Free column */}
           <div className="flex flex-col border border-white/10 bg-white/[0.02] rounded-md px-5 py-6 gap-4">
             <div>
-              <p className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-1">Free</p>
+              <p className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-1">Core</p>
               <p className="font-mono text-3xl font-bold text-white">$0</p>
               <p className="font-mono text-xs text-zinc-500 mt-1">No credit card required</p>
             </div>
@@ -176,7 +176,7 @@ export default function UpgradePage() {
             <thead>
               <tr className="border-b border-white/10">
                 <th className="text-left px-4 py-3 text-zinc-500 text-xs uppercase tracking-wider font-medium">Feature</th>
-                <th className="text-center px-4 py-3 text-zinc-500 text-xs uppercase tracking-wider font-medium">Free</th>
+                <th className="text-center px-4 py-3 text-zinc-500 text-xs uppercase tracking-wider font-medium">Core</th>
                 <th className="text-center px-4 py-3 text-zinc-500 text-xs uppercase tracking-wider font-medium">Pro Monthly</th>
                 <th className="text-center px-4 py-3 text-zinc-500 text-xs uppercase tracking-wider font-medium">Pro Annual</th>
               </tr>

@@ -81,14 +81,6 @@ export function LandingPricing() {
               </li>
               <li className="flex gap-2">
                 <span style={{ color: "#FF3300" }}>›</span>
-                <span>Unlimited prompt generations</span>
-              </li>
-              <li className="flex gap-2">
-                <span style={{ color: "#FF3300" }}>›</span>
-                <span>Up to 5 saved product profiles</span>
-              </li>
-              <li className="flex gap-2">
-                <span style={{ color: "#FF3300" }}>›</span>
                 <span>Prompt history + restore</span>
               </li>
             </ul>
@@ -117,12 +109,14 @@ export function LandingPricing() {
               </span>
             </div>
             <div className="mt-6 flex items-baseline gap-2">
-              <span className="font-tech text-white font-bold text-[44px] tracking-tight">$199</span>
-              <span className="landing-text-muted text-[14px]">/year</span>
-              <span className="landing-text-muted text-[12px] line-through ml-2">$348</span>
+              <span className="font-tech text-white font-bold text-[44px] tracking-tight">$16</span>
+              <span className="landing-text-muted text-[14px]">/mo</span>
             </div>
+            <p className="mt-1 font-mono text-[14px] landing-text-muted">
+              Billed $199/year — save $149
+            </p>
             <p className="mt-2 landing-text-body text-[14px] leading-relaxed">
-              Best value. Save $149 on annual.
+              Best value, year-round.
             </p>
             <ul className="mt-6 space-y-2.5 text-[14px] landing-text-body">
               <li className="flex gap-2">
@@ -132,10 +126,6 @@ export function LandingPricing() {
               <li className="flex gap-2">
                 <span style={{ color: "#FF3300" }}>›</span>
                 <span>~$16.58/month effective</span>
-              </li>
-              <li className="flex gap-2">
-                <span style={{ color: "#FF3300" }}>›</span>
-                <span>Priority support</span>
               </li>
               <li className="flex gap-2">
                 <span style={{ color: "#FF3300" }}>›</span>
