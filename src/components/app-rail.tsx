@@ -24,6 +24,13 @@ interface AppRailProps {
   onPinChange: (pinned: boolean) => void;
   onAddProfile?: () => void;
   userTier?: 'core' | 'pro';
+  /**
+   * When true, the rail is the picker's "background" — icons fade to 30%, the
+   * rail forces a collapsed width, and tool-nav does NOT yet hold the morph
+   * layoutIds (the gallery owns them). Flips to false the moment the user
+   * picks, so the rail captures the morph and re-asserts full opacity.
+   */
+  iconsDeferred?: boolean;
 }
 
 export function AppRail({
@@ -37,21 +44,23 @@ export function AppRail({
   onPinChange,
   onAddProfile,
   userTier = 'core',
+  iconsDeferred = false,
 }: AppRailProps) {
   const [hoverExpanded, setHoverExpanded] = useState(false);
   const hoverInTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const hoverOutTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  const isExpanded = hoverExpanded || isPinned;
+  // While the picker is rendering, ignore pin/hover and force collapsed.
+  const isExpanded = !iconsDeferred && (hoverExpanded || isPinned);
 
   function handleMouseEnter() {
-    if (isPinned) return;
+    if (isPinned || iconsDeferred) return;
     clearTimeout(hoverOutTimer.current);
     hoverInTimer.current = setTimeout(() => setHoverExpanded(true), 150);
   }
 
   function handleMouseLeave() {
-    if (isPinned) return;
+    if (isPinned || iconsDeferred) return;
     clearTimeout(hoverInTimer.current);
     hoverOutTimer.current = setTimeout(() => setHoverExpanded(false), 100);
   }
@@ -94,10 +103,11 @@ export function AppRail({
           hidden md:flex flex-col fixed left-0 top-14 z-[80]
           h-[calc(100dvh-56px)]
           border-r border-zinc-800 bg-[#070707]
-          transition-[width] duration-200 ease-in-out
+          transition-[width,opacity] duration-200 ease-in-out
           overflow-hidden
           ${isExpanded ? "w-60" : "w-16"}
           ${isPinned ? "" : "shadow-[2px_0_20px_-5px_rgba(0,0,0,0.6)]"}
+          ${iconsDeferred ? "opacity-30 pointer-events-none" : "opacity-100"}
         `}
       >
         <ToolNav
@@ -105,6 +115,7 @@ export function AppRail({
           onToolSelect={onToolSelect}
           isCollapsed={!isExpanded}
           userTier={userTier}
+          enableMorphAnchor={!iconsDeferred}
         />
 
         {isExpanded && (
@@ -185,6 +196,7 @@ export function AppRail({
           onToolSelect={handleToolSelect}
           isCollapsed={false}
           userTier={userTier}
+          enableMorphAnchor={!iconsDeferred}
         />
 
         {/* History */}

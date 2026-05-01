@@ -2,11 +2,13 @@
 
 import { useState, useCallback, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 import { TopBar } from "@/components/top-bar";
 import { AppRail } from "@/components/app-rail";
 import { ControlPanel } from "@/components/control-panel";
 import { UpgradeTrigger } from "@/components/upgrade-trigger";
 import { ProfileWizardSheet } from "@/components/profile-wizard-sheet";
+import { ToolPicker } from "@/components/tool-picker";
 import { tools } from "@/lib/tools";
 import { useProfileSwitcher } from "@/lib/profile-context";
 import {
@@ -17,6 +19,12 @@ import type { RestoredGeneration } from "@/lib/types/generation";
 import type { ProductProfile } from "@/lib/types/profile";
 
 const RAIL_PIN_KEY = "promptstarter:rail-pinned";
+// TODO: migrate to a server-side `users.session_count` (or similar) once that
+// column lands. localStorage is sufficient for v1 — first session a device
+// has ever seen the dashboard shows the picker, every subsequent session
+// goes straight to the last-used tool. The flag is intentionally never
+// cleared except by manual storage reset.
+const HAS_PICKED_TOOL_KEY = "promptstarter:has-picked-tool";
 
 function defaultSliderValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
@@ -51,6 +59,12 @@ function HomeInner() {
   const [userTier, setUserTier] = useState<'core' | 'pro'>('core');
   const [welcomeBanner, setWelcomeBanner] = useState(false);
 
+  // Picker view state. Default 'tool' so the SSR pass and the returning-user
+  // experience match (no flash of picker on every reload). The mount-time
+  // localStorage check below flips this to 'gallery' for first-session users
+  // and for users who explicitly hit ?picker=true.
+  const [view, setView] = useState<'gallery' | 'tool'>('tool');
+
   // ── One-time initialisation: load rail pin + handle ?restore / ?openWizard / cache ──
 
   const initialized = useRef(false);
@@ -62,6 +76,30 @@ function HomeInner() {
       // localStorage unavailable
     }
   }, []);
+
+  // Picker view gate. Order matters:
+  //   1. ?picker=true forces gallery (return-to-picker affordance from the
+  //      wordmark) regardless of the localStorage flag, then strips itself
+  //      from the URL so a reload behaves like a normal returning visit.
+  //   2. Otherwise, first-session users (flag absent) see the gallery.
+  //   3. Returning users (flag === "true") fall through to 'tool', which is
+  //      already the default state.
+  useEffect(() => {
+    let forcedByQuery = false;
+    if (searchParams.get("picker") === "true") {
+      forcedByQuery = true;
+      setView('gallery');
+      router.replace("/dashboard", { scroll: false });
+    }
+    if (forcedByQuery) return;
+    try {
+      const hasPicked = localStorage.getItem(HAS_PICKED_TOOL_KEY) === "true";
+      if (!hasPicked) setView('gallery');
+    } catch {
+      // localStorage unavailable — keep default 'tool' view.
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once on mount
 
   useEffect(() => {
     fetch('/api/user/tier')
@@ -185,6 +223,23 @@ function HomeInner() {
     [activeProfileId]
   );
 
+  // ── Picker → tool transition ───────────────────────────────────────────────
+
+  const handlePickTool = useCallback(
+    (toolId: string) => {
+      try {
+        localStorage.setItem(HAS_PICKED_TOOL_KEY, "true");
+      } catch {
+        // localStorage unavailable — flag flip is best-effort; the user
+        // will see the picker again on next mount, which is acceptable
+        // degradation.
+      }
+      handleToolSelect(toolId);
+      setView('tool');
+    },
+    [handleToolSelect]
+  );
+
   // ── Restore from rail / history click ─────────────────────────────────────
 
   const handleRestoreGeneration = useCallback((gen: RestoredGeneration) => {
@@ -262,6 +317,7 @@ function HomeInner() {
         onPinChange={setRailPinned}
         onAddProfile={() => setWizardOpen(true)}
         userTier={userTier}
+        iconsDeferred={view === 'gallery'}
       />
 
       <main
@@ -271,35 +327,34 @@ function HomeInner() {
           pt-20 md:pt-20
           pb-16
           transition-[margin-left] duration-200 ease-in-out
-          ${railPinned ? "md:ml-60" : "md:ml-16"}
+          ${view === 'gallery' ? "md:ml-16" : railPinned ? "md:ml-60" : "md:ml-16"}
         `}
       >
-        <ControlPanel
-          key={activeToolId}
-          activeTool={activeTool}
-          sliderValues={sliderValues}
-          variableValues={variableValues}
-          isReady={isReady}
-          onSliderChange={(id, value) =>
-            setSliderValues((prev) => ({ ...prev, [id]: value }))
-          }
-          onVariableChange={(name, value) =>
-            setVariableValues((prev) => ({ ...prev, [name]: value }))
-          }
-          rawContext={rawContext}
-          onRawContextChange={setRawContext}
-          contextOpen={contextOpen}
-          onContextOpenChange={setContextOpen}
-          restoredOutput={currentOutput}
-          onGenerationStart={handleGenerationStart}
-          onGenerationComplete={handleGenerationComplete}
-          userTier={userTier}
-        />
-        <UpgradeTrigger
-          toolId={activeToolId}
-          userTier={userTier}
-          hasOutput={Boolean(currentOutput)}
-        />
+        {view === 'gallery' ? (
+          <ToolPicker onPick={handlePickTool} userTier={userTier} />
+        ) : (
+          <ToolSurface
+            activeToolId={activeToolId}
+            activeTool={activeTool}
+            sliderValues={sliderValues}
+            variableValues={variableValues}
+            isReady={isReady}
+            onSliderChange={(id, value) =>
+              setSliderValues((prev) => ({ ...prev, [id]: value }))
+            }
+            onVariableChange={(name, value) =>
+              setVariableValues((prev) => ({ ...prev, [name]: value }))
+            }
+            rawContext={rawContext}
+            onRawContextChange={setRawContext}
+            contextOpen={contextOpen}
+            onContextOpenChange={setContextOpen}
+            currentOutput={currentOutput}
+            onGenerationStart={handleGenerationStart}
+            onGenerationComplete={handleGenerationComplete}
+            userTier={userTier}
+          />
+        )}
       </main>
 
       <ProfileWizardSheet
@@ -308,6 +363,63 @@ function HomeInner() {
         onComplete={handleWizardComplete}
       />
     </div>
+  );
+}
+
+/**
+ * Wraps the ControlPanel + UpgradeTrigger pair so the surface fades in once
+ * the picker → rail morph has settled. Layout matches what `<main>` expects
+ * (flex children sitting side by side / stacked at the breakpoints
+ * ControlPanel itself manages).
+ */
+function ToolSurface(props: {
+  activeToolId: string;
+  activeTool: typeof tools[number];
+  sliderValues: Record<string, number>;
+  variableValues: Record<string, string>;
+  isReady: boolean;
+  onSliderChange: (id: string, value: number) => void;
+  onVariableChange: (name: string, value: string) => void;
+  rawContext: string;
+  onRawContextChange: (value: string) => void;
+  contextOpen: boolean;
+  onContextOpenChange: (open: boolean) => void;
+  currentOutput: string;
+  onGenerationStart: () => void;
+  onGenerationComplete: (output: string) => void;
+  userTier: 'core' | 'pro';
+}) {
+  return (
+    <motion.div
+      key="tool-surface"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2, ease: "easeOut", delay: 0.35 }}
+      className="flex flex-1 items-start justify-center"
+    >
+      <ControlPanel
+        key={props.activeToolId}
+        activeTool={props.activeTool}
+        sliderValues={props.sliderValues}
+        variableValues={props.variableValues}
+        isReady={props.isReady}
+        onSliderChange={props.onSliderChange}
+        onVariableChange={props.onVariableChange}
+        rawContext={props.rawContext}
+        onRawContextChange={props.onRawContextChange}
+        contextOpen={props.contextOpen}
+        onContextOpenChange={props.onContextOpenChange}
+        restoredOutput={props.currentOutput}
+        onGenerationStart={props.onGenerationStart}
+        onGenerationComplete={props.onGenerationComplete}
+        userTier={props.userTier}
+      />
+      <UpgradeTrigger
+        toolId={props.activeToolId}
+        userTier={props.userTier}
+        hasOutput={Boolean(props.currentOutput)}
+      />
+    </motion.div>
   );
 }
 
