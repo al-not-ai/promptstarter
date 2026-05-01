@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { AlertTriangle, Check } from "lucide-react";
+import { AlertTriangle, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PromptHandoff } from "@/components/prompt-handoff";
+import { DOWNSTREAM_AIS, getPreferredAI } from "@/lib/downstream-ai";
+
+const FIRST_COPY_KEY = "promptstarter:has-copied-first-prompt";
 
 interface TerminalOutputProps {
   output: string;
@@ -11,6 +14,20 @@ interface TerminalOutputProps {
   error: Error | undefined;
   rawContext?: string;
   onRetry?: () => void;
+  /** Called after a successful clipboard write. Lifted to the dashboard so
+   *  upgrade-trigger gating + first-flow tracking can react to copy events. */
+  onCopy?: () => void;
+  /** True when the visible output is a freshly generated prompt (vs. a
+   *  history restore). Gates the one-time coaching tooltip. */
+  isFreshGeneration?: boolean;
+}
+
+function coachingCopyFor(preferred: ReturnType<typeof getPreferredAI>): string {
+  if (!preferred) {
+    return "Prompt engineered. Click Copy, then paste it into ChatGPT, Claude, or Gemini — your AI writes the deliverable.";
+  }
+  const label = DOWNSTREAM_AIS.find((ai) => ai.id === preferred)?.label ?? "your AI";
+  return `Prompt engineered. Click Copy, then paste it into ${label} — your AI writes the deliverable.`;
 }
 
 function friendlyError(message: string): string {
@@ -21,17 +38,52 @@ function friendlyError(message: string): string {
   return "Something went wrong. Try again.";
 }
 
-export function TerminalOutput({ output, isLoading, error, rawContext, onRetry }: TerminalOutputProps) {
+export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, onCopy, isFreshGeneration }: TerminalOutputProps) {
   const isEmpty = !output && !isLoading && !error;
   const [hasCopied, setHasCopied] = useState(false);
   const [sweepKey, setSweepKey] = useState<number | null>(null);
   const copyButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  // Coaching tooltip state. Defaults closed so first paint matches SSR; the
+  // mount-time effect below opens it for first-time users on a fresh
+  // generation.
+  const [coachingOpen, setCoachingOpen] = useState(false);
+  const [coachingCopy, setCoachingCopy] = useState<string>(() => coachingCopyFor(null));
 
   // Reset on new output (re-generation or history restore)
   useEffect(() => {
     setHasCopied(false);
     setSweepKey(null);
   }, [output]);
+
+  // Coaching tooltip gate — only shows for users who have never copied a
+  // prompt before, and only on freshly generated output (not history restores).
+  useEffect(() => {
+    if (!output || isLoading || error || !isFreshGeneration) {
+      setCoachingOpen(false);
+      return;
+    }
+    try {
+      const alreadyCopied = localStorage.getItem(FIRST_COPY_KEY) === "true";
+      if (alreadyCopied) {
+        setCoachingOpen(false);
+        return;
+      }
+    } catch {
+      // localStorage unavailable — best-effort, fall through and show.
+    }
+    setCoachingCopy(coachingCopyFor(getPreferredAI()));
+    setCoachingOpen(true);
+  }, [output, isLoading, error, isFreshGeneration]);
+
+  function dismissCoaching() {
+    setCoachingOpen(false);
+    try {
+      localStorage.setItem(FIRST_COPY_KEY, "true");
+    } catch {
+      // best-effort; tooltip will reappear next session if storage is blocked.
+    }
+  }
 
   function handleCopy() {
     if (!output) return;
@@ -46,6 +98,8 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry }
     navigator.clipboard.writeText(output + intel).then(() => {
       setHasCopied(true);
       setSweepKey(Date.now());
+      dismissCoaching();
+      onCopy?.();
     });
   }
 
@@ -104,6 +158,46 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry }
                 {hasCopied && <Check size={12} />}
                 <span>{hasCopied ? "Copied — clipboard ready" : (rawContext?.trim() ? "Copy + Context" : "Copy")}</span>
               </button>
+              {coachingOpen && (
+                <div
+                  role="tooltip"
+                  className={cn(
+                    "absolute z-30 right-0 w-[280px] max-w-[calc(100vw-2rem)]",
+                    "bottom-full mb-3 sm:bottom-full sm:mb-3",
+                    "max-sm:bottom-auto max-sm:top-full max-sm:mt-3 max-sm:mb-0",
+                    "animate-coach-bounce"
+                  )}
+                >
+                  <div className="relative rounded-md bg-[#FF3300] text-white px-3.5 py-2.5 shadow-[0_8px_24px_-8px_rgba(255,51,0,0.5)]">
+                    <div className="flex items-start gap-2">
+                      <p className="font-sans text-[13px] font-medium leading-snug flex-1">
+                        {coachingCopy}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={dismissCoaching}
+                        className="shrink-0 -mr-1 -mt-0.5 p-1 rounded-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                        aria-label="Dismiss tooltip"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                    {/* Arrow notch — points down toward the Copy button on desktop, up on mobile */}
+                    <div
+                      aria-hidden
+                      className={cn(
+                        "absolute right-6 w-0 h-0",
+                        "border-l-[6px] border-l-transparent",
+                        "border-r-[6px] border-r-transparent",
+                        // Desktop: tooltip is above, arrow points down
+                        "top-full border-t-[6px] border-t-[#FF3300]",
+                        // Mobile: tooltip below, arrow points up (override desktop borders)
+                        "max-sm:top-auto max-sm:bottom-full max-sm:border-t-0 max-sm:border-b-[6px] max-sm:border-b-[#FF3300]"
+                      )}
+                    />
+                  </div>
+                </div>
+              )}
               <PromptHandoff
                 visible={hasCopied}
                 onDismiss={() => setHasCopied(false)}

@@ -25,6 +25,10 @@ const RAIL_PIN_KEY = "promptstarter:rail-pinned";
 // goes straight to the last-used tool. The flag is intentionally never
 // cleared except by manual storage reset.
 const HAS_PICKED_TOOL_KEY = "promptstarter:has-picked-tool";
+// Set to "true" the first time the user copies any prompt. Suppresses the
+// upgrade-trigger banner during the user's very first end-to-end flow so the
+// initial copy moment isn't immediately competing with an upsell.
+const HAS_COMPLETED_FIRST_FLOW_KEY = "promptstarter:has-completed-first-flow";
 
 function defaultSliderValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
@@ -51,6 +55,12 @@ function HomeInner() {
   const [rawContext, setRawContext] = useState("");
   const [contextOpen, setContextOpen] = useState(false);
   const [currentOutput, setCurrentOutput] = useState("");
+  // True only between the moment the user clicks Copy on the *current* output
+  // and the moment a new output replaces it. Drives the upgrade-trigger banner.
+  const [hasCopiedCurrentOutput, setHasCopiedCurrentOutput] = useState(false);
+  // Read once on mount. Stays false through the user's very first copy so the
+  // upgrade banner doesn't appear during the first flow.
+  const [hasCompletedFirstFlow, setHasCompletedFirstFlow] = useState(false);
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [generationCount, setGenerationCount] = useState(0);
@@ -72,6 +82,9 @@ function HomeInner() {
   useEffect(() => {
     try {
       setRailPinned(localStorage.getItem(RAIL_PIN_KEY) === "true");
+      setHasCompletedFirstFlow(
+        localStorage.getItem(HAS_COMPLETED_FIRST_FLOW_KEY) === "true"
+      );
     } catch {
       // localStorage unavailable
     }
@@ -194,6 +207,7 @@ function HomeInner() {
   const handleToolSelect = useCallback(
     (toolId: string) => {
       setActiveToolId(toolId);
+      setHasCopiedCurrentOutput(false);
 
       if (!activeProfileId) {
         setVariableValues(defaultVariableValues(toolId));
@@ -250,16 +264,32 @@ function HomeInner() {
     setRawContext("");
     setContextOpen(false);
     setCurrentOutput(gen.output);
+    setHasCopiedCurrentOutput(false);
   }, []);
 
   // ── Generation lifecycle ───────────────────────────────────────────────────
 
-  const handleGenerationStart = useCallback(() => {}, []);
+  const handleGenerationStart = useCallback(() => {
+    setHasCopiedCurrentOutput(false);
+  }, []);
 
   const handleGenerationComplete = useCallback((output: string) => {
     setCurrentOutput(output);
     setGenerationCount((c) => c + 1);
+    setHasCopiedCurrentOutput(false);
   }, []);
+
+  const handleCopy = useCallback(() => {
+    setHasCopiedCurrentOutput(true);
+    if (!hasCompletedFirstFlow) {
+      try {
+        localStorage.setItem(HAS_COMPLETED_FIRST_FLOW_KEY, "true");
+      } catch {
+        // best-effort
+      }
+      setHasCompletedFirstFlow(true);
+    }
+  }, [hasCompletedFirstFlow]);
 
   // ── Wizard callbacks ───────────────────────────────────────────────────────
 
@@ -352,6 +382,9 @@ function HomeInner() {
             currentOutput={currentOutput}
             onGenerationStart={handleGenerationStart}
             onGenerationComplete={handleGenerationComplete}
+            onCopy={handleCopy}
+            hasCopiedCurrentOutput={hasCopiedCurrentOutput}
+            hasCompletedFirstFlow={hasCompletedFirstFlow}
             userTier={userTier}
           />
         )}
@@ -387,6 +420,9 @@ function ToolSurface(props: {
   currentOutput: string;
   onGenerationStart: () => void;
   onGenerationComplete: (output: string) => void;
+  onCopy: () => void;
+  hasCopiedCurrentOutput: boolean;
+  hasCompletedFirstFlow: boolean;
   userTier: 'core' | 'pro';
 }) {
   return (
@@ -412,12 +448,14 @@ function ToolSurface(props: {
         restoredOutput={props.currentOutput}
         onGenerationStart={props.onGenerationStart}
         onGenerationComplete={props.onGenerationComplete}
+        onCopy={props.onCopy}
         userTier={props.userTier}
       />
       <UpgradeTrigger
         toolId={props.activeToolId}
         userTier={props.userTier}
-        hasOutput={Boolean(props.currentOutput)}
+        hasCopied={props.hasCopiedCurrentOutput}
+        suppressForFirstFlow={!props.hasCompletedFirstFlow}
       />
     </motion.div>
   );

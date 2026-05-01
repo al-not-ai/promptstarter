@@ -213,6 +213,15 @@ body {
   animation: copy-pulse 0.32s ease-out forwards;
 }
 
+/* First-prompt coaching tooltip bounce — gentle vertical hover */
+@keyframes coach-bounce {
+  0%, 100% { transform: translateY(-2px); }
+  50%      { transform: translateY(0); }
+}
+.animate-coach-bounce {
+  animation: coach-bounce 1.4s ease-in-out infinite;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

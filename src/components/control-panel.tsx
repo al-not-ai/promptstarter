@@ -23,6 +23,7 @@ interface ControlPanelProps {
   restoredOutput: string;
   onGenerationStart: () => void;
   onGenerationComplete: (output: string) => void;
+  onCopy: () => void;
   userTier: 'core' | 'pro';
 }
 
@@ -40,6 +41,7 @@ export function ControlPanel({
   restoredOutput,
   onGenerationStart,
   onGenerationComplete,
+  onCopy,
   userTier,
 }: ControlPanelProps) {
   const { complete, completion, isLoading, error } = useCompletion({
@@ -245,6 +247,10 @@ export function ControlPanel({
         error={isLocked ? undefined : error}
         rawContext={rawContext}
         onRetry={handleGenerate}
+        onCopy={onCopy}
+        // Fresh = the visible output came from the live useCompletion stream
+        // (not from `restoredOutput` and not the locked sample preview).
+        isFreshGeneration={!isLocked && Boolean(completion)}
       />
 
     </div>
