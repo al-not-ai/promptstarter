@@ -3,7 +3,8 @@
 interface UpgradeTriggerProps {
   toolId: string;
   userTier: 'core' | 'pro';
-  hasOutput: boolean;
+  hasCopied: boolean;
+  suppressForFirstFlow: boolean;
 }
 
 const UPGRADE_NUDGES: Partial<Record<string, string>> = {
@@ -12,8 +13,8 @@ const UPGRADE_NUDGES: Partial<Record<string, string>> = {
   'cold-hook':         "Following up on cold outreach is where most replies die. The Deal Reviver builds a multi-touch sequence for this same prospect.",
 };
 
-export function UpgradeTrigger({ toolId, userTier, hasOutput }: UpgradeTriggerProps) {
-  if (userTier !== 'core' || !hasOutput) return null;
+export function UpgradeTrigger({ toolId, userTier, hasCopied, suppressForFirstFlow }: UpgradeTriggerProps) {
+  if (userTier !== 'core' || !hasCopied || suppressForFirstFlow) return null;
 
   const nudge = UPGRADE_NUDGES[toolId];
   if (!nudge) return null;
