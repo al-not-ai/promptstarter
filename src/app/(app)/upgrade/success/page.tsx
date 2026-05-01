@@ -17,7 +17,7 @@ export default function UpgradeSuccessPage() {
         if (res.ok) {
           const { tier } = await res.json();
           if (tier === 'pro') {
-            router.replace('/?welcome=true');
+            router.replace('/dashboard?welcome=true');
             return;
           }
         }
@@ -48,7 +48,7 @@ export default function UpgradeSuccessPage() {
             Your payment went through. Pro access usually activates within 30 seconds — refresh the app and you will be good to go.
           </p>
           <a
-            href="/"
+            href="/dashboard"
             className="font-mono text-sm text-[#FF3300] hover:text-[#e02d00] transition-colors duration-150"
           >
             Go to app →

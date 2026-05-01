@@ -325,7 +325,7 @@ function DrawerProfileSwitcher({
                 onMobileClose?.();
                 onAddProfile();
               } else {
-                router.push("/?openWizard=true");
+                router.push("/dashboard?openWizard=true");
               }
             }}
             className="w-full text-left block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"

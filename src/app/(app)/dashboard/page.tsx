@@ -74,7 +74,7 @@ function HomeInner() {
   useEffect(() => {
     if (searchParams.get("openWizard") === "true") {
       setWizardOpen(true);
-      router.replace("/", { scroll: false });
+      router.replace("/dashboard", { scroll: false });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // run once on mount; searchParams stable at mount
@@ -82,7 +82,7 @@ function HomeInner() {
   // Handle ?welcome=true — strip from URL on mount, show banner briefly
   useEffect(() => {
     if (searchParams.get("welcome") === "true") {
-      router.replace("/", { scroll: false });
+      router.replace("/dashboard", { scroll: false });
       setWelcomeBanner(true);
       const t = setTimeout(() => setWelcomeBanner(false), 5000);
       return () => clearTimeout(t);
@@ -96,7 +96,7 @@ function HomeInner() {
 
     const restoreId = searchParams.get("restore");
     if (restoreId) {
-      router.replace("/", { scroll: false });
+      router.replace("/dashboard", { scroll: false });
       fetch(`/api/generations/${restoreId}`)
         .then((r) => (r.ok ? r.json() : null))
         .then((gen) => {

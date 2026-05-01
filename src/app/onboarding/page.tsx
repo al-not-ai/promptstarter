@@ -34,7 +34,7 @@ function OnboardingInner() {
   }, [isReturning]);
 
   function handleComplete() {
-    router.push(returnTo ?? "/");
+    router.push(returnTo ?? "/dashboard");
   }
 
   return (

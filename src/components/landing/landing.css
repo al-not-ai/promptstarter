@@ -1,0 +1,302 @@
+/* Landing page styles — scoped to the marketing site. */
+
+.landing-root { color: #d4d4d8; }
+.landing-text-body { color: rgba(212, 212, 216, 0.92); }
+.landing-text-muted { color: #a1a1aa; }
+
+/* Hero grid + vignette */
+.landing-grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 51, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 51, 0, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center center;
+}
+.landing-hero-vignette {
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 25%, rgba(255, 51, 0, 0.10), transparent 60%),
+    radial-gradient(ellipse 80% 60% at 80% 80%, rgba(255, 51, 0, 0.05), transparent 70%);
+}
+
+/* Buttons */
+.landing-btn-primary {
+  background: #FF3300; color: #fff; font-weight: 600;
+  padding: 12px 18px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: filter .18s, transform .12s, box-shadow .25s;
+}
+.landing-btn-primary:hover { filter: brightness(1.08); box-shadow: 0 8px 28px rgba(255, 51, 0, 0.30); }
+.landing-btn-primary:active { transform: translateY(1px); }
+.landing-btn-primary .arrow { transition: transform .25s cubic-bezier(.2, .7, .2, 1); }
+.landing-btn-primary:hover .arrow { transform: translateX(4px); }
+
+.landing-btn-ghost {
+  background: transparent; color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  padding: 12px 18px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: background .2s, border-color .2s;
+}
+.landing-btn-ghost:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.32); }
+
+.landing-btn-secondary {
+  background: #2A2A2A; color: #fff; font-weight: 600;
+  padding: 12px 18px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background .2s;
+}
+.landing-btn-secondary:hover { background: #353535; }
+
+.landing-btn-outline {
+  background: transparent; color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 12px 18px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: background .2s, border-color .2s;
+  font-weight: 600;
+}
+.landing-btn-outline:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.32); }
+
+/* Header */
+.landing-nav-link {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px; font-weight: 500;
+  padding: 8px 12px; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.landing-nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.04); }
+.landing-header-scrolled {
+  background: rgba(7, 7, 7, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(39, 39, 42, 1);
+}
+
+/* Wordmark */
+.landing-wordmark {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Cards */
+.landing-surface-card {
+  background: #1E1E1E;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+}
+
+/* Bento card with cursor-tracked glow */
+.landing-bento {
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s, border-color .25s;
+}
+.landing-bento::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 51, 0, 0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+@media (hover: hover) {
+  .landing-bento:hover { transform: scale(1.015); border-color: rgba(255, 51, 0, 0.30); }
+  .landing-bento:hover::before { opacity: 1; }
+}
+
+/* Chips */
+.landing-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: .04em;
+  padding: 4px 8px; border-radius: 999px;
+  text-transform: uppercase;
+}
+.landing-chip-free {
+  background: rgba(255, 255, 255, 0.06);
+  color: #d4d4d8;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+.landing-chip-pro {
+  background: rgba(255, 51, 0, 0.10);
+  color: #FF7A55;
+  border: 1px solid rgba(255, 51, 0, 0.25);
+}
+.landing-chip-best { background: #FF3300; color: #fff; }
+
+/* Stage / hero animation */
+.landing-stage {
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-slot {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .55s ease, transform .55s ease;
+  transform: translateY(10px);
+  padding: 22px;
+}
+.landing-slot.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.landing-step-pip {
+  width: 22px; height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background .3s;
+}
+.landing-step-pip.is-active { background: #FF3300; }
+
+/* Stage step header */
+.landing-step-header {
+  padding: 22px 24px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.landing-step-num {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: #FF3300;
+}
+.landing-step-title {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1.1;
+  margin-top: 6px;
+}
+.landing-step-sub {
+  color: #a1a1aa;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.landing-wf-input {
+  background: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.landing-wf-input.focused {
+  border-color: rgba(255, 51, 0, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 51, 0, 0.10);
+}
+.landing-wf-label {
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: #71717a;
+}
+.landing-wf-value {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  color: #e4e4e7;
+  margin-top: 6px;
+  min-height: 18px;
+}
+@keyframes landing-blink {
+  0%, 60% { opacity: 1; }
+  61%, 100% { opacity: 0; }
+}
+.landing-caret {
+  display: inline-block;
+  width: 7px; height: 14px;
+  background: #FF3300;
+  vertical-align: -2px;
+  margin-left: 2px;
+  animation: landing-blink 1s step-end infinite;
+}
+
+/* Pricing */
+.landing-pro-annual {
+  border: 2px solid #FF3300;
+  box-shadow: 0 0 30px rgba(255, 51, 0, 0.15);
+}
+
+.landing-price-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .landing-price-row {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 8px 20px 16px;
+    margin: 0 -20px;
+  }
+  .landing-price-row > * {
+    flex: 0 0 86%;
+    scroll-snap-align: center;
+  }
+}
+
+/* Tool grid: 7 even tiles, dense + readable */
+.landing-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  grid-auto-rows: minmax(190px, 1fr);
+}
+.landing-bento-grid .b-recon { grid-column: span 2; }
+@media (max-width: 900px) {
+  .landing-bento-grid { grid-template-columns: repeat(2, 1fr); }
+  .landing-bento-grid .b-recon { grid-column: span 2; }
+}
+@media (max-width: 540px) {
+  .landing-bento-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    grid-auto-rows: auto;
+  }
+  .landing-bento-grid > * { grid-column: span 1 !important; }
+}
+.landing-tool-icon {
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 51, 0, 0.10);
+  border: 1px solid rgba(255, 51, 0, 0.28);
+  color: #FF3300;
+}
+.landing-tool-tier {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  color: #52525b;
+}
+
+.landing-rule { height: 1px; background: rgba(255, 255, 255, 0.06); }
+.landing-ulink { color: rgba(255, 255, 255, 0.7); transition: color .15s; }
+.landing-ulink:hover { color: #fff; }
+
+@keyframes landing-pulse {
+  0%, 100% { opacity: .4; }
+  50% { opacity: 1; }
+}
+.landing-live-dot {
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: #FF3300;
+  animation: landing-pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-root *,
+  .landing-root *::before,
+  .landing-root *::after {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}

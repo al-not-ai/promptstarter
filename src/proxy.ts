@@ -31,14 +31,17 @@ export async function proxy(request: NextRequest) {
 
   const { response, user } = await getSessionAndUser(request);
 
+  // Public routes — anyone can hit them. Marketing landing, login.
+  const isPublic = pathname === "/" || pathname === "/login";
+
   // Unauthenticated user on a protected route → /login
-  if (!user && pathname !== "/login") {
+  if (!user && !isPublic) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Authenticated user hitting /login → Command Center
-  if (user && pathname === "/login") {
-    return NextResponse.redirect(new URL("/", request.url));
+  // Authenticated user hitting / or /login → Command Center
+  if (user && (pathname === "/login" || pathname === "/")) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return response;

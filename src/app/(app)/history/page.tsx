@@ -263,7 +263,7 @@ export default function HistoryPage() {
           <div className="py-20 text-center">
             <p className="font-mono text-sm text-zinc-600">No generations yet.</p>
             <Link
-              href="/"
+              href="/dashboard"
               className="mt-3 inline-block font-mono text-xs text-[#FF3300]/70 hover:text-[#FF3300] transition-colors duration-150"
             >
               ← Go generate something
