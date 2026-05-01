@@ -28,8 +28,14 @@ export function TopBar({ isMobileOpen, onMenuToggle, onAddProfile }: TopBarProps
 
       {/* ── Desktop layout ─────────────────────────────────── */}
       <div className="hidden md:flex flex-1 items-center min-w-0">
-        {/* Logo + brand */}
-        <div className="flex items-center gap-2 px-4 shrink-0">
+        {/* Logo + brand — clicking the wordmark surfaces the tool picker */}
+        <Link
+          href="/dashboard?picker=true"
+          aria-label="Switch tool"
+          title="Switch tool"
+          className="flex items-center gap-2 px-4 shrink-0 rounded-md py-1 -my-1 transition-colors duration-150 hover:bg-white/[0.04]"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/icon-dark.svg"
             alt=""
@@ -41,7 +47,7 @@ export function TopBar({ isMobileOpen, onMenuToggle, onAddProfile }: TopBarProps
             <span className="text-white font-extrabold text-lg">PromptStarter</span>
             <span className="text-[#FF3300] font-bold text-lg">.ai</span>
           </div>
-        </div>
+        </Link>
 
         {/* Divider */}
         <div className="w-px h-5 bg-zinc-700/60 shrink-0" />
@@ -71,8 +77,13 @@ export function TopBar({ isMobileOpen, onMenuToggle, onAddProfile }: TopBarProps
           {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
 
-        {/* Center: brand lockup */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Center: brand lockup — tap to switch tool */}
+        <Link
+          href="/dashboard?picker=true"
+          aria-label="Switch tool"
+          className="flex items-center gap-2 shrink-0 rounded-md px-2 py-1 -mx-2 -my-1 transition-colors duration-150 active:bg-white/[0.06]"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/icon-dark.svg"
             alt=""
@@ -84,7 +95,7 @@ export function TopBar({ isMobileOpen, onMenuToggle, onAddProfile }: TopBarProps
             <span className="text-white font-extrabold text-base">PromptStarter</span>
             <span className="text-[#FF3300] font-bold text-base">.ai</span>
           </div>
-        </div>
+        </Link>
 
         {/* Right: user avatar */}
         <div className="shrink-0">
