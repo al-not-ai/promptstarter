@@ -84,18 +84,48 @@ export function LandingToolsBento() {
         </div>
 
         <div className="landing-bento-grid">
-          <BentoCard icon={DollarSign} title="CFO Pitch" tier="pro" />
-          <BentoCard icon={MessageSquare} title="Follow-Up Forward" tier="pro" />
-          <BentoCard icon={ShieldCheck} title="Objection Defuser" tier="pro" />
-          <BentoCard icon={Zap} title="Cold Hook" tier="pro" />
-          <BentoCard icon={RotateCcw} title="Deal Reviver" tier="pro" />
-          <BentoCard icon={BarChart2} title="Battlecard" tier="pro" />
+          <BentoCard
+            icon={DollarSign}
+            title="CFO Pitch"
+            tier="pro"
+            description="A CFO-ready business case in their language, not yours."
+          />
+          <BentoCard
+            icon={MessageSquare}
+            title="Follow-Up Forward"
+            tier="pro"
+            description="Post-call email plus a forward-ready recap your prospect can send internally."
+          />
+          <BentoCard
+            icon={ShieldCheck}
+            title="Objection Defuser"
+            tier="pro"
+            description="A direct response and the follow-up question for any objection in your pipeline."
+          />
+          <BentoCard
+            icon={Zap}
+            title="Cold Hook"
+            tier="pro"
+            description="A first-touch outreach hook tied to a real trigger event."
+          />
+          <BentoCard
+            icon={RotateCcw}
+            title="Deal Reviver"
+            tier="pro"
+            description="A three-touch revival sequence to bring a stalled deal back."
+          />
+          <BentoCard
+            icon={BarChart2}
+            title="Battlecard"
+            tier="pro"
+            description="Five discovery questions tuned to win against a known competitor."
+          />
           <BentoCard
             icon={Phone}
             title="Pre-Call Recon"
             tier="free"
             className="b-recon"
-            description="Try the engine — paste any account, get the anchor facts. No signup."
+            description="Free forever — your first tool, no card required."
           />
         </div>
       </div>
