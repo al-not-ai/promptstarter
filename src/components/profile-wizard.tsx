@@ -236,7 +236,7 @@ export function StepCompany({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="e.g., KEYENCE, Stripe, Snowflake…"
+            placeholder="e.g., Salesforce, Stripe, Snowflake…"
             autoFocus
             className="w-full h-11 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
           />

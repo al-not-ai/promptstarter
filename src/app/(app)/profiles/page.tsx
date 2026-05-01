@@ -402,7 +402,7 @@ function EditDialog({ profile, onClose, onSaved }: EditDialogProps) {
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               className="w-full font-mono text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40"
-              placeholder="KEYENCE"
+              placeholder="e.g., Salesforce"
             />
           </div>
 

@@ -2,12 +2,12 @@
  * Product Profile types.
  *
  * Profiles are product-scoped, not company-scoped. A rep at a multi-product
- * company (e.g. KEYENCE) sells one of many products to one of many markets;
+ * company (e.g. Salesforce) sells one of many products to one of many markets;
  * this profile matches their specific product or product group.
  *
  * User-facing fields — the rep fills these out or edits them:
- *   - company_name          "KEYENCE"
- *   - product_name          "IV3 Vision System" (can be a specific product or a product line)
+ *   - company_name          "Salesforce"
+ *   - product_name          "Sales Cloud" (can be a specific product or a product line)
  *   - product_summary       One sentence on what it does
  *   - key_differentiators   2–3 short phrases on what makes it stand out
  *

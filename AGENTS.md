@@ -17,7 +17,7 @@
 - The Engine never speaks in first person as if it were the Downstream AI.
 - Third-person references to "Downstream AI" or "the AI" must never appear in the generated master prompt — only in internal engine rules.
 
-**Profiles are product-scoped, not company-scoped.** A rep at a multi-product company (e.g. KEYENCE) sells one of many products to one of many markets. The profile must match the rep's specific product or product group; company-level facts that don't bear on that product are noise.
+**Profiles are product-scoped, not company-scoped.** A rep at a multi-product company (e.g. Salesforce) sells one of many products to one of many markets. The profile must match the rep's specific product or product group; company-level facts that don't bear on that product are noise.
 
 **Design balance — hold both at once:**
 
