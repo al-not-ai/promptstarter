@@ -1,6 +1,7 @@
 export function LandingHowItWorks() {
   return (
     <section id="how" className="py-20 md:py-28">
+      <span id="how-it-works" className="sr-only" />
       <div className="max-w-[1280px] mx-auto px-5 md:px-8">
         <div className="max-w-[640px]">
           <div className="font-mono text-[11px] tracking-[.18em] uppercase landing-text-muted mb-4">
