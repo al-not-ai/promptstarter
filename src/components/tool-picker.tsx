@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Lock, type LucideIcon } from "lucide-react";
-import { tools } from "@/lib/tools";
+import { TOOL_CATEGORIES } from "@/lib/tools";
 import { TOOL_ICONS, toolIconLayoutId } from "@/components/tool-nav";
+import { DesktopProfileSwitcher } from "@/components/top-bar";
 import { cn } from "@/lib/utils";
 
 interface ToolPickerProps {
@@ -70,7 +71,7 @@ function ToolCard({
           isLocked ? "text-[#FF7A55]" : "text-zinc-500"
         )}
       >
-        {isLocked ? "Pro" : "Free"}
+        {isLocked ? "Pro" : "Core"}
       </span>
 
       {/* Icon — the morph anchor. Same layoutId in tool-nav rail. */}
@@ -104,42 +105,46 @@ export function ToolPicker({ onPick, userTier = "core" }: ToolPickerProps) {
       aria-label="Tool picker"
       className="w-full max-w-[1100px] mx-auto px-4 md:px-8 py-10 md:py-16"
     >
-      <header className="mb-8 md:mb-10">
-        <h1 className="font-sans text-white text-[22px] md:text-[26px] font-semibold tracking-tight">
-          Pick a tool to start
-        </h1>
-        <p className="mt-1.5 text-[14px] text-zinc-400">
-          You can switch anytime from the left rail.
-        </p>
+      <header className="mb-8 md:mb-10 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="font-sans text-white text-[22px] md:text-[26px] font-semibold tracking-tight">
+            Pick a tool to start
+          </h1>
+          <p className="mt-1.5 text-[14px] text-zinc-400">
+            Pick once. Switch anytime.
+          </p>
+        </div>
+        <div className="relative shrink-0 pt-1">
+          <DesktopProfileSwitcher dropdownAlign="right" />
+        </div>
       </header>
 
-      <div
-        className={cn(
-          // Desktop: 4 cards top row, 3 cards bottom row, centered.
-          // Implemented as a 12-col grid where each top card spans 3, each
-          // bottom card spans 4 — that leaves the bottom row naturally centered.
-          "grid grid-cols-2 sm:grid-cols-12 gap-3 md:gap-4"
-        )}
-      >
-        {tools.map((tool, idx) => {
-          const Icon = TOOL_ICONS[tool.id];
-          if (!Icon) return null;
-          const isLocked = tool.tier === "pro" && userTier === "core";
-          // Top row (first 4) span 3; bottom row (last 3) span 4.
-          const span = idx < 4 ? "sm:col-span-3" : "sm:col-span-4";
-          return (
-            <div key={tool.id} className={cn("col-span-1", span)}>
-              <ToolCard
-                toolId={tool.id}
-                name={tool.name}
-                outcome={TOOL_OUTCOMES[tool.id] ?? ""}
-                Icon={Icon}
-                isLocked={isLocked}
-                onPick={onPick}
-              />
+      <div className="flex flex-col gap-8 md:gap-10">
+        {TOOL_CATEGORIES.map(({ category, tools: categoryTools }) => (
+          <div key={category}>
+            <p className="font-sans text-[11px] tracking-wider uppercase text-zinc-500 mb-3">
+              {category}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+              {categoryTools.map((tool) => {
+                const Icon = TOOL_ICONS[tool.id];
+                if (!Icon) return null;
+                const isLocked = tool.tier === "pro" && userTier === "core";
+                return (
+                  <ToolCard
+                    key={tool.id}
+                    toolId={tool.id}
+                    name={tool.name}
+                    outcome={TOOL_OUTCOMES[tool.id] ?? ""}
+                    Icon={Icon}
+                    isLocked={isLocked}
+                    onPick={onPick}
+                  />
+                );
+              })}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </section>
   );
