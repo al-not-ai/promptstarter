@@ -122,7 +122,7 @@ export function ToolNav({
                       )}
                       style={isActive ? { textShadow: "0 0 12px rgba(255,51,0,0.2)" } : undefined}
                     >
-                      <span className="truncate">{tool.name.replace(/^The\s+/, "")}</span>
+                      <span className="truncate">{tool.name}</span>
                       {isLocked && (
                         <Lock size={11} className="shrink-0 text-zinc-600" />
                       )}
