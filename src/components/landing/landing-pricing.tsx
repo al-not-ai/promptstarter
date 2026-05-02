@@ -110,7 +110,7 @@ export function LandingPricing() {
             </div>
             <div className="mt-6 flex items-baseline gap-2">
               <span className="font-tech text-white font-bold text-[44px] tracking-tight">$16</span>
-              <span className="landing-text-muted text-[14px]">/mo</span>
+              <span className="landing-text-muted ml-1 text-[14px]">/month</span>
             </div>
             <p className="mt-1 font-mono text-[14px] landing-text-muted">
               Billed $199/year — save $149
@@ -122,10 +122,6 @@ export function LandingPricing() {
               <li className="flex gap-2">
                 <span style={{ color: "#FF3300" }}>›</span>
                 <span>Everything in Pro Monthly</span>
-              </li>
-              <li className="flex gap-2">
-                <span style={{ color: "#FF3300" }}>›</span>
-                <span>~$16.58/month effective</span>
               </li>
               <li className="flex gap-2">
                 <span style={{ color: "#FF3300" }}>›</span>
