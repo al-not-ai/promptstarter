@@ -19,12 +19,6 @@ import type { RestoredGeneration } from "@/lib/types/generation";
 import type { ProductProfile } from "@/lib/types/profile";
 
 const RAIL_PIN_KEY = "promptstarter:rail-pinned";
-// TODO: migrate to a server-side `users.session_count` (or similar) once that
-// column lands. localStorage is sufficient for v1 — first session a device
-// has ever seen the dashboard shows the picker, every subsequent session
-// goes straight to the last-used tool. The flag is intentionally never
-// cleared except by manual storage reset.
-const HAS_PICKED_TOOL_KEY = "promptstarter:has-picked-tool";
 // Set to "true" the first time the user copies any prompt. Suppresses the
 // upgrade-trigger banner during the user's very first end-to-end flow so the
 // initial copy moment isn't immediately competing with an upsell.
@@ -69,11 +63,12 @@ function HomeInner() {
   const [userTier, setUserTier] = useState<'core' | 'pro'>('core');
   const [welcomeBanner, setWelcomeBanner] = useState(false);
 
-  // Picker view state. Default 'tool' so the SSR pass and the returning-user
-  // experience match (no flash of picker on every reload). The mount-time
-  // localStorage check below flips this to 'gallery' for first-session users
-  // and for users who explicitly hit ?picker=true.
-  const [view, setView] = useState<'gallery' | 'tool'>('tool');
+  // Picker view state. Default 'gallery' so every fresh load lands on the
+  // picker. The ?picker=true effect keeps client-side nav working (e.g.
+  // wordmark click from /dashboard where the component does not remount).
+  // The restore effect below flips to 'tool' directly when ?restore= is
+  // present so the restored generation skips the picker entirely.
+  const [view, setView] = useState<'gallery' | 'tool'>('gallery');
 
   // ── One-time initialisation: load rail pin + handle ?restore / ?openWizard / cache ──
 
@@ -87,16 +82,6 @@ function HomeInner() {
       );
     } catch {
       // localStorage unavailable
-    }
-  }, []);
-
-  // First-session picker gate — one-shot, no query params involved.
-  useEffect(() => {
-    try {
-      const hasPicked = localStorage.getItem(HAS_PICKED_TOOL_KEY) === "true";
-      if (!hasPicked) setView('gallery');
-    } catch {
-      // localStorage unavailable — keep default 'tool' view.
     }
   }, []);
 
@@ -143,6 +128,7 @@ function HomeInner() {
 
     const restoreId = searchParams.get("restore");
     if (restoreId) {
+      setView('tool');
       router.replace("/dashboard", { scroll: false });
       fetch(`/api/generations/${restoreId}`)
         .then((r) => (r.ok ? r.json() : null))
@@ -237,13 +223,6 @@ function HomeInner() {
 
   const handlePickTool = useCallback(
     (toolId: string) => {
-      try {
-        localStorage.setItem(HAS_PICKED_TOOL_KEY, "true");
-      } catch {
-        // localStorage unavailable — flag flip is best-effort; the user
-        // will see the picker again on next mount, which is acceptable
-        // degradation.
-      }
       handleToolSelect(toolId);
       setView('tool');
     },
