@@ -96,7 +96,7 @@ export function ControlPanel({
     <div className="w-full flex flex-col gap-4">
 
       {/* Main form card */}
-      <Card className="w-full border border-white/10 bg-white/[0.02] backdrop-blur-md">
+      <Card className="w-full border border-white/10 bg-[#1E1E1E]">
         <CardContent className="px-5 py-5 space-y-4">
 
           {/* Pro banner — only in locked mode */}

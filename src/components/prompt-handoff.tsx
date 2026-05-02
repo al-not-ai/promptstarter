@@ -69,7 +69,7 @@ export function PromptHandoff({ visible, onDismiss, pulseKey, copyButtonRef }: P
       )}
       style={{ transitionDelay: visible ? "150ms" : "0ms" }}
     >
-      <div className="relative rounded-lg border border-[#FF3300]/30 bg-[#0a0a0a]/95 backdrop-blur-md px-5 py-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)]">
+      <div className="relative rounded-lg border border-[#FF3300]/30 bg-[#2A2A2A] px-5 py-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)]">
         {/* Re-copy pulse — re-keyed on every pulseKey change so animation restarts */}
         {pulseKey != null && (
           <div

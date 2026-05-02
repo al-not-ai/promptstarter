@@ -283,7 +283,7 @@ function DrawerProfileSwitcher({
         <div
           ref={menuRef}
           role="listbox"
-          className="absolute left-2 right-2 top-full mt-1 z-[110] rounded-lg border border-white/10 bg-[#0a0a0a] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] overflow-hidden"
+          className="absolute left-2 right-2 top-full mt-1 z-[110] rounded-lg border border-white/10 bg-[#2A2A2A] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] overflow-hidden"
         >
           <div className="max-h-72 overflow-y-auto py-1">
             {profiles.map((p) => {
