@@ -93,7 +93,7 @@ export function ControlPanel({
     : (completion || restoredOutput);
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 max-md:pb-24">
 
       {/* Main form card */}
       <Card className="w-full border border-white/10 bg-[#1E1E1E]">
@@ -169,21 +169,23 @@ export function ControlPanel({
             </div>
           </div>
 
-          {/* Action row */}
-          <div className="flex flex-col md:flex-row md:flex-wrap justify-between items-stretch md:items-center gap-4 mt-2 pt-4 border-t border-zinc-800">
+          {/* Action row — inline on md+, sticky bottom on mobile so the
+              Generate button stays above the iOS keyboard when the Add
+              Context textarea is focused. */}
+          <div className="flex justify-between items-center gap-3 md:gap-4 md:flex-wrap md:mt-2 md:pt-4 md:border-t md:border-zinc-800 max-md:fixed max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:z-40 max-md:bg-[#1E1E1E]/95 max-md:backdrop-blur-md max-md:border-t max-md:border-white/10 max-md:px-5 max-md:pt-3 max-md:pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             {isLocked ? (
               /* Locked action row: Sample + Upgrade buttons */
-              <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto md:ml-auto">
+              <div className="flex flex-row gap-2 w-full md:gap-3 md:w-auto md:ml-auto">
                 <button
                   type="button"
                   onClick={() => setShowSample(true)}
-                  className="w-full md:w-auto px-6 h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md border border-white/10 bg-white/[0.03] text-zinc-300 hover:bg-white/[0.06] hover:text-white transition-all duration-200"
+                  className="flex-1 md:flex-none md:w-auto px-6 h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md border border-white/10 bg-white/[0.03] text-zinc-300 hover:bg-white/[0.06] hover:text-white transition-all duration-200"
                 >
                   See a Sample Output
                 </button>
                 <a
                   href="/upgrade"
-                  className="w-full md:w-auto px-6 h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] transition-all duration-200 flex items-center justify-center"
+                  className="flex-1 md:flex-none md:w-auto px-6 h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] transition-all duration-200 flex items-center justify-center"
                   style={{ boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" }}
                 >
                   Upgrade to Pro →
@@ -195,9 +197,9 @@ export function ControlPanel({
                 <button
                   type="button"
                   onClick={() => onContextOpenChange(!contextOpen)}
-                  className="flex items-center gap-1.5 group shrink-0"
+                  className="flex items-center gap-1.5 group min-w-0 md:shrink-0"
                 >
-                  <span className="font-sans text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors duration-150 font-medium">
+                  <span className="font-sans text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors duration-150 font-medium truncate md:whitespace-normal">
                     Add Context / Prospect Notes{" "}
                     <span className="text-zinc-600">(Optional)</span>
                   </span>
@@ -210,7 +212,7 @@ export function ControlPanel({
                 </button>
 
                 <Button
-                  className="w-full md:w-auto md:min-w-max whitespace-nowrap px-6 font-sans text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
+                  className="md:w-auto md:min-w-max whitespace-nowrap px-6 font-sans text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
                   disabled={!isReady || isLoading}
                   onClick={handleGenerate}
                   style={isReady && !isLoading ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" } : {}}
@@ -221,7 +223,7 @@ export function ControlPanel({
             )}
           </div>
 
-          <p className="font-sans text-[11px] text-zinc-400 text-right -mt-2 pr-1">
+          <p className="font-sans text-[11px] text-zinc-400 text-right -mt-2 pr-1 max-md:hidden">
             You paste it into your AI tool.
           </p>
 
