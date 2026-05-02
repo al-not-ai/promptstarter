@@ -127,14 +127,8 @@ export function AppRail({
             </span>
           </button>
 
-          {/* Version stamp + status pulse */}
-          <div className="px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] flex items-center gap-2">
-            <span
-              className={cn(
-                "block w-1 h-1 rounded-full bg-[#FF3300] shrink-0 transition-opacity duration-200",
-                "shadow-[0_0_4px_rgba(255,51,0,0.8)]"
-              )}
-            />
+          {/* Version stamp */}
+          <div className="px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <p
               className={cn(
                 "font-sans text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap",
@@ -142,7 +136,7 @@ export function AppRail({
                 isExpanded ? "opacity-100" : "opacity-0"
               )}
             >
-              Promptstarter V1.0 · Engine online
+              Promptstarter V1.0
             </p>
           </div>
         </div>
