@@ -33,7 +33,7 @@ export function TopBar({ isMobileOpen, onMenuToggle, onAddProfile }: TopBarProps
           href="/dashboard?picker=true"
           aria-label="Switch tool"
           title="Switch tool"
-          className="flex items-center gap-2 px-4 shrink-0 rounded-md py-1 -my-1 transition-colors duration-150 hover:bg-white/[0.04]"
+          className="flex items-center gap-2 px-4 shrink-0 rounded-md py-1 -my-1 cursor-pointer transition-colors duration-150 hover:bg-white/[0.08] active:scale-[0.98]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -81,7 +81,7 @@ export function TopBar({ isMobileOpen, onMenuToggle, onAddProfile }: TopBarProps
         <Link
           href="/dashboard?picker=true"
           aria-label="Switch tool"
-          className="flex items-center gap-2 shrink-0 rounded-md px-2 py-1 -mx-2 -my-1 transition-colors duration-150 active:bg-white/[0.06]"
+          className="flex items-center gap-2 shrink-0 rounded-md px-2 py-1 -mx-2 -my-1 cursor-pointer transition-colors duration-150 hover:bg-white/[0.08] active:bg-white/[0.06] active:scale-[0.98]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
