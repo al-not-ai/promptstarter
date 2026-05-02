@@ -91,7 +91,7 @@ export function ToolNav({
                           strokeWidth={isActive ? 2.25 : 1.75}
                           className={cn(
                             "transition-colors duration-150",
-                            isActive && "text-[#FF3300]"
+                            isActive ? "text-[#FF3300]" : "text-zinc-400"
                           )}
                           style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : undefined}
                         />
@@ -103,7 +103,7 @@ export function ToolNav({
                           strokeWidth={isActive ? 2.25 : 1.75}
                           className={cn(
                             "transition-colors duration-150",
-                            isActive && "text-[#FF3300]"
+                            isActive ? "text-[#FF3300]" : "text-zinc-400"
                           )}
                           style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : undefined}
                         />
