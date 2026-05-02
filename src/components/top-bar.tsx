@@ -11,6 +11,9 @@ import {
   LogOut,
   Menu,
   X,
+  HelpCircle,
+  ShieldCheck,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { useProfileSwitcher } from "@/lib/profile-context";
@@ -315,6 +318,31 @@ export function UserMenu() {
           >
             <Users className="w-3.5 h-3.5 shrink-0" />
             Manage profiles
+          </Link>
+          <Link
+            href="/#how-it-works"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5 px-3 py-2 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+          >
+            <HelpCircle className="w-3.5 h-3.5 shrink-0" />
+            How it works
+          </Link>
+          <div className="my-1 border-t border-white/5" />
+          <Link
+            href="/privacy"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5 px-3 py-2 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+            Privacy
+          </Link>
+          <Link
+            href="/terms"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5 px-3 py-2 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+          >
+            <FileText className="w-3.5 h-3.5 shrink-0" />
+            Terms
           </Link>
           <div className="my-1 border-t border-white/5" />
           <button
