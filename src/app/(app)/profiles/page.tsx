@@ -184,7 +184,7 @@ function ProfileCard({
   return (
     <article
       className={cn(
-        "rounded-lg border border-white/10 bg-white/[0.02] backdrop-blur-md p-5 transition-colors",
+        "rounded-lg border border-white/10 bg-[#1E1E1E] p-5 transition-colors",
         isActive && "ring-1 ring-[#FF3300]/30"
       )}
     >

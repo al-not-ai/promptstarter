@@ -164,7 +164,7 @@ function DesktopProfileSwitcher({ onAddProfile }: { onAddProfile?: () => void })
         <div
           ref={menuRef}
           role="listbox"
-          className="absolute left-0 top-full mt-1.5 z-[100] w-60 rounded-lg border border-white/10 bg-[#0a0a0a] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] overflow-hidden"
+          className="absolute left-0 top-full mt-1.5 z-[100] w-60 rounded-lg border border-white/10 bg-[#2A2A2A] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] overflow-hidden"
         >
           <div className="max-h-72 overflow-y-auto py-1">
             {profiles.map((p) => {
@@ -292,7 +292,7 @@ export function UserMenu() {
       {open && (
         <div
           ref={menuRef}
-          className="absolute right-0 top-full mt-1.5 z-[100] w-48 rounded-lg border border-white/10 bg-[#0a0a0a] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] overflow-hidden py-1"
+          className="absolute right-0 top-full mt-1.5 z-[100] w-48 rounded-lg border border-white/10 bg-[#2A2A2A] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] overflow-hidden py-1"
         >
           <Link
             href="/settings"

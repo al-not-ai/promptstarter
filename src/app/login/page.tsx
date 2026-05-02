@@ -104,7 +104,7 @@ function LoginForm() {
         </div>
 
         {/* Auth card */}
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-sm p-6 space-y-5">
+        <div className="rounded-xl border border-white/10 bg-[#1E1E1E] p-6 space-y-5">
 
           {/* Headline */}
           <div className="text-center space-y-1">

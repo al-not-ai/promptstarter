@@ -71,7 +71,7 @@ export function ProfileWizard({ onComplete, onCancel, isReturning }: ProfileWiza
   );
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-sm p-6 space-y-5">
+    <div className="rounded-xl border border-white/10 bg-[#1E1E1E] p-6 space-y-5">
       <Header step={state.step} isReturning={isReturning} />
       {state.step === 1 && (
         <StepCompany

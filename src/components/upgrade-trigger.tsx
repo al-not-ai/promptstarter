@@ -20,7 +20,7 @@ export function UpgradeTrigger({ toolId, userTier, hasCopied, suppressForFirstFl
   if (!nudge) return null;
 
   return (
-    <div className="w-full border border-white/10 bg-white/[0.02] border-l-2 border-l-[#FF8800]/50 rounded-sm px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+    <div className="w-full border border-white/10 bg-[#1E1E1E] border-l-2 border-l-[#FF8800]/50 rounded-sm px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
       <p className="font-sans text-xs text-zinc-400 flex-1 leading-relaxed">
         {nudge}
       </p>

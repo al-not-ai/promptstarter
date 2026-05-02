@@ -121,7 +121,7 @@ function ExistingProfilesPanel({
         {existingProfiles.map((profile) => (
           <div
             key={profile.id}
-            className="rounded-lg border border-white/10 bg-white/[0.02] p-3"
+            className="rounded-lg border border-white/10 bg-[#1E1E1E] p-3"
           >
             <div className="font-sans text-[10px] text-[#FF3300]/70 uppercase tracking-wider truncate">
               {profile.company_name}

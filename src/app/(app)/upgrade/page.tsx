@@ -70,7 +70,7 @@ export default function UpgradePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
           {/* Free column */}
-          <div className="flex flex-col border border-white/10 bg-white/[0.02] rounded-md px-5 py-6 gap-4">
+          <div className="flex flex-col border border-white/10 bg-[#1E1E1E] rounded-md px-5 py-6 gap-4">
             <div>
               <p className="font-sans text-xs uppercase tracking-wider text-zinc-500 mb-1">Core</p>
               <p className="font-sans text-3xl font-bold text-white">$0</p>
@@ -93,7 +93,7 @@ export default function UpgradePage() {
           </div>
 
           {/* Pro Monthly column */}
-          <div className="flex flex-col border border-white/10 bg-white/[0.02] rounded-md px-5 py-6 gap-4">
+          <div className="flex flex-col border border-white/10 bg-[#1E1E1E] rounded-md px-5 py-6 gap-4">
             <div>
               <p className="font-sans text-xs uppercase tracking-wider text-zinc-500 mb-1">Pro Monthly</p>
               <p className="font-sans text-3xl font-bold text-white">$29<span className="text-lg text-zinc-400">/mo</span></p>

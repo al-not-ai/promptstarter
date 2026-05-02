@@ -52,8 +52,8 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
         showCloseButton={false}
         className={
           isMobile
-            ? "h-[100dvh] w-full p-0 flex flex-col bg-[#0a0a0a] border-t border-white/10 rounded-t-xl"
-            : "w-full sm:w-[560px] p-0 flex flex-col bg-[#0a0a0a] border-l border-white/10"
+            ? "h-[100dvh] w-full p-0 flex flex-col bg-[#2A2A2A] border-t border-white/10 rounded-t-xl"
+            : "w-full sm:w-[560px] p-0 flex flex-col bg-[#2A2A2A] border-l border-white/10"
         }
       >
         {/* Sheet header row */}

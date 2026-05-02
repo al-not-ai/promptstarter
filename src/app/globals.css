@@ -98,13 +98,17 @@
 
 body {
   font-family: var(--font-sans), Arial, sans-serif;
-  background: radial-gradient(ellipse 80% 60% at 50% 40%, #141414 0%, #0a0a0a 100%);
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #1A1A1A 0%, #121212 100%);
   min-height: 100dvh;
 }
 
 .dark {
   /* Brand: deep charcoal */
-  --background: #0a0a0a;
+  --background: #121212;
+  --surface-1: #1E1E1E;
+  --surface-2: #2A2A2A;
+  --success: #22C55E;
+  --danger: #F43F5E;
   --foreground: #d4d4d8;
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -227,7 +231,7 @@ body {
     @apply border-border outline-ring/50;
   }
   html {
-    @apply font-sans bg-[#0a0a0a];
+    @apply font-sans bg-[#121212];
   }
   body {
     @apply bg-background text-foreground min-h-[100dvh];
