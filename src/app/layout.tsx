@@ -3,6 +3,7 @@ import "./globals.css";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/next";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className="min-h-[100dvh] flex flex-col">
         {children}
         <Toaster theme="dark" position="bottom-right" />
+        <Analytics />
       </body>
     </html>
   );
