@@ -129,13 +129,13 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
           className="h-1.5 w-1.5 rounded-full bg-primary"
           style={{ boxShadow: "0 0 6px rgba(255,51,0,0.9)" }}
         />
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50">
+        <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-400">
           Generated Prompt
         </span>
 
         <div className="ml-auto flex items-center gap-3">
           {isLoading && (
-            <span className="font-mono text-[10px] text-primary animate-pulse">
+            <span className="font-mono text-[11px] text-primary animate-pulse">
               Generating...
             </span>
           )}
@@ -146,7 +146,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
                 key={sweepKey ?? "btn-idle"}
                 onClick={handleCopy}
                 className={cn(
-                  "font-mono text-[10px] uppercase tracking-widest transition-all duration-200 px-3 py-1.5 rounded-sm border flex items-center gap-1.5",
+                  "font-mono text-[11px] uppercase tracking-wider transition-all duration-200 px-3 py-1.5 rounded-sm border flex items-center gap-1.5",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50",
                   hasCopied
                     ? "border-[#FF3300]/60 bg-[#FF3300]/10 text-[#FF3300]"
@@ -248,7 +248,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
               <button
                 type="button"
                 onClick={onRetry}
-                className="self-start font-sans text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-sm border border-red-400/40 text-red-400 hover:bg-red-400/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
+                className="self-start font-sans text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-sm border border-red-400/40 text-red-400 hover:bg-red-400/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
               >
                 Try Again
               </button>

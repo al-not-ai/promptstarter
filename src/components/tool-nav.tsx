@@ -48,7 +48,7 @@ export function ToolNav({
             {isCollapsed ? (
               <div className="w-full h-px bg-white/5" />
             ) : (
-              <p className="font-sans text-[10px] uppercase tracking-wider text-muted-foreground/50 whitespace-nowrap overflow-hidden">
+              <p className="font-sans text-[11px] uppercase tracking-wider text-zinc-400 whitespace-nowrap overflow-hidden">
                 {category}
               </p>
             )}

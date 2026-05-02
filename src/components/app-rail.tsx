@@ -131,7 +131,7 @@ export function AppRail({
           <div className="px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <p
               className={cn(
-                "font-sans text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap",
+                "font-sans text-[11px] tracking-wider text-zinc-600 whitespace-nowrap",
                 "transition-opacity duration-200",
                 isExpanded ? "opacity-100" : "opacity-0"
               )}
@@ -190,7 +190,7 @@ export function AppRail({
 
         {/* Footer */}
         <div className="mt-auto shrink-0 border-t border-white/8 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <p className="font-sans text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap">
+          <p className="font-sans text-[11px] tracking-wider text-zinc-600 whitespace-nowrap">
             Promptstarter V1.0
           </p>
         </div>
@@ -245,7 +245,7 @@ function DrawerProfileSwitcher({
         className="group w-full flex items-center gap-2 px-4 py-2.5 text-left hover:bg-white/[0.02] transition-colors duration-150"
       >
         <div className="min-w-0 flex-1">
-          <div className="font-sans text-[10px] tracking-wider text-[#FF3300]/70 uppercase truncate">
+          <div className="font-sans text-[11px] tracking-wider text-[#FF3300]/70 uppercase truncate">
             {active.company_name}
           </div>
           <div className="font-sans text-[11px] text-zinc-500 truncate">
@@ -285,7 +285,7 @@ function DrawerProfileSwitcher({
                   } ${isResearching || isFailed ? "opacity-40 cursor-not-allowed" : ""}`}
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="font-sans text-[10px] tracking-wider text-[#FF3300]/80 uppercase truncate">
+                    <div className="font-sans text-[11px] tracking-wider text-[#FF3300]/80 uppercase truncate">
                       {p.company_name}
                     </div>
                     <div className="font-sans text-xs text-zinc-300 truncate">
@@ -492,7 +492,7 @@ function RailHistorySection({
         onClick={toggleOpen}
         className="flex w-full items-center justify-between px-1 min-h-[44px] md:min-h-[32px] group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF3300]/50 rounded"
       >
-        <span className="font-sans text-[10px] tracking-wider text-zinc-600 uppercase group-hover:text-zinc-400 transition-colors duration-150">
+        <span className="font-sans text-[11px] tracking-wider text-zinc-500 uppercase group-hover:text-zinc-400 transition-colors duration-150">
           Recent{!loading && items.length > 0 ? ` · ${items.length}` : ""}
         </span>
         <ChevronDown
@@ -529,12 +529,12 @@ function RailHistorySection({
                       <span className="font-sans text-[11px] text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
                         {shortName}
                       </span>
-                      <span className="font-sans text-[10px] text-zinc-600 shrink-0">
+                      <span className="font-sans text-[11px] text-zinc-500 shrink-0">
                         {timeAgo(item.created_at)}
                       </span>
                     </div>
                     {subtitle && (
-                      <div className="font-sans text-[10px] text-zinc-600 truncate leading-snug pr-6">
+                      <div className="font-sans text-[11px] text-zinc-500 truncate leading-snug pr-6">
                         {subtitle}
                       </div>
                     )}
@@ -556,7 +556,7 @@ function RailHistorySection({
           {!loading && items.length > 0 && (
             <Link
               href="/history"
-              className="mt-1 mb-1 flex items-center gap-1 px-1 font-sans text-[10px] text-zinc-600 hover:text-zinc-300 transition-colors duration-100"
+              className="mt-1 mb-1 flex items-center gap-1 px-1 font-sans text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-100"
             >
               Show all
               <ArrowRight size={10} />

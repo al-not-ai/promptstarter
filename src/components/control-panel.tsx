@@ -101,7 +101,7 @@ export function ControlPanel({
 
           {/* Pro banner — only in locked mode */}
           {isLocked && (
-            <div className="flex items-center gap-1.5 text-[10px] font-sans text-[#FF3300]/70 mb-1">
+            <div className="flex items-center gap-1.5 text-[11px] font-sans text-[#FF3300]/70 mb-1">
               <Lock size={10} />
               <span>Pro — upgrade to unlock</span>
             </div>
@@ -221,7 +221,7 @@ export function ControlPanel({
             )}
           </div>
 
-          <p className="font-sans text-[10px] text-zinc-500 text-right -mt-2 pr-1">
+          <p className="font-sans text-[11px] text-zinc-400 text-right -mt-2 pr-1">
             You paste it into your AI tool.
           </p>
 
