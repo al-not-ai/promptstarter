@@ -90,29 +90,23 @@ function HomeInner() {
     }
   }, []);
 
-  // Picker view gate. Order matters:
-  //   1. ?picker=true forces gallery (return-to-picker affordance from the
-  //      wordmark) regardless of the localStorage flag, then strips itself
-  //      from the URL so a reload behaves like a normal returning visit.
-  //   2. Otherwise, first-session users (flag absent) see the gallery.
-  //   3. Returning users (flag === "true") fall through to 'tool', which is
-  //      already the default state.
+  // First-session picker gate — one-shot, no query params involved.
   useEffect(() => {
-    let forcedByQuery = false;
-    if (searchParams.get("picker") === "true") {
-      forcedByQuery = true;
-      setView('gallery');
-      router.replace("/dashboard", { scroll: false });
-    }
-    if (forcedByQuery) return;
     try {
       const hasPicked = localStorage.getItem(HAS_PICKED_TOOL_KEY) === "true";
       if (!hasPicked) setView('gallery');
     } catch {
       // localStorage unavailable — keep default 'tool' view.
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once on mount
+  }, []);
+
+  // ?picker=true — forces gallery view on client-side navigation (e.g. wordmark
+  // click from /dashboard, where the component does not remount).
+  useEffect(() => {
+    if (searchParams.get("picker") !== "true") return;
+    setView('gallery');
+    router.replace("/dashboard", { scroll: false });
+  }, [searchParams, router]);
 
   useEffect(() => {
     fetch('/api/user/tier')
@@ -121,25 +115,27 @@ function HomeInner() {
       .catch(() => {}); // fail safe — stays 'core'
   }, []);
 
-  // Handle ?openWizard=true search param
+  // ?openWizard=true — reactive so deep-links work after client-side nav too.
   useEffect(() => {
-    if (searchParams.get("openWizard") === "true") {
-      setWizardOpen(true);
-      router.replace("/dashboard", { scroll: false });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once on mount; searchParams stable at mount
+    if (searchParams.get("openWizard") !== "true") return;
+    setWizardOpen(true);
+    router.replace("/dashboard", { scroll: false });
+  }, [searchParams, router]);
 
-  // Handle ?welcome=true — strip from URL on mount, show banner briefly
+  // ?welcome=true — strip URL and show banner. Auto-dismiss is a separate
+  // effect so that replacing the URL (which re-runs this effect) doesn't
+  // cancel the timeout by running the cleanup prematurely.
   useEffect(() => {
-    if (searchParams.get("welcome") === "true") {
-      router.replace("/dashboard", { scroll: false });
-      setWelcomeBanner(true);
-      const t = setTimeout(() => setWelcomeBanner(false), 5000);
-      return () => clearTimeout(t);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once on mount
+    if (searchParams.get("welcome") !== "true") return;
+    router.replace("/dashboard", { scroll: false });
+    setWelcomeBanner(true);
+  }, [searchParams, router]);
+
+  useEffect(() => {
+    if (!welcomeBanner) return;
+    const t = setTimeout(() => setWelcomeBanner(false), 5000);
+    return () => clearTimeout(t);
+  }, [welcomeBanner]);
 
   useEffect(() => {
     if (initialized.current || !activeProfileId) return;
