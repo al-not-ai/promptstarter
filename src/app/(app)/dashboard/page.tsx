@@ -23,6 +23,8 @@ const RAIL_COLLAPSED_KEY = "promptstarter:rail-collapsed";
 // upgrade-trigger banner during the user's very first end-to-end flow so the
 // initial copy moment isn't immediately competing with an upsell.
 const HAS_COMPLETED_FIRST_FLOW_KEY = "promptstarter:has-completed-first-flow";
+const LAST_VIEW_KEY = "promptstarter:last-view";
+const LAST_TOOL_KEY = "promptstarter:last-tool";
 
 function defaultSliderValues(toolId: string): Record<string, number> {
   const tool = tools.find((t) => t.id === toolId)!;
@@ -80,6 +82,17 @@ function HomeInner() {
       setHasCompletedFirstFlow(
         localStorage.getItem(HAS_COMPLETED_FIRST_FLOW_KEY) === "true"
       );
+      const savedTool = localStorage.getItem(LAST_TOOL_KEY);
+      if (
+        localStorage.getItem(LAST_VIEW_KEY) === "tool" &&
+        savedTool &&
+        tools.some((t) => t.id === savedTool)
+      ) {
+        setView("tool");
+        setActiveToolId(savedTool);
+        setSliderValues(defaultSliderValues(savedTool));
+        setVariableValues(defaultVariableValues(savedTool));
+      }
     } catch {
       // localStorage unavailable
     }
@@ -145,7 +158,7 @@ function HomeInner() {
       return;
     }
 
-    const cached = getCache(activeProfileId, tools[0].id);
+    const cached = getCache(activeProfileId, activeToolId);
     if (cached) {
       setVariableValues(cached.variableValues);
       setSliderValues(cached.sliderValues);
@@ -228,6 +241,18 @@ function HomeInner() {
     },
     [handleToolSelect]
   );
+
+  // ── Persist view + active tool to localStorage ────────────────────────────
+
+  useEffect(() => {
+    if (view !== "tool") return;
+    try {
+      localStorage.setItem(LAST_VIEW_KEY, "tool");
+      localStorage.setItem(LAST_TOOL_KEY, activeToolId);
+    } catch {
+      // localStorage unavailable
+    }
+  }, [view, activeToolId]);
 
   // ── Restore from rail / history click ─────────────────────────────────────
 
