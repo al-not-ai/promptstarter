@@ -152,7 +152,7 @@ export function DesktopProfileSwitcher({
         className="group flex items-center gap-2 rounded-md px-2.5 py-1.5 hover:bg-white/[0.04] transition-colors duration-150"
       >
         <div className="flex flex-col items-start min-w-0">
-          <span className="font-sans text-[10px] tracking-wider text-[#FF3300]/70 uppercase truncate max-w-[160px]">
+          <span className="font-sans text-[11px] tracking-wider text-[#FF3300]/70 uppercase truncate max-w-[160px]">
             {active.company_name}
           </span>
           <span className="font-sans text-[11px] text-zinc-400 truncate max-w-[160px]">
@@ -192,7 +192,7 @@ export function DesktopProfileSwitcher({
                   } ${isResearching || isFailed ? "opacity-40 cursor-not-allowed" : ""}`}
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="font-sans text-[10px] tracking-wider text-[#FF3300]/80 uppercase truncate">
+                    <div className="font-sans text-[11px] tracking-wider text-[#FF3300]/80 uppercase truncate">
                       {p.company_name}
                     </div>
                     <div className="font-sans text-xs text-zinc-300 truncate">
