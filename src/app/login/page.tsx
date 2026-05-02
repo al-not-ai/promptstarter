@@ -108,10 +108,10 @@ function LoginForm() {
 
           {/* Headline */}
           <div className="text-center space-y-1">
-            <h1 className="font-mono text-sm font-bold text-white">
+            <h1 className="font-sans text-sm font-bold text-white">
               Access your Arsenal
             </h1>
-            <p className="font-mono text-xs text-zinc-500">
+            <p className="font-sans text-xs text-zinc-500">
               Sign in to continue to the Command Center
             </p>
           </div>
@@ -124,7 +124,7 @@ function LoginForm() {
             className="w-full h-11 flex items-center justify-center gap-2.5 rounded-md bg-white text-zinc-900 text-sm font-semibold hover:bg-zinc-100 active:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
           >
             {loading === "google" ? (
-              <span className="font-mono text-xs text-zinc-600">Redirecting…</span>
+              <span className="font-sans text-xs text-zinc-600">Redirecting…</span>
             ) : (
               <>
                 <GoogleLogo />
@@ -136,7 +136,7 @@ function LoginForm() {
           {/* Divider */}
           <div className="flex items-center gap-3">
             <div className="flex-1 h-px bg-white/8" />
-            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-600 shrink-0">
+            <span className="font-sans text-[10px] uppercase tracking-widest text-zinc-600 shrink-0">
               or continue with email
             </span>
             <div className="flex-1 h-px bg-white/8" />
@@ -145,16 +145,16 @@ function LoginForm() {
           {/* Magic link form or success state */}
           {sent ? (
             <div className="rounded-lg border border-[#FF3300]/25 bg-[#FF3300]/8 px-4 py-4 text-center space-y-1">
-              <p className="font-mono text-xs font-semibold text-[#FF3300]">
+              <p className="font-sans text-xs font-semibold text-[#FF3300]">
                 Magic link sent — check your inbox.
               </p>
-              <p className="font-mono text-[10px] text-zinc-500">
+              <p className="font-sans text-[10px] text-zinc-500">
                 Link expires in 10 minutes. Check spam if needed.
               </p>
               <button
                 type="button"
                 onClick={() => { setSent(false); setEmail(""); }}
-                className="mt-2 font-mono text-[10px] text-zinc-600 hover:text-zinc-400 underline transition-colors duration-150"
+                className="mt-2 font-sans text-[10px] text-zinc-600 hover:text-zinc-400 underline transition-colors duration-150"
               >
                 Use a different email
               </button>
@@ -168,12 +168,12 @@ function LoginForm() {
                 placeholder="you@company.com"
                 required
                 autoComplete="email"
-                className="w-full h-11 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
+                className="w-full h-11 font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
               />
               <button
                 type="submit"
                 disabled={busy || !email.trim()}
-                className="w-full h-11 font-mono text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] active:bg-[#c72700] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
+                className="w-full h-11 font-sans text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] active:bg-[#c72700] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
                 style={
                   !busy && email.trim()
                     ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" }
@@ -187,13 +187,13 @@ function LoginForm() {
 
           {/* Error */}
           {error && (
-            <p className="font-mono text-xs text-red-400 text-center leading-relaxed">
+            <p className="font-sans text-xs text-red-400 text-center leading-relaxed">
               {error}
             </p>
           )}
         </div>
 
-        <p className="font-mono text-[10px] text-zinc-700 text-center mt-5 leading-relaxed">
+        <p className="font-sans text-[10px] text-zinc-700 text-center mt-5 leading-relaxed">
           By signing in you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>

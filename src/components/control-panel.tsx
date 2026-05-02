@@ -101,14 +101,14 @@ export function ControlPanel({
 
           {/* Pro banner — only in locked mode */}
           {isLocked && (
-            <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#FF3300]/70 mb-1">
+            <div className="flex items-center gap-1.5 text-[10px] font-sans text-[#FF3300]/70 mb-1">
               <Lock size={10} />
               <span>Pro — upgrade to unlock</span>
             </div>
           )}
 
           {/* Tool title — compact, no eyebrow */}
-          <h1 className="font-mono text-lg font-bold tracking-tight text-white leading-tight">
+          <h1 className="font-sans text-lg font-bold tracking-tight text-white leading-tight">
             {activeTool.name}
           </h1>
 
@@ -124,7 +124,7 @@ export function ControlPanel({
                     value={displayVariableValues[variable.name] ?? ""}
                     onChange={(e) => onVariableChange(variable.name, e.target.value)}
                     onFocus={(e) => e.currentTarget.select()}
-                    className="font-mono bg-zinc-900 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-primary h-[40px] text-sm"
+                    className="font-sans bg-zinc-900 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-primary h-[40px] text-sm"
                     placeholder={variable.placeholder}
                     readOnly={isLocked}
                   />
@@ -140,7 +140,7 @@ export function ControlPanel({
 
                 return (
                   <div key={slider.id} className="space-y-1.5">
-                    <p className="font-mono text-xs text-zinc-300 font-medium">
+                    <p className="font-sans text-xs text-zinc-300 font-medium">
                       {slider.label}
                     </p>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5">
@@ -177,13 +177,13 @@ export function ControlPanel({
                 <button
                   type="button"
                   onClick={() => setShowSample(true)}
-                  className="w-full md:w-auto px-6 h-[40px] font-mono text-sm font-semibold tracking-wide rounded-md border border-white/10 bg-white/[0.03] text-zinc-300 hover:bg-white/[0.06] hover:text-white transition-all duration-200"
+                  className="w-full md:w-auto px-6 h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md border border-white/10 bg-white/[0.03] text-zinc-300 hover:bg-white/[0.06] hover:text-white transition-all duration-200"
                 >
                   See a Sample Output
                 </button>
                 <a
                   href="/upgrade"
-                  className="w-full md:w-auto px-6 h-[40px] font-mono text-sm font-semibold tracking-wide rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] transition-all duration-200 flex items-center justify-center"
+                  className="w-full md:w-auto px-6 h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] transition-all duration-200 flex items-center justify-center"
                   style={{ boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" }}
                 >
                   Upgrade to Pro →
@@ -197,7 +197,7 @@ export function ControlPanel({
                   onClick={() => onContextOpenChange(!contextOpen)}
                   className="flex items-center gap-1.5 group shrink-0"
                 >
-                  <span className="font-mono text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors duration-150 font-medium">
+                  <span className="font-sans text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors duration-150 font-medium">
                     Add Context / Prospect Notes{" "}
                     <span className="text-zinc-600">(Optional)</span>
                   </span>
@@ -210,7 +210,7 @@ export function ControlPanel({
                 </button>
 
                 <Button
-                  className="w-full md:w-auto md:min-w-max whitespace-nowrap px-6 font-mono text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
+                  className="w-full md:w-auto md:min-w-max whitespace-nowrap px-6 font-sans text-sm font-semibold tracking-wide transition-all duration-500 h-[40px]"
                   disabled={!isReady || isLoading}
                   onClick={handleGenerate}
                   style={isReady && !isLoading ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" } : {}}
@@ -221,7 +221,7 @@ export function ControlPanel({
             )}
           </div>
 
-          <p className="font-mono text-[10px] text-zinc-500 text-right -mt-2 pr-1">
+          <p className="font-sans text-[10px] text-zinc-500 text-right -mt-2 pr-1">
             You paste it into your AI tool.
           </p>
 
@@ -233,7 +233,7 @@ export function ControlPanel({
               onFocus={(e) => e.currentTarget.select()}
               placeholder="Paste email threads, call notes, LinkedIn profiles, or any prospect context here..."
               rows={4}
-              className="w-full font-mono text-xs bg-zinc-900 border border-white/10 rounded-sm px-3 py-2.5 text-white placeholder:text-zinc-600 resize-none focus:outline-none focus:border-primary/30 transition-colors duration-150"
+              className="w-full font-sans text-xs bg-zinc-900 border border-white/10 rounded-sm px-3 py-2.5 text-white placeholder:text-zinc-600 resize-none focus:outline-none focus:border-primary/30 transition-colors duration-150"
             />
           )}
 

@@ -45,7 +45,7 @@ export function ToolNav({
           {/* Eyebrow — always in DOM, collapses to zero-height when rail is narrow */}
           <p
             className={cn(
-              "font-mono text-[10px] uppercase tracking-wider text-muted-foreground/50 px-2 whitespace-nowrap overflow-hidden transition-all duration-200",
+              "font-sans text-[10px] uppercase tracking-wider text-muted-foreground/50 px-2 whitespace-nowrap overflow-hidden transition-all duration-200",
               isCollapsed ? "max-h-0 mb-0 opacity-0" : "max-h-4 mb-1.5 opacity-100"
             )}
           >
@@ -112,7 +112,7 @@ export function ToolNav({
                     <span
                       aria-hidden={isCollapsed}
                       className={cn(
-                        "font-mono text-sm md:text-[13px] truncate min-w-0 text-left flex items-center gap-1.5",
+                        "font-sans text-sm md:text-[13px] truncate min-w-0 text-left flex items-center gap-1.5",
                         "transition-[opacity,transform] duration-200",
                         isCollapsed
                           ? "opacity-0 -translate-x-1 pointer-events-none"

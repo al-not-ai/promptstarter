@@ -66,7 +66,7 @@ function ToolCard({
       {/* Tier chip — top right, quiet */}
       <span
         className={cn(
-          "absolute top-3 right-3 font-mono text-[10px] tracking-[0.16em] uppercase",
+          "absolute top-3 right-3 font-sans text-[10px] tracking-[0.16em] uppercase",
           isLocked ? "text-[#FF7A55]" : "text-zinc-500"
         )}
       >

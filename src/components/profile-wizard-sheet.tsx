@@ -58,7 +58,7 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
       >
         {/* Sheet header row */}
         <div className="h-12 shrink-0 flex items-center justify-between px-4 border-b border-white/[0.08]">
-          <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">
+          <span className="font-sans text-xs text-zinc-400 uppercase tracking-widest">
             Add Profile
           </span>
           <button

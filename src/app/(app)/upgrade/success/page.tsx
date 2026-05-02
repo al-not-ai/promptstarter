@@ -43,13 +43,13 @@ export default function UpgradeSuccessPage() {
     return (
       <div className="flex flex-col min-h-[100dvh] bg-background items-center justify-center px-4">
         <div className="max-w-md w-full flex flex-col gap-6 text-center">
-          <h1 className="font-mono text-2xl font-bold text-white">Almost there.</h1>
-          <p className="font-mono text-sm text-zinc-400 leading-relaxed">
+          <h1 className="font-sans text-2xl font-bold text-white">Almost there.</h1>
+          <p className="font-sans text-sm text-zinc-400 leading-relaxed">
             Your payment went through. Pro access usually activates within 30 seconds — refresh the app and you will be good to go.
           </p>
           <a
             href="/dashboard"
-            className="font-mono text-sm text-[#FF3300] hover:text-[#e02d00] transition-colors duration-150"
+            className="font-sans text-sm text-[#FF3300] hover:text-[#e02d00] transition-colors duration-150"
           >
             Go to app →
           </a>
@@ -61,8 +61,8 @@ export default function UpgradeSuccessPage() {
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background items-center justify-center px-4">
       <div className="max-w-md w-full flex flex-col gap-6 text-center">
-        <h1 className="font-mono text-2xl font-bold text-white">You&apos;re in.</h1>
-        <p className="font-mono text-sm text-zinc-400 leading-relaxed">
+        <h1 className="font-sans text-2xl font-bold text-white">You&apos;re in.</h1>
+        <p className="font-sans text-sm text-zinc-400 leading-relaxed">
           Activating your Pro access — this takes just a moment.
         </p>
 
@@ -79,7 +79,7 @@ export default function UpgradeSuccessPage() {
           </div>
         </div>
 
-        <p className="font-mono text-xs text-zinc-600 leading-relaxed">
+        <p className="font-sans text-xs text-zinc-600 leading-relaxed">
           Remember — fewer than 16 prompts generated means a full refund if you are not satisfied. Just reply to your receipt email.
         </p>
       </div>

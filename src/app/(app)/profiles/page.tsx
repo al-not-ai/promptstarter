@@ -61,7 +61,7 @@ export default function ProfilesPage() {
         type="button"
         onClick={() => setWizardOpen(true)}
         className={cn(
-          "hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-md border font-mono text-xs font-semibold",
+          "hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-md border font-sans text-xs font-semibold",
           "border-[#FF3300]/40 text-[#FF3300] bg-[#FF3300]/[0.06] hover:bg-[#FF3300]/[0.12]",
           "transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50"
         )}
@@ -96,11 +96,11 @@ export default function ProfilesPage() {
       <div className="max-w-3xl mx-auto w-full px-4 md:px-6 pt-20 pb-6 flex flex-col gap-3">
         {sorted.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="font-mono text-sm text-zinc-600">No profiles yet.</p>
+            <p className="font-sans text-sm text-zinc-600">No profiles yet.</p>
             <button
               type="button"
               onClick={() => setWizardOpen(true)}
-              className="mt-3 inline-block font-mono text-xs text-[#FF3300]/70 hover:text-[#FF3300] transition-colors duration-150"
+              className="mt-3 inline-block font-sans text-xs text-[#FF3300]/70 hover:text-[#FF3300] transition-colors duration-150"
             >
               Create your first profile →
             </button>
@@ -190,11 +190,11 @@ function ProfileCard({
     >
       {/* Top row: company eyebrow + active pill */}
       <div className="flex items-center justify-between gap-3">
-        <span className="font-mono text-[10px] uppercase tracking-wider text-[#FF3300]/70 truncate">
+        <span className="font-sans text-[10px] uppercase tracking-wider text-[#FF3300]/70 truncate">
           {profile.company_name}
         </span>
         {isActive && (
-          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-full bg-[#FF3300]/10 border border-[#FF3300]/30 font-mono text-[10px] text-[#FF3300]">
+          <span className="inline-flex items-center gap-1.5 shrink-0 px-2 py-0.5 rounded-full bg-[#FF3300]/10 border border-[#FF3300]/30 font-sans text-[10px] text-[#FF3300]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#FF3300] animate-pulse" />
             active
           </span>
@@ -202,13 +202,13 @@ function ProfileCard({
       </div>
 
       {/* Product name */}
-      <h3 className="mt-1 font-mono text-lg font-bold text-white tracking-tight">
+      <h3 className="mt-1 font-sans text-lg font-bold text-white tracking-tight">
         {profile.product_name}
       </h3>
 
       {/* Summary */}
       {profile.product_summary && (
-        <p className="mt-2 font-mono text-sm text-zinc-400 leading-relaxed">
+        <p className="mt-2 font-sans text-sm text-zinc-400 leading-relaxed">
           {profile.product_summary}
         </p>
       )}
@@ -219,13 +219,13 @@ function ProfileCard({
           {chips.map((d, i) => (
             <span
               key={i}
-              className="inline-flex items-center bg-white/[0.04] border border-white/10 rounded-sm px-2 py-1 font-mono text-[11px] text-zinc-300"
+              className="inline-flex items-center bg-white/[0.04] border border-white/10 rounded-sm px-2 py-1 font-sans text-[11px] text-zinc-300"
             >
               {d}
             </span>
           ))}
           {extraCount > 0 && (
-            <span className="inline-flex items-center px-2 py-1 font-mono text-[11px] text-zinc-600">
+            <span className="inline-flex items-center px-2 py-1 font-sans text-[11px] text-zinc-600">
               +{extraCount} more
             </span>
           )}
@@ -234,7 +234,7 @@ function ProfileCard({
 
       {/* Footer */}
       <div className="mt-4 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
-        <p className="font-mono text-[10px] text-zinc-600">
+        <p className="font-sans text-[10px] text-zinc-600">
           Created {timeAgo(profile.created_at)}
           {profile.updated_at !== profile.created_at && (
             <> · Updated {timeAgo(profile.updated_at)}</>
@@ -267,7 +267,7 @@ function ProfileCard({
                 />
               </TooltipTrigger>
               <TooltipContent>
-                <span className="font-mono text-xs">
+                <span className="font-sans text-xs">
                   {profile.is_default ? "Default" : "Set as default"}
                 </span>
               </TooltipContent>
@@ -384,38 +384,38 @@ function EditDialog({ profile, onClose, onSaved }: EditDialogProps) {
         <div className="flex flex-col gap-4">
           {/* Header */}
           <div>
-            <DialogTitle className="font-mono text-sm font-bold text-white mb-1">
+            <DialogTitle className="font-sans text-sm font-bold text-white mb-1">
               Edit profile
             </DialogTitle>
-            <p className="font-mono text-xs text-zinc-500">
+            <p className="font-sans text-xs text-zinc-500">
               Changes apply to all future generations.
             </p>
           </div>
 
           {/* Company name */}
           <div>
-            <label className="block font-mono text-[11px] text-zinc-500 mb-1.5">
+            <label className="block font-sans text-[11px] text-zinc-500 mb-1.5">
               Company name <span className="text-[#FF3300]">*</span>
             </label>
             <input
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full font-mono text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40"
+              className="w-full font-sans text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40"
               placeholder="e.g., Salesforce"
             />
           </div>
 
           {/* Product name */}
           <div>
-            <label className="block font-mono text-[11px] text-zinc-500 mb-1.5">
+            <label className="block font-sans text-[11px] text-zinc-500 mb-1.5">
               Product name <span className="text-[#FF3300]">*</span>
             </label>
             <input
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              className="w-full font-mono text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40"
+              className="w-full font-sans text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40"
               placeholder="IV3 Vision System"
             />
           </div>
@@ -423,12 +423,12 @@ function EditDialog({ profile, onClose, onSaved }: EditDialogProps) {
           {/* Product summary */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="font-mono text-[11px] text-zinc-500">
+              <label className="font-sans text-[11px] text-zinc-500">
                 Product summary
               </label>
               <span
                 className={cn(
-                  "font-mono text-[10px]",
+                  "font-sans text-[10px]",
                   summaryCount > 200 ? "text-[#FF3300]" : "text-zinc-600"
                 )}
               >
@@ -439,7 +439,7 @@ function EditDialog({ profile, onClose, onSaved }: EditDialogProps) {
               type="text"
               value={productSummary}
               onChange={(e) => setProductSummary(e.target.value)}
-              className="w-full font-mono text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40"
+              className="w-full font-sans text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40"
               placeholder="One sentence on what it does"
             />
           </div>
@@ -447,12 +447,12 @@ function EditDialog({ profile, onClose, onSaved }: EditDialogProps) {
           {/* Key differentiators */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="font-mono text-[11px] text-zinc-500">
+              <label className="font-sans text-[11px] text-zinc-500">
                 Key differentiators
               </label>
               <span
                 className={cn(
-                  "font-mono text-[10px]",
+                  "font-sans text-[10px]",
                   atDiffLimit ? "text-[#FF3300]" : "text-zinc-600"
                 )}
               >
@@ -463,20 +463,20 @@ function EditDialog({ profile, onClose, onSaved }: EditDialogProps) {
               value={differentiators}
               onChange={(e) => setDifferentiators(e.target.value)}
               rows={4}
-              className="w-full font-mono text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40 resize-none"
+              className="w-full font-sans text-sm bg-zinc-900/60 border border-white/10 rounded-md px-3 py-2 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#FF3300]/50 focus:border-[#FF3300]/40 resize-none"
               placeholder={"One per line — max 5\nFastest in class\nNo integration required"}
             />
           </div>
 
           {/* Inline error */}
-          {error && <p className="font-mono text-xs text-red-400">{error}</p>}
+          {error && <p className="font-sans text-xs text-red-400">{error}</p>}
 
           {/* Footer */}
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-md font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50"
+              className="px-4 py-2 rounded-md font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50"
             >
               Cancel
             </button>
@@ -485,7 +485,7 @@ function EditDialog({ profile, onClose, onSaved }: EditDialogProps) {
               onClick={handleSave}
               disabled={!canSave}
               className={cn(
-                "px-4 py-2 rounded-md font-mono text-xs font-semibold transition-colors duration-150",
+                "px-4 py-2 rounded-md font-sans text-xs font-semibold transition-colors duration-150",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50",
                 canSave
                   ? "bg-[#FF3300] text-white hover:bg-[#e62e00]"
@@ -552,11 +552,11 @@ function DeleteDialog({ profile, onClose, onDeleted }: DeleteDialogProps) {
     >
       <DialogContent className="max-w-md bg-[#0d0d0d] border-white/10 text-white">
         <div className="flex flex-col gap-4">
-          <DialogTitle className="font-mono text-sm font-bold text-white">
+          <DialogTitle className="font-sans text-sm font-bold text-white">
             Delete this profile?
           </DialogTitle>
 
-          <div className="font-mono text-sm text-zinc-400 leading-relaxed">
+          <div className="font-sans text-sm text-zinc-400 leading-relaxed">
             {n === null ? (
               <div className="h-4 w-3/4 bg-zinc-800 rounded animate-pulse" />
             ) : (
@@ -569,13 +569,13 @@ function DeleteDialog({ profile, onClose, onDeleted }: DeleteDialogProps) {
             )}
           </div>
 
-          {error && <p className="font-mono text-xs text-red-400">{error}</p>}
+          {error && <p className="font-sans text-xs text-red-400">{error}</p>}
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-md font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50"
+              className="px-4 py-2 rounded-md font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50"
             >
               Cancel
             </button>
@@ -584,7 +584,7 @@ function DeleteDialog({ profile, onClose, onDeleted }: DeleteDialogProps) {
               onClick={handleDelete}
               disabled={!canDelete}
               className={cn(
-                "px-4 py-2 rounded-md font-mono text-xs font-semibold border transition-colors duration-150",
+                "px-4 py-2 rounded-md font-sans text-xs font-semibold border transition-colors duration-150",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50",
                 canDelete
                   ? "bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20"

@@ -40,7 +40,7 @@ export function SecondaryTopBar({ title, onBack, right }: SecondaryTopBarProps) 
 
       {/* Divider + page title */}
       <div className="w-px h-4 bg-zinc-700/60 mx-3 shrink-0" />
-      <span className="font-mono text-sm font-semibold text-zinc-300 truncate">
+      <span className="font-sans text-sm font-semibold text-zinc-300 truncate">
         {title}
       </span>
 

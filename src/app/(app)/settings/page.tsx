@@ -60,10 +60,10 @@ export default function SettingsPage() {
 
       <div className="max-w-3xl mx-auto w-full px-4 md:px-6 pt-14 py-8 flex flex-col gap-8">
         <section>
-          <h2 className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-2">
+          <h2 className="font-sans text-xs uppercase tracking-wider text-zinc-500 mb-2">
             Default AI
           </h2>
-          <p className="font-mono text-xs text-zinc-500 mb-4 leading-relaxed">
+          <p className="font-sans text-xs text-zinc-500 mb-4 leading-relaxed">
             When you copy a generated prompt, this AI gets the spotlight in the handoff panel. Change anytime — your last-clicked AI also becomes the default automatically.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -82,7 +82,7 @@ export default function SettingsPage() {
                   )}
                   style={isSelected ? { boxShadow: "0 0 12px rgba(255,51,0,0.18)" } : undefined}
                 >
-                  <span className="font-mono text-sm font-semibold">{ai.label}</span>
+                  <span className="font-sans text-sm font-semibold">{ai.label}</span>
                   {isSelected && <Check size={14} className="text-[#FF3300] shrink-0" />}
                 </button>
               );
@@ -91,7 +91,7 @@ export default function SettingsPage() {
           {loaded && preferred && (
             <button
               onClick={() => choose(null)}
-              className="mt-3 font-mono text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150"
+              className="mt-3 font-sans text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150"
             >
               Clear default
             </button>
@@ -100,31 +100,31 @@ export default function SettingsPage() {
 
         {/* Subscription section */}
         <section>
-          <h2 className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-4">
+          <h2 className="font-sans text-xs uppercase tracking-wider text-zinc-500 mb-4">
             Subscription
           </h2>
           {tier === 'core' ? (
             <div className="flex flex-col gap-3">
-              <p className="font-mono text-sm text-zinc-300">
+              <p className="font-sans text-sm text-zinc-300">
                 Free Plan — Pre-Call Recon Brief only
               </p>
               <a
                 href="/upgrade"
-                className="inline-flex items-center font-mono text-sm font-semibold text-[#FF3300] hover:text-[#e02d00] transition-colors duration-150"
+                className="inline-flex items-center font-sans text-sm font-semibold text-[#FF3300] hover:text-[#e02d00] transition-colors duration-150"
               >
                 Upgrade to Pro →
               </a>
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              <p className="font-mono text-sm text-zinc-300 font-semibold">Pro Plan</p>
+              <p className="font-sans text-sm text-zinc-300 font-semibold">Pro Plan</p>
               {generationCount !== null && (
-                <p className="font-mono text-sm text-zinc-400">
+                <p className="font-sans text-sm text-zinc-400">
                   You have generated {generationCount} prompt{generationCount === 1 ? '' : 's'} total.
                 </p>
               )}
               {generationCount !== null && generationCount < 16 && (
-                <p className="font-mono text-xs text-zinc-500 leading-relaxed">
+                <p className="font-sans text-xs text-zinc-500 leading-relaxed">
                   You are within the money-back guarantee window. Not satisfied? Reply to your receipt email for a full refund.
                 </p>
               )}
@@ -132,7 +132,7 @@ export default function SettingsPage() {
                 type="button"
                 onClick={handlePortal}
                 disabled={portalLoading}
-                className="inline-flex items-center font-mono text-sm text-zinc-400 hover:text-zinc-200 underline underline-offset-4 transition-colors duration-150 disabled:opacity-50 w-fit"
+                className="inline-flex items-center font-sans text-sm text-zinc-400 hover:text-zinc-200 underline underline-offset-4 transition-colors duration-150 disabled:opacity-50 w-fit"
               >
                 {portalLoading ? 'Redirecting…' : 'Manage Subscription'}
               </button>

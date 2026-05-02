@@ -139,7 +139,7 @@ export function AppRail({
             </span>
             <span
               className={cn(
-                "font-mono text-[11px] whitespace-nowrap transition-opacity duration-200",
+                "font-sans text-[11px] whitespace-nowrap transition-opacity duration-200",
                 isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
               )}
             >
@@ -151,7 +151,7 @@ export function AppRail({
           <div className="px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <p
               className={cn(
-                "font-mono text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap",
+                "font-sans text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap",
                 "transition-opacity duration-200",
                 isExpanded ? "opacity-100" : "opacity-0"
               )}
@@ -175,7 +175,7 @@ export function AppRail({
       >
         {/* Mobile close button row */}
         <div className="flex h-12 shrink-0 items-center justify-between border-b border-white/8 px-4">
-          <span className="font-mono text-xs text-zinc-500 uppercase tracking-wider">
+          <span className="font-sans text-xs text-zinc-500 uppercase tracking-wider">
             Menu
           </span>
           <button
@@ -210,7 +210,7 @@ export function AppRail({
 
         {/* Footer */}
         <div className="mt-auto shrink-0 border-t border-white/8 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <p className="font-mono text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap">
+          <p className="font-sans text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap">
             Promptstarter V1.0
           </p>
         </div>
@@ -265,10 +265,10 @@ function DrawerProfileSwitcher({
         className="group w-full flex items-center gap-2 px-4 py-2.5 text-left hover:bg-white/[0.02] transition-colors duration-150"
       >
         <div className="min-w-0 flex-1">
-          <div className="font-mono text-[10px] tracking-wider text-[#FF3300]/70 uppercase truncate">
+          <div className="font-sans text-[10px] tracking-wider text-[#FF3300]/70 uppercase truncate">
             {active.company_name}
           </div>
-          <div className="font-mono text-[11px] text-zinc-500 truncate">
+          <div className="font-sans text-[11px] text-zinc-500 truncate">
             {active.product_name}
           </div>
         </div>
@@ -305,10 +305,10 @@ function DrawerProfileSwitcher({
                   } ${isResearching || isFailed ? "opacity-40 cursor-not-allowed" : ""}`}
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="font-mono text-[10px] tracking-wider text-[#FF3300]/80 uppercase truncate">
+                    <div className="font-sans text-[10px] tracking-wider text-[#FF3300]/80 uppercase truncate">
                       {p.company_name}
                     </div>
-                    <div className="font-mono text-xs text-zinc-300 truncate">
+                    <div className="font-sans text-xs text-zinc-300 truncate">
                       {p.product_name}
                       {isResearching && <span className="ml-2 text-zinc-600">• researching…</span>}
                       {isFailed && <span className="ml-2 text-red-400/80">• failed</span>}
@@ -322,7 +322,7 @@ function DrawerProfileSwitcher({
           <Link
             href="/profiles"
             onClick={() => setOpen(false)}
-            className="block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+            className="block border-t border-white/5 px-3 py-2.5 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
             <span className="inline-flex items-center gap-2">
               <Users className="w-3.5 h-3.5 text-zinc-500" />
@@ -340,7 +340,7 @@ function DrawerProfileSwitcher({
                 router.push("/dashboard?openWizard=true");
               }
             }}
-            className="w-full text-left block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+            className="w-full text-left block border-t border-white/5 px-3 py-2.5 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
             <span className="inline-flex items-center gap-2">
               <Plus className="w-3.5 h-3.5 text-[#FF3300]" />
@@ -512,7 +512,7 @@ function RailHistorySection({
         onClick={toggleOpen}
         className="flex w-full items-center justify-between px-1 min-h-[44px] md:min-h-[32px] group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF3300]/50 rounded"
       >
-        <span className="font-mono text-[10px] tracking-wider text-zinc-600 uppercase group-hover:text-zinc-400 transition-colors duration-150">
+        <span className="font-sans text-[10px] tracking-wider text-zinc-600 uppercase group-hover:text-zinc-400 transition-colors duration-150">
           Recent{!loading && items.length > 0 ? ` · ${items.length}` : ""}
         </span>
         <ChevronDown
@@ -546,15 +546,15 @@ function RailHistorySection({
                     className="w-full text-left rounded-md px-2 py-1.5 hover:bg-white/[0.04] transition-colors duration-100 group relative"
                   >
                     <div className="flex items-baseline justify-between gap-2 min-w-0 pr-6">
-                      <span className="font-mono text-[11px] text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
+                      <span className="font-sans text-[11px] text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
                         {shortName}
                       </span>
-                      <span className="font-mono text-[10px] text-zinc-600 shrink-0">
+                      <span className="font-sans text-[10px] text-zinc-600 shrink-0">
                         {timeAgo(item.created_at)}
                       </span>
                     </div>
                     {subtitle && (
-                      <div className="font-mono text-[10px] text-zinc-600 truncate leading-snug pr-6">
+                      <div className="font-sans text-[10px] text-zinc-600 truncate leading-snug pr-6">
                         {subtitle}
                       </div>
                     )}
@@ -576,7 +576,7 @@ function RailHistorySection({
           {!loading && items.length > 0 && (
             <Link
               href="/history"
-              className="mt-1 mb-1 flex items-center gap-1 px-1 font-mono text-[10px] text-zinc-600 hover:text-zinc-300 transition-colors duration-100"
+              className="mt-1 mb-1 flex items-center gap-1 px-1 font-sans text-[10px] text-zinc-600 hover:text-zinc-300 transition-colors duration-100"
             >
               Show all
               <ArrowRight size={10} />

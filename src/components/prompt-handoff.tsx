@@ -86,10 +86,10 @@ export function PromptHandoff({ visible, onDismiss, pulseKey, copyButtonRef }: P
             style={{ filter: "drop-shadow(0 0 4px rgba(255,51,0,0.6))" }}
           />
           <div className="min-w-0 flex-1">
-            <p className="font-mono text-sm text-white">
+            <p className="font-sans text-sm text-white">
               Prompt copied to clipboard
             </p>
-            <p className="font-mono text-[11px] text-zinc-500 mt-0.5">
+            <p className="font-sans text-[11px] text-zinc-500 mt-0.5">
               Paste with ⌘V (Mac) or Ctrl+V (Windows)
             </p>
           </div>
@@ -112,7 +112,7 @@ export function PromptHandoff({ visible, onDismiss, pulseKey, copyButtonRef }: P
                 )}
                 style={isPreferred ? { boxShadow: "0 0 12px rgba(255,51,0,0.18)" } : undefined}
               >
-                <span className="font-mono text-sm font-semibold tracking-tight">
+                <span className="font-sans text-sm font-semibold tracking-tight">
                   {ai.label}
                 </span>
                 <ArrowUpRight

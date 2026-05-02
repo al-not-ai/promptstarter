@@ -240,7 +240,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <AlertTriangle size={16} className="text-red-400/70 shrink-0" />
-              <p className="font-mono text-xs text-red-400/80">
+              <p className="font-sans text-xs text-red-400/80">
                 {friendlyError(error.message)}
               </p>
             </div>
@@ -248,7 +248,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
               <button
                 type="button"
                 onClick={onRetry}
-                className="self-start font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-sm border border-red-400/40 text-red-400 hover:bg-red-400/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
+                className="self-start font-sans text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-sm border border-red-400/40 text-red-400 hover:bg-red-400/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
               >
                 Try Again
               </button>

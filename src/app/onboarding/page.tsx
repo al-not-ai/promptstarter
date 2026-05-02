@@ -58,7 +58,7 @@ function OnboardingInner() {
         {isReturning && (
           <Link
             href={returnTo ?? "/profiles"}
-            className="flex items-center min-h-[44px] px-2 font-mono text-xs text-zinc-500 hover:text-white transition-colors duration-150"
+            className="flex items-center min-h-[44px] px-2 font-sans text-xs text-zinc-500 hover:text-white transition-colors duration-150"
           >
             ← Back
           </Link>
@@ -114,7 +114,7 @@ function ExistingProfilesPanel({
 }) {
   return (
     <div className="sticky top-[80px] self-start">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-600 mb-3">
+      <p className="font-sans text-[10px] uppercase tracking-widest text-zinc-600 mb-3">
         Your profiles
       </p>
       <div className="space-y-2">
@@ -123,17 +123,17 @@ function ExistingProfilesPanel({
             key={profile.id}
             className="rounded-lg border border-white/10 bg-white/[0.02] p-3"
           >
-            <div className="font-mono text-[10px] text-[#FF3300]/70 uppercase tracking-wider truncate">
+            <div className="font-sans text-[10px] text-[#FF3300]/70 uppercase tracking-wider truncate">
               {profile.company_name}
             </div>
-            <div className="font-mono text-sm font-semibold text-white truncate flex items-center gap-1">
+            <div className="font-sans text-sm font-semibold text-white truncate flex items-center gap-1">
               <span className="truncate">{profile.product_name}</span>
               {profile.is_default && (
                 <Star size={11} className="fill-[#FF3300] text-[#FF3300] shrink-0" />
               )}
             </div>
             {profile.product_summary && (
-              <div className="font-mono text-[11px] text-zinc-500 truncate mt-0.5">
+              <div className="font-sans text-[11px] text-zinc-500 truncate mt-0.5">
                 {profile.product_summary}
               </div>
             )}

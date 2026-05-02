@@ -131,7 +131,7 @@ export function Header({ step, isReturning }: { step: Step; isReturning: boolean
           />
         ))}
       </div>
-      <p className="font-mono text-[10px] text-zinc-600 text-center tracking-wide uppercase">
+      <p className="font-sans text-[10px] text-zinc-600 text-center tracking-wide uppercase">
         Step {step} of 3
       </p>
     </div>
@@ -222,10 +222,10 @@ export function StepCompany({
   return (
     <div className="space-y-5">
       <div className="space-y-1">
-        <h1 className="font-mono text-sm font-bold text-white">
+        <h1 className="font-sans text-sm font-bold text-white">
           Which company do you rep?
         </h1>
-        <p className="font-mono text-xs text-zinc-500 leading-relaxed">
+        <p className="font-sans text-xs text-zinc-500 leading-relaxed">
           Start typing — we&apos;ll find it.
         </p>
       </div>
@@ -238,7 +238,7 @@ export function StepCompany({
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g., Salesforce, Stripe, Snowflake…"
             autoFocus
-            className="w-full h-11 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
+            className="w-full h-11 font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
           />
 
           <div className="space-y-2 min-h-[120px]">
@@ -262,14 +262,14 @@ export function StepCompany({
                   setManualName(query.trim());
                   setManualMode(true);
                 }}
-                className="w-full h-11 font-mono text-xs font-semibold rounded-md border border-white/10 text-zinc-300 hover:text-white hover:border-[#FF3300]/40 hover:bg-white/[0.02] transition-colors duration-150"
+                className="w-full h-11 font-sans text-xs font-semibold rounded-md border border-white/10 text-zinc-300 hover:text-white hover:border-[#FF3300]/40 hover:bg-white/[0.02] transition-colors duration-150"
               >
                 Enter URL manually →
               </button>
             )}
 
             {error && (
-              <p className="font-mono text-xs text-red-400">{error}</p>
+              <p className="font-sans text-xs text-red-400">{error}</p>
             )}
           </div>
 
@@ -277,7 +277,7 @@ export function StepCompany({
             <button
               type="button"
               onClick={() => setManualMode(true)}
-              className="font-mono text-[11px] text-zinc-600 hover:text-zinc-400 underline transition-colors duration-150"
+              className="font-sans text-[11px] text-zinc-600 hover:text-zinc-400 underline transition-colors duration-150"
             >
               Don&apos;t see it? Enter URL manually
             </button>
@@ -285,7 +285,7 @@ export function StepCompany({
               <button
                 type="button"
                 onClick={onCancel}
-                className="font-mono text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors duration-150"
+                className="font-sans text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors duration-150"
               >
                 ← Cancel
               </button>
@@ -297,7 +297,7 @@ export function StepCompany({
       {manualMode && (
         <form onSubmit={submitManual} className="space-y-3">
           <div className="space-y-1.5">
-            <label className="font-mono text-xs font-semibold text-zinc-300 block">
+            <label className="font-sans text-xs font-semibold text-zinc-300 block">
               Company Name
             </label>
             <input
@@ -306,11 +306,11 @@ export function StepCompany({
               onChange={(e) => setManualName(e.target.value)}
               placeholder="e.g., Acme Corp"
               autoFocus
-              className="w-full h-11 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
+              className="w-full h-11 font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="font-mono text-xs font-semibold text-zinc-300 block">
+            <label className="font-sans text-xs font-semibold text-zinc-300 block">
               Company URL
             </label>
             <input
@@ -319,7 +319,7 @@ export function StepCompany({
               onChange={(e) => setManualUrl(e.target.value)}
               placeholder="https://acmecorp.com"
               required
-              className="w-full h-11 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
+              className="w-full h-11 font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
             />
           </div>
 
@@ -327,14 +327,14 @@ export function StepCompany({
             <button
               type="button"
               onClick={() => setManualMode(false)}
-              className="h-11 px-4 font-mono text-xs font-semibold rounded-md border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 transition-colors duration-150"
+              className="h-11 px-4 font-sans text-xs font-semibold rounded-md border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 transition-colors duration-150"
             >
               ← Back to search
             </button>
             <button
               type="submit"
               disabled={!manualUrl.trim()}
-              className="flex-1 h-11 font-mono text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
+              className="flex-1 h-11 font-sans text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
               style={
                 manualUrl.trim()
                   ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" }
@@ -375,20 +375,20 @@ export function CompanyCard({
       />
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
-          <span className="font-mono text-sm font-semibold text-white truncate">
+          <span className="font-sans text-sm font-semibold text-white truncate">
             {candidate.name}
           </span>
-          <span className="font-mono text-[10px] text-zinc-600 truncate">
+          <span className="font-sans text-[10px] text-zinc-600 truncate">
             {hostFromUrl(candidate.url)}
           </span>
         </div>
         {candidate.description && (
-          <p className="font-mono text-[11px] text-zinc-500 leading-snug mt-0.5 line-clamp-2">
+          <p className="font-sans text-[11px] text-zinc-500 leading-snug mt-0.5 line-clamp-2">
             {candidate.description}
           </p>
         )}
       </div>
-      <span className="font-mono text-[#FF3300] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-150 mt-2">
+      <span className="font-sans text-[#FF3300] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-150 mt-2">
         →
       </span>
     </button>
@@ -454,11 +454,11 @@ export function StepProducts({
   return (
     <div className="space-y-5">
       <div className="space-y-1">
-        <h1 className="font-mono text-sm font-bold text-white">
+        <h1 className="font-sans text-sm font-bold text-white">
           Which product do you sell at{" "}
           <span className="text-[#FF3300]">{company.name}</span>?
         </h1>
-        <p className="font-mono text-xs text-zinc-500 leading-relaxed">
+        <p className="font-sans text-xs text-zinc-500 leading-relaxed">
           Pick the line you sell. If you sell multiple, pick the one you sell
           most — you can add others later.
         </p>
@@ -478,16 +478,16 @@ export function StepProducts({
               className="group w-full text-left rounded-lg border border-white/10 bg-white/[0.01] hover:bg-white/[0.04] hover:border-[#FF3300]/30 px-3 py-2.5 flex items-center gap-3 transition-all duration-150"
             >
               <div className="min-w-0 flex-1">
-                <div className="font-mono text-sm font-semibold text-white truncate">
+                <div className="font-sans text-sm font-semibold text-white truncate">
                   {g.name}
                 </div>
                 {g.description && (
-                  <div className="font-mono text-[11px] text-zinc-500 leading-snug truncate">
+                  <div className="font-sans text-[11px] text-zinc-500 leading-snug truncate">
                     {g.description}
                   </div>
                 )}
               </div>
-              <span className="font-mono text-[#FF3300] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              <span className="font-sans text-[#FF3300] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                 →
               </span>
             </button>
@@ -498,10 +498,10 @@ export function StepProducts({
       {!isLoading && pasteMode && (
         <form onSubmit={submitPaste} className="space-y-3">
           {error && (
-            <p className="font-mono text-xs text-amber-400/90">{error}</p>
+            <p className="font-sans text-xs text-amber-400/90">{error}</p>
           )}
           <div className="space-y-1.5">
-            <label className="font-mono text-xs font-semibold text-zinc-300 block">
+            <label className="font-sans text-xs font-semibold text-zinc-300 block">
               Product Page URL
             </label>
             <input
@@ -510,9 +510,9 @@ export function StepProducts({
               onChange={(e) => setPastedUrl(e.target.value)}
               placeholder={`${company.url}/products/...`}
               autoFocus
-              className="w-full h-11 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
+              className="w-full h-11 font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
             />
-            <p className="font-mono text-[10px] text-zinc-600 leading-relaxed">
+            <p className="font-sans text-[10px] text-zinc-600 leading-relaxed">
               A product page works best. Homepage is fine if the company only
               sells one thing.
             </p>
@@ -520,7 +520,7 @@ export function StepProducts({
           <button
             type="submit"
             disabled={!pastedUrl.trim()}
-            className="w-full h-11 font-mono text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
+            className="w-full h-11 font-sans text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
             style={
               pastedUrl.trim()
                 ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" }
@@ -536,7 +536,7 @@ export function StepProducts({
         <button
           type="button"
           onClick={onBack}
-          className="font-mono text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150"
+          className="font-sans text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150"
         >
           ← Back
         </button>
@@ -544,7 +544,7 @@ export function StepProducts({
           <button
             type="button"
             onClick={() => setPasteMode(true)}
-            className="font-mono text-[11px] text-zinc-500 hover:text-zinc-300 underline transition-colors duration-150"
+            className="font-sans text-[11px] text-zinc-500 hover:text-zinc-300 underline transition-colors duration-150"
           >
             Don&apos;t see yours? Paste URL
           </button>
@@ -553,7 +553,7 @@ export function StepProducts({
           <button
             type="button"
             onClick={useCompanyHomepage}
-            className="font-mono text-[11px] text-zinc-500 hover:text-zinc-300 underline transition-colors duration-150"
+            className="font-sans text-[11px] text-zinc-500 hover:text-zinc-300 underline transition-colors duration-150"
           >
             Just use the homepage
           </button>
@@ -680,10 +680,10 @@ export function StepExtract({
     return (
       <div className="space-y-4">
         <div className="space-y-1">
-          <h1 className="font-mono text-sm font-bold text-white">
+          <h1 className="font-sans text-sm font-bold text-white">
             Building your profile…
           </h1>
-          <p className="font-mono text-xs text-zinc-500">
+          <p className="font-sans text-xs text-zinc-500">
             Usually done in 4–6 seconds.
           </p>
         </div>
@@ -691,7 +691,7 @@ export function StepExtract({
           {NARRATION.slice(0, narrationIdx + 1).map((line, i) => (
             <div
               key={i}
-              className="flex items-start gap-2 font-mono text-xs leading-relaxed animate-in fade-in duration-300"
+              className="flex items-start gap-2 font-sans text-xs leading-relaxed animate-in fade-in duration-300"
             >
               <span className="text-[#FF3300] shrink-0 mt-px">›</span>
               <span className={i === narrationIdx ? "text-zinc-200" : "text-zinc-500"}>
@@ -699,7 +699,7 @@ export function StepExtract({
               </span>
             </div>
           ))}
-          <div className="flex items-center gap-2 font-mono text-xs">
+          <div className="flex items-center gap-2 font-sans text-xs">
             <span className="text-[#FF3300]">›</span>
             <span className="inline-block w-1.5 h-3.5 bg-[#FF3300] animate-pulse rounded-sm" />
           </div>
@@ -712,10 +712,10 @@ export function StepExtract({
     return (
       <div className="space-y-4">
         <div className="space-y-1">
-          <h1 className="font-mono text-sm font-bold text-white">
+          <h1 className="font-sans text-sm font-bold text-white">
             That didn&apos;t work
           </h1>
-          <p className="font-mono text-xs text-zinc-500 leading-relaxed">
+          <p className="font-sans text-xs text-zinc-500 leading-relaxed">
             {errorMsg ?? "We couldn't read that page. Try a different product URL."}
           </p>
         </div>
@@ -723,7 +723,7 @@ export function StepExtract({
           <button
             type="button"
             onClick={onBack}
-            className="h-11 px-4 font-mono text-xs font-semibold rounded-md border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 transition-colors duration-150"
+            className="h-11 px-4 font-sans text-xs font-semibold rounded-md border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 transition-colors duration-150"
           >
             ← Try a different URL
           </button>
@@ -735,10 +735,10 @@ export function StepExtract({
   return (
     <div className="space-y-5">
       <div className="space-y-1">
-        <h1 className="font-mono text-sm font-bold text-white">
+        <h1 className="font-sans text-sm font-bold text-white">
           Here&apos;s what we pulled
         </h1>
-        <p className="font-mono text-xs text-zinc-500 leading-relaxed">
+        <p className="font-sans text-xs text-zinc-500 leading-relaxed">
           Edit anything that looks off. This anchors every prompt we craft for
           you.
         </p>
@@ -750,7 +750,7 @@ export function StepExtract({
             type="text"
             value={draftName}
             onChange={(e) => setDraftName(e.target.value)}
-            className="w-full h-11 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
+            className="w-full h-11 font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
           />
         </Field>
 
@@ -759,7 +759,7 @@ export function StepExtract({
             value={draftSummary}
             onChange={(e) => setDraftSummary(e.target.value)}
             rows={3}
-            className="w-full font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 py-2.5 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150 resize-none"
+            className="w-full font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 py-2.5 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150 resize-none"
           />
         </Field>
 
@@ -770,7 +770,7 @@ export function StepExtract({
           <div className="space-y-2">
             {draftDiffs.map((d, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="font-mono text-[#FF3300] text-sm shrink-0">›</span>
+                <span className="font-sans text-[#FF3300] text-sm shrink-0">›</span>
                 <input
                   type="text"
                   value={d}
@@ -779,13 +779,13 @@ export function StepExtract({
                     next[i] = e.target.value;
                     setDraftDiffs(next);
                   }}
-                  className="flex-1 h-10 font-mono text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
+                  className="flex-1 h-10 font-sans text-sm bg-zinc-900 border border-white/10 rounded-md px-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#FF3300]/40 focus:ring-1 focus:ring-[#FF3300]/15 transition-all duration-150"
                 />
                 {draftDiffs.length > 1 && (
                   <button
                     type="button"
                     onClick={() => setDraftDiffs(draftDiffs.filter((_, j) => j !== i))}
-                    className="font-mono text-xs text-zinc-600 hover:text-red-400 transition-colors duration-150"
+                    className="font-sans text-xs text-zinc-600 hover:text-red-400 transition-colors duration-150"
                     aria-label="Remove differentiator"
                   >
                     ✕
@@ -797,7 +797,7 @@ export function StepExtract({
               <button
                 type="button"
                 onClick={() => setDraftDiffs([...draftDiffs, ""])}
-                className="font-mono text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150"
+                className="font-sans text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150"
               >
                 + Add another
               </button>
@@ -807,7 +807,7 @@ export function StepExtract({
       </div>
 
       {errorMsg && (
-        <p className="font-mono text-xs text-red-400">{errorMsg}</p>
+        <p className="font-sans text-xs text-red-400">{errorMsg}</p>
       )}
 
       <div className="flex items-center gap-2 pt-1">
@@ -815,7 +815,7 @@ export function StepExtract({
           type="button"
           onClick={onBack}
           disabled={status === "saving"}
-          className="h-11 px-4 font-mono text-xs font-semibold rounded-md border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 transition-colors duration-150 disabled:opacity-40"
+          className="h-11 px-4 font-sans text-xs font-semibold rounded-md border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 transition-colors duration-150 disabled:opacity-40"
         >
           ← Back
         </button>
@@ -823,7 +823,7 @@ export function StepExtract({
           type="button"
           onClick={handleSave}
           disabled={status === "saving" || !draftName.trim()}
-          className="flex-1 h-11 font-mono text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
+          className="flex-1 h-11 font-sans text-sm font-semibold rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
           style={
             status !== "saving" && draftName.trim()
               ? { boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" }
@@ -854,7 +854,7 @@ export function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="font-mono text-xs font-semibold text-zinc-300 block">
+      <label className="font-sans text-xs font-semibold text-zinc-300 block">
         {label}
         {hint && <span className="text-zinc-600 font-normal ml-2">{hint}</span>}
       </label>
@@ -902,7 +902,7 @@ export function ShimmerRows({ count }: { count: number }) {
 export function EmptyHint({ children }: { children: React.ReactNode }) {
   return (
     <div className="rounded-lg border border-dashed border-white/10 px-3 py-3">
-      <p className="font-mono text-[11px] text-zinc-500 leading-relaxed">{children}</p>
+      <p className="font-sans text-[11px] text-zinc-500 leading-relaxed">{children}</p>
     </div>
   );
 }

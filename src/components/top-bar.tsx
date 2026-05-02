@@ -146,10 +146,10 @@ function DesktopProfileSwitcher({ onAddProfile }: { onAddProfile?: () => void })
         className="group flex items-center gap-2 rounded-md px-2.5 py-1.5 hover:bg-white/[0.04] transition-colors duration-150"
       >
         <div className="flex flex-col items-start min-w-0">
-          <span className="font-mono text-[10px] tracking-wider text-[#FF3300]/70 uppercase truncate max-w-[160px]">
+          <span className="font-sans text-[10px] tracking-wider text-[#FF3300]/70 uppercase truncate max-w-[160px]">
             {active.company_name}
           </span>
-          <span className="font-mono text-[11px] text-zinc-400 truncate max-w-[160px]">
+          <span className="font-sans text-[11px] text-zinc-400 truncate max-w-[160px]">
             {active.product_name}
           </span>
         </div>
@@ -186,10 +186,10 @@ function DesktopProfileSwitcher({ onAddProfile }: { onAddProfile?: () => void })
                   } ${isResearching || isFailed ? "opacity-40 cursor-not-allowed" : ""}`}
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="font-mono text-[10px] tracking-wider text-[#FF3300]/80 uppercase truncate">
+                    <div className="font-sans text-[10px] tracking-wider text-[#FF3300]/80 uppercase truncate">
                       {p.company_name}
                     </div>
-                    <div className="font-mono text-xs text-zinc-300 truncate">
+                    <div className="font-sans text-xs text-zinc-300 truncate">
                       {p.product_name}
                       {isResearching && <span className="ml-2 text-zinc-600">• researching…</span>}
                       {isFailed && <span className="ml-2 text-red-400/80">• failed</span>}
@@ -210,7 +210,7 @@ function DesktopProfileSwitcher({ onAddProfile }: { onAddProfile?: () => void })
                 router.push("/dashboard?openWizard=true");
               }
             }}
-            className="w-full text-left block border-t border-white/5 px-3 py-2.5 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+            className="w-full text-left block border-t border-white/5 px-3 py-2.5 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
             <span className="inline-flex items-center gap-2">
               <Plus className="w-3.5 h-3.5 text-[#FF3300]" />
@@ -284,7 +284,7 @@ export function UserMenu() {
         onClick={() => setOpen((v) => !v)}
         aria-label="User menu"
         aria-expanded={open}
-        className="flex items-center justify-center h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-300 font-mono text-xs font-bold hover:border-zinc-500 hover:text-white transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50"
+        className="flex items-center justify-center h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-300 font-sans text-xs font-bold hover:border-zinc-500 hover:text-white transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3300]/50"
       >
         {initials}
       </button>
@@ -297,7 +297,7 @@ export function UserMenu() {
           <Link
             href="/settings"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2.5 px-3 py-2 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+            className="flex items-center gap-2.5 px-3 py-2 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
             <Settings className="w-3.5 h-3.5 shrink-0" />
             Settings
@@ -305,7 +305,7 @@ export function UserMenu() {
           <Link
             href="/profiles"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2.5 px-3 py-2 font-mono text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
+            className="flex items-center gap-2.5 px-3 py-2 font-sans text-xs text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors duration-100"
           >
             <Users className="w-3.5 h-3.5 shrink-0" />
             Manage profiles
@@ -313,7 +313,7 @@ export function UserMenu() {
           <div className="my-1 border-t border-white/5" />
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2.5 px-3 py-2 font-mono text-xs text-zinc-400 hover:text-red-400 hover:bg-white/[0.04] transition-colors duration-100"
+            className="w-full flex items-center gap-2.5 px-3 py-2 font-sans text-xs text-zinc-400 hover:text-red-400 hover:bg-white/[0.04] transition-colors duration-100"
           >
             <LogOut className="w-3.5 h-3.5 shrink-0" />
             Sign out

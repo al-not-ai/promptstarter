@@ -321,13 +321,13 @@ function HomeInner() {
             className="pointer-events-auto flex items-center gap-3 bg-zinc-900 border border-[#FF3300]/40 rounded-md px-4 py-3 shadow-lg"
             style={{ boxShadow: "0 0 24px rgba(255,51,0,0.2)" }}
           >
-            <span className="font-mono text-sm text-zinc-200">
+            <span className="font-sans text-sm text-zinc-200">
               Welcome to Pro. All 7 tools are now unlocked.
             </span>
             <button
               type="button"
               onClick={() => setWelcomeBanner(false)}
-              className="font-mono text-xs text-zinc-500 hover:text-zinc-300 transition-colors duration-150 ml-1"
+              className="font-sans text-xs text-zinc-500 hover:text-zinc-300 transition-colors duration-150 ml-1"
               aria-label="Dismiss"
             >
               ✕

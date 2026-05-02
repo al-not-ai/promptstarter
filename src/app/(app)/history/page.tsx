@@ -231,19 +231,19 @@ export default function HistoryPage() {
       {selected.size > 0 && (
         <div className="fixed top-14 left-0 right-0 z-[80] border-b border-zinc-800 bg-[#070707]/95 backdrop-blur-md">
           <div className="max-w-3xl mx-auto px-4 md:px-6 py-2 flex items-center gap-3">
-            <span className="font-mono text-xs text-zinc-400">
+            <span className="font-sans text-xs text-zinc-400">
               {selected.size} selected
             </span>
             <button
               onClick={handleBulkDelete}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs text-red-400 border border-red-400/30 hover:bg-red-400/10 transition-colors duration-150"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-sans text-xs text-red-400 border border-red-400/30 hover:bg-red-400/10 transition-colors duration-150"
             >
               <Trash2 size={12} />
               Delete
             </button>
             <button
               onClick={() => setSelected(new Set())}
-              className="font-mono text-xs text-zinc-500 hover:text-white transition-colors duration-150"
+              className="font-sans text-xs text-zinc-500 hover:text-white transition-colors duration-150"
             >
               Cancel
             </button>
@@ -261,10 +261,10 @@ export default function HistoryPage() {
           </div>
         ) : items.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="font-mono text-sm text-zinc-600">No generations yet.</p>
+            <p className="font-sans text-sm text-zinc-600">No generations yet.</p>
             <Link
               href="/dashboard"
-              className="mt-3 inline-block font-mono text-xs text-[#FF3300]/70 hover:text-[#FF3300] transition-colors duration-150"
+              className="mt-3 inline-block font-sans text-xs text-[#FF3300]/70 hover:text-[#FF3300] transition-colors duration-150"
             >
               ← Go generate something
             </Link>
@@ -280,7 +280,7 @@ export default function HistoryPage() {
                   onChange={toggleSelectAll}
                   className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 accent-[#FF3300] cursor-pointer"
                 />
-                <span className="font-mono text-[10px] text-zinc-600 uppercase tracking-wider">
+                <span className="font-sans text-[10px] text-zinc-600 uppercase tracking-wider">
                   Select all
                 </span>
               </label>
@@ -288,7 +288,7 @@ export default function HistoryPage() {
 
             {groups.map(({ group, items: groupItems }) => (
               <section key={group}>
-                <h2 className="font-mono text-[10px] uppercase tracking-wider text-zinc-600 mb-2 px-0.5">
+                <h2 className="font-sans text-[10px] uppercase tracking-wider text-zinc-600 mb-2 px-0.5">
                   {group}
                 </h2>
                 <div className="flex flex-col gap-0.5">
@@ -330,15 +330,15 @@ export default function HistoryPage() {
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-baseline gap-2 min-w-0">
-                            <span className="font-mono text-sm text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
+                            <span className="font-sans text-sm text-zinc-300 group-hover:text-white truncate transition-colors duration-100 leading-snug">
                               {shortName}
                             </span>
-                            <span className="font-mono text-[10px] text-zinc-600 shrink-0">
+                            <span className="font-sans text-[10px] text-zinc-600 shrink-0">
                               {timeAgo(item.created_at)}
                             </span>
                           </div>
                           {subtitle && (
-                            <div className="font-mono text-xs text-zinc-500 truncate leading-snug mt-0.5">
+                            <div className="font-sans text-xs text-zinc-500 truncate leading-snug mt-0.5">
                               {subtitle}
                             </div>
                           )}

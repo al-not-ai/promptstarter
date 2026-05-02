@@ -60,7 +60,7 @@ export default function UpgradePage() {
 
         {/* Money-back guarantee — prominent, not fine print */}
         <div className="border border-[#FF3300]/30 bg-[#FF3300]/5 rounded-md px-5 py-4">
-          <p className="font-mono text-sm text-zinc-200 leading-relaxed">
+          <p className="font-sans text-sm text-zinc-200 leading-relaxed">
             <span className="text-[#FF3300] font-semibold">Money-back guarantee.</span>{" "}
             Not satisfied? If you have generated fewer than 16 prompts, reply to your receipt email for a full refund — no questions asked.
           </p>
@@ -72,20 +72,20 @@ export default function UpgradePage() {
           {/* Free column */}
           <div className="flex flex-col border border-white/10 bg-white/[0.02] rounded-md px-5 py-6 gap-4">
             <div>
-              <p className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-1">Core</p>
-              <p className="font-mono text-3xl font-bold text-white">$0</p>
-              <p className="font-mono text-xs text-zinc-500 mt-1">No credit card required</p>
+              <p className="font-sans text-xs uppercase tracking-wider text-zinc-500 mb-1">Core</p>
+              <p className="font-sans text-3xl font-bold text-white">$0</p>
+              <p className="font-sans text-xs text-zinc-500 mt-1">No credit card required</p>
             </div>
-            <p className="font-mono text-sm text-zinc-300 leading-relaxed">
+            <p className="font-sans text-sm text-zinc-300 leading-relaxed">
               Pre-Call Recon Brief only.
             </p>
             <div className="mt-auto pt-4">
               {tier === 'core' ? (
-                <div className="w-full h-[40px] flex items-center justify-center font-mono text-xs text-zinc-500 border border-white/10 rounded-md">
+                <div className="w-full h-[40px] flex items-center justify-center font-sans text-xs text-zinc-500 border border-white/10 rounded-md">
                   Your current plan
                 </div>
               ) : (
-                <div className="w-full h-[40px] flex items-center justify-center font-mono text-xs text-zinc-600 border border-white/5 rounded-md">
+                <div className="w-full h-[40px] flex items-center justify-center font-sans text-xs text-zinc-600 border border-white/5 rounded-md">
                   Free tier
                 </div>
               )}
@@ -95,16 +95,16 @@ export default function UpgradePage() {
           {/* Pro Monthly column */}
           <div className="flex flex-col border border-white/10 bg-white/[0.02] rounded-md px-5 py-6 gap-4">
             <div>
-              <p className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-1">Pro Monthly</p>
-              <p className="font-mono text-3xl font-bold text-white">$29<span className="text-lg text-zinc-400">/mo</span></p>
-              <p className="font-mono text-xs text-zinc-500 mt-1">Billed monthly</p>
+              <p className="font-sans text-xs uppercase tracking-wider text-zinc-500 mb-1">Pro Monthly</p>
+              <p className="font-sans text-3xl font-bold text-white">$29<span className="text-lg text-zinc-400">/mo</span></p>
+              <p className="font-sans text-xs text-zinc-500 mt-1">Billed monthly</p>
             </div>
-            <p className="font-mono text-sm text-zinc-300 leading-relaxed">
+            <p className="font-sans text-sm text-zinc-300 leading-relaxed">
               All 7 tools. Cancel anytime.
             </p>
             <div className="mt-auto pt-4">
               {isPro ? (
-                <div className="w-full h-[40px] flex items-center justify-center font-mono text-xs text-[#FF3300] border border-[#FF3300]/30 rounded-md">
+                <div className="w-full h-[40px] flex items-center justify-center font-sans text-xs text-[#FF3300] border border-[#FF3300]/30 rounded-md">
                   You&apos;re on Pro
                 </div>
               ) : (
@@ -112,7 +112,7 @@ export default function UpgradePage() {
                   type="button"
                   onClick={() => handleCheckout('monthly')}
                   disabled={loading !== null}
-                  className="w-full h-[40px] font-mono text-sm font-semibold tracking-wide rounded-md bg-zinc-800 border border-white/10 text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all duration-200 disabled:opacity-50"
+                  className="w-full h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md bg-zinc-800 border border-white/10 text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all duration-200 disabled:opacity-50"
                 >
                   {loading === 'monthly' ? 'Redirecting…' : 'Get Pro Monthly'}
                 </button>
@@ -127,18 +127,18 @@ export default function UpgradePage() {
           >
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <p className="font-mono text-xs uppercase tracking-wider text-zinc-500">Pro Annual</p>
-                <span className="font-mono text-[10px] bg-[#FF3300]/20 text-[#FF3300] px-1.5 py-0.5 rounded">Best Value</span>
+                <p className="font-sans text-xs uppercase tracking-wider text-zinc-500">Pro Annual</p>
+                <span className="font-sans text-[10px] bg-[#FF3300]/20 text-[#FF3300] px-1.5 py-0.5 rounded">Best Value</span>
               </div>
-              <p className="font-mono text-3xl font-bold text-white">$16<span className="text-lg text-zinc-400">/mo</span></p>
-              <p className="font-mono text-xs text-zinc-500 mt-1">Billed $199/year — save $149</p>
+              <p className="font-sans text-3xl font-bold text-white">$16<span className="text-lg text-zinc-400">/mo</span></p>
+              <p className="font-sans text-xs text-zinc-500 mt-1">Billed $199/year — save $149</p>
             </div>
-            <p className="font-mono text-sm text-zinc-300 leading-relaxed">
+            <p className="font-sans text-sm text-zinc-300 leading-relaxed">
               All 7 tools.
             </p>
             <div className="mt-auto pt-4">
               {isPro ? (
-                <div className="w-full h-[40px] flex items-center justify-center font-mono text-xs text-[#FF3300] border border-[#FF3300]/30 rounded-md">
+                <div className="w-full h-[40px] flex items-center justify-center font-sans text-xs text-[#FF3300] border border-[#FF3300]/30 rounded-md">
                   You&apos;re on Pro
                 </div>
               ) : (
@@ -146,7 +146,7 @@ export default function UpgradePage() {
                   type="button"
                   onClick={() => handleCheckout('annual')}
                   disabled={loading !== null}
-                  className="w-full h-[40px] font-mono text-sm font-semibold tracking-wide rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] transition-all duration-200 disabled:opacity-50"
+                  className="w-full h-[40px] font-sans text-sm font-semibold tracking-wide rounded-md bg-[#FF3300] text-white hover:bg-[#e02d00] transition-all duration-200 disabled:opacity-50"
                   style={{ boxShadow: "0 0 20px rgba(255,51,0,0.3), 0 0 50px rgba(255,51,0,0.1)" }}
                 >
                   {loading === 'annual' ? 'Redirecting…' : 'Get Pro Annual — Best Value'}
@@ -163,7 +163,7 @@ export default function UpgradePage() {
               type="button"
               onClick={handlePortal}
               disabled={loading !== null}
-              className="font-mono text-sm text-zinc-400 hover:text-zinc-200 underline underline-offset-4 transition-colors duration-150 disabled:opacity-50"
+              className="font-sans text-sm text-zinc-400 hover:text-zinc-200 underline underline-offset-4 transition-colors duration-150 disabled:opacity-50"
             >
               {loading === 'portal' ? 'Redirecting…' : 'Manage Subscription'}
             </button>
@@ -172,7 +172,7 @@ export default function UpgradePage() {
 
         {/* Feature comparison table */}
         <div className="border border-white/10 rounded-md overflow-hidden">
-          <table className="w-full font-mono text-sm">
+          <table className="w-full font-sans text-sm">
             <thead>
               <tr className="border-b border-white/10">
                 <th className="text-left px-4 py-3 text-zinc-500 text-xs uppercase tracking-wider font-medium">Feature</th>
