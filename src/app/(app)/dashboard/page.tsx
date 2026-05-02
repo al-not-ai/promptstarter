@@ -18,7 +18,7 @@ import {
 import type { RestoredGeneration } from "@/lib/types/generation";
 import type { ProductProfile } from "@/lib/types/profile";
 
-const RAIL_PIN_KEY = "promptstarter:rail-pinned";
+const RAIL_COLLAPSED_KEY = "promptstarter:rail-collapsed";
 // Set to "true" the first time the user copies any prompt. Suppresses the
 // upgrade-trigger banner during the user's very first end-to-end flow so the
 // initial copy moment isn't immediately competing with an upsell.
@@ -58,7 +58,7 @@ function HomeInner() {
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [generationCount, setGenerationCount] = useState(0);
-  const [railPinned, setRailPinned] = useState(false);
+  const [railCollapsed, setRailCollapsed] = useState(false);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [userTier, setUserTier] = useState<'core' | 'pro'>('core');
   const [welcomeBanner, setWelcomeBanner] = useState(false);
@@ -76,7 +76,7 @@ function HomeInner() {
 
   useEffect(() => {
     try {
-      setRailPinned(localStorage.getItem(RAIL_PIN_KEY) === "true");
+      setRailCollapsed(localStorage.getItem(RAIL_COLLAPSED_KEY) === "true");
       setHasCompletedFirstFlow(
         localStorage.getItem(HAS_COMPLETED_FIRST_FLOW_KEY) === "true"
       );
@@ -318,8 +318,8 @@ function HomeInner() {
         onMobileClose={() => setMobileNavOpen(false)}
         onRestoreGeneration={handleRestoreGeneration}
         refreshKey={generationCount}
-        isPinned={railPinned}
-        onPinChange={setRailPinned}
+        isCollapsed={railCollapsed}
+        onCollapsedChange={setRailCollapsed}
         onAddProfile={() => setWizardOpen(true)}
         userTier={userTier}
         iconsDeferred={view === 'gallery'}
@@ -332,7 +332,7 @@ function HomeInner() {
           pt-20 md:pt-20
           pb-16
           transition-[margin-left] duration-200 ease-in-out
-          ${view === 'gallery' ? "md:ml-16" : railPinned ? "md:ml-60" : "md:ml-16"}
+          ${view === 'gallery' ? "md:ml-16" : railCollapsed ? "md:ml-16" : "md:ml-60"}
         `}
       >
         {view === 'gallery' ? (

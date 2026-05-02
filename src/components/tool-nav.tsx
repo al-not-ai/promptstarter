@@ -42,15 +42,17 @@ export function ToolNav({
     <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
       {TOOL_CATEGORIES.map(({ category, tools }) => (
         <div key={category}>
-          {/* Eyebrow — always in DOM, collapses to zero-height when rail is narrow */}
-          <p
-            className={cn(
-              "font-sans text-[10px] uppercase tracking-wider text-muted-foreground/50 px-2 whitespace-nowrap overflow-hidden transition-all duration-200",
-              isCollapsed ? "max-h-0 mb-0 opacity-0" : "max-h-4 mb-1.5 opacity-100"
+          {/* Fixed-height category header — holds eyebrow text when expanded,
+              or a 1px divider when collapsed, so the icon grid stays vertically locked. */}
+          <div className="h-[22px] flex items-center px-2 mb-0.5">
+            {isCollapsed ? (
+              <div className="w-full h-px bg-white/5" />
+            ) : (
+              <p className="font-sans text-[10px] uppercase tracking-wider text-muted-foreground/50 whitespace-nowrap overflow-hidden">
+                {category}
+              </p>
             )}
-          >
-            {category}
-          </p>
+          </div>
           <ul className="space-y-0.5">
             {tools.map((tool) => {
               const isActive = tool.id === activeToolId;
