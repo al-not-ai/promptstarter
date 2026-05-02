@@ -106,9 +106,12 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
   /* ── Empty skeleton ── */
   if (isEmpty) {
     return (
-      <div className="w-full min-h-[120px] bg-zinc-900/50 border border-zinc-800 rounded-lg flex items-center justify-center">
-        <p className="font-mono text-sm text-zinc-600 select-none">
-          Generated prompt will appear here...
+      <div className="w-full min-h-[120px] bg-zinc-900/50 border border-zinc-800 rounded-lg flex flex-col items-center justify-center px-5 py-6 text-center">
+        <p className="font-mono text-sm text-zinc-500 select-none">
+          Your master prompt will appear here.
+        </p>
+        <p className="font-mono text-xs text-zinc-600 mt-2 max-w-[480px] mx-auto leading-relaxed select-none">
+          Copy it, paste into ChatGPT, Claude, or Gemini — your AI generates the deliverable.
         </p>
       </div>
     );

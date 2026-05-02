@@ -8,9 +8,7 @@ interface UpgradeTriggerProps {
 }
 
 const UPGRADE_NUDGES: Partial<Record<string, string>> = {
-  'objection-defuser': "Most objections that stall go quiet within days. The Deal Reviver builds a 3-touch re-engagement sequence for exactly this moment.",
   'pre-call-recon':    "After the call, the Follow-Up Forward writes the follow-up email plus a recap your prospect can forward to their boss — no editing required.",
-  'cold-hook':         "Following up on cold outreach is where most replies die. The Deal Reviver builds a multi-touch sequence for this same prospect.",
 };
 
 export function UpgradeTrigger({ toolId, userTier, hasCopied, suppressForFirstFlow }: UpgradeTriggerProps) {
