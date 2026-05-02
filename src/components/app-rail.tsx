@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { X, ChevronDown, Check, Plus, Pin, PinOff, ArrowRight, Users } from "lucide-react";
+import { X, ChevronDown, Check, Plus, PanelLeftClose, PanelLeftOpen, ArrowRight, Users } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ import { useProfileSwitcher } from "@/lib/profile-context";
 import { tools } from "@/lib/tools";
 import type { RestoredGeneration } from "@/lib/types/generation";
 
-const RAIL_PIN_KEY = "promptstarter:rail-pinned";
+const RAIL_COLLAPSED_KEY = "promptstarter:rail-collapsed";
 
 interface AppRailProps {
   activeToolId: string;
@@ -20,8 +20,8 @@ interface AppRailProps {
   onMobileClose: () => void;
   onRestoreGeneration: (gen: RestoredGeneration) => void;
   refreshKey: number;
-  isPinned: boolean;
-  onPinChange: (pinned: boolean) => void;
+  isCollapsed: boolean;
+  onCollapsedChange: (collapsed: boolean) => void;
   onAddProfile?: () => void;
   userTier?: 'core' | 'pro';
   /**
@@ -40,47 +40,27 @@ export function AppRail({
   onMobileClose,
   onRestoreGeneration,
   refreshKey,
-  isPinned,
-  onPinChange,
+  isCollapsed,
+  onCollapsedChange,
   onAddProfile,
   userTier = 'core',
   iconsDeferred = false,
 }: AppRailProps) {
-  const [hoverExpanded, setHoverExpanded] = useState(false);
-  const hoverInTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const hoverOutTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
-  // While the picker is rendering, ignore pin/hover and force collapsed.
-  const isExpanded = !iconsDeferred && (hoverExpanded || isPinned);
-
-  function handleMouseEnter() {
-    if (isPinned || iconsDeferred) return;
-    clearTimeout(hoverOutTimer.current);
-    hoverInTimer.current = setTimeout(() => setHoverExpanded(true), 150);
-  }
-
-  function handleMouseLeave() {
-    if (isPinned || iconsDeferred) return;
-    clearTimeout(hoverInTimer.current);
-    hoverOutTimer.current = setTimeout(() => setHoverExpanded(false), 100);
-  }
+  // While the picker is rendering, force collapsed width.
+  const isExpanded = !iconsDeferred && !isCollapsed;
 
   function handleToolSelect(toolId: string) {
     onToolSelect(toolId);
     setTimeout(onMobileClose, 150);
   }
 
-  function togglePin() {
-    const next = !isPinned;
-    onPinChange(next);
+  function toggleCollapsed() {
+    const next = !isCollapsed;
+    onCollapsedChange(next);
     try {
-      localStorage.setItem(RAIL_PIN_KEY, String(next));
+      localStorage.setItem(RAIL_COLLAPSED_KEY, String(next));
     } catch {
       // localStorage unavailable — no-op
-    }
-    if (next) {
-      // When pinning, collapse hover state (pin takes over)
-      setHoverExpanded(false);
     }
   }
 
@@ -97,8 +77,6 @@ export function AppRail({
 
       {/* ── Desktop rail ────────────────────────────────────── */}
       <aside
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         className={`
           hidden md:flex flex-col fixed left-0 top-14 z-[80]
           h-[calc(100dvh-56px)]
@@ -106,7 +84,6 @@ export function AppRail({
           transition-[width,opacity] duration-200 ease-in-out
           overflow-hidden
           ${isExpanded ? "w-60" : "w-16"}
-          ${isPinned ? "" : "shadow-[2px_0_20px_-5px_rgba(0,0,0,0.6)]"}
           ${iconsDeferred ? "opacity-30 pointer-events-none" : "opacity-100"}
         `}
       >
@@ -127,15 +104,18 @@ export function AppRail({
 
         {/* Pin toggle + footer */}
         <div className="mt-auto shrink-0 border-t border-white/5">
-          {/* Pin button — unified layout, icon stays in column */}
+          {/* Collapse/expand toggle — icon stays in column */}
           <button
-            onClick={togglePin}
-            aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
-            title={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
+            onClick={toggleCollapsed}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             className="flex items-center w-full px-5 gap-3 py-3 text-zinc-600 hover:text-zinc-300 hover:bg-white/[0.03] transition-colors duration-150"
           >
             <span className="flex shrink-0 items-center justify-center w-5">
-              {isPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
+              {isCollapsed
+                ? <PanelLeftOpen className="w-4 h-4" />
+                : <PanelLeftClose className="w-4 h-4" />
+              }
             </span>
             <span
               className={cn(
@@ -143,12 +123,18 @@ export function AppRail({
                 isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
               )}
             >
-              {isPinned ? "Unpin sidebar" : "Pin sidebar"}
+              {isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             </span>
           </button>
 
-          {/* Version stamp — always in DOM, fades with opacity */}
-          <div className="px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          {/* Version stamp + status pulse */}
+          <div className="px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] flex items-center gap-2">
+            <span
+              className={cn(
+                "block w-1 h-1 rounded-full bg-[#FF3300] shrink-0 transition-opacity duration-200",
+                "shadow-[0_0_4px_rgba(255,51,0,0.8)]"
+              )}
+            />
             <p
               className={cn(
                 "font-sans text-[10px] tracking-wider text-muted-foreground/30 whitespace-nowrap",
@@ -156,7 +142,7 @@ export function AppRail({
                 isExpanded ? "opacity-100" : "opacity-0"
               )}
             >
-              Promptstarter V1.0
+              Promptstarter V1.0 · Engine online
             </p>
           </div>
         </div>
