@@ -224,7 +224,7 @@ export function ControlPanel({
           </div>
 
           <p className="font-sans text-[11px] text-zinc-400 text-right -mt-2 pr-1 max-md:hidden">
-            You paste it into your AI tool.
+            Output is a master prompt. Paste it into your AI to generate the deliverable.
           </p>
 
           {/* Context textarea — only in unlocked mode */}
