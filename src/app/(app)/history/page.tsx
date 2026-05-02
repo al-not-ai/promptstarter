@@ -294,7 +294,7 @@ export default function HistoryPage() {
                 <div className="flex flex-col gap-0.5">
                   {groupItems.map((item) => {
                     const tool = tools.find((t) => t.id === item.tool_id);
-                    const shortName = (tool?.name ?? item.tool_id).replace(/^The\s+/i, "");
+                    const shortName = tool?.name ?? item.tool_id;
                     const firstVal = Object.values(item.variable_values)[0] ?? "";
                     const subtitle =
                       firstVal.length > 48 ? firstVal.slice(0, 47) + "…" : firstVal;

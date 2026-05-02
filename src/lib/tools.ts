@@ -60,7 +60,7 @@ export type Tool = {
 export const tools: Tool[] = [
   {
     id: "pre-call-recon",
-    name: "The Pre-Call Recon Brief",
+    name: "Pre-Call Recon Brief",
     category: "Call Prep",
     tier: 'core',
     outputFormat: "Exactly 3 sections: (1) One specific intel signal about this account, (2) Three conversation openers the rep can choose from, (3) Two questions to ask in the first 5 minutes of the call",
@@ -88,7 +88,7 @@ export const tools: Tool[] = [
   },
   {
     id: "objection-defuser",
-    name: "The Objection Defuser",
+    name: "Objection Defuser",
     category: "Active Deals",
     tier: 'pro',
     outputFormat: "3-5 sentences the rep can say verbatim or riff on, followed by one follow-up question. Conversational tone, not formal. Actual language, not a framework.",
@@ -122,7 +122,7 @@ export const tools: Tool[] = [
   },
   {
     id: "competitor-battlecard",
-    name: "The Competitor Battlecard",
+    name: "Competitor Battlecard",
     category: "Call Prep",
     tier: 'pro',
     outputFormat: "5 discovery questions numbered 1-5, each followed by a one-line coaching note on why it works and what signal to listen for in the answer. No scripted dialogue. No fake conversations.",
@@ -156,7 +156,7 @@ export const tools: Tool[] = [
   },
   {
     id: "cold-hook",
-    name: "The Cold Hook",
+    name: "Cold Hook",
     category: "Outreach",
     tier: 'pro',
     outputFormat: "Short-form Outreach (Under 100 words)",
@@ -208,7 +208,7 @@ export const tools: Tool[] = [
 
   {
     id: "follow-up-forward",
-    name: "The Follow-Up Forward",
+    name: "Follow-Up Forward",
     category: "Active Deals",
     tier: 'pro',
     outputFormat: `TWO assets, each with a clear heading:
@@ -255,7 +255,7 @@ ASSET 2 — FORWARD-READY RECAP (prospect → their internal decision-maker): 5�
 
   {
     id: "deal-reviver",
-    name: "The Deal Reviver",
+    name: "Deal Reviver",
     category: "Pipeline",
     tier: 'pro',
     outputFormat: `THREE-TOUCH REVIVAL SEQUENCE — each touch as its own labeled sub-section:
@@ -304,7 +304,7 @@ TOUCH 3 — VOICEMAIL SCRIPT (label "if applicable"): 20–30 seconds when spoke
 
   {
     id: "cfo-pitch",
-    name: "The CFO Pitch",
+    name: "CFO Pitch",
     category: "Active Deals",
     tier: 'pro',
     outputFormat: `A one-page financial brief written as if the prospect's internal champion authored it to their own finance decision-maker. "We" refers to the prospect's company, never the vendor's. Structured for a 90-second skim.

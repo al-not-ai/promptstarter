@@ -88,8 +88,8 @@ function ToolCard({
         />
       </motion.span>
 
-      <h3 className="font-tech text-white font-semibold text-[17px] tracking-tight leading-tight flex items-center gap-1.5">
-        {name.replace(/^The\s+/i, "")}
+      <h3 className="font-sans text-white font-semibold text-[17px] tracking-tight leading-tight flex items-center gap-1.5">
+        {name}
         {isLocked && <Lock size={12} className="text-zinc-600" />}
       </h3>
       <p className="mt-1.5 text-[13px] leading-snug text-zinc-400 max-w-[280px]">
