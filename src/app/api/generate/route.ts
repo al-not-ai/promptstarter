@@ -228,8 +228,12 @@ export async function POST(req: Request) {
     : { data: null };
 
   const userTier = (userSettings?.tier ?? 'core') as 'core' | 'pro';
+  // Pre-launch testing bypass: mirrors the same flag honored by /api/user/tier
+  // so the UI-side and server-side gates stay in sync. Remove BYPASS_TIER from
+  // env when Stripe is wired up for real users.
+  const tierBypass = process.env.BYPASS_TIER === 'true';
 
-  if (tool.tier === 'pro' && userTier === 'core' && !isStressTestBypass) {
+  if (tool.tier === 'pro' && userTier === 'core' && !isStressTestBypass && !tierBypass) {
     return Response.json(
       { error: 'tier_required', requiredTier: 'pro', toolId: tool.id },
       { status: 403 }
