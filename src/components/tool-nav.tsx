@@ -87,10 +87,9 @@ export function ToolNav({
                         className="flex shrink-0 items-center justify-center w-5"
                       >
                         <Icon
-                          size={17}
                           strokeWidth={isActive ? 2.25 : 1.75}
                           className={cn(
-                            "transition-colors duration-150",
+                            "w-[17px] h-[17px] shrink-0 transition-colors duration-150",
                             isActive ? "text-[#FF3300]" : "text-zinc-400"
                           )}
                           style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : undefined}
@@ -99,10 +98,9 @@ export function ToolNav({
                     ) : (
                       <span className="flex shrink-0 items-center justify-center w-5">
                         <Icon
-                          size={17}
                           strokeWidth={isActive ? 2.25 : 1.75}
                           className={cn(
-                            "transition-colors duration-150",
+                            "w-[17px] h-[17px] shrink-0 transition-colors duration-150",
                             isActive ? "text-[#FF3300]" : "text-zinc-400"
                           )}
                           style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : undefined}
