@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Phone, ShieldCheck, BarChart2, Zap, MessageSquare, RotateCcw, DollarSign, Lock, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TOOL_CATEGORIES } from "@/lib/tools";
@@ -10,12 +9,7 @@ interface ToolNavProps {
   onToolSelect: (toolId: string) => void;
   isCollapsed?: boolean;
   userTier?: 'core' | 'pro';
-  /**
-   * When true, each tool icon is wrapped in a motion element with a stable
-   * layoutId, so the picker → rail morph animation lands here. Default false:
-   * the picker (tool-picker.tsx) owns the layoutIds during the gallery view,
-   * and the rail picks them up only after the user has chosen a tool.
-   */
+  /** Reserved for future picker→rail morph animation. Currently unused. */
   enableMorphAnchor?: boolean;
 }
 
@@ -75,38 +69,16 @@ export function ToolNav({
                         : "before:opacity-0 text-muted-foreground hover:text-foreground hover:bg-white/[0.02]"
                     )}
                   >
-                    {/* Icon — fixed column, always visible. When the picker
-                        is active, the morph anchor is OFF here so the gallery
-                        owns the layoutId; when the user lands on a tool, the
-                        anchor flips ON and Framer Motion morphs the gallery
-                        icon into this slot. */}
-                    {enableMorphAnchor ? (
-                      <motion.span
-                        layoutId={toolIconLayoutId(tool.id)}
-                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                        className="flex shrink-0 items-center justify-center w-5"
-                      >
-                        <Icon
-                          strokeWidth={isActive ? 2.25 : 1.75}
-                          className={cn(
-                            "w-[17px] h-[17px] shrink-0 transition-colors duration-150",
-                            isActive ? "text-[#FF3300]" : "text-zinc-400"
-                          )}
-                          style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : undefined}
-                        />
-                      </motion.span>
-                    ) : (
-                      <span className="flex shrink-0 items-center justify-center w-5">
-                        <Icon
-                          strokeWidth={isActive ? 2.25 : 1.75}
-                          className={cn(
-                            "w-[17px] h-[17px] shrink-0 transition-colors duration-150",
-                            isActive ? "text-[#FF3300]" : "text-zinc-400"
-                          )}
-                          style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : undefined}
-                        />
-                      </span>
-                    )}
+                    <span className="flex shrink-0 items-center justify-center w-5">
+                      <Icon
+                        strokeWidth={isActive ? 2.25 : 1.75}
+                        className={cn(
+                          "w-[17px] h-[17px] shrink-0 transition-colors duration-150",
+                          isActive ? "text-[#FF3300]" : "text-zinc-400"
+                        )}
+                        style={isActive ? { filter: "drop-shadow(0 0 4px rgba(255,51,0,0.5))" } : undefined}
+                      />
+                    </span>
 
                     {/* Label — fades and slides in when expanded */}
                     <span
