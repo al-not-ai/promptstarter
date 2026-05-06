@@ -63,6 +63,31 @@ per seller + situation, but a strong hint anchors the framing.
 produce. The engine copies the substance of this into STRUCTURE, so be
 specific about format, length, and what to exclude.
 
+**`engineSkipsStructure?: boolean`** — When `true`, the engine is told to
+output MISSION + GROUNDING only (2 sections). The STRUCTURE section is
+server-templated by `buildTemplatedStructure()` in `prompt-templates.ts`
+and spliced between MISSION and GROUNDING by `assembleMasterPrompt()` at
+delivery time. The verbose `tool.outputFormat` is dropped from the user
+prompt for these tools; a one-line cue replaces it. Default: `false`
+(omit the field entirely for the standard 3-section path).
+
+When to set `true`: the tool's `outputFormat` is already a complete
+structural spec that can be reliably slot-filled from rep inputs and
+slider values — no case-specific interpretation needed in STRUCTURE itself.
+Saves ~200 engine output tokens per call by eliminating engine paraphrasing
+of a fixed spec. Currently enabled only on `cfo-pitch`.
+
+Gotchas:
+- Setting this flag without a corresponding `buildXxxStructure()` function
+  throws at runtime. Add the builder and dispatch case first.
+- The `## GROUNDING` header is the natural delimiter for the splice. If
+  the engine omits this header (has not occurred in cycles 4–10), the
+  splice falls back to passing engine output unchanged — STRUCTURE will be
+  missing from that one response. Monitor `console.warn` for the fallback
+  log line.
+- The engine's system prompt gets a different cache key from the standard
+  3-section prompt. One extra cache write per deploy/per-user on first call.
+
 # Templated tail — what the engine does NOT write
 
 Every master prompt ends with two fixed blocks appended in
@@ -90,6 +115,17 @@ When you rename/add/remove one, update in lockstep:
 
 The engine itself (`src/app/api/generate/route.ts`) is tool-agnostic and
 reads the schema directly — it does not need to change.
+
+**Flipping `engineSkipsStructure: true` on a tool** is not a single-file
+change. In lockstep:
+- Add a `buildXxxStructure()` function in `src/lib/prompt-templates.ts`
+  that slot-fills the tool's STRUCTURE template from `variableValues`,
+  `sliderValues`, and optionally `companyName`.
+- Add a dispatch case for the new `toolId` inside `buildTemplatedStructure()`
+  in the same file. The function currently throws on any unrecognised toolId.
+- Update `cfo-pitch.sampleOutput` in `tools.ts` is the model — MISSION and
+  GROUNDING stay as engine-generated samples; only STRUCTURE is replaced with
+  the literal templated output for that tool's `lockedPreviewInputs`.
 
 # Token cost accounting
 
