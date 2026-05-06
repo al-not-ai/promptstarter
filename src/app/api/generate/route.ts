@@ -261,13 +261,9 @@ export async function POST(req: Request) {
       `- Treat the profile as the only source of truth for the rep's product. Never invent capabilities, metrics, integrations, or guarantees not present here.\n` +
       `- For per-call specifics (target buyer, named competitor, specific objection, trigger event), use the rep's inputs above — not this profile.\n` +
       `- CRITICAL — NUMERICAL SPECIFICITY RULE: When a differentiator contains a specific number (e.g. "within 4%", "30% lower", "~14 sq ft", "10-year warranty", "50% holdback"), DO NOT echo that number anywhere in the master prompt unless the rep's per-call inputs explicitly contain that exact number. Reference the *capability* the differentiator describes, not the number itself. The numbers in <key_differentiators> describe what is broadly true of the product — not what is necessarily true of this deal, this prospect, or this engagement. The rep is the sole source of per-deal numerical claims; per-deal numbers come only from the rep's inputs above.\n` +
-      `   - "Anywhere" means: not as the assistant's anchor, not as a calculation basis, not as a source citation, not as a parenthetical aside, not in an Avoid: list as a positive example, not as a soft "mention if natural" suggestion. If the rep didn't supply the number, the number does not exist for this deliverable.\n` +
       `   - GOOD: "anchor to my forecast accuracy SLA" / "lean on the energy-cost savings" / "our success-aligned fee structure" (capability references, no number)\n` +
       `   - BAD:  "anchor to my 4% accuracy guarantee" / "lean on our 30% lower energy draw" / "our 50% holdback structure" (concretized differentiator numbers)\n` +
-      `   - BAD:  "the success-aligned fee structure (50% holdback) is a trust signal" (parenthetical re-introduces the very number the capability replaced)\n` +
-      `   - BAD:  "calculate savings from our 30% energy reduction" (uses a profile number as the math basis without rep authorization)\n` +
-      `   - Exception: if the rep's per-call inputs explicitly contain the specific number (e.g. they wrote "$24,000/year" or "30% margin compression" or "50% fee held back"), you may use that exact number — but ONLY that input-supplied number, and ONLY the way the rep phrased it.\n` +
-      `   - If the assistant needs a number to make the case (e.g. cfo-pitch FINANCIAL CASE bullets, ROI math, defuser counter-claims), instruct it to ASK ME FOR THE NUMBER. Do not back-fill from the profile. Phrase as "If we need the [specific quantification] to make the case land, ask me for it" or "Flag any assumed multiplier as an explicit assumption pending my input."\n\n` +
+      `   - Do not enumerate the forbidden numbers in your instruction to the assistant — reference them by category ("the differentiator-derived numbers") if you must reference them at all. The instruction itself can leak the very numbers it is trying to suppress.\n\n` +
       profileXml;
   }
 
