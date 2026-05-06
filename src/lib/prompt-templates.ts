@@ -30,6 +30,73 @@ export const RECON_RESEARCH_BLOCK = `## RESEARCH PROTOCOL
 - If you have no live tools, OR your tools return nothing usable for this prospect: open the brief by saying so plainly ("I don't have live research access in this session"), then fall back to role + industry pattern and flag everything as "pattern, not fact."
 - A "source" means content you actually retrieved via a tool call in THIS session. Your training data is months old and may be wrong — never cite specific articles, earnings calls, reports, filings, or quotes from training data as sources you can stand behind.`;
 
+// Splits engine output on the `## GROUNDING` header so we can splice templated
+// STRUCTURE between MISSION and GROUNDING. Returns null when the header is
+// missing; caller falls back to passing engine output through unchanged.
+function splitOnGroundingHeader(text: string): { mission: string; grounding: string } | null {
+  const match = text.match(/^##\s+GROUNDING\b/m);
+  if (!match || match.index === undefined) return null;
+  return {
+    mission: text.slice(0, match.index),
+    grounding: text.slice(match.index),
+  };
+}
+
+// Returns the templated STRUCTURE block for cfo-pitch with slots filled.
+// Kept inline rather than reaching into tools.ts so prompt-templates remains
+// tool-schema-light; the small mapping is an acceptable second source of truth.
+function buildCfoPitchStructure(params: {
+  variableValues: Record<string, string>;
+  sliderValues: Record<string, number>;
+  companyName?: string;
+}): string {
+  const { variableValues, sliderValues, companyName } = params;
+  const painPoint = variableValues.painPoint ?? "(not provided)";
+  const annualCost = variableValues.annualCost ?? "(not provided)";
+  const financialCases = ["Save Labor Hours", "Speed Up Revenue", "Cut Hard Costs", "Reduce Risk / Compliance"];
+  const financialCaseLabel = financialCases[sliderValues["financial-case"] ?? 0] ?? financialCases[0];
+  const audienceTargets = ["the champion's finance partner", "the CFO", "the CEO or COO"];
+  const audienceTarget = audienceTargets[sliderValues["reader-audience"] ?? 0] ?? audienceTargets[0];
+  const company = companyName ?? "vendor";
+  return `## STRUCTURE
+
+1. **THE PROBLEM** (2–3 bullets)
+   - Anchor to my pain point in the champion's own words: ${painPoint}
+   - Make the cost of this pain concrete and visible to a finance reader
+   - No marketing language — operational frustration, not vendor concern
+
+2. **FINANCIAL CASE** (3–4 bullets)
+   - Translate the ${financialCaseLabel} angle into concrete business impact using the annual cost I've supplied (${annualCost})
+   - Flag any assumed multipliers explicitly (e.g., "assuming X hours saved per week" or "assuming Y closures prevented per year")
+   - Show the math in a form a finance reader can stress-test
+   - Do not introduce dollar amounts, percentages, or timelines beyond what I've given you
+
+3. **WHAT WE EVALUATED** (1–2 bullets)
+   - Behavioral and specific observations from the champion's own evaluation — what they saw work, not a feature checklist
+   - One concrete operational signal that builds the champion's credibility with their reader
+
+4. **THE ASK** (1 bullet)
+   - The specific approval or next step ${audienceTarget} needs to take — concrete decision language, no "consider" or "explore"
+
+**Avoid throughout:** ${company} branding, "industry-leading," "robust," "cutting-edge," the vendor company name anywhere in the body, any dollar amounts beyond what I've supplied.`;
+}
+
+/**
+ * Dispatch fn — returns the templated STRUCTURE block for the given tool with
+ * slots filled. For the Phase 3 pilot, only cfo-pitch is implemented; throws
+ * for any other toolId.
+ */
+export function buildTemplatedStructure(params: {
+  toolId: string;
+  variableValues: Record<string, string>;
+  sliderValues: Record<string, number>;
+  companyName?: string;
+}): string {
+  const { toolId } = params;
+  if (toolId === "cfo-pitch") return buildCfoPitchStructure(params);
+  throw new Error(`No templated STRUCTURE defined for tool: ${toolId}`);
+}
+
 export function buildDrillDownBlock(outputDescriptor: string): string {
   return `## DRILL-DOWN OFFER
 
@@ -43,17 +110,36 @@ After delivering ${outputDescriptor}, pause and:
  * Assembles the final master prompt: engine output + templated tail.
  * The tail order is STANDARD RULES → optional RESEARCH PROTOCOL → DRILL-DOWN.
  *
- * Assumes the engine wrote only MISSION + STRUCTURE + GROUNDING and ended
- * its output after the last line of GROUNDING (per system prompt contract).
+ * When templatedStructure is provided, splices it between MISSION and GROUNDING
+ * using the `## GROUNDING` header as the natural delimiter. If the header is
+ * absent (engine didn't emit it), logs a warning and passes engine output
+ * through unchanged — prompt is still deliverable, just missing STRUCTURE.
  */
 export function assembleMasterPrompt(params: {
   engineOutput: string;
   outputDescriptor: string;
   toolId: string;
+  templatedStructure?: string;
 }): string {
-  const { engineOutput, outputDescriptor, toolId } = params;
+  const { engineOutput, outputDescriptor, toolId, templatedStructure } = params;
   const trimmed = engineOutput.trim();
+
+  let body: string;
+  if (templatedStructure) {
+    const split = splitOnGroundingHeader(trimmed);
+    if (split === null) {
+      console.warn(
+        `[assembleMasterPrompt] No '## GROUNDING' header in engine output for ${toolId}; STRUCTURE splice skipped`
+      );
+      body = trimmed;
+    } else {
+      body = `${split.mission.trimEnd()}\n\n${templatedStructure.trim()}\n\n${split.grounding.trimStart()}`;
+    }
+  } else {
+    body = trimmed;
+  }
+
   const reconResearch =
     toolId === "pre-call-recon" ? `\n\n${RECON_RESEARCH_BLOCK}` : "";
-  return `${trimmed}\n\n${STANDARD_RULES_BLOCK}${reconResearch}\n\n${buildDrillDownBlock(outputDescriptor)}`;
+  return `${body}\n\n${STANDARD_RULES_BLOCK}${reconResearch}\n\n${buildDrillDownBlock(outputDescriptor)}`;
 }
