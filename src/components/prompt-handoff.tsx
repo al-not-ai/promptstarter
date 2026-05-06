@@ -23,9 +23,11 @@ export function PromptHandoff({ visible, onDismiss, pulseKey, copyButtonRef }: P
   const [preferred, setPreferred] = useState<DownstreamAIId | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage must be read client-side; lazy init would cause server/client hydration mismatch */
   useEffect(() => {
     setPreferred(getPreferredAI());
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Click-outside + ESC dismissal — only active when visible
   useEffect(() => {

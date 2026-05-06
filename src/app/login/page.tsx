@@ -24,15 +24,18 @@ function LoginForm() {
 
   // Read query-param errors forwarded by our callback route (?error=...)
   const searchParams = useSearchParams();
+  /* eslint-disable react-hooks/set-state-in-effect -- reactive to URL params; error is set conditionally only when ?error= param is present */
   useEffect(() => {
     if (searchParams.get("error")) {
       setError("Authentication failed. Please try again.");
     }
   }, [searchParams]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Read hash-fragment errors sent directly by Supabase Auth (#error=...)
   // This happens when the redirect URL isn't whitelisted and Supabase falls
   // back to the Site URL, appending the error as a fragment.
+  /* eslint-disable react-hooks/set-state-in-effect -- window.location.hash only available client-side; runs once on mount to catch Supabase fragment errors */
   useEffect(() => {
     const hash = window.location.hash;
     if (!hash.includes("error=")) return;
@@ -46,6 +49,7 @@ function LoginForm() {
     // Clean the ugly fragment from the URL bar
     window.history.replaceState({}, "", window.location.pathname);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   async function handleGoogle() {
     setLoading("google");

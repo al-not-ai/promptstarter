@@ -15,6 +15,7 @@ interface ProfileWizardSheetProps {
 export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardSheetProps) {
   const [isMobile, setIsMobile] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- window.matchMedia only available client-side; synchronous initial read required alongside the change listener */
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     setIsMobile(mq.matches);
@@ -22,6 +23,7 @@ export function ProfileWizardSheet({ open, onClose, onComplete }: ProfileWizardS
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (!open) return;

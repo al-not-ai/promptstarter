@@ -57,6 +57,7 @@ export default function HistoryPage() {
     Map<string, { item: GenerationMeta; timer: ReturnType<typeof setTimeout> }>
   >(new Map());
 
+  /* eslint-disable react-hooks/set-state-in-effect -- synchronous loading flag before async fetch; the clearing calls are in .then() callbacks */
   useEffect(() => {
     if (!profile) return;
     setLoading(true);
@@ -68,6 +69,7 @@ export default function HistoryPage() {
       })
       .catch(() => setLoading(false));
   }, [profile]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Flush pending deletes if the page is torn down before the undo window
   // expires. Uses a single bulk request so large bulk-selections don't fan out

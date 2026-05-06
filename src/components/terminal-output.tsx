@@ -51,13 +51,16 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
   const [coachingCopy, setCoachingCopy] = useState<string>(() => coachingCopyFor(null));
 
   // Reset on new output (re-generation or history restore)
+  /* eslint-disable react-hooks/set-state-in-effect -- intentional reset on output change; adding hasCopied/sweepKey to deps would cause immediate re-reset after every Copy click */
   useEffect(() => {
     setHasCopied(false);
     setSweepKey(null);
   }, [output]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Coaching tooltip gate — only shows for users who have never copied a
   // prompt before, and only on freshly generated output (not history restores).
+  /* eslint-disable react-hooks/set-state-in-effect -- reads localStorage to gate first-time tooltip; state is async-derived and has no rendered equivalent */
   useEffect(() => {
     if (!output || isLoading || error || !isFreshGeneration) {
       setCoachingOpen(false);
@@ -75,6 +78,7 @@ export function TerminalOutput({ output, isLoading, error, rawContext, onRetry, 
     setCoachingCopy(coachingCopyFor(getPreferredAI()));
     setCoachingOpen(true);
   }, [output, isLoading, error, isFreshGeneration]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   function dismissCoaching() {
     setCoachingOpen(false);
