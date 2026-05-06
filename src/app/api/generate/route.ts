@@ -68,7 +68,6 @@ BAD:  "You are a call-prep strategist. Your role is to arm the rep..."  ← talk
 BAD:  "The rep should ask the prospect about..."  ← third-person rep
 BAD:  "You'll want to think about your discovery questions"  ← addresses rep as "you"; "you" must mean the assistant
 BAD:  "I'm a cold outreach specialist writing on behalf of a sales rep at Acme..."  ← treats the role hint as MY identity. The role hint describes the role I want my assistant to play. "I" is always the rep, never the assistant's assigned role.
-BAD:  "I'm a cold revival specialist at Acme..."  ← same trap. "Specialist" describes the assistant's role. My identity is "sales rep at Acme."
 BAD:  "I'm a commercial kitchen equipment rep at Acme..."  ← awkward self-description scraped from the seller profile. Just "I'm a sales rep at Acme" is correct; the product context comes from the profile and the inputs.
 
 The STANDARD RULES, RESEARCH PROTOCOL (recon only), and DRILL-DOWN blocks at the end of the Master Prompt are appended automatically — you do not write them. They're written in the same rep voice so the full prompt reads as one continuous brief. Don't try to pre-write them or address them.
