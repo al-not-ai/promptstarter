@@ -373,9 +373,20 @@ export async function POST(req: Request) {
         }
         controller.enqueue(encoder.encode(templatedTail));
         // Append token usage for stress-test runs only — stripped by the test script.
+        // The AI SDK exposes cache breakdown under `usage.inputTokenDetails` (see
+        // node_modules/ai/dist/index.d.ts: LanguageModelUsage). Surface them so the
+        // stress harness can apply correct per-category pricing and report cache
+        // hit/miss ratios.
         if (isStressTestBypass) {
           const usage = await result.usage;
-          const usageLine = `\n[STRESS_TEST_USAGE:${JSON.stringify({ inputTokens: usage.inputTokens, outputTokens: usage.outputTokens })}]`;
+          const details = usage.inputTokenDetails;
+          const usageLine = `\n[STRESS_TEST_USAGE:${JSON.stringify({
+            inputTokens: usage.inputTokens,
+            outputTokens: usage.outputTokens,
+            cacheReadInputTokens: details?.cacheReadTokens,
+            cacheCreationInputTokens: details?.cacheWriteTokens,
+            uncachedInputTokens: details?.noCacheTokens,
+          })}]`;
           controller.enqueue(encoder.encode(usageLine));
         }
         controller.close();
