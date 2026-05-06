@@ -19,14 +19,6 @@ const anthropic = createAnthropic({
   // shell/env overrides (e.g. https://api.anthropic.com without /v1) from
   // routing requests to the wrong endpoint.
   baseURL: "https://api.anthropic.com/v1",
-  // 1h prompt-cache TTL is gated behind the extended-cache-ttl beta. The
-  // @ai-sdk/anthropic schema accepts ttl: "1h" but does not auto-emit the
-  // beta header — without it the API silently treats the cacheControl as
-  // invalid and skips caching entirely. The SDK merges this header with any
-  // betas it adds itself (see getBetasFromHeaders in the SDK source).
-  headers: {
-    "anthropic-beta": "extended-cache-ttl-2025-04-11",
-  },
 });
 
 /**
@@ -317,7 +309,7 @@ export async function POST(req: Request) {
         // it at 10× discount on those input tokens.
         providerOptions: {
           anthropic: {
-            cacheControl: { type: "ephemeral", ttl: "1h" },
+            cacheControl: { type: "ephemeral", ttl: "5m" },
           },
         },
       },
