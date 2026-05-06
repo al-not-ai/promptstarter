@@ -46,6 +46,19 @@ export type Tool = {
    * situation tools = false.
    */
   includesProfile: boolean;
+  /**
+   * When true, the engine is instructed to output MISSION + GROUNDING only
+   * (2 sections). The STRUCTURE section is server-templated via
+   * buildTemplatedStructure() in prompt-templates.ts and spliced in between
+   * MISSION and GROUNDING after the engine finishes. This saves ~200 output
+   * tokens per call by eliminating engine paraphrasing of a fixed spec.
+   *
+   * Set true only on tools whose outputFormat is a complete structural spec
+   * that can be reliably slot-filled server-side. Default: false (undefined).
+   * Adding this flag requires a corresponding buildXxxStructure() function in
+   * prompt-templates.ts and a dispatch case in buildTemplatedStructure().
+   */
+  engineSkipsStructure?: boolean;
   variables: ToolVariable[];
   sliders: ToolSlider[];
   /** Pro tools only: pre-filled inputs shown in locked/preview mode. */
@@ -499,6 +512,7 @@ Avoid throughout: vendor branding, "industry-leading," "robust," "cutting-edge,"
     // engineRoleHint makes this explicit so MISSION frames the deliverable correctly.
     engineRoleHint: "financial-justification strategist composing a brief the rep's champion will forward to their CFO — write it entirely in the champion's voice, as if the champion authored it internally, not as a vendor document",
     includesProfile: true,
+    engineSkipsStructure: true,
     variables: [
       {
         name: "painPoint",
