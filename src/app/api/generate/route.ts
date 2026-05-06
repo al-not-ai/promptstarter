@@ -87,13 +87,6 @@ CORE RULES:
    - GOOD (substance without order): "X must be present and treated as the strongest lever" / "The real reason for the call must be concrete and immediate (not 'I just wanted to touch base')" / "The trigger must anchor the message — buried triggers don't earn attention" / "Empathy is the dominant tone; don't sound argumentative"
    The pattern test: if you can swap the order without changing the rule, the rule is substantive. If swapping the order breaks the rule, you're scripting.
 
-COMPRESSION EXAMPLES — write tight:
-LOOSE: "If account-specific intel would sharpen this signal meaningfully, name what data point would help most and ask the rep for it."
-TIGHT: "If account-specific intel would sharpen this, ask me for it."
-
-LOOSE: "Provide three distinct ways the rep can kick off the call. Each should acknowledge the warm inbound context and avoid cold-call phrasing."
-TIGHT: "Three openers. Each acknowledges the warm inbound — no cold-call energy."
-
 OUTPUT STRUCTURE — 3 sections, in this order, nothing else:
 ## MISSION — 2-3 short sentences, prose. Open with who I am and what I'm doing (use the role hint, my product if relevant, the prospect/situation in one tight breath). Then state the deliverable and my posture/stage calibration woven in. If my calibration includes a channel (email, DM, etc.), note STRUCTURE must scaffold channel-appropriate elements.
 ## STRUCTURE — Numbered sections you'll produce. ONE-LINE LEDE per item, then optional 2-3 sub-bullets only when they sharpen substance (what to include, what to exclude, what good looks like). No paragraph-form items. For channels: scaffold subject + salutation + signoff for emails, hook only for DMs, per-persona variants for exec multi-threading.
