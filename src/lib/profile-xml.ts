@@ -26,17 +26,14 @@ export function renderProfileAsXML(p: ProductProfile): string {
   const sections: string[] = [];
 
   // ── Identity (always present) ──────────────────────────────────────────────
+  // company_url / product_url intentionally omitted — the engine has no live
+  // tools, never references URLs in output (verified across 63 cycle-4 cases),
+  // and the bytes are pure inert payload.
   sections.push(
     `<identity>\n` +
       `  <company_name>${escape(p.company_name)}</company_name>\n` +
-      `  <product_name>${escape(p.product_name)}</product_name>` +
-      (p.company_url
-        ? `\n  <company_url>${escape(p.company_url)}</company_url>`
-        : "") +
-      (p.product_url
-        ? `\n  <product_url>${escape(p.product_url)}</product_url>`
-        : "") +
-      `\n</identity>`
+      `  <product_name>${escape(p.product_name)}</product_name>\n` +
+      `</identity>`
   );
 
   // ── Product summary ───────────────────────────────────────────────────────
