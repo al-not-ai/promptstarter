@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { renderProfileAsXML } from "@/lib/profile-xml";
 import {
   assembleMasterPrompt,
+  buildTemplatedStructure,
   STANDARD_RULES_BLOCK,
   RECON_RESEARCH_BLOCK,
   buildDrillDownBlock,
@@ -51,7 +52,10 @@ const anthropic = createAnthropic({
  * downstream's actual deliverable (exact dialogue, email copy, verbatim
  * questions to the prospect). That rule stays.
  */
-const BASE_SYSTEM_PROMPT = `You are writing a Master Prompt the rep will paste into their own AI assistant (ChatGPT, Claude, etc.). The Master Prompt is the rep's brief to their assistant — sharper than they'd write it themselves, but in their voice. Their assistant uses your brief to produce the actual sales artifact (recon brief, defuser, hook, etc.). Your output is the brief, not the artifact.
+// Core engine rules — voice contract, anti-hallucination, compression, formatting.
+// Shared across all tools regardless of whether STRUCTURE is engine-generated or
+// server-templated. The OUTPUT STRUCTURE block below is tool-branched.
+const BASE_SYSTEM_PROMPT_PREAMBLE = `You are writing a Master Prompt the rep will paste into their own AI assistant (ChatGPT, Claude, etc.). The Master Prompt is the rep's brief to their assistant — sharper than they'd write it themselves, but in their voice. Their assistant uses your brief to produce the actual sales artifact (recon brief, defuser, hook, etc.). Your output is the brief, not the artifact.
 
 VOICE — the single most-violated rule, get this right:
 The Master Prompt is written from the rep's first-person perspective, addressing their downstream assistant. Hold this voice across MISSION, STRUCTURE, and GROUNDING — never break it.
@@ -84,14 +88,28 @@ CORE RULES:
    - BAD (word-count opener scripting): "Lead with the real reason for the call in the first 5 words" / "Open with one sentence acknowledging X" / "First sentence must name the trigger"
    - BAD (positional substance dictates): "Lead with the cost reduction as the pay-back math" / "Lead with empathy — acknowledge the timing concern"
    - GOOD (substance without order): "X must be present and treated as the strongest lever" / "The real reason for the call must be concrete and immediate (not 'I just wanted to touch base')" / "The trigger must anchor the message — buried triggers don't earn attention" / "Empathy is the dominant tone; don't sound argumentative"
-   The pattern test: if you can swap the order without changing the rule, the rule is substantive. If swapping the order breaks the rule, you're scripting.
+   The pattern test: if you can swap the order without changing the rule, the rule is substantive. If swapping the order breaks the rule, you're scripting.`;
 
-OUTPUT STRUCTURE — 3 sections, in this order, nothing else:
+// Default OUTPUT STRUCTURE block — engine writes all 3 sections.
+const OUTPUT_STRUCTURE_FULL = `OUTPUT STRUCTURE — 3 sections, in this order, nothing else:
 ## MISSION — 2-3 short sentences, prose. Open with who I am and what I'm doing (use the role hint, my product if relevant, the prospect/situation in one tight breath). Then state the deliverable and my posture/stage calibration woven in. If my calibration includes a channel (email, DM, etc.), note STRUCTURE must scaffold channel-appropriate elements.
 ## STRUCTURE — Numbered sections you'll produce. ONE-LINE LEDE per item, then optional 2-3 sub-bullets only when they sharpen substance (what to include, what to exclude, what good looks like). No paragraph-form items. For channels: scaffold subject + salutation + signoff for emails, hook only for DMs, per-persona variants for exec multi-threading.
 ## GROUNDING — Bulleted list. Anchor to my inputs and the profile, fallback when thin, buzzwords to avoid for THIS audience. No long paragraphs. Tie to the actual call. Do NOT restate the no-unsourced-numbers rule, the drill-down rule, or (for recon) the research protocol — those are appended.
 
 Output ends at the last line of GROUNDING. Nothing before ## MISSION. Nothing after ## GROUNDING.`;
+
+// Skip-STRUCTURE OUTPUT STRUCTURE block — engine writes MISSION + GROUNDING only.
+// STRUCTURE is server-templated and spliced in by assembleMasterPrompt().
+const OUTPUT_STRUCTURE_SKIP = `OUTPUT STRUCTURE — 2 sections only. STRUCTURE is server-templated and will be spliced between MISSION and GROUNDING after you finish. Do not write a STRUCTURE section.
+## MISSION — 2-3 short sentences, prose. Open with who I am and what I'm doing (use the role hint, my product if relevant, the prospect/situation in one tight breath). Then state the deliverable and my posture/stage calibration woven in.
+## GROUNDING — Bulleted list. Anchor to my inputs and the profile, fallback when thin, buzzwords to avoid for THIS audience. No long paragraphs. Tie to the actual call. Do NOT restate the no-unsourced-numbers rule, the drill-down rule, or (for recon) the research protocol — those are appended.
+
+Output ends at the last line of GROUNDING. Nothing before ## MISSION. Nothing after ## GROUNDING.`;
+
+function buildBaseSystemPrompt(engineSkipsStructure?: boolean): string {
+  const outputStructure = engineSkipsStructure ? OUTPUT_STRUCTURE_SKIP : OUTPUT_STRUCTURE_FULL;
+  return `${BASE_SYSTEM_PROMPT_PREAMBLE}\n\n${outputStructure}`;
+}
 
 function buildUserPrompt(params: {
   toolId: string;
@@ -148,11 +166,19 @@ function buildUserPrompt(params: {
 **Recon framing rule:** This is prospect research, not product positioning. The "Seller's product" line above is context for who I am and what industry my recon should tilt toward — NOT the deliverable's anchor. Do not pitch my product, do not anchor discovery questions to my product's capabilities, do not frame the prospect as a "lead." The deliverable is about understanding the prospect. My product appears in the brief only if naturally needed to set my role context.`
       : "";
 
-  return `Generate the Master Prompt for this tool run. Follow the 3-section structure (MISSION / STRUCTURE / GROUNDING). Write it in the rep's first-person voice per your VOICE rules. Do not write DRILL-DOWN or STANDARD RULES — those are appended.
+  const structureInstruction = tool.engineSkipsStructure
+    ? "Follow the 2-section structure (MISSION / GROUNDING) — STRUCTURE is server-templated. Write it in the rep's first-person voice per your VOICE rules. Do not write STRUCTURE, DRILL-DOWN, or STANDARD RULES — those are handled server-side."
+    : "Follow the 3-section structure (MISSION / STRUCTURE / GROUNDING). Write it in the rep's first-person voice per your VOICE rules. Do not write DRILL-DOWN or STANDARD RULES — those are appended.";
+
+  const outputFormatLine = tool.engineSkipsStructure
+    ? `**What my assistant must produce:** ${tool.outputDescriptor} (STRUCTURE is server-templated; focus your work on MISSION framing and GROUNDING anchoring).`
+    : `**What my assistant must produce:** ${tool.outputFormat}`;
+
+  return `Generate the Master Prompt for this tool run. ${structureInstruction}
 
 **Tool:** ${tool.name} (${tool.category})
 **Role hint for MISSION (the role I want my assistant to play — NOT a description of me; never echo this back as my identity):** ${engineRoleHint}
-**What my assistant must produce:** ${tool.outputFormat}${sellerLine}
+${outputFormatLine}${sellerLine}
 
 **My inputs:**
 ${variableSummary}
@@ -248,7 +274,10 @@ export async function POST(req: Request) {
   // Profile injection is tool-gated: prospect-focused tools (pre-call-recon)
   // set includesProfile=false in tools.ts because the seller profile is
   // low-signal there and nudges the engine toward product-pitch language.
-  let systemPrompt = BASE_SYSTEM_PROMPT;
+  //
+  // For tools with engineSkipsStructure, the OUTPUT STRUCTURE block is swapped
+  // to the 2-section variant — engine writes MISSION + GROUNDING only.
+  let systemPrompt = buildBaseSystemPrompt(tool.engineSkipsStructure);
 
   if (profile && tool.includesProfile) {
     const profileXml = renderProfileAsXML(profile);
@@ -266,6 +295,19 @@ export async function POST(req: Request) {
       `   - Do not enumerate the forbidden numbers in your instruction to the assistant — reference them by category ("the differentiator-derived numbers") if you must reference them at all. The instruction itself can leak the very numbers it is trying to suppress.\n\n` +
       profileXml;
   }
+
+  // ── Build templated STRUCTURE for skip-STRUCTURE tools ────────────────────
+  // Computed before streamText so it's available in both the onFinish closure
+  // and the stream start() closure. Undefined for tools that write their own
+  // STRUCTURE section (the majority path).
+  const templatedStructure: string | undefined = tool.engineSkipsStructure
+    ? buildTemplatedStructure({
+        toolId,
+        variableValues,
+        sliderValues,
+        companyName: profile?.company_name ?? undefined,
+      })
+    : undefined;
 
   // ── Stream the response ────────────────────────────────────────────────────
   // Prompt caching: the entire systemPrompt (BASE + optional profile block)
@@ -333,11 +375,13 @@ export async function POST(req: Request) {
       try {
         // Persist the ASSEMBLED master prompt (what the rep actually copies),
         // not just the engine output — otherwise the history view would be
-        // missing the templated blocks.
+        // missing the templated blocks. For skip-STRUCTURE tools, pass
+        // templatedStructure so the DB record matches what the client received.
         const fullMasterPrompt = assembleMasterPrompt({
           engineOutput: text,
           outputDescriptor: tool.outputDescriptor,
           toolId,
+          templatedStructure,
         });
         await supabase.from("generations").insert({
           user_id: user.id,
@@ -369,10 +413,28 @@ export async function POST(req: Request) {
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
-        for await (const chunk of result.textStream) {
-          controller.enqueue(encoder.encode(chunk));
+        if (tool.engineSkipsStructure) {
+          // Buffer-then-emit: read the full engine output, splice in the
+          // server-templated STRUCTURE, then emit the assembled master prompt
+          // (MISSION + STRUCTURE + GROUNDING + STANDARD_RULES + DRILL-DOWN)
+          // as a single chunk. Non-skip tools keep live per-chunk streaming.
+          let buffered = "";
+          for await (const chunk of result.textStream) {
+            buffered += chunk;
+          }
+          const assembled = assembleMasterPrompt({
+            engineOutput: buffered,
+            outputDescriptor: tool.outputDescriptor,
+            toolId,
+            templatedStructure,
+          });
+          controller.enqueue(encoder.encode(assembled + "\n"));
+        } else {
+          for await (const chunk of result.textStream) {
+            controller.enqueue(encoder.encode(chunk));
+          }
+          controller.enqueue(encoder.encode(templatedTail));
         }
-        controller.enqueue(encoder.encode(templatedTail));
         // Append token usage for stress-test runs only — stripped by the test script.
         // The AI SDK exposes cache breakdown under `usage.inputTokenDetails` (see
         // node_modules/ai/dist/index.d.ts: LanguageModelUsage). Surface them so the
