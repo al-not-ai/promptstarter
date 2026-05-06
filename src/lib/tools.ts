@@ -549,27 +549,25 @@ I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven
 
 ## STRUCTURE
 
-1. **THE PROBLEM (2–3 bullets)**
-   - Anchor to the unplanned closures and the per-incident revenue loss I've provided
-   - Use the champion's own tone — operational frustration, not marketing concern
-   - No feature preamble; jump to the pain
+1. **THE PROBLEM** (2–3 bullets)
+   - Anchor to my pain point in the champion's own words: We had 3 unplanned kitchen closures last year because our incumbent vendor's service tech took 4-6 days to dispatch — each closure cost us roughly $40K in lost revenue per location
+   - Make the cost of this pain concrete and visible to a finance reader
+   - No marketing language — operational frustration, not vendor concern
 
-2. **FINANCIAL CASE (3–4 bullets)**
-   - Translate the one-time and annual costs into business impact (risk avoidance, operational resilience, or net cost of downtime prevented)
-   - Build from the closure frequency and per-closure cost I've supplied
-   - Flag any assumed multiplier explicitly (e.g., "assuming X closures prevented per year...")
-   - If you need a specific annual figure beyond the two costs I've given you to complete the math, ask me for it
+2. **FINANCIAL CASE** (3–4 bullets)
+   - Translate the Reduce Risk / Compliance angle into concrete business impact using the annual cost I've supplied ($22,000/unit one-time + $1,800/unit/yr service)
+   - Flag any assumed multipliers explicitly (e.g., "assuming X hours saved per week" or "assuming Y closures prevented per year")
+   - Show the math in a form a finance reader can stress-test
+   - Do not introduce dollar amounts, percentages, or timelines beyond what I've given you
 
-3. **WHAT WE EVALUATED (1–2 bullets)**
-   - Specific, behavioral observations during the champion's evaluation — what they *saw* work, not a feature checklist
-   - No vendor name; frame as "the unit" or "this solution"
-   - One concrete operational win (e.g., setup time, staff training, floor footprint, or service response speed)
+3. **WHAT WE EVALUATED** (1–2 bullets)
+   - Behavioral and specific observations from the champion's own evaluation — what they saw work, not a feature checklist
+   - One concrete operational signal that builds the champion's credibility with their reader
 
-4. **THE ASK (1 bullet)**
-   - Single, specific approval or next step the CEO/COO needs to take
-   - No soft language ("consider," "explore") — direct decision language
+4. **THE ASK** (1 bullet)
+   - The specific approval or next step the CEO or COO needs to take — concrete decision language, no "consider" or "explore"
 
-**Avoid throughout:** Northwind branding, "industry-leading," "robust," "cutting-edge," vendor company name in the body, any dollar amounts beyond $40K (per-closure loss), $22,000 (one-time cost), and $1,800/year (service cost).
+**Avoid throughout:** Northwind Commercial Kitchen branding, "industry-leading," "robust," "cutting-edge," the vendor company name anywhere in the body, any dollar amounts beyond what I've supplied.
 
 ## GROUNDING
 
