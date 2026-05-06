@@ -305,7 +305,6 @@ export async function POST(req: Request) {
         toolId,
         variableValues,
         sliderValues,
-        companyName: profile?.company_name ?? undefined,
       })
     : undefined;
 

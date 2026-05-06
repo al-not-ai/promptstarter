@@ -48,25 +48,24 @@ function splitOnGroundingHeader(text: string): { mission: string; grounding: str
 function buildCfoPitchStructure(params: {
   variableValues: Record<string, string>;
   sliderValues: Record<string, number>;
-  companyName?: string;
 }): string {
-  const { variableValues, sliderValues, companyName } = params;
+  const { variableValues, sliderValues } = params;
   const painPoint = variableValues.painPoint ?? "(not provided)";
   const annualCost = variableValues.annualCost ?? "(not provided)";
   const financialCases = ["Save Labor Hours", "Speed Up Revenue", "Cut Hard Costs", "Reduce Risk / Compliance"];
   const financialCaseLabel = financialCases[sliderValues["financial-case"] ?? 0] ?? financialCases[0];
   const audienceTargets = ["the champion's finance partner", "the CFO", "the CEO or COO"];
   const audienceTarget = audienceTargets[sliderValues["reader-audience"] ?? 0] ?? audienceTargets[0];
-  const company = companyName ?? "vendor";
   return `## STRUCTURE
 
 1. **THE PROBLEM** (2–3 bullets)
-   - Anchor to my pain point in the champion's own words: ${painPoint}
+   - Anchor to my pain point in the champion's own words:
+     > ${painPoint}
    - Make the cost of this pain concrete and visible to a finance reader
    - No marketing language — operational frustration, not vendor concern
 
 2. **FINANCIAL CASE** (3–4 bullets)
-   - Translate the ${financialCaseLabel} angle into concrete business impact using the annual cost I've supplied (${annualCost})
+   - Translate the ${financialCaseLabel} angle into concrete business impact using the annual cost I've supplied: ${annualCost}
    - Flag any assumed multipliers explicitly (e.g., "assuming X hours saved per week" or "assuming Y closures prevented per year")
    - Show the math in a form a finance reader can stress-test
    - Do not introduce dollar amounts, percentages, or timelines beyond what I've given you
@@ -78,7 +77,7 @@ function buildCfoPitchStructure(params: {
 4. **THE ASK** (1 bullet)
    - The specific approval or next step ${audienceTarget} needs to take — concrete decision language, no "consider" or "explore"
 
-**Avoid throughout:** ${company} branding, "industry-leading," "robust," "cutting-edge," the vendor company name anywhere in the body, any dollar amounts beyond what I've supplied.`;
+**Avoid throughout:** vendor marketing language ("industry-leading," "robust," "cutting-edge"), feature lists, dollar amounts beyond what I've supplied.`;
 }
 
 /**
