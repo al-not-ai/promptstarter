@@ -309,7 +309,7 @@ export async function POST(req: Request) {
         // it at 10× discount on those input tokens.
         providerOptions: {
           anthropic: {
-            cacheControl: { type: "ephemeral", ttl: "5m" },
+            cacheControl: { type: "ephemeral", ttl: "1h" },
           },
         },
       },
