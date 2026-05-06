@@ -34,10 +34,33 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // ── Pricing constants (claude-haiku-4-5-20251001) ─────────────────────────────
-const INPUT_PRICE_PER_MILLION  = 0.80;  // USD per 1M input tokens
-const OUTPUT_PRICE_PER_MILLION = 4.00;  // USD per 1M output tokens
-const calcCost = (inT, outT) =>
-  (inT / 1_000_000) * INPUT_PRICE_PER_MILLION + (outT / 1_000_000) * OUTPUT_PRICE_PER_MILLION;
+// Source: https://www.anthropic.com/pricing — verify before relying on these.
+const INPUT_PRICE_PER_MILLION         = 0.80;  // USD per 1M uncached input tokens
+const CACHE_READ_PRICE_PER_MILLION    = 0.08;  // USD per 1M cached read tokens (10% of normal)
+const CACHE_WRITE_PRICE_PER_MILLION   = 1.00;  // USD per 1M cache-creation tokens (1.25× normal)
+const OUTPUT_PRICE_PER_MILLION        = 4.00;  // USD per 1M output tokens
+
+// Detailed cost: applies per-category pricing when the new fields are present.
+// Falls back to the legacy all-input-at-uncached math when the API/route did
+// not expose the breakdown (older runs, custom clients, etc.).
+function calcCost({ inputTokens, outputTokens, cacheReadInputTokens, cacheCreationInputTokens, uncachedInputTokens }) {
+  const out = (outputTokens ?? 0) / 1_000_000 * OUTPUT_PRICE_PER_MILLION;
+
+  const hasBreakdown =
+    uncachedInputTokens != null ||
+    cacheReadInputTokens != null ||
+    cacheCreationInputTokens != null;
+
+  if (!hasBreakdown) {
+    // Legacy fallback — treat all input as uncached.
+    return (inputTokens ?? 0) / 1_000_000 * INPUT_PRICE_PER_MILLION + out;
+  }
+
+  const uncached = (uncachedInputTokens ?? 0) / 1_000_000 * INPUT_PRICE_PER_MILLION;
+  const cacheRead = (cacheReadInputTokens ?? 0) / 1_000_000 * CACHE_READ_PRICE_PER_MILLION;
+  const cacheWrite = (cacheCreationInputTokens ?? 0) / 1_000_000 * CACHE_WRITE_PRICE_PER_MILLION;
+  return uncached + cacheRead + cacheWrite + out;
+}
 
 // ── Run directory (bump for cycle 2) ──────────────────────────────────────────
 // Cycle 1: "2026-05-04"
@@ -734,6 +757,7 @@ async function runCase(testCase, index) {
     const ms = Date.now() - start;
 
     let inputTokens = null, outputTokens = null, cost = null;
+    let cacheReadInputTokens = null, cacheCreationInputTokens = null, uncachedInputTokens = null;
     let output = rawOutput;
     const usageMatch = rawOutput.match(/\[STRESS_TEST_USAGE:(\{[^}]+\})\]/);
     if (usageMatch) {
@@ -741,7 +765,15 @@ async function runCase(testCase, index) {
         const usage = JSON.parse(usageMatch[1]);
         inputTokens = usage.inputTokens ?? null;
         outputTokens = usage.outputTokens ?? null;
-        if (inputTokens != null && outputTokens != null) cost = calcCost(inputTokens, outputTokens);
+        cacheReadInputTokens = usage.cacheReadInputTokens ?? null;
+        cacheCreationInputTokens = usage.cacheCreationInputTokens ?? null;
+        uncachedInputTokens = usage.uncachedInputTokens ?? null;
+        if (inputTokens != null && outputTokens != null) {
+          cost = calcCost({
+            inputTokens, outputTokens,
+            cacheReadInputTokens, cacheCreationInputTokens, uncachedInputTokens,
+          });
+        }
       } catch { /* ignore */ }
       output = rawOutput.replace(/\n\[STRESS_TEST_USAGE:[^\]]+\]/, "");
     }
@@ -751,13 +783,17 @@ async function runCase(testCase, index) {
     const hasGrounding = output.includes("## GROUNDING");
     const hasProfile   = output.includes(profileMarker);
 
-    const tokenStr = inputTokens != null ? `, in=${inputTokens} out=${outputTokens} $${cost.toFixed(4)}` : "";
+    const cacheStr = cacheReadInputTokens != null
+      ? ` (cache r=${cacheReadInputTokens} w=${cacheCreationInputTokens ?? 0})`
+      : "";
+    const tokenStr = inputTokens != null ? `, in=${inputTokens}${cacheStr} out=${outputTokens} $${cost.toFixed(4)}` : "";
     process.stdout.write(`OK (${ms}ms${tokenStr})\n`);
 
     return {
       ...testCase, status: "OK",
       output, ms, hasDrillDown, hasGrounding, hasProfile,
       inputTokens, outputTokens, cost,
+      cacheReadInputTokens, cacheCreationInputTokens, uncachedInputTokens,
     };
   } catch (err) {
     process.stdout.write(`ERROR\n`);
@@ -814,6 +850,13 @@ function buildIndex(results, runDir) {
   const totalCost = ok.reduce((s, r) => s + (r.cost ?? 0), 0);
   const totalIn = ok.reduce((s, r) => s + (r.inputTokens ?? 0), 0);
   const totalOut = ok.reduce((s, r) => s + (r.outputTokens ?? 0), 0);
+  const totalCacheRead   = ok.reduce((s, r) => s + (r.cacheReadInputTokens ?? 0), 0);
+  const totalCacheWrite  = ok.reduce((s, r) => s + (r.cacheCreationInputTokens ?? 0), 0);
+  const totalUncachedIn  = ok.reduce((s, r) => s + (r.uncachedInputTokens ?? 0), 0);
+  const hasCacheBreakdown = ok.some(
+    (r) => r.cacheReadInputTokens != null || r.cacheCreationInputTokens != null || r.uncachedInputTokens != null
+  );
+  const cacheHitRatio = totalIn > 0 ? totalCacheRead / totalIn : 0;
 
   const toolIds = [...new Set(TEST_CASES.map((t) => t.tool))];
   const profileKeys = [...new Set(TEST_CASES.map((t) => t.profile))];
@@ -823,8 +866,15 @@ function buildIndex(results, runDir) {
   md += `**Endpoint:** ${ENDPOINT}  \n`;
   md += `**Cases:** ${ok.length}/${TOTAL} OK  \n`;
   md += `**Tokens:** ${totalIn.toLocaleString()} in / ${totalOut.toLocaleString()} out  \n`;
-  md += `**Engine cost:** $${totalCost.toFixed(4)}  \n\n`;
-  md += `*Pricing: claude-haiku-4-5-20251001 — $${INPUT_PRICE_PER_MILLION}/1M in, $${OUTPUT_PRICE_PER_MILLION}/1M out*\n\n`;
+  if (hasCacheBreakdown) {
+    md += `**Input breakdown:** ${totalUncachedIn.toLocaleString()} uncached / ${totalCacheRead.toLocaleString()} cache-read / ${totalCacheWrite.toLocaleString()} cache-write  \n`;
+    md += `**Cache hit ratio (read / total input):** ${(cacheHitRatio * 100).toFixed(1)}%  \n`;
+  }
+  md += `**Engine cost:** $${totalCost.toFixed(4)}  \n`;
+  if (ok.length > 0) {
+    md += `**Cost per case (avg):** $${(totalCost / ok.length).toFixed(4)}  \n`;
+  }
+  md += `\n*Pricing: claude-haiku-4-5-20251001 — $${INPUT_PRICE_PER_MILLION}/1M uncached, $${CACHE_READ_PRICE_PER_MILLION}/1M cache-read, $${CACHE_WRITE_PRICE_PER_MILLION}/1M cache-write, $${OUTPUT_PRICE_PER_MILLION}/1M out*\n\n`;
   md += `---\n\n`;
 
   md += `## Per-tool breakdown\n\n`;
