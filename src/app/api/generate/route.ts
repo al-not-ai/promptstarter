@@ -19,6 +19,9 @@ const anthropic = createAnthropic({
   // shell/env overrides (e.g. https://api.anthropic.com without /v1) from
   // routing requests to the wrong endpoint.
   baseURL: "https://api.anthropic.com/v1",
+  headers: {
+    "anthropic-beta": "extended-cache-ttl-2025-04-11",
+  },
 });
 
 /**
@@ -288,6 +291,17 @@ export async function POST(req: Request) {
   // blocks at the end of the stream. The rep sees the engine work as it
   // happens, then the templated blocks appear at the bottom — same UX,
   // ~150 fewer engine output tokens billed per call.
+  // KNOWN ISSUE — prompt caching not currently firing.
+  // Cycles 5–8 (docs/test-runs/2026-05-05-cycle{5..8}/) confirmed that
+  // cacheReadInputTokens and cacheCreationInputTokens are 0 across all 63 test
+  // cases regardless of TTL setting ("5m" or "1h") or beta header presence.
+  // Suspected cause: the @ai-sdk/anthropic version installed does not emit
+  // cache_control on the wire when the system message content is a plain string.
+  // The likely fix is to restructure the system message as a content-block array:
+  //   content: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }]
+  // instead of relying on providerOptions on a string-content message.
+  // Tracked for future work. Until then, this config (1h TTL + beta header) is
+  // the intended target state and will start saving cost the moment caching fires.
   const result = streamText({
     model: anthropic(MODEL),
     // System prompt is server-trusted (BASE_SYSTEM_PROMPT + profile XML rendered
@@ -309,7 +323,7 @@ export async function POST(req: Request) {
         // it at 10× discount on those input tokens.
         providerOptions: {
           anthropic: {
-            cacheControl: { type: "ephemeral", ttl: "5m" },
+            cacheControl: { type: "ephemeral", ttl: "1h" },
           },
         },
       },
