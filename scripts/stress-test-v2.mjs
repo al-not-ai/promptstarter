@@ -830,7 +830,10 @@ function buildToolFile(toolId, results, runDir) {
       md += ` | **Drill-down:** ${r.hasDrillDown ? "✓" : "✗"} | **Grounding:** ${r.hasGrounding ? "✓" : "✗"} | **Profile:** ${r.hasProfile ? "✓" : "✗"}`;
     }
     if (r.inputTokens != null) {
-      md += ` | **In:** ${r.inputTokens} | **Out:** ${r.outputTokens} | **Cost:** $${r.cost.toFixed(4)}`;
+      const cacheDetail = r.cacheReadInputTokens != null
+        ? ` (read=${r.cacheReadInputTokens}, write=${r.cacheCreationInputTokens ?? 0})`
+        : "";
+      md += ` | **In:** ${r.inputTokens}${cacheDetail} | **Out:** ${r.outputTokens} | **Cost:** $${r.cost.toFixed(4)}`;
     }
     md += `\n\n`;
 
