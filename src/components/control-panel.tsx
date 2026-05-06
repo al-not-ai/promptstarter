@@ -52,11 +52,6 @@ export function ControlPanel({
   const isLocked = activeTool.tier === 'pro' && userTier === 'core';
   const [showSample, setShowSample] = useState(false);
 
-  // Reset sample state when tool changes
-  useEffect(() => {
-    setShowSample(false);
-  }, [activeTool.id]);
-
   // Detect isLoading: true → false with a non-empty completion to fire onGenerationComplete
   const prevLoadingRef = useRef(false);
   useEffect(() => {

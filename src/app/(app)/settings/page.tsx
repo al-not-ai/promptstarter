@@ -20,10 +20,12 @@ export default function SettingsPage() {
   const [generationCount, setGenerationCount] = useState<number | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage must be read client-side; lazy init would cause server/client hydration mismatch */
   useEffect(() => {
     setPreferred(getPreferredAI());
     setLoaded(true);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     fetch('/api/user/tier')

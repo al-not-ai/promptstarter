@@ -76,6 +76,7 @@ function HomeInner() {
 
   const initialized = useRef(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage must be read client-side; lazy init would cause server/client hydration mismatch on first render */
   useEffect(() => {
     try {
       setRailCollapsed(localStorage.getItem(RAIL_COLLAPSED_KEY) === "true");
@@ -97,14 +98,17 @@ function HomeInner() {
       // localStorage unavailable
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // ?picker=true — forces gallery view on client-side navigation (e.g. wordmark
   // click from /dashboard, where the component does not remount).
+  /* eslint-disable react-hooks/set-state-in-effect -- reactive to URL params; setState is conditional behind a hard early-return guard */
   useEffect(() => {
     if (searchParams.get("picker") !== "true") return;
     setView('gallery');
     router.replace("/dashboard", { scroll: false });
   }, [searchParams, router]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     fetch('/api/user/tier')
@@ -114,20 +118,24 @@ function HomeInner() {
   }, []);
 
   // ?openWizard=true — reactive so deep-links work after client-side nav too.
+  /* eslint-disable react-hooks/set-state-in-effect -- reactive to URL params; setState is conditional behind a hard early-return guard */
   useEffect(() => {
     if (searchParams.get("openWizard") !== "true") return;
     setWizardOpen(true);
     router.replace("/dashboard", { scroll: false });
   }, [searchParams, router]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // ?welcome=true — strip URL and show banner. Auto-dismiss is a separate
   // effect so that replacing the URL (which re-runs this effect) doesn't
   // cancel the timeout by running the cleanup prematurely.
+  /* eslint-disable react-hooks/set-state-in-effect -- reactive to URL params; setState is conditional behind a hard early-return guard */
   useEffect(() => {
     if (searchParams.get("welcome") !== "true") return;
     router.replace("/dashboard", { scroll: false });
     setWelcomeBanner(true);
   }, [searchParams, router]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (!welcomeBanner) return;
@@ -135,6 +143,7 @@ function HomeInner() {
     return () => clearTimeout(t);
   }, [welcomeBanner]);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- one-time restore+init; dep is [activeProfileId] intentionally; adding view would break ?restore= deep-link logic */
   useEffect(() => {
     if (initialized.current || !activeProfileId) return;
     initialized.current = true;
@@ -168,6 +177,7 @@ function HomeInner() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProfileId]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // ── Persist form + output to sessionStorage ────────────────────────────────
 

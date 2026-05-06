@@ -159,6 +159,7 @@ export function StepCompany({
 
   const abortRef = useRef<AbortController | null>(null);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- resets async search state when query shortens; adding these states to deps would re-trigger the debounced fetch on each reset */
   useEffect(() => {
     const trimmed = query.trim();
     if (trimmed.length < 2) {
@@ -204,6 +205,7 @@ export function StepCompany({
       controller.abort();
     };
   }, [query]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   function submitManual(e: React.FormEvent) {
     e.preventDefault();

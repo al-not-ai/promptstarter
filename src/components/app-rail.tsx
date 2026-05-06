@@ -378,6 +378,7 @@ function RailHistorySection({
   >(new Map());
 
   // Hydrate open state from localStorage
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage must be read client-side; lazy init would cause server/client hydration mismatch */
   useEffect(() => {
     try {
       setIsOpen(localStorage.getItem(HISTORY_OPEN_KEY) === "true");
@@ -385,6 +386,7 @@ function RailHistorySection({
       // localStorage unavailable — stay closed
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Flush any pending (undo-window) deletes when the page is torn down.
   // pagehide fires on refresh, tab close, and bfcache navigation — more
@@ -401,6 +403,7 @@ function RailHistorySection({
     return () => window.removeEventListener("pagehide", onPageHide);
   }, []);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- synchronous loading flag before async fetch; data and clearing calls are in .then() callbacks */
   useEffect(() => {
     setLoading(true);
     fetch("/api/generations")
@@ -411,6 +414,7 @@ function RailHistorySection({
       })
       .catch(() => setLoading(false));
   }, [refreshKey]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   function toggleOpen() {
     const next = !isOpen;
