@@ -2,8 +2,8 @@
 
 **Run:** 2026-05-04  
 **Cases:** 9 (9 OK)  
-**Tokens:** 20,725 in / 6,512 out  
-**Engine cost (this tool):** $0.0426  
+**Tokens:** 32,394 in / 6,781 out  
+**Engine cost (this tool):** $0.0530  
 
 ---
 
@@ -26,41 +26,41 @@
 }
 ```
 
-**Status:** OK | **Time:** 6709ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2252 | **Out:** 588 | **Cost:** $0.0042
+**Status:** OK | **Time:** 10115ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3551 (read=0, write=0) | **Out:** 818 | **Cost:** $0.0061
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform — and I'm reviving a stalled deal with Rachel at Meridian Analytics after she went quiet waiting to loop in her VP of Sales. I need you to be my cold revival specialist and craft a three-touch re-engagement sequence that gives me a genuine reason to come back without desperation. Each touch should feel like new information, not a follow-up. Anchor everything to the one thing that's changed — new data or a signal Rachel or her VP would actually care about — and give me a distinct hook for each channel so I don't sound like a broken record.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching back out to Rachel at Meridian Analytics after our conversation stalled when she said she needed to loop in her VP of Sales. She's been quiet for a few days, and I have a new data point or signal that gives me a real reason to re-engage — not a generic "just checking in." Be my cold revival specialist and build me a three-touch re-engagement sequence (email, LinkedIn DM, voicemail) that leans on our prior conversation as the credibility anchor and uses this new signal as the reason to surface again.
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line + three short paragraphs
-   - Opens with a specific, earned reason tied to pipeline visibility or forecast risk — something Rachel's VP would want to see before signing off
-   - Closes with a low-friction ask (reply, 15-min call, or simple yes/no question)
-   - Avoid: "circle back," "just checking in," references to silence or timeline
+   - Subject line that signals you know where the conversation left off (her VP involvement) without sounding pushy or desperate.
+   - Opening references the specific moment she mentioned looping in her VP — this is your wedge that proves you've talked before. Don't say "I wanted to follow up"; say why you're writing *now*.
+   - Body (3 short paragraphs): The new data or signal you're surfacing (be concrete — what changed, what you learned, what you're seeing); why it's relevant to her original concern or the decision she was making; a low-friction close (reply, 15-min call, or simple yes/no question).
+   - Avoid "circle back," "just checking in," references to how long she's been quiet, or any language a cold prospect would recognize.
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - 2–3 sentences max, no links or attachment asks
-   - Hook must be distinct from the email opener — don't recycle the same angle
-   - Reads human and conversational, not a forwarded email
+   - 2–3 sentences max. Different hook, different angle than the email — not a repurposed version.
+   - Still reads as a re-contact (you've talked before), not a first DM from a stranger.
+   - No link, no attachment ask. Human voice.
 
-3. **TOUCH 3 — VOICEMAIL SCRIPT**
-   - Label as "if applicable" since it's conditional
-   - 20–30 seconds when spoken aloud
-   - Lead with the real reason for the call in the first 5 words
-   - Leave one question for Rachel to sit with — don't demand a callback
-   - Avoid: "touch base," restating the email, or urgency language
+3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
+   - 20–30 seconds when spoken aloud.
+   - Anchor to the revival signal or shared history — the concrete reason you're calling *now*, not generic filler.
+   - Leave one question for her to sit with; no explicit callback demand.
+   - Avoid "just wanted to touch base" or restating the email.
 
 ## GROUNDING
 
-- Rachel mentioned needing VP buy-in — the new reason to reach out should *help* her case to that VP, not pressure her
-- Velara Revenue OS eliminates CRM data rot and surfaces deal risk in real time; the revival angle leans on how that visibility would matter to a VP evaluating sales tooling
-- A few days of silence is normal when executive alignment is needed — position the re-engagement as providing *new information for that conversation*, not as a nudge
-- Avoid: generic "we've helped similar companies," unsubstantiated claims, product feature dumps, or any statistic or metric not anchored to Meridian's situation
-- Tone: consultant, not pest — she wants to move forward; you're removing friction for her to do it
+- **Anchor to your inputs.** Rachel said she needed to loop in her VP before moving forward. That's your entry point for Touch 1 — reference it explicitly. If your "new signal" is vague, ask me what the specific data point or insight is before you draft.
+- **Velara Revenue OS is the product.** Lean on what's most relevant to her original conversation with me — likely the forecast accuracy or the live in-call coaching signals, depending on what she cared about.
+- **Re-engagement, not cold.** Every touch must read like you've already talked. A prospect who's been quiet a few days recognizes cold language instantly. Kill it.
+- **Distinct angles across three touches.** Email is the full context; DM is a separate reason to pay attention; voicemail is the conversational follow-up. Don't repeat the same hook three times.
+- **New signal must be concrete.** "I was thinking about our conversation" is not a signal. "We just saw X trend in your space" or "I realized the gap we discussed maps to Y" is. If I didn't give you specificity, ask me for it.
+- **Low friction for Touch 1.** Don't demand a 30-min deep dive. A reply, a quick call, or a "does this land?" question works. Desperation kills revival.
 
 ## STANDARD RULES
 
@@ -97,42 +97,44 @@ After delivering the 3-touch revival sequence, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 9910ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2257 | **Out:** 748 | **Cost:** $0.0048
+**Status:** OK | **Time:** 8306ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3556 (read=0, write=0) | **Out:** 699 | **Cost:** $0.0056
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS to Ben at Cascade Logistics. Our conversation stalled on integration complexity — he wasn't confident we'd sync cleanly with their ERP. I'm reviving this deal with a three-touch sequence anchored to a real product update that solves his exact concern. I need each touch (email, LinkedIn DM, voicemail) positioned as a genuine reason to re-engage, not a "checking in" resurface.
+I'm a sales rep at Velara selling Velara Revenue OS. I talked to Ben at Cascade Logistics, we hit a real blocker around integration complexity with their ERP, and the conversation stalled. Now I'm ready to re-engage him with a reason to care — a genuine product or feature update that removes the friction that killed the deal. Be my cold revival specialist and craft me a three-touch sequence that reads like I'm picking up a real thread with someone I've already talked to, not sliding into a stranger's inbox.
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line: Name the update or capability that addresses ERP sync directly — no generic "reconnect" energy
-   - Opening paragraph: Reference his original concern (ERP integration) by name, then introduce what's changed since we last spoke — make it concrete and relevant to *his* blocker, not a broad feature announcement
-   - Middle paragraph: One sentence on how this closes the gap for him; one sentence on what it means in practice (less manual work, cleaner data flow, whatever is true)
-   - Closing paragraph: Low-friction ask — reply with a yes/no, grab 15 minutes, or simply confirm if this lands differently now
-   - Tone: Earned, not apologetic; respectful of the silence without acknowledging it directly
+   - Subject line + 3 short paragraphs
+   - MUST anchor to the ERP integration concern Ben surfaced in our original conversation — reference it explicitly by name or specific worry, not "just following up"
+   - Body explains what's changed (the product or feature update that solves the blocker) in plain language — no marketing noise
+   - Closes with a concrete, low-friction ask: a quick reply, a 15-min call, or a simple yes/no
+   - Avoid: "circle back," "just checking in," guilt plays, or any reference to how long he's been silent
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - Hook: Completely different entry point than the email — not a repackaging. Could reference a specific use case, a mutual connection, or a concrete outcome he'd recognize
-   - Length: 2–3 sentences max
-   - No link, no ask for a document or attachment
-   - Read aloud to yourself: Should sound like a human, not a forwarded email
+   - 2–3 sentences max — distinct angle, not an echo of the email
+   - Still reads as re-contact, not a first-time DM
+   - No links, no attachment asks
+   - Human voice — conversational, not forwarded copy
 
 3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
-   - First 5 words: Lead with the real reason for the call — the update, the insight, the reason *now*
-   - Body: 20–30 seconds when spoken aloud; conversational, no rush
-   - Close: Leave one question or observation that invites thinking, not an explicit "call me back" demand
-   - Avoid: "Just wanted to touch base," restating the email, or any desperation signal
+   - 20–30 seconds when spoken aloud
+   - Anchor to the revival angle or the ERP friction point — concrete and immediate, not filler
+   - Leave one genuine question for him to sit with; no explicit callback demand
+   - Avoid: "just wanted to touch base," generic follow-up phrasing, or restating the email
 
 ## GROUNDING
 
-- **ERP sync is his blocker.** Everything here hangs on that. The update or capability you anchor to must address it directly — no generic feature talk.
-- **1–3 months quiet.** He's not in active peril; this is a thoughtful re-entry, not a panic save.
-- **No fabricated updates.** If I haven't told you what changed in our product since we last spoke, anchor to standard industry patterns (e.g., "expanded native connector," "API depth") and flag it as a pattern for me to confirm.
-- **Velara Revenue OS auto-captures deal activity and syncs natively with Salesforce and HubSpot** — but Ben uses an ERP, so his concern is likely around *that* integration. Anchor to what I've given you about his stack; don't invent connector specs.
-- **Tone for this segment:** Ben disengaged on a real technical concern, not budget or priority. Treat him as serious and thoughtful — no aggressive urgency, no "just one more chance."
+- Ben raised ERP integration as the stopper. That's the wedge for Touch 1 — lead with what's changed on that front.
+- The product update or feature you're citing must be real and must address the integration concern. If it's vague in your mind, ask me for specifics before drafting.
+- Three-touch means three distinct moments, three different entry points — not three versions of the same message.
+- Velara Revenue OS syncs natively with Salesforce and HubSpot; if Ben's ERP concern touches on those systems specifically, that's a strong anchor.
+- Touch 1 is email; Touch 2 is LinkedIn DM (different energy, different angle); Touch 3 is voicemail. Channel matters.
+- Re-engagement energy: Ben knows me, I know he cared about the solution but got stuck on a real blocker. I'm not selling the platform again; I'm solving the thing that killed the conversation.
+- Avoid positioning this as "just wanted to see if you're still interested" — that's cold-call framing. Lead with the blocker fix.
 
 ## STANDARD RULES
 
@@ -164,44 +166,49 @@ After delivering the 3-touch revival sequence, pause and:
   },
   "sliderValues": {
     "silence-duration": 3,
-    "revival-angle": 3
+    "revival-angle": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 9790ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2250 | **Out:** 689 | **Cost:** $0.0046
+**Status:** OK | **Time:** 7635ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3549 (read=0, write=0) | **Out:** 714 | **Cost:** $0.0057
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a Velara rep at a stalled opportunity — Nina at Thornfield Capital cited budget freeze in January and we've been radio silent for 3+ months. I'm mounting a final, deliberate re-engagement sequence. I need you as my cold revival specialist to craft three touches (email, LinkedIn DM, voicemail) that feel earned and specific, each with a distinct hook. The angle is concrete: something has shifted — market conditions, their forecast accuracy pressure, or deal velocity risk — that makes NOW a real reason to land one more conversation before I sunset this. No desperation, no "just checking in," no reference to the silence itself.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm re-engaging Nina at Thornfield Capital after a budget freeze stalled us in January — it's been 3+ months with no contact. I'm crafting a three-touch revival sequence where each touch reads as written by someone who's already talked to her, not a stranger. The angle is the "last try" — direct, honest, brief. Give me three distinct touches (email, LinkedIn DM, voicemail) that acknowledge our prior conversation and give her a real reason to respond now, not generic follow-up noise.
 
 ## STRUCTURE
 
-1. **Email (Touch 1): Subject + body**
-   - Subject anchors to a forward-looking business shift (market, quarter-end approach, forecast pressure) — not to the prospect, not to budget, not to time elapsed
-   - Three short paragraphs: (1) earned opener tied to the shift; (2) one sentence on how Velara Revenue OS solves the pressure it creates; (3) ask for a yes/no reply or brief 15-min call
-   - Close with low friction — no desperation, no "let me know if you have time," no pressure play
+1. **TOUCH 1 — EMAIL**
+   - Subject line + 3 short paragraphs
+   - Open by referencing the budget freeze conversation specifically — name the moment or concern she raised in January
+   - If you lack that detail, ask me for one specific thing Nina said or worried about before you draft
+   - Close with a low-friction ask (a reply, a 15-min call, or a simple yes/no)
+   - Avoid: "circle back," "just checking in," desperation signals, any mention of how long she's been silent, or text a cold stranger could plausibly send
 
-2. **LinkedIn DM (Touch 2): Hook-first message**
-   - 2–3 sentences max; reads like you're thinking of them, not forwarding the email
-   - Hook must be visibly different from the email opener — same angle, different angle of attack
-   - No links, no attachment, no meeting-request button; just a reason to reply
+2. **TOUCH 2 — LINKEDIN DM**
+   - 2–3 sentences max
+   - Distinct hook and angle from the email — don't forward the email onto LinkedIn
+   - Still reads as re-contact to someone you've spoken with, not a first DM to a stranger
+   - No links, no attachment asks
+   - Human tone — conversational, not corporate
 
-3. **Voicemail (Label "if applicable"): 20–30 seconds spoken**
-   - First 5 words name the real reason for the call (the shift, the pressure, the timing)
-   - Leave one open question they sit with — something that makes them curious enough to call back without you asking for the call
-   - Avoid "touching base," repeating the email, or explicit callback demand
+3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
+   - 20–30 seconds when spoken aloud
+   - Anchor the real reason for the call to either the revival angle or something from your January conversation — nothing generic like "just following up"
+   - Leave one question for her to sit with; no explicit callback demand or pressure
+   - Avoid: "just wanted to touch base," restating the email, filler phrasing
 
 ## GROUNDING
 
-- **The budget freeze is now 3+ months old.** Don't reference it as a reason to reach out; use it as context for why the market or their forecast risk may have shifted since January. The angle is *change*, not time.
-- **Nina is your sole named contact.** No multi-threading here; land this one conversation.
-- **Velara Revenue OS** solves pipeline visibility and forecast accuracy — anchor to whichever pressure feels most real for a capital firm in Q2: deal velocity, forecast drift, or forecast accuracy (we guarantee within 4%).
-- **For Thornfield specifically,** capital firms live and die by deal velocity and forecast confidence. That's the thread.
-- **Avoid:** "circling back," "wanted to check in," "haven't heard from you," any reference to the 3-month silence, desperation language, or vague "synergy" talk.
-- **Each touch stands alone.** If Nina responds to any one, the sequence stops. Write as if each is the last one.
+- Nina said "budget freeze" in January — that's your only concrete prior detail. Use it. Don't invent other objections or conversations.
+- Three months is long enough that she may have moved on; don't shame her for the silence. The angle is "things may have shifted" or "I'm not going to keep knocking," not "why haven't you responded?"
+- Velara Revenue OS eliminates CRM data rot and surfaces deal risk in real time — if the revival angle touches forecasting confidence or pipeline visibility, that's a natural anchor. Don't force it if the January conversation didn't go there.
+- The "last try" posture means directness and brevity. No multi-paragraph relationship-building. Respect her time.
+- Each touch must be genuinely different — not three versions of the same message. If all three say the same thing, the sequence fails.
+- Thornfield Capital is a fund; assume Nina is dealing with dealflow, portfolio company metrics, or capital allocation decisions. Anchor to that world if relevant, but only if her January conversation surfaced it.
 
 ## STANDARD RULES
 
@@ -233,46 +240,48 @@ After delivering the 3-touch revival sequence, pause and:
   },
   "sliderValues": {
     "silence-duration": 1,
-    "revival-angle": 2
+    "revival-angle": 0
   }
 }
 ```
 
-**Status:** OK | **Time:** 9782ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2235 | **Out:** 812 | **Cost:** $0.0050
+**Status:** OK | **Time:** 7651ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3534 (read=0, write=0) | **Out:** 702 | **Cost:** $0.0056
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling the Velara Revenue OS. I'm reviving a stalled deal with Tom who went quiet 2–4 weeks ago because he got busy. I need you to be my cold revival specialist and craft a three-touch re-engagement sequence that gives him a real, earned reason to come back — not a "just checking in" desperation play. Each touch should feel like I'm adding value before asking for his time, anchored to the outside helpful resource angle. The sequence should progressively warm him up across email, LinkedIn, and voicemail without sounding repetitive or needy.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching back out to Tom after we went quiet for a few weeks — he got busy, but there's a new signal or data point that gives me a real reason to re-engage. I need a three-touch revival sequence (email, LinkedIn DM, voicemail) that feels like a re-contact, not a cold opener. Each touch should land differently and anchor to shared history, not generic follow-up language.
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line that signals a concrete reason to reach out, not a circle-back or generic check-in
-   - Three short paragraphs: (a) the earned hook tied to the helpful resource angle, (b) one micro-insight or observation relevant to his world, (c) low-friction ask (reply, 15-min call, or yes/no question)
-   - Closes warm but direct — no apologies for the gap, no "busy season" commiseration
+   - Subject line that signals real news, not a check-in
+   - 3 short paragraphs max
+   - CRITICAL: Opens by naming or referencing a specific moment, topic, or concern from our prior conversation — the wedge that proves we talked before. If my input doesn't give you enough prior-conversation detail to do this credibly, ask me for one concrete moment or pain point Tom raised before you draft.
+   - Closes with a low-friction ask (reply, 15-min call, or yes/no question)
+   - Avoid: "circle back," "just checking in," "wanted to follow up," "haven't heard from you," desperation, or generic language a stranger could send
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - 2–3 sentences maximum
-   - Hook must be distinct from the email opener — find a different angle or entry point
-   - Human voice, no forwarding energy, no links or attachment asks
-   - Feels like a genuine thought, not a broadcast
+   - 2–3 sentences max
+   - Different hook and angle than the email — not a forwarded version
+   - Still reads as a re-contact (shows we've talked); not a first DM
+   - No links, no attachment asks
+   - Conversational tone
 
 3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
    - 20–30 seconds when spoken aloud
-   - First 5 words lead with the real reason for the call — no "just wanted to touch base"
-   - Ends with one open question for him to sit with, not a callback demand
-   - Avoids restating the email; gives him something new to chew on
+   - Anchored to the revival angle (new data or signal) or shared history — concrete reason, not "just calling to follow up"
+   - Leaves one thought or question for Tom to sit with; no explicit callback demand
+   - Avoid: "just wanted to touch base," restating the email, generic filler
 
 ## GROUNDING
 
-- **The revival angle is outside helpful resource:** Lead with something genuinely useful — an insight, a pattern I've noticed in his space, a resource that might matter to him — before mentioning Velara Revenue OS or my agenda. The ask comes *after* the value.
-- **Tom went quiet because he got busy, not because he said no.** Treat this as a re-warm, not a win-back. He was engaged enough to pause, not enough to reject. Don't reference the silence directly.
-- **Anchor to one real reason to reach out.** If you lack specifics on Tom's company, role, or situation, ask me for them before drafting. If I can't provide them, lean on a broad industry pattern Tom's space likely faces (e.g., "teams managing pipeline forecasting often surface stale CRM data as a bottleneck") — but flag that as a pattern assumption, not a fact about Tom.
-- **Velara Revenue OS eliminates CRM data rot and surfaces deal risk in real time.** Use one of these as the helpful resource angle if it fits Tom's world — but only if I've confirmed his situation warrants it. If I haven't, ask me what Tom's actual pain point or priority is before you write.
-- **Avoid:** "circle back," "just checking in," "just wanted to touch base," "I know you're busy," reference to how long he's been silent, extraneous details I didn't supply, any statistic or metric not in my inputs.
-- **Voice:** Direct, curious, grounded in respect for his time. No cutesy subject lines or artificial urgency. Write like I'm genuinely offering something, not fishing for a meeting.
+- Tom got busy; the silence is situational, not a hard no. The revival angle is a **new data point or signal** — something that's changed or surfaced since we last talked, or something I've noticed that connects to his world.
+- Anchor to **Velara Revenue OS** and its real-time pipeline intelligence — specifically, whatever capability or outcome is most relevant to the concern or goal Tom raised in our original conversation. If you need me to clarify what that was, ask.
+- Re-engagement reads different from cold outreach. Every touch should assume Tom remembers us and our conversation; if it could be sent to a stranger, it's not a revival.
+- The "new signal" should feel like a natural reason to circle back — not manufactured urgency or artificial scarcity. If my input doesn't supply a concrete new signal, ask me what's actually changed or what I've learned about Tom's world since we talked.
+- Tom is busy, so respect his time: low friction, short, no multi-step asks in a single touch.
 
 ## STANDARD RULES
 
@@ -290,7 +299,7 @@ After delivering the 3-touch revival sequence, pause and:
 
 ---
 
-## [V] Deal Reviver — 2-4 Weeks / Outside Resource
+## [V] Deal Reviver — 2-4 Weeks / Product Update
 
 **Profile:** Velara Revenue OS  
 **Inputs:**
@@ -304,48 +313,37 @@ After delivering the 3-touch revival sequence, pause and:
   },
   "sliderValues": {
     "silence-duration": 1,
-    "revival-angle": 2
+    "revival-angle": 1
   }
 }
 ```
 
-**Status:** OK | **Time:** 9422ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2271 | **Out:** 800 | **Cost:** $0.0050
+**Status:** OK | **Time:** 8401ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3570 (read=0, write=0) | **Out:** 690 | **Cost:** $0.0056
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS to Devon Patel, a RevOps lead at Stellaris who went quiet 2–4 weeks ago after showing genuine interest but citing manager sign-off as the blocker. I need you to act as my cold revival specialist and craft a three-touch re-engagement sequence that gives Devon a real, earned reason to reply — anchored to the "outside helpful resource" angle — without sounding desperate or referencing the silence itself.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reviving Devon Patel, a RevOps lead at Stellaris who went quiet after a promising initial conversation — their manager was on PTO and they needed sign-off to move forward. I've got a real reason to reach out now: a product update or feature that's landed since we last talked. Build me a three-touch re-engagement sequence (email, LinkedIn DM, voicemail) that reads like it's coming from someone who's already in the conversation with them — not a cold restart. Every touch anchors to our prior talk and gives Devon a concrete reason to re-engage without feeling like a nag.
 
 ## STRUCTURE
 
-1. TOUCH 1 — EMAIL
-   - Subject line: Sharp, specific hook tied to the revival angle (RevOps friction, forecast accuracy, pipeline visibility) — no "checking in" or time-based openers
-   - Body: 3 short paragraphs. First paragraph opens with the earned reason to reach out (tie it to a RevOps challenge or signal relevant to Stellaris' likely situation). Second paragraph bridges to Velara Revenue OS and the one differentiator that matters most to a RevOps lead managing forecast or pipeline risk. Third paragraph closes with a low-friction ask — a single reply, a 15-min call, or a simple yes/no question
-   - Tone: Helpful peer, not salesy
-   - Avoid: "circle back," "just checking in," "hope you're well," any reference to their silence or manager's PTO
+**1. EMAIL — Touch 1**
+Subject line + 3 short paragraphs. Must call back a specific moment or concern from our original conversation — the manager's PTO blocker, something they asked about, a pain they named — to establish continuity. That callback IS the wedge. If I haven't given you enough prior-conversation detail to make this land, ask me for one specific moment or objection from the call before you draft. Close with a low-friction ask (reply, brief call, or simple yes/no). Exclude: "circle back," "just checking in," how long they've been silent, generic opening-to-closers.
 
-2. TOUCH 2 — LINKEDIN DM
-   - Hook: Distinct from the email opener — new angle, new signal, or a different pain point
-   - Length: 2–3 sentences max
-   - No links, no attachment requests, no forwarded email energy
-   - Reads conversational, not templated
+**2. LINKEDIN DM — Touch 2**
+2–3 sentences. Different hook, different angle than the email — don't repackage the same message. Still reads as a re-contact, not a first outreach. No links, no attachments, no asks for attachments. Human voice.
 
-3. TOUCH 3 — VOICEMAIL SCRIPT (label "if applicable")
-   - Duration: 20–30 seconds when spoken aloud
-   - Opening: Lead with the real reason for the call in the first 5 words — specificity counts
-   - Closes with one question for Devon to sit with; no explicit callback demand or urgency
-   - Avoid: "just wanted to touch base," repeating the email, generic warm-up phrasing
+**3. VOICEMAIL — Touch 3 (if applicable)**
+20–30 seconds spoken aloud. Ground the real reason for the call in the revival angle (product update, feature that landed) or a thread from our prior talk — concrete and immediate. Leave one open question for them to sit with. Exclude: "just wanted to touch base," re-stating the email, generic callback pressure.
 
 ## GROUNDING
 
-- Devon is a RevOps lead — anchor to pipeline hygiene, forecast reliability, or the gap between what CRM says and what's actually happening. RevOps leaders care about data integrity and predictability.
-- The blocker was manager sign-off on PTO. The revival angle is "outside helpful resource" — position yourself as someone bringing useful intel or a capability that helps Devon make a stronger case to their manager, not as someone chasing a deal.
-- Velara Revenue OS eliminates CRM data rot and surfaces deal risk in real time — this is the differentiator that resonates with RevOps. Lean on forecast accuracy and auto-capture (zero manual CRM updates) as the concrete win.
-- Stellaris is likely mid-market or enterprise with pipeline complexity. Assume their RevOps function is stretched managing data quality across multiple stakeholders.
-- Do not invent specific company challenges, recent earnings misses, headcount changes, or other firmographic details not in my inputs. Use standard RevOps friction patterns as your anchor.
-- Avoid RevOps buzzword bingo: "enablement," "alignment," "best practices," "world-class." Talk specifics — forecast drift, manual CRM work, deal visibility gaps.
-- The tone across all three touches should be: peer helping peer unblock a real problem, not a sales rep trying to resurrect a deal.
+- **Anchor to the prior conversation.** Devon knows who I am. They said yes to the platform; the blocker was their manager's availability. The update or feature is the signal that things have moved since we last talked.
+- **The product update must be real.** If I haven't told you what landed, ask me for it — don't fabricate a feature or assume timing.
+- **Revived prospects are impatient with soft language.** No "wanted to reach out," no "just circling back," no apology for the gap in contact. Confidence + specificity.
+- **Each touch is distinct.** Email is the main case. DM is a parallel nudge with a different angle (not a reprint). Voicemail is the human touch — a real moment of presence, not a message dump.
+- **Stellaris context.** Use what I've given you about RevOps lead role and the manager-approval dynamic, but don't invent headcount, company size, or other details.
 
 ## STANDARD RULES
 
@@ -382,40 +380,40 @@ After delivering the 3-touch revival sequence, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7678ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2365 | **Out:** 643 | **Cost:** $0.0045
+**Status:** OK | **Time:** 8146ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3657 (read=0, write=0) | **Out:** 679 | **Cost:** $0.0056
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I'm reviving a stalled deal with Sara, VP F&B at Stratton Hotel Group — her kitchen renovation slid from Q1 to Q3, but fit was never the issue. I need you to craft a three-touch re-engagement sequence with a real reason to reach out (not "checking in"), each touch distinct in voice and medium, designed to land a conversation when timing unlocks. Keep friction low and avoid any signal of desperation.
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I'm re-engaging Sara at Stratton Hotel Group after her renovation timeline shifted — timing was the only blocker, fit was solid. Be my cold revival specialist and craft me a THREE-TOUCH RE-ENGAGEMENT SEQUENCE where each touch reads as if we've already talked, anchored to her delayed project and a concrete reason to reconnect now. Every touch must reference our prior conversation — not as generic "circling back," but as a specific moment or concern that proves shared history. If I haven't given you enough detail about what we discussed originally, ask me for one specific moment or topic from our last call before you draft.
 
 ## STRUCTURE
 
-**1. EMAIL**
-- Subject line: Earned angle tied to the Q3 timeline or a legitimate business development reason (not a time reference). No "circling back" phrasing.
-- Three short paragraphs: (a) Opening reason to reach out — grounded in a real trigger or insight relevant to multi-property F&B ops. (b) One sentence connecting that trigger to the Northwind XR-Series and its fit for a large operation. (c) Low-friction close — offer a reply, 15-min call, or simple yes/no question.
-- Tone: Specific, helpful, no apology for silence.
+**1. EMAIL — Subject + 3 short paragraphs**
+- Subject must signal continuity, not a cold restart (avoid "just checking in" / "circle back" energy)
+- Paragraph 1: Reference a specific moment, concern, or detail from our original conversation — this is the wedge that distinguishes re-engagement from cold outreach
+- Paragraph 2: Introduce the revival angle — what's changed or what you've learned since we last spoke (tied to her delayed Q3 timeline or the space/equipment challenge she raised)
+- Paragraph 3: Low-friction close — reply, brief call, or simple yes/no question
+- Avoid: Desperation signals, "I noticed you haven't responded," timestamp references ("it's been X weeks"), generic pleasantries
 
-**2. LINKEDIN DM**
-- 2–3 sentences max. Completely different hook from the email opener — don't forward the email logic here.
-- No links, no attachment ask.
-- Reads like a human message, not templated.
+**2. LINKEDIN DM — 2–3 sentences max**
+- Distinct from the email — different hook, different angle, same re-contact feel
+- No links, no attachment asks, no forwarding energy
+- Reads as one human to another, not a copy-paste variant of the email
 
-**3. VOICEMAIL SCRIPT (if applicable)**
-- 20–30 seconds spoken aloud.
-- First 5 words lead with the real reason for the call.
-- End with one question for her to sit with — no "call me back" demand.
-- Avoid "just touching base" or echoing the email.
+**3. VOICEMAIL (if applicable) — 20–30 seconds spoken**
+- Real reason must be concrete and immediate — anchored to the revival signal or shared history
+- Leave one question for her to sit with; no explicit callback demand
+- Avoid: "just calling to touch base," restating email content, generic filler
 
 ## GROUNDING
 
-- Sara's blocker was timing, not product fit — position this sequence as timing-aware and outcome-focused, not desperate.
-- Stratton Hotel Group operates 8 properties; anchor the Northwind XR-Series value to multi-site operational efficiency (energy savings, space recovery, staff training speed across locations).
-- The "Q3 renovation" is the real trigger — use it as your earned reason to surface, not as an apology.
-- Avoid: "circle back," "reconnect," "last time we spoke," or any reference to how long she's been quiet.
-- Northwind's 30% energy advantage and space recovery (~14 sq ft per unit) are the sharpest levers for a multi-property operator managing utility and real estate costs.
-- If you lack intel on Stratton's specific Q3 timeline or recent kitchen news, anchor to standard patterns for large hospitality groups (energy cost pressures, staffing continuity post-renovation) and flag them as patterns, not facts.
+- Sara said timing was the blocker, not fit — the renovation delay to Q3 is real context, but the Northwind XR-Series value proposition (space recovery, energy efficiency, service footprint) stays relevant to her eventual project restart
+- Anchor the revival angle to something concrete: a capability she cares about, a new data point relevant to her timeline, or a reason the delay actually sharpens the case for what she needs
+- Don't invent details I didn't supply — no specific conversations, no "we discussed X" unless I said it, no assumptions about what happened between now and Q1
+- Tone: peer to peer, not vendor-chasing; confidence that the fit is real, patience about timing
+- Prospect is an operator (VP F&B) and a decision-maker — speak to operational and business concerns, not feature listing
 
 ## STANDARD RULES
 
@@ -447,49 +445,51 @@ After delivering the 3-touch revival sequence, pause and:
   },
   "sliderValues": {
     "silence-duration": 3,
-    "revival-angle": 3
+    "revival-angle": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 9874ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✗ | **In:** 2368 | **Out:** 779 | **Cost:** $0.0050
+**Status:** OK | **Time:** 9323ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3660 (read=0, write=0) | **Out:** 862 | **Cost:** $0.0064
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a commercial kitchen equipment rep at Northwind selling the XR-Series Combi Oven. My prospect is Diego, an executive chef at a Bay Area restaurant group who chose a competitor six months ago but signaled frustration with their service response after a recent breakdown. I need you to build me a three-touch revival sequence that gives me a real reason to reach out — anchored to his service pain — without sounding desperate or apologizing for the silence. This is my last try to get back in, so each touch has to earn its place and feel distinct.
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I'm re-engaging Diego, an Executive Chef at a 4-restaurant Bay Area group, after he went with a competitor 6 months ago. He told me off-the-record he was frustrated with their service response when his unit broke down. I need a three-touch revival sequence that feels like I'm picking up a real conversation, not cold-calling a dead lead. Each touch has its own angle and channel — email, DM, voicemail — and together they give him three low-friction ways to say yes without feeling hunted.
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line that flags the service angle (not "checking in") — makes him curious why I'm writing now
-   - Paragraph 1: Open with the service friction he experienced — name it directly, no hedging. Position it as a pattern I'm seeing with that unit in his market
-   - Paragraph 2: Pivot to how my product's service model differs — same-day on-site response, no factory-tech bottleneck. Tie it to kitchen uptime, not features
-   - Paragraph 3: Close with a low-friction ask — a 15-min call, a reply, or a simple "curious if this matters to you?" No pressure
-   - Avoid: "circle back," "just checking in," "it's been a while," "I know you're busy"
+   - Subject line + 3 short paragraphs
+   - Anchor the email to his service frustration from our original conversation — that's the wedge that separates this from a cold opener
+   - Paragraph 1: Reference the specific concern he raised (service response time on breakdown). Keep it tight — "When you mentioned the downtime on your Rational..." or the moment he told you his frustration
+   - Paragraph 2: Introduce the relevant differentiator — same-day on-site service nationwide; position it as a direct answer to the pain he named, not a generic feature pitch
+   - Paragraph 3: Low-friction close — invite a reply, a 15-min call, or a simple yes/no (e.g., "Worth a quick conversation?")
+   - Avoid: "circle back," "just checking in," "it's been a while," desperation signals, or any text a cold stranger could send
+   - If the rep's input doesn't supply enough detail about what he said in the original call, instruct the assistant to ask for one specific phrase or moment before drafting
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - Hook distinct from the email opener — if the email led with service pain, open here with a kitchen-specific angle (floor space recovered, labor efficiency, energy cost) or a fresh reason tied to his restaurant group's footprint
-   - 2–3 sentences max. Conversational tone — reads like a peer, not a follow-up
-   - No link, no attachment ask, no "saw your recent post" filler
-   - Goal: Spark curiosity, not drive action
+   - 2–3 sentences max
+   - Different angle from the email — don't repeat the service frustration; find a new reason to stay top-of-mind (e.g., kitchen footprint, staff training ease, energy efficiency for a multi-unit group)
+   - Should still read as a re-contact ("since we talked about..."), not a first DM to a stranger
+   - No link, no attachment ask
+   - Tone: human and direct, not a forwarded email
 
 3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
-   - First 5 words must land the reason for the call — service reliability, kitchen capacity, operational efficiency. Not "just wanted to touch base"
-   - 20–30 seconds when spoken aloud
-   - Close with one open question he sits with after you hang up — not a callback demand or explicit ask
-   - Tone: Respectful of his time. You're offering something, not chasing
+   - 20–30 seconds when read aloud
+   - The real reason for the call must be concrete and tied to the revival angle or shared history — not generic "just calling to follow up" filler
+   - Leave one open question for him to sit with; don't demand a callback
+   - Avoid: "just wanted to touch base," "checking in," restating the email
 
 ## GROUNDING
 
-- Diego experienced service friction with his current unit; use that as the earned entry point, not the Northwind pitch. Service uptime is his pain language
-- The Northwind XR-Series replaces four pieces of equipment in one footprint — relevant to a multi-unit operator managing kitchen labor and space across locations
-- Same-day on-site service is my sharpest differentiator here because his frustration was downtime, not features
-- He's cold 3+ months — no "sorry we haven't talked" energy, no self-aware apologies. Confidence that this service insight is fresh and worth his time
-- Bay Area fine-dining and upscale casual kitchens prioritize consistency and speed-to-recovery; anchor language to those operational values
-- Avoid: tech specs, energy percentages, warranty details (save those for the call). Keep it about kitchen reliability and service response
-- He's an executive chef, not a purchasing agent — speak to operational pain and uptime, not ROI or procurement process
+- Diego's frustration with service response is the only emotional leverage that exists here — anchor Touch 1 tightly to it
+- Same-day on-site service nationwide is my strongest differentiator for his situation; it's a direct counter to the pain he experienced
+- He runs a 4-restaurant group, so multi-unit efficiency (footprint recovery, staff training speed, energy draw) is relevant context for Touch 2, but don't invent which of his kitchens had the breakdown or which unit he's thinking about replacing
+- "Last Try" framing means the tone is respectful and genuine, not pushy — he already chose competitor; this is a real reason to reconsider, not a desperation play
+- Avoid: industry jargon, feature-dumping, pricing, timelines, or promises not anchored to his stated concern
+- Do not reference how long he's been quiet, how many times you've tried to reach him, or any signal that he owes you a response
 
 ## STANDARD RULES
 
@@ -526,39 +526,40 @@ After delivering the 3-touch revival sequence, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 9235ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2365 | **Out:** 735 | **Cost:** $0.0048
+**Status:** OK | **Time:** 10220ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3660 (read=0, write=0) | **Out:** 877 | **Cost:** $0.0064
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a cold revival specialist at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm re-engaging Greg, CEO of Helmsdale Foundry, after we stalled one signature away when his PE sponsor's portfolio priorities hijacked his Q1. I need you to build me a three-touch revival sequence — email, LinkedIn DM, voicemail — each with a real, earned reason to reach out tied to what happened (his sponsor's push, not time passing). Every touch should feel like progress, not persistence.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm re-engaging Greg, CEO of Helmsdale Foundry, after we went cold mid-deal — he was close to signing, but a PE portfolio priority hijacked his Q1. Be my cold revival specialist and craft a three-touch re-engagement sequence that feels like it's from someone who was in the room with him, not a stranger. Every touch must anchor to our prior conversation and give him a real, concrete reason to re-engage — not a generic "just checking in."
 
 ## STRUCTURE
 
 1. **TOUCH 1 — EMAIL**
-   - Subject line: Opens with the specific context (PE sponsor's portfolio priority, operational margin pressure in foundries post-crisis) — makes him think "how'd they know?"
-   - Body: Paragraph one acknowledges what likely happened (sponsor priorities shifted). Paragraph two plants a real reason to reconnect tied to PE-backed industrial operations right now. Paragraph three closes with a low-friction ask (reply, 15-min call, or a simple yes/no on interest).
-   - Tone: Respectful of his reality, not apologetic. Shows you've thought about his world.
+   - Subject + 3 short paragraphs. Must reference a specific moment, topic, or concern from our original conversation — the shared history is what separates this from cold outreach.
+   - Opens warm (we were close, I remember where we landed). Acknowledges the PE priority silently ate his bandwidth without calling it out by name. Pivots to the revival angle — something new or changed that re-arms the case for a 12-week reset.
+   - Closes with a low-friction ask: a quick reply, a 15-minute call, or a yes/no question. Do NOT reference how long we've been silent, use "circle back" or "just wanted to follow up," or signal desperation.
+   - **If my input doesn't supply enough prior-conversation detail for the shared-history wedge, ask me for one specific moment or concern from the original call before you draft.**
 
 2. **TOUCH 2 — LINKEDIN DM**
-   - Hook: Entirely different angle from the email — not a recap, not a forwarded summary. Leans into something you'd only say in a DM (a quick observation, a pattern you're seeing, a specific aha).
-   - Length: 2–3 sentences max. No links, no attachment asks.
-   - Reads: Conversational, like you're thinking of him, not automating him.
+   - 2–3 sentences max. Completely different hook and angle than the email — not a forwarded excerpt.
+   - Still reads as a re-contact. No link, no attachment ask. Human tone — feels like a direct message from someone who knows him, not a template.
 
-3. **TOUCH 3 — VOICEMAIL (if applicable)**
-   - Lead: First 5 words must land the real reason for the call — tie it to his situation or the PE sponsor context, not "catching up."
-   - Body: 20–30 seconds when spoken. One question you leave him with — something he'll sit with after you hang up.
-   - Avoid: "Just wanted to touch base," restating the email, any callback demand. Let the question do the work.
+3. **TOUCH 3 — VOICEMAIL SCRIPT** (if applicable)
+   - 20–30 seconds when spoken aloud. The real reason for the call must be concrete and grounded in the revival angle or shared history — not "just calling to follow up" filler.
+   - Leaves one open question for him to sit with. Does not demand a callback or use "just wanted to touch base" language.
+   - Avoid restating the email.
 
 ## GROUNDING
 
-- Greg was *one signature away* — this isn't a cold restart, it's a warm thaw. Every touch should reflect that he knows us and what we do.
-- The PE sponsor's portfolio-wide priority is the *real reason* he went quiet — not objection, not disinterest. That's your spine.
-- Helmsdale Foundry is a PE-backed industrial — exactly our sector. Our Aldermark 12-Week Operations Reset ships working fixes, not recommendations. That's the difference between a study and a reset.
-- Don't invent what the sponsor's priority was or claim to know his current margin pressure directly — anchor to what's reasonable for PE-backed industrials post-crisis.
-- No "circle back," "just checking in," or time-based language ("it's been a few weeks"). He knows it's been quiet. Move past it.
-- Senior-only delivery and fixed-fee-with-50%-success-holdback are our hard anchors — don't soften them or oversell them, but let them inform confidence in the sequence.
+- Greg was **one signature away** before the PE portfolio priority hit. He knows the value and was ready. Don't reset trust; remind him why it still matters.
+- **PE-backed industrial** context: his PE sponsor's bandwidth demand is real and temporary. The reset case is actually *stronger* now — margin pressure doesn't disappear, it compounds. Position accordingly.
+- **2–4 weeks silent** is not cold. This is a stalled deal with shared history. Write like we're resuming a conversation, not initiating one.
+- The **revival angle is a product or feature update** — anchor to something concrete that re-opens the conversation without sounding like you're scrounging for a reason. (If you need specifics on what changed or what to spotlight, ask me.)
+- **Helmsdale Foundry is an industrial operation.** Avoid startup jargon, SaaS-speak, or anything that signals you don't know the sector. Margin, efficiency, cash leaks, operational friction — speak his language.
+- **Aldermark turns down ~70% of inquiries to stay partner-focused.** This is not a "last chance to grab you" angle — it's a signal that we're selective and serious. Lean on it only if natural; don't force it.
+- The **Aldermark 12-Week Operations Reset ships working fixes, not decks.** Use this strength sparingly in re-engagement — focus on the shared history and the new reason to move, not a full product pitch.
 
 ## STANDARD RULES
 
@@ -576,7 +577,7 @@ After delivering the 3-touch revival sequence, pause and:
 
 ---
 
-## [A] Deal Reviver — New CFO arrived / 3+ Months / Outside Resource
+## [A] Deal Reviver — New CFO arrived / 3+ Months / Product Update
 
 **Profile:** Aldermark 12-Week Operations Reset  
 **Inputs:**
@@ -590,45 +591,42 @@ After delivering the 3-touch revival sequence, pause and:
   },
   "sliderValues": {
     "silence-duration": 3,
-    "revival-angle": 2
+    "revival-angle": 1
   }
 }
 ```
 
-**Status:** OK | **Time:** 8433ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2362 | **Out:** 718 | **Cost:** $0.0048
+**Status:** OK | **Time:** 9519ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3657 (read=0, write=0) | **Out:** 740 | **Cost:** $0.0059
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a cold revival specialist at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm re-engaging Linda, COO of a $40M family-owned services business, after three months of silence — the deal stalled when they brought in a new CFO who's now vetting all outside engagements. I need you to craft a three-touch revival sequence that gives me a real, earned reason to resurface (not "just checking in"), positions me as a helpful resource to Linda and her new CFO, and lands a low-friction next step on each touch.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm reviving a stalled deal with Linda, COO of a mid-market services business — the conversation went cold when a new CFO took over external vendor review 3 months ago. Build me a three-touch re-engagement sequence where each touch reads like it's coming from someone who's already talked to this prospect. Every touch must anchor to our prior relationship or a real reason to reach out now — no cold-email energy, no "just checking in." I want a genuine wedge back in.
 
 ## STRUCTURE
 
-1. **Touch 1 — Email**
-   - Subject line anchored to the CFO transition as the opener — this is your earned reason
-   - Three short paragraphs: (1) acknowledge the new CFO and what that means for Linda's priorities; (2) one concrete insight about what we've seen in similar transitions that's relevant to a services CFO's first 90 days; (3) low-friction ask — 15-min call or a quick yes/no reply
-   - Avoid: "circle back," "checking in," "it's been a while," apology language, any reference to the silence
+1. **TOUCH 1 — EMAIL**
+   - Subject line + 3 short paragraphs. MUST reference a specific moment, concern, or topic from our original conversation — the shared history is the only thing that separates this from a cold email. If I haven't given you enough prior-call detail to anchor this, ask me for one concrete moment before you draft.
+   - Body closes with a low-friction ask: a reply, a 15-minute call, or a simple yes/no question.
+   - Avoid: "circle back," "just checking in," apologies for silence, "it's been a while," desperation, generic follow-up energy.
 
-2. **Touch 2 — LinkedIn DM**
-   - Hook must be distinct from the email — don't echo the subject line or opening angle
-   - 2–3 sentences max; reads human, not templated or forwarded
-   - No link, no ask for attachment or scheduling tool
-   - One conversation starter that feels natural, not sales
+2. **TOUCH 2 — LINKEDIN DM**
+   - 2–3 sentences. Distinct from the email — a different angle or hook, not a shortened rerun. Still reads like a re-contact, not a first DM.
+   - No links, no attachments, no asks for a call or document. Reads human.
 
-3. **Touch 3 — Voicemail (if applicable)**
-   - 20–30 seconds spoken aloud
-   - First 5 words must land the real reason for the call — no "just calling to touch base"
-   - Ends with one open question that lets them sit with it; no "call me back" demand
-   - Avoid restating the email or sounding like a re-read
+3. **TOUCH 3 — VOICEMAIL SCRIPT (if applicable)**
+   - 20–30 seconds when spoken aloud. Anchor to the revival angle or what you know from prior conversation — not "just calling to follow up" filler.
+   - Leaves one thought or question for them to sit with. No explicit callback demand or urgency language.
+   - Avoid: "just wanted to touch base," rewording the email, generic voicemail pacing.
 
 ## GROUNDING
 
-- **Earned reason to resurface:** The CFO hire is your legitimate hook — Linda's priorities have shifted, and a new CFO's first 100 days are when operational questions surface. Don't invent a news trigger or false urgency.
-- **Position for two buyers:** This email works if Linda reads it, but write it so the CFO could read it forwarded and get context too. I'm a resource to both, not just Linda.
-- **What a "helpful resource" sounds like:** Acknowledge the real work of integrating a new CFO, hint at what we've seen in similar transitions (operations chaos, cash leaks surfacing post-hire), offer a conversation — not a pitch or a deck.
-- **Tone:** Respectful of their time, specific to their situation (family business, services, new CFO), confident but not pushy. They've been quiet for 3+ months — treat that as data, not an apology prompt.
-- **Avoid:** "Reconnect," "value-add," buzzword padding, any statistic or metric not from my inputs, urgency language ("limited time," "only slots left"), references to the silence or how long you've been waiting.
+- **Anchor to Linda's role and situation.** She's a COO at a services business reviewing operational efficiency — that's her native language. The CFO gatekeeping is real friction; don't ignore it or soft-pedal around it.
+- **The new CFO is the context, not the obstacle.** Lean into it: new CFO likely means fresh scrutiny on what's working and what's bleeding margin. That's the wedge.
+- **Aldermark 12-Week Operations Reset is the anchor.** Reference the working fixes / hands-on embed model — not generic "operational consulting."
+- **Revival angle: What's changed for them in 3 months?** The new CFO's review is live; they may have found cash leaks. Our senior-only, fixed-fee success model plays differently when there's new scrutiny.
+- **Avoid:** Assuming the new CFO killed the deal (they may have just paused it); generic "I wanted to reconnect" energy; any pressure or "I've been trying to reach you" language; references to Aldermark turning down deals or internal metrics — those don't belong in outreach.
 
 ## STANDARD RULES
 

@@ -2,8 +2,8 @@
 
 **Run:** 2026-05-04  
 **Cases:** 9 (9 OK)  
-**Tokens:** 20,630 in / 5,699 out  
-**Engine cost (this tool):** $0.0393  
+**Tokens:** 30,823 in / 5,504 out  
+**Engine cost (this tool):** $0.0467  
 
 ---
 
@@ -26,37 +26,33 @@
 }
 ```
 
-**Status:** OK | **Time:** 6644ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2230 | **Out:** 541 | **Cost:** $0.0039
+**Status:** OK | **Time:** 7048ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3365 (read=0, write=0) | **Out:** 529 | **Cost:** $0.0048
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform. I just finished a call with a prospect (department manager, HubSpot shop, skeptical mood) where they surfaced a major pain: their ops team burns 8 hours a week on manual pipeline updates. I need you to produce two assets that lock in the aha without needing my follow-up spin — a crisp email I send to them, then a forward-ready recap they can send to their internal stakeholder with zero editing.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished a call with a prospect (department manager, HubSpot shop, skeptical energy out). My assistant is my post-meeting strategist — produce two forward-ready assets: a follow-up email I send them, and a recap they can forward internally without editing. Both anchor to the single biggest aha: their ops team burns 8 hours weekly on manual pipeline updates. The email opens sharp (not "great call") and references a specific moment from my demo notes. The recap reads like their own thinking — no rep voice, no vendor branding — and is scannable enough they'll actually send it up.
 
 ## STRUCTURE
+1. **FOLLOW-UP EMAIL (rep → prospect)**
+   - Opens with the ops-time pain as the real lever, not pleasantry. Reference the specific CRM integration moment from the call.
+   - One paragraph unpacking why this matters to their role / bottleneck.
+   - One paragraph on what Velara Revenue OS does (focus: native HubSpot sync, zero manual updates).
+   - Closes with one concrete next step — no vague "let's sync."
 
-1. **Follow-Up Email (rep → prospect)**
-   - Open with the 8-hour ops tax they named — that's the hook, not pleasantries
-   - Reference the HubSpot integration question they asked; anchor to what they'll get (auto-capture, zero manual CRM updates)
-   - One concrete next step only (no list of options)
-   - 3–4 short paragraphs; close with their move, not mine
-
-2. **Forward-Ready Recap (prospect → their decision-maker)**
-   - Five to seven bullets, one sentence each, written in their voice — no rep language, no vendor branding
-   - Flow: their pain in their words → what they saw in the demo → how it maps to their priority → two proof points (auto-capture + native HubSpot sync) → one next step
-   - Strip all rep framing, product marketing copy, dollar figures not in my notes
-   - Make it read like they wrote it
+2. **FORWARD-READY RECAP (prospect → internal decision-maker)**
+   - Five to seven bullets, one sentence each.
+   - Sequence: their problem (ops time drain) → what they observed in the demo → how it maps to their priority → two concrete proof points → proposed next step.
+   - Write in their voice — no "Velara," no rep name, no dollar figures, no vendor language.
+   - Scannable, internal-memo tone.
 
 ## GROUNDING
-
-- Anchor both assets to the ops time tax (8 hours/week) — that's the aha; don't soften it
-- The HubSpot integration they asked about is the single proof point; lean on native bidirectional sync (no middleware) as the differentiator that solves their manual update problem
-- Mood is skeptical — understate, don't oversell; let the time savings speak
-- No product marketing language ("eliminates CRM data rot," "real-time intelligence," etc.) in either asset
-- Don't invent call moments beyond what's in my notes; reference only: dashboard demo, HubSpot integration question, ops time burn
-- Avoid: "per our conversation," feature lists, dollar amounts, timelines, implementation details I didn't mention
-- The forward-ready recap must sound like a manager wrote it, not a vendor
+- The pain is real and quantified (8 hours/week). Center the forward-ready recap on that, not on feature novelty.
+- HubSpot is their CRM — anchor to native sync capability, not middleware or implementation overhead.
+- They're skeptical; proof points should be capability-anchored and concrete (what does zero manual updates actually mean for their workflow).
+- Avoid: "per our conversation," marketing superlatives ("industry-leading," "game-changing"), promises I didn't make in the demo, anything that reads as sales copy in the recap.
+- The recap is written for an internal stakeholder who wasn't on the call — assume zero Velara context.
 
 ## STANDARD RULES
 
@@ -93,38 +89,36 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7520ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2250 | **Out:** 626 | **Cost:** $0.0043
+**Status:** OK | **Time:** 8459ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3385 (read=0, write=0) | **Out:** 617 | **Cost:** $0.0052
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I just had a discovery call with James (VP / Director level), he's bought-in, and I need you to produce two assets: a follow-up email from me to him that opens with his biggest pain and lands one next step, and a forward-ready recap he can send to his internal stakeholders without editing — something that sounds like *his* words, not vendor copy. Both anchor to the Q2 forecast accuracy problem (60% vs. what they need) and his stale pipeline data. James wants a pilot in April.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished a discovery call with a VP/Director prospect — they're bought-in and want to pilot in April. I need you to be my post-meeting strategist and produce two assets: a follow-up email from me to them anchoring on their forecast accuracy crisis, and a forward-ready recap they can send to their internal stakeholders without touching a word. Both should feel fresh and grounded in what they actually told me, not generic closing talk.
 
 ## STRUCTURE
 
-1. **Follow-Up Email (rep → prospect)**
-   - Open with forecast accuracy as the core pain, grounded in the 60% number he shared
-   - Reference one specific moment from the call (his screen share of the forecast problem)
-   - One sentence on what Velara Revenue OS does to solve it (real-time pipeline visibility, auto-captured activity — no manual CRM rot)
-   - Close with the April pilot as the concrete next step; no vague "let's sync"
+1. **Follow-Up Email** (rep to prospect)
+   - Opens with their forecast accuracy pain — the real aha from the call, stated in their language
+   - References one specific call moment (the screen share of Q2 forecast data) as proof you listened
+   - One concrete next step tied to their April timeline
+   - Tone: direct, no pleasantries or feature rattling; sounds like a peer problem-solver, not a vendor
 
-2. **Forward-Ready Recap (prospect → his internal stakeholders)**
-   - Bullet 1: The problem in *his* language (60% forecast accuracy, pipeline data arriving stale)
-   - Bullet 2: What he observed during our call (reference the screen share, what struck him)
-   - Bullet 3: Fit to his stated priority (April pilot proves out the approach)
-   - Bullets 4–5: Two concrete proof points — anchor to real-time data capture eliminating manual CRM updates and forecast accuracy within 4% guaranteed (SLA-backed)
-   - Bullet 6: Proposed next step (pilot scope and timeline)
-   - Tone: internal stakeholder memo, no vendor branding, no rep name, no dollar figures
+2. **Forward-Ready Recap** (prospect to their leadership)
+   - Five to seven bullets, one sentence each, written so the prospect's voice owns it — no "Velara told us," no product names, no rep branding
+   - Sequence: their forecast accuracy challenge in their own words → what they discovered on the call → how a real-time pipeline fix maps to their stated priority → two concrete proof points → proposed April pilot as the next step
+   - Tone: internal memo, not sales collateral; a peer briefing their boss, not a vendor summary
+   - Avoid: my name, product marketing copy, any dollar amounts I didn't supply
 
 ## GROUNDING
 
-- Anchor everything to the call notes and the 60% forecast accuracy number — that's the through-line for both assets
-- The pain is *stale pipeline data*; the solution is real-time activity capture with zero manual CRM updates
-- "April pilot" is the only timeline commitment — use it, don't invent other dates
-- For the recap: James is the author, so write it as if *he's* the expert and observer — use first-person plural ("we observed", "we want to pilot")
-- Avoid: product feature-speak, "Velara" or company branding in the recap, dollar amounts, marketing qualifiers like "cutting-edge" or "industry-leading," post-call pleasantries ("Thanks for your time")
-- The recap must be scannable and stakeholder-ready — bullets are short, one thought per line, no jargon only James would know
+- **Anchor to what they said:** Forecast accuracy down to 60%, pipeline data stale by board time, April pilot appetite. Use those exact terms and timing.
+- **The aha is their pain, not my product:** Lead with why their forecast is broken (stale data upstream), not why Velara is good. They bought the problem first.
+- **One call moment as your credibility signal:** The screen share of Q2 forecast. Make it specific and brief — shows you were listening, not scripting.
+- **Bought-in mood = confidence, not urgency:** James was nodding. Write like he's already sold on the direction; the email and recap are clarity, not persuasion.
+- **Recap is their weapon, not mine:** If they send this to their CFO or board, they should sound like they own this analysis, not like they're forwarding a vendor deck. Strip any trace of sales language.
+- **Avoid:** "per our conversation," "we discussed," "as mentioned," generic gratitude, feature lists, marketing claims, any number I didn't explicitly surface in my inputs.
 
 ## STANDARD RULES
 
@@ -161,40 +155,37 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7598ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2246 | **Out:** 621 | **Cost:** $0.0043
+**Status:** OK | **Time:** 7450ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3381 (read=0, write=0) | **Out:** 580 | **Cost:** $0.0050
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I just closed a 30-minute call with a CEO who wants to send something to his CFO — he's already selling internally. My biggest leverage is the 14-day implementation story and the fact that they lost a deal last quarter because deal risk went unflagged. I need you to produce two assets: a follow-up email from me to the CEO that opens with that deal-loss pain and references a specific moment from the call, and a forward-ready recap he can send to his CFO without editing — written in his voice, not mine, that builds the case for moving fast.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished a 30-min call with the CEO — he surfaced deal risk visibility as the core pain (lost a deal last quarter because his rep didn't flag risk early enough) and he's already primed to sell internally to his CFO. He loved the speed story. I need two assets: a follow-up email I send him, and a forward-ready recap he can send to his CFO without touching it — both anchored to the deal-risk moment and the 14-day speed, positioned so he owns the insight, not me.
 
 ## STRUCTURE
 
-1. **Follow-Up Email (Rep → CEO)**
-   - Open with the deal they lost last quarter and the unflagged risk that cost them — tie it directly to what they shared on the call
-   - Reference one specific moment or insight from our 30-min conversation that showed you listened
-   - Close with one concrete next step (not "let's schedule"; something that moves the ball)
-   - 3–4 short paragraphs; no pleasantries, no feature lists, no "per our conversation"
+1. **Follow-Up Email (rep → CEO)**
+   - Open with the deal-risk blind spot as the real cost — tie it to the moment he named it on the call
+   - Reference one specific detail from his situation (the lost deal, the rep blind spot, whatever he actually said)
+   - One paragraph on speed as the enabler (14-day entry, no friction)
+   - Close with one concrete next step (internal alignment call, CFO intro, whatever lands here)
+   - Tone: direct, not congratulatory; assume he's already sold
 
 2. **Forward-Ready Recap (CEO → CFO)**
-   - Written entirely in the CEO's voice — no vendor language, no rep names, no Velara branding
-   - Five to seven bullets, one sentence each, in this order:
-     - Their problem (in their words, from the call)
-     - What they observed on the demo or discussion
-     - How this fits their stated priority
-     - Two concrete proof points (the 14-day deployment + forecast accuracy; anchor both to what they care about)
-     - Proposed next step (scan-ready, one line)
-   - No dollar amounts unless I gave them to you; no product marketing copy; no hedging
+   - Five to seven bullets, one sentence each, written as if the CEO authored it
+   - Order: problem statement in his words → what he observed on the call → how this fits his stated priority → two concrete proof points → proposed next step
+   - No vendor language, no rep name, no Velara branding, no dollar amounts outside his inputs
+   - Assume CFO reads fast — each bullet is self-contained
 
 ## GROUNDING
 
-- The deal they lost last quarter is real and specific — anchor to it hard. This is the emotional keystone for both assets.
-- The 14-day implementation is the single biggest lever with this buyer. Lead with speed, not features.
-- The CEO is already selling to the CFO — your recap makes his job easier, not harder. Write it so he could have written it himself.
-- C-Suite buyers at this stage don't need education; they need proof. Forecast accuracy matters because it prevents deal surprise. Keep it tight.
-- Avoid: product jargon (CRM data rot, pipeline intelligence, etc.), "best-in-class," "industry-leading," any statistic or number I didn't give you, rep voice creeping into the recap.
-- The CEO mentioned the CFO explicitly — this is a two-stakeholder play. The email primes him; the recap closes the CFO.
+- **Anchor to the deal-risk moment.** This is the scar tissue. Everything connects back to "we didn't see it coming."
+- **The 14-day speed is the trust signal here.** Not features — speed removes implementation friction and signals confidence.
+- **He's already selling.** Don't convince him; arm him. Write for his CFO's concerns, not his.
+- **CEO voice in the recap.** No "our product," no "Velara," no "the platform." Write like a CEO who just had an aha, not a rep quoting a vendor.
+- **Deal-risk visibility is the single lever.** Don't dilute with CRM hygiene or forecast accuracy — stay on the pain he named.
+- **Avoid:** marketing cadence, feature stacking, ROI math without his numbers, "synergy," "best practices," "per our conversation."
 
 ## STANDARD RULES
 
@@ -231,37 +222,29 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 6871ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2210 | **Out:** 533 | **Cost:** $0.0039
+**Status:** OK | **Time:** 7993ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3345 (read=0, write=0) | **Out:** 521 | **Cost:** $0.0048
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — we just had a call with a prospect in an operational user role who came out mildly interested after seeing the demo. I need you to produce two assets: a follow-up email from me to them that anchors to the specific moment they responded positively, and a forward-ready recap they can send to their internal stakeholders without editing — written in their voice, not mine, so it feels like their own analysis.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished a call with an operational user who showed mildly positive interest—they liked what they saw. I need you to be my post-meeting strategist and produce two assets: a follow-up email from me to them that anchors to their genuine reaction, and a forward-ready recap they can send internally without editing—one that sounds like it came from them, not from a vendor.
 
 ## STRUCTURE
 
 1. **Follow-Up Email (Rep → Prospect)**
-   - Open with the specific demo moment or capability they reacted to — the actual aha they surfaced, not generic praise
-   - One tight paragraph referencing a concrete thing from my call notes
-   - One paragraph on what that moment means for their stated workflow or pain
-   - Close with one concrete next step (timing, format, owner — no vague "let's connect")
-   - Tone: direct, earned, zero pleasantries
+   Open with the single thing they responded to—not a generic recap opener. Reference one specific moment from the call that landed. One concrete next step to close (no "let's sync soon"). No pleasantries, no feature lists, no "per our conversation" phrasing.
 
 2. **Forward-Ready Recap (Prospect → Their Decision-Maker)**
-   - Five to seven bullets, one sentence each
-   - Order: their problem in their own words → what they observed in the demo that mattered → how it maps to their stated priority → two proof points (capability or use case they can own) → proposed next step
-   - Write as if the prospect authored it — no "the vendor showed us," no product marketing language, no rep name, no Velara branding unless they named it first
-   - Avoid dollar amounts or headcount not in my call notes
-   - Scannable, no jargon, executive-ready
+   Five to seven bullets, one sentence each. Order: their problem statement → what they observed in the demo → how it connects to what they told me matters → two concrete proof points (from the demo or our conversation) → proposed next step. Write in their voice, not vendor voice. Exclude: my name, Velara branding, any dollar amounts I didn't supply. The prospect should be able to send this without attribution or editing.
 
 ## GROUNDING
 
-- Anchor both assets to my call notes — the specific demo moment and what they responded to. If my notes don't name the moment, ask me to clarify what they reacted to.
-- "Mildly interested" is honest baseline — don't oversell their energy or invent momentum they didn't show.
-- The operational user role means they care about workflow friction and day-to-day enablement — center the aha around that, not executive ROI metrics.
-- Avoid: case studies, competitor mentions, timelines or metrics not in my notes, generic CRM language, "as discussed."
-- The forward-ready recap is their tool, not our foot in the door — it should sound like their discovery, their words.
+- Their biggest takeaway was positive but not a home run—mildly interested means they saw value but haven't yet connected it to an urgent priority. Anchor the follow-up to what they actually said resonated, not to a bigger claim.
+- The demo was the vehicle; the call notes are thin. If I didn't capture a specific reaction or moment, use the fact that they liked it as the genuine anchor and build from there—no invented details.
+- Operational users care about friction removal and workflow fit, not executive metrics. The recap should speak to how this changes their day-to-day, not ROI or board-level outcomes.
+- "Forward-ready" means the prospect reads it and thinks "yes, I could send this"—no vendor language, no "we discussed," no rep jargon. If it sounds like sales copy, it won't survive the forward.
+- Avoid buzzwords: "leverage," "synergy," "cutting-edge," "innovative," "empower," "transformation."
 
 ## STANDARD RULES
 
@@ -298,41 +281,39 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 9105ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2261 | **Out:** 678 | **Cost:** $0.0045
+**Status:** OK | **Time:** 9908ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3396 (read=0, write=0) | **Out:** 696 | **Cost:** $0.0055
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I just finished a call with James (VP / Director level) where he pushed back hard on our forecast accuracy claims and made clear he only moves forward on peer references — not vendor marketing. I need you to be my post-meeting strategist and produce two assets: a follow-up email I send to James that opens with his skepticism as the real issue (not a pleasantry) and anchors to a specific moment from the call, plus a forward-ready recap he can send to his internal stakeholders that reads like he wrote it, surfaces his core concern without vendor language, and builds a peer-reference path as the next concrete step.
+I'm a sales rep at Velara selling Velara Revenue OS. I just finished a call with James (VP / Director level, skeptical mood) where he pushed back hard on our accuracy claims and made clear he'll only trust peer references — not vendor marketing. I need you to be my post-meeting strategist and produce two assets: a follow-up email from me to James that opens with his core concern (peer validation, not metrics), and a forward-ready recap he can send to his internal stakeholders that sounds like his own analysis, not a pitch. Both must reflect what actually surfaced on the call — his skepticism about public claims and his demand for peer proof.
 
 ## STRUCTURE
 
-1. **Follow-up Email (Rep → James)**
-   - Open with acknowledgment of his skepticism about vendor claims — name it directly as the insight, not "great call"
-   - Reference one specific moment from the call (he took notes the whole time; he rejected the forecast accuracy metric)
-   - Pivot to peer-reference as the bridge: position the ask as "here's how we move this forward in a way that fits how you evaluate vendors"
-   - Close with one concrete next step (reference call, intro to customer, timeline for you to send names — pick the clearest path)
-   - 3–4 short paragraphs; no feature-benefit list, no "per our conversation"
+1. **Follow-Up Email (Rep to James)**
+   - Opens with acknowledgment of his stated requirement (peer references trump vendor claims) — treat this as the entry point, not a problem to overcome
+   - References one specific moment from the call (e.g., his pushback on the accuracy metric, his note-taking signal, his skepticism about vendor marketing)
+   - One concrete next step: getting him connected to a peer customer who can speak to deployment and accuracy on their own terms
+   - Tone: direct, no pleasantries or "great chatting" openers; respect his rigor
 
-2. **Forward-Ready Recap (James → His Internal Team)**
-   - Five to seven bullets, one sentence each, in this order:
-     - Their problem as James would state it
-     - What he observed on the call that matters (skepticism about vendor metrics is valid; here's why)
-     - How this connects to his stated priority
-     - Two proof points (peer references are the lever; Velara's model is built on peer validation, not marketing)
-     - Proposed next step (timeline, who owns it, what success looks like)
-   - Write in James's voice — no rep language, no "Velara Revenue OS" branding, no dollar amounts
-   - Scannable, tight, stakeholder-ready
+2. **Forward-Ready Recap (James → His Internal Stakeholders)**
+   - Problem statement in his voice (CRM data rot, forecast misses, or pipeline visibility gap — anchor to what he surfaced, not our framing)
+   - What he observed on the call (Velara Revenue OS's auto-capture model, real-time coaching, live deployment speed — stated as features he heard, not features we claim)
+   - How this aligns with his stated priority (e.g., if accuracy or speed was his lever, name it as such)
+   - Two proof points: peer customer outcomes (explicitly flagged as "peer reference coming" or "to be validated with customer conversation") and product capability he saw demonstrated or discussed
+   - Proposed next step: peer call, timing TBD pending James's availability
+   - Avoid rep branding, vendor language, his name, any unsubstantiated claims, and dollar amounts
 
 ## GROUNDING
 
-- **Anchor to the call**: James's skepticism isn't an objection — it's his evaluation framework. Treat it as clarity, not friction.
-- **Peer references as the only move**: Don't rehash the forecast accuracy claim. Let peer validation be the answer.
-- **Specific moment**: He took notes the whole time and pushed back on metrics. Use that as evidence he's taking this seriously and will move on proof he trusts.
-- **His role**: VP / Director — he's evaluating on behalf of a team. The recap should be a tool he actually uses internally, not marketing material.
-- **Avoid**: Vendor cheerleading, dollar figures, my name or title, "Velara" branding in the recap, any claims not backed by the peer-reference ask.
-- **Tone in both assets**: Respect his skepticism. Be direct. Move fast.
+- James's skepticism is the asset's strength, not a liability — frame peer validation as the path forward, not a concession
+- His note-taking is a buying signal; reflect back the specifics he captured, not our talking points
+- The peer reference is the only credible proof point for him; treat it as the single next lever
+- No numerical claims (accuracy percentages, deployment timelines as concrete promises, cost figures) unless James explicitly stated them in the call notes
+- "Per our conversation" and similar cadences are banned; use "you noted" or "you asked about" to anchor to his actual inputs
+- The recap must read as if James wrote it — no Velara branding, no "the vendor said," no product marketing copy
+- If James mentioned a specific internal stakeholder, decision criterion, or timeline in the call, anchor the recap to that; if not, keep it generalist enough that he can customize it
 
 ## STANDARD RULES
 
@@ -369,34 +350,30 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 6605ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2384 | **Out:** 540 | **Cost:** $0.0041
+**Status:** OK | **Time:** 8670ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3512 (read=0, write=0) | **Out:** 628 | **Cost:** $0.0053
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I just ran an on-site kitchen demo with a department manager who's bought in on solving their morning prep bottleneck. I need you to produce two assets — a follow-up email from me to them, and a forward-ready recap they can send to their internal decision-maker without editing — that anchor to what they actually saw and said, not marketing language.
+I'm a sales rep at Northwind Commercial Kitchen. I just ran a live on-site demo of the Northwind XR-Series Combi Oven with a department manager who's bought-in. Be my post-meeting strategist and produce two assets: a follow-up email from me to the prospect that surfaces their biggest bottleneck and anchors to a specific demo moment, and a forward-ready recap they can send to their internal decision-maker — written in their voice, not mine, so they own the narrative without editing.
 
 ## STRUCTURE
 
-1. **Follow-Up Email (rep → prospect)**
-   - Open with their bottleneck (proofer across the kitchen) and how the XR-Series collapses it into one station — reference the specific moment from the demo
-   - One sentence citing the energy reading (28% below their current Rational unit during the demo)
-   - One concrete next step (e.g., spec sheet, timeline to proposal, internal champion intro)
-   - Tone: colleague-to-colleague, no pleasantries or feature lists
+1. **FOLLOW-UP EMAIL (Rep to Prospect)**
+   Opens with the morning prep bottleneck they named — the spatial spread that breaks their workflow — not generic pleasantries. Reference one concrete moment from the demo (the back-to-back cook sequence, Chef Diego's observation about line-cook autonomy, or the energy meter read). Close with one specific next step (site plan review, internal stakeholder meeting, timeline for decision — whatever moves the ball). Strip marketing language and "per our conversation" framing.
 
-2. **Forward-Ready Recap (prospect → their internal stakeholder)**
-   - Five to seven single-sentence bullets in this order: their bottleneck in their own words → what they observed during the demo → why it solves their stated priority → two concrete proof points (programmability feedback from Chef Diego; energy efficiency number) → proposed next step
-   - Write as if they authored it — no rep voice, no vendor branding, no marketing copy
-   - Exclude: my name, Northwind branding, any dollar amounts
+2. **FORWARD-READY RECAP (Prospect to Their Decision-Maker)**
+   Five to seven bullets, one sentence each. Sequence: their current pain → what they witnessed during the demo → how it solves their stated priority → two proof points (one from the cook performance, one from the energy meter or space recovery) → what happens next. Write as if they authored it — no rep names, no Northwind branding, no dollar amounts unless they came from my notes. Prospect owns the credibility.
 
 ## GROUNDING
 
-- Anchor both assets strictly to my call notes — the salmon/beef short rib/bread demo, Chef Diego's exact feedback on programmability, the 28% energy reading, the proofer-across-the-kitchen bottleneck
-- The energy reading (28% below their Rational) is the single concrete proof point; use it once, in both assets, exactly as I've stated it
-- The programmability insight ("line cooks could run it without hovering") is a real operational win — use it, not generic "ease of use" language
-- Prospect is a department manager who's bought in — energy and confidence in the copy, no soft-sell hedging
-- For the forward-ready recap: the prospect is writing to an internal decision-maker (likely finance or ops lead) — skip jargon, anchor to their business problem, not the oven's features
+- The single biggest aha is the morning prep bottleneck — the proofer across the kitchen breaks their line flow. Anchor both assets to this, not generic efficiency gains.
+- Concrete demo moments live in my notes: back-to-back cook sequence (salmon, short rib, proofed bread), Chef Diego's comment about line-cook autonomy without supervision, the 28% energy read vs. their current Rational.
+- Department manager is the buyer here and they're bought-in — the email tone is collaborative and forward-moving, not persuasive.
+- Forward-ready recap is written *for* them to send upstairs: their language, their priorities, their wins. If I call it a "recap," they hear vendor. Write it as a decision brief.
+- Avoid product marketing copy, rep language ("as discussed," "we believe"), and any dollar amounts. The energy number (28% below their current unit) is fair game because it came from the live meter read in my notes — use it as a proof point only if it sharpens the case.
+- Space recovery is a byproduct of the XR-Series footprint, not a feature to lead with — mention only if it anchors to their workflow pain.
 
 ## STANDARD RULES
 
@@ -433,37 +410,36 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 9850ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2353 | **Out:** 746 | **Cost:** $0.0049
+**Status:** OK | **Time:** 7600ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3481 (read=0, write=0) | **Out:** 602 | **Cost:** $0.0052
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. I just finished a call with a VP/Director-level prospect (Karen) who surfaced a real but unspoken concern: service coverage in their secondary-city locations. She stayed polite but kept benchmarking us to Convotherm and asked about response times twice. I'm mildly interested but need to move her past equipment-spec comparison into confidence around our nationwide service footprint. Produce two assets: a follow-up email from me that anchors to her service concern (not energy specs) and a forward-ready recap she can send to her internal decision-makers that reads like *she* authored it — no vendor voice, no rep branding.
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I just finished a call with Karen (VP / Director level) who surfaced a real concern about service coverage in their secondary-city locations — that's the unspoken risk underneath the equipment comparison. She's mildly interested but cautious. I need you to produce two assets: a follow-up email from me that anchors to the service-network advantage and references a specific moment from our call, and a forward-ready recap she can send internally to her decision-maker without editing — written in her voice, not mine, that translates what we discussed into a business case her peer will recognize.
 
 ## STRUCTURE
 
-1. **FOLLOW-UP EMAIL (rep → prospect)**
-   - Open with the service-response-time worry she surfaced — name it directly, no small talk
-   - Reference one specific moment from the call (e.g., her Convotherm comparison, her question about secondary-market coverage)
-   - Weave in one concrete proof point about our same-day nationwide service model (use the fact from my inputs or the profile — no invented stats)
-   - Close with one next step: either a call with our service ops lead, a specific secondary market case study she can review, or a commitment to send tertiary-market coverage details
-   - Tone: Peer-level, solution-focused; skip "per our conversation," pleasantries, and feature lists
+1. **Follow-Up Email (rep → prospect)**
+   - Opens with the service-network insight — that's what moves the conversation forward, not the energy spec
+   - One specific call reference from my notes (her second question about tertiary-market response, the Convotherm comparison, whatever moment clarifies the anchor)
+   - One concrete next step — what happens now, not "let's stay in touch"
+   - Tone: direct, peer-level, respect her caution without selling harder
+   - Avoid: "Great chatting," feature lists, marketing language, "per our conversation"
 
-2. **FORWARD-READY RECAP (prospect → their stakeholders)**
-   - 5–7 bullets, one sentence each; written in first person from her perspective
-   - Sequence: (1) their problem/pain in her words → (2) what they observed/learned on the call → (3) how it maps to their stated priority → (4) two concrete proof points (equipment footprint gain + service reliability; or energy + speed of implementation; your call based on what landed) → (5) proposed next step
-   - Strip all rep language, vendor branding, product names where possible; use "the oven" or functional reference instead
-   - No rep name, no dollar figures, no marketing copy
-   - Tone: Internal, matter-of-fact, decision-ready — something a busy exec would skim in 30 seconds
+2. **Forward-Ready Recap (prospect → internal decision-maker)**
+   - Five to seven bullets, one sentence each — scannable, no fluff
+   - Order: problem statement in Karen's words → what she observed or tested → fit to her stated priority (service coverage) → two concrete proof points (what Northwind delivers vs. Convotherm's lag) → proposed next step
+   - Written as if Karen authored it — no vendor branding, no rep name, no marketing copy
+   - Avoid: dollar amounts unless I supplied them, product marketing language, her hesitation or tentativeness
 
 ## GROUNDING
 
-- **Anchor to the call:** Her service concern was implicit (asked twice about response times in secondary markets) — surface it as the real decision lever, not equipment cost or energy efficiency
-- **Service proof point:** Use only what's in the profile — same-day on-site response across continental US, no factory-trained-tech bottleneck — and calibrate it to secondary-market confidence
-- **Convotherm mention:** I can acknowledge the comparison (don't denigrate it), but pivot to what she actually cares about — can you cover *our* secondary locations reliably?
-- **Avoid:** energy-savings percentages unless she brings them back; feature-benefit rundowns; any stat or case-study name not in my inputs; assuming her decision timeline or next meeting date
-- **For the recap:** Write it like an internal memo, not a handoff — no "the vendor told us" construction; no quotation marks around our claims; conversational but crisp
+- The real tension is service coverage in secondary markets, not equipment cost or feature parity. Anchor both assets to that.
+- Karen compared us to Convotherm — reference that comparison only if it sharpens the service-network differentiation (same-day on-site response nationwide is the lever).
+- "Mildly interested" means she's curious but not yet convinced the risk is solved. The email and recap must make service certainty tangible, not aspirational.
+- Keep the rep voice (the email) warm and direct; keep the internal recap crisp and peer-ready — no vendor enthusiasm, no jargon.
+- If my notes don't supply enough specificity for the call reference in the email, ask me to clarify which moment best illustrates her concern.
 
 ## STANDARD RULES
 
@@ -500,38 +476,34 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 8373ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2353 | **Out:** 619 | **Cost:** $0.0044
+**Status:** OK | **Time:** 7593ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3484 (read=0, write=0) | **Out:** 610 | **Cost:** $0.0052
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Aldermark Advisory who just finished a 60-minute strategy call with a CEO. He surfaced margin compression rooted in legacy SOPs his team lacks political capital to kill — and he's already thinking board-ready. I need you to be my post-meeting strategist and produce two assets: a follow-up email I send him today that anchors to that aha and clears the path to his one-pager, plus a forward-ready recap he can drop into internal conversation without editing. Both pieces should feel like progress, not pitch.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I just finished a 60-min strategy call with a CEO who's already selling internally — he wants to take this to his board next month and needs a one-pager for the pre-read. Be my post-meeting strategist and produce two assets that let him move this forward without friction: a follow-up email from me that anchors to the real aha from our call, and a forward-ready internal recap he can drop straight into his board materials.
 
 ## STRUCTURE
 
-**1. Follow-Up Email (Rep → Prospect)**
-- Open with the margin/SOP insight — the single biggest thing he said that shifted something
-- Reference one specific moment or phrase from the call notes that made that insight real
-- One paragraph on what we'd dig into in the next phase (diagnosis of the three biggest cash leaks, not features)
-- Close with the concrete ask: a one-pager suitable for board pre-read, what we'd need from him to build it, timeline
-- Tone: peer, not vendor; actionable, not flowery
+1. **Follow-Up Email (rep → prospect)**
+   - Opens with the single biggest aha: margin compression as a legacy-SOP problem, not procurement. Ground this in one specific moment from the call — a quote, an observation, or a reaction he had.
+   - One concrete next step (the one-pager for his board pre-read). Make it clear, actionable, and tied to his timeline.
+   - Tone: peer-level, no hype. Close the email fast — 3–4 short paragraphs.
 
-**2. Forward-Ready Recap (Prospect → Their Internal Decision-Makers)**
-- Written entirely in his voice and thinking — no rep name, no Aldermark branding, no product marketing language
-- Five to seven bullets, one sentence each
-- Sequence: problem statement (margin compression, root cause in his words) → what he observed on the call → how it fits his stated priority → two concrete proof points from the conversation → next step (the one-pager, the board moment)
-- Dollar amounts, headcount, specific percentages only if they came from his mouth in the call notes
-- Designed to survive a copy-paste into an internal Slack or email chain
+2. **Forward-Ready Internal Recap (prospect → his board)**
+   - Scannable bullets, one sentence each. Write this as if the CEO authored it — no Aldermark branding, no rep language, no vendor copy.
+   - Order: (1) the margin-compression problem in his words, (2) what he observed in our conversation, (3) how it ties to his stated priority, (4–5) two concrete proof points that this approach works, (6) proposed next step (the 12-week engagement).
+   - Avoid: my name, dollar amounts not in my inputs, marketing-speak. This document is for his board, not a sales artifact.
 
 ## GROUNDING
 
-- The aha is margin compression tied to legacy SOPs and internal politics — anchor everything there, not to procurement spend or headcount
-- He's already selling internally (board mention, one-pager ask) — treat him as an internal champion, not a skeptic; your job is to make him look sharp when he evangelizes
-- One-pager is the concrete next step, not a "learning call" or "exploratory phase" — the email moves toward that deliverable
-- Senior-only delivery and working fixes by week 12 are our differentiators; if the recap touches next phase, ground it in diagnosis + outcome, not methodology or team size
-- Board-ready means crisp, outcome-focused, no vendor jargon — the recap especially should read like internal strategy memo language
-- Avoid: "per our conversation," "great chatting," feature lists, Aldermark mentions in the recap, any statistic or figure not in the call notes
+- His pressure is real: board conversation next month, pre-read materials needed now. Speed and clarity win.
+- He's already convinced margin compression is the issue. The aha is that it's *political*, not procurement — legacy SOPs his team won't touch. Anchor there.
+- CEO audience (his board): they care about root cause, speed to fix, and who's executing. No methodology, no credentials, no case studies needed yet.
+- The one-pager he requested is the follow-up vehicle. Make it feel like we listened, not like we're selling.
+- "Already selling internally" means he's the champion. Don't write for him — write *with* him. The recap should sound like his thinking, not ours.
+- Avoid: process jargon, ROI calculations, timeline promises not anchored to his stated 12-week window, "synergies" or corporate-speak.
 
 ## STANDARD RULES
 
@@ -568,41 +540,40 @@ After delivering the follow-up email and forward-ready recap, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 9307ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2343 | **Out:** 795 | **Cost:** $0.0051
+**Status:** OK | **Time:** 9647ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3474 (read=0, write=0) | **Out:** 721 | **Cost:** $0.0057
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I just closed a call with Anna (VP / Director level) who's skeptical — she's been burned by a consulting engagement before and doesn't trust the category yet. The trust gap is the real blocker, not the fee. Be my post-meeting strategist and produce two assets: a follow-up email from me that anchors to her skepticism and the specific moment she surfaced the trust issue, and a forward-ready recap she can send to her internal decision-maker without editing — one that proves we're different through action, not claims.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I just finished a call with a prospect (Anna, VP/Director level) who surfaced deep skepticism rooted in a prior bad consulting experience — not fee resistance. She challenged our success-aligned fee structure and asked for case studies in industrial fabrication. I need you to be my post-meeting strategist and produce two assets: a follow-up email from me that anchors to the trust gap (not defensiveness about fees), and a forward-ready recap she can send internally to her decision-makers without editing — written in her voice, not ours.
 
 ## STRUCTURE
 
-1. **Follow-Up Email (me → Anna)**
-   - Open with the trust gap she named, not pleasantries — acknowledge the burned experience and why it matters
-   - Reference one specific moment from the call where she tested our difference claim (Anna asking for case studies in her exact industry)
-   - One concrete next step that moves her from skepticism to proof (not a meeting, not a deck — something that shows we ship real work)
-   - Close with specificity on what we'll show, not what we promise
-   - Avoid: "Great chatting today," feature lists, product marketing language, "per our conversation"
+1. **Follow-up Email (rep → Anna)**
+   - Opens with the real blocker we surfaced: prior engagement burned her, and she needs proof we're different — not a recap of what we discussed
+   - References one specific moment from the call where she named the trust issue
+   - Anchors to senior-only delivery and working fixes (not slides) as the structural difference from what failed her before
+   - One concrete next step (case study in industrial fabrication, reference call, site visit — your call based on what's realistic)
+   - Closes tight; no "looking forward to hearing from you" filler
 
-2. **Forward-Ready Recap (Anna → her decision-maker)**
-   - Scannable bullets, one sentence each, written in her voice — no rep language, no Aldermark branding
-   - Problem statement in her exact words (operations bleeding margin, prior engagement failed)
-   - What she observed in the call (senior partners embed, fixed-fee success-aligned structure, no junior consultants)
-   - Fit to her stated priority (trust through shipping real fixes, not recommendations)
-   - Two proof points: the success-aligned fee structure (50% held back until margin recovery signed off), and the industrial fabrication sector focus
-   - Proposed next step that's lightweight and non-salesy
-   - Exclude: my name, product marketing copy, dollar amounts, headcounts, or any specificity not in my inputs
+2. **Forward-Ready Recap (Anna → her internal stakeholders)**
+   - Tone: her voice. She's a skeptic with a bad prior experience; the recap should sound cautious but intrigued, not sold
+   - Five to seven bullets, one sentence each, in this order:
+     - Problem statement (the margin bleed she named; no Aldermark language)
+     - What she observed in the call (senior partners embedding, 12 weeks, working fixes shipped — only what she witnessed; no feature-speak)
+     - How this maps to her stated priority (solve cash leaks without another consulting theater exercise)
+     - Two concrete proof points (case study detail or reference call outcome from industrial fabrication; no dollar amounts or metrics not in my inputs)
+     - Proposed next step (concrete, her-voice framing of what we suggested)
+   - Avoid: my name, "Aldermark," product marketing copy, budget figures, success metrics, vendor-style language
 
 ## GROUNDING
 
-- **The trust blocker is real.** She's skeptical because the last engagement failed. Don't sell the Reset — show that we're different through concrete action (embedded partners, working fixes, sector focus). Claims won't move her.
-- **Anchor to the specific moment.** She asked for case studies in industrial fabrication. That's the door. Reference that exact ask and show how we address it (sector-specific expertise, not generic library).
-- **Success-aligned fee is the proof.** The 50% holdback isn't a gimmick — it's skin in the game. That's what separates us from every consultant who "claims they're different."
-- **No marketing copy in the recap.** She's forwarding this internally. It reads like her memo, not a vendor brief. Use her language (operations, margin, trust) not ours.
-- **One next step, one direction.** Not "let's set up a call" — something that proves we move fast and show work (an initial diagnostic window, a sector-specific reference, a one-pager on how we approach her specific leak).
-- **Avoid buzzwords for this audience:** "world-class," "solutions," "partnership," "leverage," "synergy" — she's skeptical of consultant-speak.
-- **Sector: industrial fabrication.** Keep this specific if it comes up; we focus on PE-backed industrials and mid-market manufacturing — her space is home.
+- **Trust is the only issue on the table.** Fee structure is a proxy for whether we're different. Don't defend fees; prove differentiation through structure (senior-only, working fixes, no theater).
+- **One call moment.** Anna named the prior engagement failure. Use that specific moment — not a generic reference to "consulting skepticism" — to anchor the email.
+- **Industrial fabrication is her ask.** If you lack a real case in that exact sector from my inputs, flag it as a data gap and ask me for a reference or comparable win. Do not invent sector details or outcomes.
+- **She's a VP/Director.** Language should match her peer level — direct, no over-explanation, no jargon beyond what she already uses.
+- **The recap is her document.** If it reads like a vendor recap, rewrite it. She should sound like she authored it — cautious, specific to her situation, no marketing gloss.
 
 ## STANDARD RULES
 

@@ -2,8 +2,8 @@
 
 **Run:** 2026-05-04  
 **Cases:** 9 (9 OK)  
-**Tokens:** 18,865 in / 6,231 out  
-**Engine cost (this tool):** $0.0400  
+**Tokens:** 31,522 in / 5,560 out  
+**Engine cost (this tool):** $0.0475  
 
 ---
 
@@ -17,52 +17,47 @@
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "Salesforce",
-    "ourAdvantage": "No implementation fees, live in 14 days vs. 6-month rollout"
+    "yourEdge": "No implementation fees, live in 14 days vs. 6-month rollout"
   },
   "sliderValues": {
-    "competitive-stance": 0,
     "conversation-stage": 0
   }
 }
 ```
 
-**Status:** OK | **Time:** 9050ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2053 | **Out:** 684 | **Cost:** $0.0044
+**Status:** OK | **Time:** 7351ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3461 (read=0, write=0) | **Out:** 655 | **Cost:** $0.0054
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS—a real-time pipeline intelligence platform that auto-captures deal activity and eliminates CRM data rot. I'm on a first conversation with a prospect who's likely managing Salesforce today. I need you to be my competitive intelligence specialist and arm me with five discovery questions that surface friction with their current setup without naming Salesforce as the villain. My edge is speed (14 days live, zero implementation fees) versus the 6-month grind they probably know. I want to uncover that pain—and the budget/bandwidth cost of their current path—through genuine curiosity, not confrontation.
+I'm a sales rep at Velara selling Velara Revenue OS, and I'm about to call a prospect who's likely comparing us to Salesforce. Be my competitive intelligence specialist and build me a battlecard — five surgical sections that arm me with where Salesforce genuinely wins, where the structural gap between what they deliver and what this prospect needs sits sharpest, the trap question that surfaces that gap without naming Salesforce as the enemy, the proof point that lands because of that gap, and the one thing I must never say that Salesforce's incumbents are trained to bait me into.
 
 ## STRUCTURE
 
-1. **Question 1: Current Adoption Friction**
-   - Ask what percentage of their team actually updates the CRM versus what leadership expects to see.
-   - Listen for: Gap between what's in the system and ground truth. Massive gap signals data rot is already a problem.
+1. WHERE THEY WIN
+One or two sentences. Salesforce's genuine strength relative to us. Acknowledge it cleanly and specifically — no hedging, no minimizing.
 
-2. **Question 2: Pipeline Visibility Cost**
-   - Ask how much time they spend each week getting accurate pipeline intel for forecasting or board prep.
-   - Listen for: Frustration with manual work, dependency on a few "keepers of truth," or cycle time. Signals they're burning cycles on grunt work.
+2. WHERE THEY LOSE
+One or two sentences. The single sharpest structural mismatch between what Salesforce delivers and what this prospect needs given their situation. Not a feature gap — a friction point the prospect should care about.
 
-3. **Question 3: Implementation Debt**
-   - Ask how long it took them to get their current system operational and whether it ever truly stabilized.
-   - Listen for: "6 months," "longer than expected," "we're still tuning it." Opens the door to mention speed without being pushy.
+3. THE TRAP QUESTION
+The question itself (one clean sentence), then a one-line coaching note on what answer signals the trap landed and how to follow up.
 
-4. **Question 4: Coaching Gaps**
-   - Ask whether reps get real-time feedback during calls or only after-action reviews.
-   - Listen for: Post-call-only feedback, missed moments, or reps flying blind. Signals they lack live intelligence.
+4. THE PROOF POINT THAT LANDS
+One specific proof point that resonates because of the WHERE THEY LOSE gap. Shape it as situation → friction → what changed, without inventing customer names or metrics. If a specific stat would make this land harder, ask me for it rather than invent.
 
-5. **Question 5: Roadmap Constraints**
-   - Ask what features or capabilities they've wanted but deprioritized because of implementation overhead or vendor roadmap delays.
-   - Listen for: Unmet needs that feel out of reach. Signals frustration with vendor pace and internal bandwidth limits.
+5. THE BOOBY TRAP
+One thing I must NOT do or say in this conversation. The thing Salesforce's incumbents are trained to bait me into saying so they can win the procurement debate. One sentence, sharp.
 
 ## GROUNDING
 
-- Anchor every question to real operational pain—adoption, time, visibility, feedback—not features. Don't lead with "Salesforce is slow"; lead with "How's adoption looking?"
-- The speed advantage (14 days vs. 6 months) is ammo only when they reveal they're burned out by implementation. Don't fire it unprompted.
-- Listen for *language* that signals openness: "wish we could," "haven't gotten around to," "if we had time." That's where you land the value.
-- Avoid competitive jargon ("legacy," "bloated," "outdated"). Use their language—CRM friction, data quality, time burden.
-- First conversation = diagnosis, not prescription. Your job is uncovering the gap between where they are and where they want to be. They'll connect it to Velara's speed naturally.
+- My sharpest edge is speed to live and zero implementation friction — anchor the battlecard to that reality. Salesforce's strength is ecosystem scale and customization depth; don't deny it.
+- This is a first conversation. The prospect may not have named Salesforce yet. The battlecard preps me for the comparison *if and when* it surfaces — not to lead with it.
+- Velara Revenue OS lives in 14 days flat. Salesforce's typical rollout is longer and resource-intensive. The gap is real; ground the WHERE THEY LOSE section in the time-to-value and change-management friction that gap creates.
+- The TRAP QUESTION should feel natural to ask in discovery — it surfaces the prospect's true pain around implementation risk, data hygiene, or time-to-insight without sounding defensive.
+- Avoid: "Salesforce is bloated," "They're enterprise," "Their implementation is expensive" — commoditized objection-speak that makes reps sound small. Let the prospect feel the friction themselves.
+- Avoid: Naming Salesforce as the threat or the enemy. The battlecard is about what the prospect needs, not about proving Salesforce wrong.
 
 ## STANDARD RULES
 
@@ -71,7 +66,7 @@ I'm a sales rep at Velara selling Velara Revenue OS—a real-time pipeline intel
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -90,53 +85,46 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "Gong",
-    "ourAdvantage": "Real-time in-call coaching vs. post-call analysis"
+    "yourEdge": "Real-time in-call coaching vs. post-call analysis"
   },
   "sliderValues": {
-    "competitive-stance": 2,
     "conversation-stage": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 8672ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2047 | **Out:** 640 | **Cost:** $0.0042
+**Status:** OK | **Time:** 7153ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3457 (read=0, write=0) | **Out:** 636 | **Cost:** $0.0053
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I'm in discovery with a prospect who's likely using Gong, and I'm building the business case for a switch. I need you to be my competitive intelligence specialist — arm me with five discovery questions that uncover friction around Gong's post-call analysis model without me naming it as the problem. Each question should expose the gap between what they're doing now and what real-time in-call coaching could unlock.
+I'm a sales rep at Velara selling Velara Revenue OS, prepping to build the business case against Gong. Be my competitive intelligence specialist and arm me with the trap, the proof, and the booby trap — a battlecard that surfaces Gong's structural weakness without naming them as the enemy. I need five surgical sections, each a different lever, that I can reference live in this call.
 
 ## STRUCTURE
 
-1. **Question 1: Visibility Gap**
-   - Surface whether reps are flying blind mid-call and only getting feedback after the deal moment passes.
-   - Listen for: frustration about missed cues, late intervention, reps repeating mistakes in live deals.
+1. WHERE THEY WIN
+One or two sentences. Name the single area where Gong genuinely outperforms us — no hedging, no asterisks. Reps lose deals by refusing to admit competitor strengths. Clean acknowledgment builds credibility.
 
-2. **Question 2: Coaching Timing**
-   - Uncover the operational friction of post-call analysis — does it actually change rep behavior, or does it sit unread?
-   - Listen for: adoption barriers, time-to-insight delays, whether coaching gets acted on or archived.
+2. WHERE THEY LOSE
+One or two sentences. The sharpest structural gap between what Gong delivers and what this prospect actually needs given their current stage. Not a feature gap — a mismatch in *when* value arrives that matters to their business case.
 
-3. **Question 3: Deal Momentum**
-   - Ask how they're catching deal risk or objection drift *while it's happening*, not in the recording.
-   - Listen for: current early-warning gaps, reliance on rep intuition or manager intuition instead of signals.
+3. THE TRAP QUESTION
+One question I can ask the prospect that surfaces Gong's weakness without naming Gong as the enemy. Format: the question itself, then a one-line coaching note on what answer signals the trap landed and how I should follow up.
 
-4. **Question 4: Forecast Reliability**
-   - Probe whether their current tooling is surfacing leading indicators that actually predict close or just rear-view data.
-   - Listen for: forecast misses, surprise slippages, confidence gaps in pipeline visibility.
+4. THE PROOF POINT THAT LANDS
+One specific proof point that resonates because of the WHERE THEY LOSE gap. Describe the shape (situation → friction → what changed) without inventing customer names or specific metrics. If a specific quantification would make this land, ask me for it rather than fabricate.
 
-5. **Question 5: Rep Retention & Confidence**
-   - Ask how coaching feedback loops affect rep morale and whether post-call reviews feel punitive or developmental.
-   - Listen for: coaching adoption friction, rep defensiveness, whether insights drive behavior change or just documentation.
+5. THE BOOBY TRAP
+One sentence. The single thing I must NOT do or say in this conversation — the exact play Gong's incumbents are trained to bait me into so they can win the procurement debate. Sharp and specific.
 
 ## GROUNDING
 
-- Anchor all five questions to *their current process* — not to "Gong is slow" or "you're behind." Let their answers reveal the gap.
-- Focus on the Feature Gap angle: the insight that real-time signals *during* the call beat analysis *after* the call for deal momentum and rep coaching.
-- No invented competitor details. Stick to what I've told you: Gong, post-call analysis model.
-- Avoid "have you considered" language. These are discovery questions, not pitches — they're hunting for operational friction the prospect already feels.
-- For each question, the coaching note tells me what *signal* to listen for, not what answer I want to hear. Let the prospect's truth emerge.
-- Buzzwords to skip for this audience: "next-gen," "disruptive," "game-changer," "AI-powered." Stick to outcomes (deal momentum, forecast accuracy, rep adoption).
+- My sharpest edge is real-time in-call coaching. Gong is a post-call analysis tool. This gap widens dramatically at the business-case stage — when the prospect is measuring *in-the-moment* impact on deal velocity and rep performance, not historical insights after the call ends.
+- The prospect is building a business case. They're not comparing feature lists; they're measuring which tool changes behavior *now* vs. which one requires reps to internalize insights later. Anchor everything to velocity and immediate rep calibration.
+- Velara Revenue OS auto-captures activity and surfaces coaching in real time. This is the only lever that matters in this conversation.
+- Avoid positioning Gong as inferior or outdated. Position them as fit for a different stage (post-call review, historical analysis) — not fit for *this* prospect's need (in-call precision and deal velocity).
+- Do not invent customer names, logos, deal sizes, or savings metrics. If a proof point needs a specific number to land, flag it and ask me for it.
 
 ## STANDARD RULES
 
@@ -145,7 +133,7 @@ I'm a sales rep at Velara selling Velara Revenue OS. I'm in discovery with a pro
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -164,53 +152,46 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "HubSpot CRM",
-    "ourAdvantage": "Native revenue intelligence — no third-party integrations needed"
+    "yourEdge": "Native revenue intelligence — no third-party integrations needed"
   },
   "sliderValues": {
-    "competitive-stance": 3,
     "conversation-stage": 3
   }
 }
 ```
 
-**Status:** OK | **Time:** 8429ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2050 | **Out:** 662 | **Cost:** $0.0043
+**Status:** OK | **Time:** 6743ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3458 (read=0, write=0) | **Out:** 592 | **Cost:** $0.0051
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a revenue rep at Velara selling Velara Revenue OS, and I'm in final vendor selection with a prospect currently using or evaluating HubSpot CRM. I need you to be my competitive intelligence specialist and give me five discovery questions that uncover friction with their current setup — specifically around the gaps between what HubSpot promises and what they're actually getting — without positioning Velara as the enemy. The goal is to surface real pain, not to bad-mouth the incumbent.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm in final vendor selection against HubSpot CRM. Be my competitive intelligence specialist and arm me with a battlecard that surfaces where we genuinely win, where HubSpot has real strength, the trap question that exposes their gap without naming them as the enemy, the proof point that lands hardest, and the booby trap I must avoid.
 
 ## STRUCTURE
 
-1. **Question on data freshness and manual overhead**
-   - Dig into how much time their reps spend on manual CRM hygiene vs. selling
-   - Signal to catch: frustration with data decay, workarounds, or third-party tools bolted on
+1. WHERE THEY WIN
+One or two sentences acknowledging HubSpot's genuine strength. Don't minimize it. This is credibility.
 
-2. **Question on forecast accuracy and visibility gaps**
-   - Probe whether they trust their pipeline forecast and how often deals slip unexpectedly
-   - Signal to catch: vagueness about forecast confidence, reliance on spreadsheets, or late surprises
+2. WHERE THEY LOSE
+The single sharpest structural mismatch between what HubSpot delivers and what this prospect needs given their situation. This is a *need* gap, not a feature gap — something about how they operate or what they're trying to solve.
 
-3. **Question on deal intelligence and coaching in the moment**
-   - Ask whether they get actionable signals *during* the call or only after
-   - Signal to catch: admission they react to problems post-call, or they lack real-time context on deal health
+3. THE TRAP QUESTION
+One question I can ask the prospect that surfaces HubSpot's weakness without naming them as the enemy. Include the question and one coaching line: what answer signals the trap landed, and how I follow up.
 
-4. **Question on integration complexity and tech debt**
-   - Explore whether they've had to layer third-party tools on top of HubSpot to fill gaps
-   - Signal to catch: mention of Gong, Outreach, Slack bots, or homegrown automation; frustration with data sync delays
+4. THE PROOF POINT THAT LANDS
+One specific proof point anchored to the WHERE THEY LOSE gap. Shape it as situation → friction → what changed, without inventing customer names or metrics. If a concrete stat would strengthen this, ask me for it rather than fabricate.
 
-5. **Question on implementation speed and ongoing support costs**
-   - Ask what their onboarding experience was like and how much internal lift it took
-   - Signal to catch: timeline slippage, professional services spend, or setup friction they didn't anticipate
+5. THE BOOBY TRAP
+One sentence. The thing I must NOT do or say. This is what HubSpot's incumbents are trained to bait me into saying so they win the procurement debate.
 
 ## GROUNDING
 
-- Anchor every question to a real problem, not a feature list. If their answer is "no problem," move on — don't force a pain that isn't there.
-- Our edge is native revenue intelligence with zero third-party integrations needed. Don't mention this directly; let their answers reveal why they need it.
-- HubSpot is a CRM — it's good at contacts and pipelines. Frame questions around the intelligence layer: forecasting, deal risk, and in-call coaching. That's where the friction lives.
-- Prospect is in final vendor selection, so they're comparing. Their answers will implicitly compare HubSpot to other options they're seeing. Let them; don't name competitors.
-- Avoid buzzwords like "AI-powered," "best-in-class," or "cutting-edge." Use plain language: data decay, forecast slip, late surprises, integration headaches.
-- Listen for mentions of tools they've already bought or considered (Gong, Slack, Salesforce connectors, etc.). That's proof of friction HubSpot isn't solving.
+- My sharpest edge is native revenue intelligence — no third-party integrations needed. Anchor THE PROOF POINT to this (HubSpot requires middleware; we don't).
+- Final vendor selection = the prospect is actively comparing. They've already bought the vision. Now they're stress-testing implementation, data fidelity, and time-to-value. Calibrate all five sections to that lens.
+- HubSpot CRM is the incumbent or co-finalist. They're likely positioned as "extensible" and "the hub." WHERE THEY LOSE should expose the hidden cost or friction of that extensibility claim.
+- Don't invent competitor capabilities or limitations I haven't given you. Anchor to standard industry patterns (CRM plus third-party intelligence integrations require sync delays, manual configuration, SLA gaps across systems).
+- Avoid: "HubSpot is the enemy" framing, feature-checklist comparisons, or shade on their product quality. Reps lose when they sound defensive. This battlecard is clean and surgical.
 
 ## STANDARD RULES
 
@@ -219,7 +200,7 @@ I'm a revenue rep at Velara selling Velara Revenue OS, and I'm in final vendor s
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -238,48 +219,47 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "Excel + HubSpot stack",
-    "ourAdvantage": "automation"
+    "yourEdge": "automation"
   },
   "sliderValues": {
-    "competitive-stance": 1,
     "conversation-stage": 1
   }
 }
 ```
 
-**Status:** OK | **Time:** 8838ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2038 | **Out:** 645 | **Cost:** $0.0042
+**Status:** OK | **Time:** 8080ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3447 (read=0, write=0) | **Out:** 625 | **Cost:** $0.0053
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS. I'm in Solution Discovery with a prospect who's currently running Excel and HubSpot for pipeline management. I need you to be my competitive intelligence specialist and give me five discovery questions that uncover the friction in their current manual stack—without naming it as the problem or positioning Velara as the obvious fix. I want to pivot toward business value: time wasted, forecast blindness, deals slipping. The questions should surface *why* their current approach breaks, what it costs them, and where they feel the pain most acutely.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm in solution discovery with a prospect who's currently running Excel + HubSpot, and I need to position our automation advantage without sounding like I'm attacking their stack. Be my competitive intelligence specialist and arm me with a battlecard that surfaces where we genuinely win, where they're structurally exposed, and the single trap question that makes them feel the gap without me naming it.
 
 ## STRUCTURE
 
-1. **Question 1: Manual CRM hygiene tax**
-   - Probe for the time cost of keeping pipeline data current across email, calendar, and HubSpot. Listen for frustration with reps cutting corners, data decaying mid-quarter, or forecasting off bad data.
+1. WHERE THEY WIN
+One or two sentences naming the specific capability where Excel + HubSpot genuinely outperforms us. Keep it clean — no hedging, no "but." This earns credibility.
 
-2. **Question 2: Forecast confidence gap**
-   - Ask how confident they are in their forecast accuracy and how often they've been surprised by miss or pull-forward. Signal: vague answers, historical misses, reliance on gut-check before board meetings.
+2. WHERE THEY LOSE
+The single sharpest structural mismatch between manual Excel-HubSpot workflows and what this prospect actually needs given they're in solution discovery. Frame this as a *workflow problem*, not a feature problem — what friction do they live with that we eliminate?
 
-3. **Question 3: Deal slippage visibility**
-   - Uncover whether they spot deal risk early or discover it in the final mile. Listen for reactive firefighting, post-mortems on lost deals, or reps hiding stuck opportunities.
+3. THE TRAP QUESTION
+One question I can ask that exposes the competitor's weakness without naming Excel or HubSpot as the enemy. Include the question itself and one coaching line: what answer signals the trap landed, and how do I follow up.
 
-4. **Question 4: Coaching and rep consistency**
-   - Ask how they ensure reps are executing the right moves at the right time in a deal. Signal: lack of real-time guidance, post-call reviews, or variation in close rates across the team.
+4. THE PROOF POINT THAT LANDS
+One proof point shaped as situation → friction → what changed. No invented customer names or metrics. If a specific quantification would strengthen this (e.g., "how long manual updates typically take," "how often forecasts slip"), flag it and ask me for it rather than guess.
 
-5. **Question 5: Scaling the current model**
-   - Probe what breaks when headcount grows or territory complexity increases. Listen for hiring fears, onboarding friction, or the ceiling on manual processes.
+5. THE BOOBY TRAP
+One sentence: the single thing I must NOT say or do in this call. Name the bait the incumbent's team is trained to lay for reps, and why falling for it loses the deal.
 
 ## GROUNDING
 
-- Anchor every question to *their* world, not mine. This is about uncovering gaps in their process, not about Velara features.
-- Avoid "compared to," "unlike," or any naming of Velara as the cure. Let the pain stand on its own.
-- One differentiator focus: auto-capture of deal activity from email and calendar removes the manual CRM update burden entirely—this is the wedge. But don't name it; let them feel the absence.
-- Forecast accuracy is table stakes for execs; time-suck and deal blindness are rep and ops pain. Calibrate each question to its buyer persona within the account.
-- "Excel + HubSpot" often means no native sync, no automation, and shadow spreadsheets outside the CRM. Don't assume—listen for it.
-- Avoid generic discovery ("Tell me about your process"). Every question should land on a cost (time, forecast error, lost deals, inconsistency).
+- Anchor everything to my automation edge — the rep calls it out as the core lever, not a feature add-on.
+- Solution discovery phase means the prospect is still evaluating options; they haven't committed to Excel + HubSpot as permanent. Use that window.
+- The prospect lives with manual CRM hygiene (data rot, forecast churn, missing signals) — that's the friction to surface, not to lecture.
+- Avoid: don't position Velara Revenue OS as "Excel replacement" or "HubSpot replacement." We integrate bidirectionally with HubSpot. The trap is the *manual labor* incumbent workflows require, not the tools themselves.
+- Avoid: don't name-check the competitor stack first. Let the prospect name their current setup; then anchor to the workflow problem.
+- The prospect is likely cynical about vendor claims of "seamless" integration and "zero manual work." Proof must be behavioral (what actually happens on calls, in forecasts, in rep workflows), not theoretical.
 
 ## STANDARD RULES
 
@@ -288,7 +268,7 @@ I'm a sales rep at Velara selling Velara Revenue OS. I'm in Solution Discovery w
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -307,50 +287,46 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "Outreach.io (already deployed for 18 months)",
-    "ourAdvantage": "Deal risk surfaced before it's fatal, not after — shifts from activity tracking to outcome intelligence"
+    "yourEdge": "Deal risk surfaced before it's fatal, not after — shifts from activity tracking to outcome intelligence"
   },
   "sliderValues": {
-    "competitive-stance": 0,
     "conversation-stage": 3
   }
 }
 ```
 
-**Status:** OK | **Time:** 9525ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2066 | **Out:** 696 | **Cost:** $0.0044
+**Status:** OK | **Time:** 7906ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3474 (read=0, write=0) | **Out:** 608 | **Cost:** $0.0052
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara pitching Velara Revenue OS to a prospect in final vendor selection who's been running Outreach.io for 18 months. I need you to be my competitive intelligence specialist and arm me with discovery questions that uncover friction in their current setup—surfacing gaps around outcome intelligence and deal risk visibility—without naming Outreach as the problem. My goal is to plant subtle doubts and position Velara's shift from activity tracking to early deal risk detection as the bridge they're missing.
+I'm a sales rep at Velara selling Velara Revenue OS, and I'm prepping for a final vendor selection conversation where Outreach.io is the incumbent. Be my competitive intelligence specialist and give me a battlecard — five surgical sections that arm me with where they genuinely win, where they crack under *this* prospect's real pressure, the trap question that surfaces it, the proof point that lands, and the one booby trap I must avoid. Never name Outreach as the enemy.
 
 ## STRUCTURE
-1. **Question 1: Activity Volume vs. Visibility**
-   - Opens with their current volume (calls, emails, touches logged) and pivots to asking how often that activity actually predicted deal outcomes before things went sideways.
-   - Listen for: Gap between "high activity" and "low predictability." Friction point = busyness without foresight.
 
-2. **Question 2: Risk Detection Timing**
-   - Asks when they typically identify a deal is at risk — before pipeline review, during it, or after the rep realizes it's lost.
-   - Listen for: Reactions like "usually in the 11th hour" or "forecast doesn't catch it until it's too late." That's your opening.
+1. WHERE THEY WIN
+   One clean acknowledgment of what Outreach.io does well that we don't match. No hedging, no asterisks — this earns credibility.
 
-3. **Question 3: Forecast Confidence**
-   - Asks how confident their leadership is in the pipeline forecast two weeks out and what % of deals actually close as predicted.
-   - Listen for: Hesitation, lower numbers, or "we pad the forecast just in case." Signal = forecast accuracy is a pain point.
+2. WHERE THEY LOSE
+   The single sharpest mismatch between what Outreach delivers (activity tracking, post-call intelligence) and what THIS prospect needs given they're in final selection (forward-looking deal risk, not historical noise). Frame it as a structural gap, not a feature gap.
 
-4. **Question 4: Post-Mortem Patterns**
-   - Asks what the most common pattern is in deals that slipped — and whether they're catching that pattern earlier now than they were six months ago.
-   - Listen for: Repeated failure modes that should be detectable earlier. Signal = their system reacts after damage, not before.
+3. THE TRAP QUESTION
+   One question the rep can ask in the conversation that exposes Outreach's weakness without naming them as the problem. Include the coaching note: what answer signals the trap landed, and how to follow up without being argumentative.
 
-5. **Question 5: Tool Workflow Friction**
-   - Asks how much manual CRM hygiene and data-entry burden falls on reps, and whether that's pulling focus from deal strategy.
-   - Listen for: Frustration with logging, time spent updating vs. selling. Signal = their stack demands reactive labor, not proactive insight.
+4. THE PROOF POINT THAT LANDS
+   One specific proof point (situation → friction → resolution shape) showing what changes when deal risk surfaces before it's fatal, not after. Do not invent customer names or metrics. If a concrete stat would strengthen this proof point, ask me for it instead of fabricating.
+
+5. THE BOOBY TRAP
+   One sentence. The specific thing the competitor's champions are trained to bait us into saying so they win the procurement debate. What must we NOT say.
 
 ## GROUNDING
-- Outreach.io is strong on activity orchestration — don't position it as weak. Position your differentiator (early deal risk detection) as the next layer they need, not a replacement.
-- "Deal risk before it's fatal" is Velara's north star here — every question funnels toward that friction.
-- Avoid naming competitors directly or suggesting their tool is broken. Frame questions around outcomes, forecasting accuracy, and timing — let them surface the gap.
-- This is final vendor selection — they're comparing. Anchor discovery to what's missing in their *current* world, not what Velara does. Let them connect the dots.
-- Their 18 months with Outreach means they've likely grown numb to its rhythms. Questions should disturb that comfort by asking about *results*, not features.
+
+- They've been live for 18 months, so incumbent inertia is real. Don't try to displace them on effort; displace them on outcome intelligence.
+- Final vendor selection means the prospect is already calibrated on activity-tracking features (Outreach's core story). You're not arguing features; you're arguing forward-looking risk vs. rearview-mirror activity logs.
+- The sharpest edge is the *timing* of intelligence — deal risk before it's fatal shifts the whole conversation from "we got it on tape" to "we stopped it before it broke."
+- Avoid the FUD play ("Their data rots" or "They miss signals"). Stick to the structural gap: their *design* is activity-centric; ours is outcome-centric. Different architectures serve different needs.
+- Incumbent advocates will have sunk time into Outreach. Credibility comes from respecting that time, not dismissing it.
 
 ## STANDARD RULES
 
@@ -359,7 +335,7 @@ I'm a sales rep at Velara pitching Velara Revenue OS to a prospect in final vend
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -378,48 +354,47 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "Rational AG (iCombi Pro)",
-    "ourAdvantage": "30% lower energy draw and same-day nationwide service vs. waiting for a factory-trained tech"
+    "yourEdge": "30% lower energy draw and same-day nationwide service vs. waiting for a factory-trained tech"
   },
   "sliderValues": {
-    "competitive-stance": 1,
     "conversation-stage": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 8728ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2153 | **Out:** 624 | **Cost:** $0.0042
+**Status:** OK | **Time:** 7547ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3555 (read=0, write=0) | **Out:** 636 | **Cost:** $0.0054
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. I'm prepping for a call where I need to uncover the operational friction my prospect is living with—specifically around energy spend and service responsiveness—without naming Rational as the problem. Be my competitive intelligence specialist and give me five discovery questions that naturally surface where my advantage (30% lower energy draw and same-day nationwide service) solves real pain, so I can build the business case on their terms, not mine.
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven, and I'm prepping for a call with a prospect who's evaluating us against Rational AG's iCombi Pro. I'm in the business-case stage — the deal is real, but the competitor is still in the conversation. Be my competitive intelligence specialist and arm me with a battlecard that surfaces Rational's structural weaknesses through questions and proof points, not by naming them as the enemy. I need five surgical levers: where they genuinely win, where they lose against THIS prospect's situation, a trap question that exposes that gap, a proof point that lands because of it, and the one thing I must not say that their team is trained to bait me into.
 
 ## STRUCTURE
 
-1. **Question on Energy & Utility Cost Visibility**
-   - Opens the conversation to what they're actually paying to run their current oven lineup. Listen for vagueness (they may not track it) or specificity (revealing sophistication). Either tells you if energy spend is a lever.
+1. **WHERE THEY WIN**
+One or two sentences acknowledging Rational's genuine strength. Clean, specific, no hedge.
 
-2. **Question on Equipment Downtime & Service Response**
-   - Surfaces how they currently handle an oven failure and what it costs them operationally. Listen for frustration around wait times, lost prep capacity, or workarounds they've built. That's your opening.
+2. **WHERE THEY LOSE**
+One or two sentences on the single sharpest structural mismatch between what Rational delivers and what this prospect needs — given their situation. This is a mismatch, not a feature gap.
 
-3. **Question on Floor Space Constraints & Line Efficiency**
-   - Explores whether they're running separate convection, steam, and holding cabinets and whether consolidation matters to them. Listen for whether they've ever considered replacing four units with one.
+3. **THE TRAP QUESTION**
+The question itself (phrased naturally, not as "ask about X"). One-line coaching note: what answer signals the trap landed, and how I follow.
 
-4. **Question on Staffing & Oven Complexity**
-   - Uncovers how much training their crew needs and whether high culinary skill is a gating factor for them. Listen for pain around retention or ramp time; that signals your one-touch recipe advantage.
+4. **THE PROOF POINT THAT LANDS**
+The shape of a proof point that resonates because of the WHERE THEY LOSE gap. Situation → friction → what changed. No invented customer names or metrics. If a specific stat would sharpen this, ask me for it rather than invent.
 
-5. **Question on Equipment Lifecycle & Warranty Confidence**
-   - Asks about their current maintenance costs and what happens when a steam generator fails. Listen for how much they budget for repairs and whether warranty depth has ever been a factor in their buying decisions.
+5. **THE BOOBY TRAP**
+One sentence. The exact thing I must NOT say or do — the thing Rational's reps are trained to bait me into so they win the procurement argument.
 
 ## GROUNDING
 
-- Anchor every question to an observable business outcome (cost, time, capacity, headcount friction) — never to product features.
-- If the prospect deflects or says "we haven't thought about it," treat that as signal; don't push. Reframe and move to the next question.
-- Rational iCombi Pro is the implicit comparison (energy efficiency, service model, warranty length), but never name it. Let their answers name the problem.
-- The XR-Series advantage is 30% lower energy draw per cooked pound and same-day on-site service nationwide — anchor to these and only these when you later tie insights back to value.
-- Avoid energy jargon ("BTU efficiency", "kWh optimization") — speak to their P&L impact instead.
-- Listening > talking. These questions are doors; your job is to hear what's behind them, not sell through them.
+- Anchor everything to the two sharpest edges I gave you: energy-cost advantage and same-day service speed vs. factory-tech dependency.
+- "Building the business case" means the prospect is cost-conscious and operationally risk-aware. They're not sold yet; they're stress-testing assumptions.
+- Rational's iCombi Pro is market-standard in its category. Acknowledge its reputation cleanly — reps who refuse to admit competitor strength lose more deals than those who do.
+- The trap question must surface service-delay friction or total-cost-of-ownership pressure without naming Rational or sounding adversarial.
+- The proof point is shaped, not numbered. If I haven't given you a metric, don't fabricate one.
+- Avoid: generic "Rational is expensive" or "we're faster" — those aren't proof points. Avoid positioning as "we vs. them." Avoid language that sounds like a smear campaign.
 
 ## STANDARD RULES
 
@@ -428,7 +403,7 @@ I'm a rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. I'm 
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -447,48 +422,47 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "Convotherm",
-    "ourAdvantage": "Replaces 4 pieces of equipment in one footprint — recovers floor space they can't get back"
+    "yourEdge": "Replaces 4 pieces of equipment in one footprint — recovers floor space they can't get back"
   },
   "sliderValues": {
-    "competitive-stance": 2,
     "conversation-stage": 1
   }
 }
 ```
 
-**Status:** OK | **Time:** 8340ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2147 | **Out:** 584 | **Cost:** $0.0041
+**Status:** OK | **Time:** 6676ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3550 (read=0, write=0) | **Out:** 563 | **Cost:** $0.0051
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-
-I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. I'm in early discovery with a prospect who currently uses or is evaluating Convotherm. I need you to be my competitive intelligence specialist and give me five discovery questions — no scripts, no fake dialogue — that uncover operational friction around floor space and equipment consolidation without naming Convotherm as the enemy. Each question should expose where their current setup is costing them flexibility, and I'll listen for the signals that tell me when to pivot to how the XR-Series solves it.
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven, and I'm prepping for a solution discovery call with a prospect who's in consideration with Convotherm. Be my competitive intelligence specialist and build me a battlecard that surfaces our edge without naming Convotherm as the enemy — five surgical levers I can deploy live to shift how they think about the trade-off.
 
 ## STRUCTURE
 
-1. Opening framing — One sentence that positions floor space as a constraint worth diagnosing, not an accusation.
+1. WHERE THEY WIN
+   One clean acknowledgment of Convotherm's genuine strength. 1-2 sentences, specific to what they do better than we do.
 
-2. Question 1 — Surfaces how many distinct pieces of equipment they're running for steam, convection, holding, and proofing; what signal tells you they feel the footprint crunch.
+2. WHERE THEY LOSE
+   The single sharpest structural gap between Convotherm and what this prospect needs given their kitchen constraints. Not a feature gap — a mismatch they should feel. 1-2 sentences.
 
-3. Question 2 — Probes the hidden cost of equipment sprawl (training burden, line choreography, handoff friction); listen for frustration in how they describe staff workflows.
+3. THE TRAP QUESTION
+   One question I can ask the prospect that surfaces Convotherm's weakness without naming them as the enemy.
+   - Coaching note: what answer signals the trap landed, and how I follow up.
 
-4. Question 3 — Explores growth constraints tied to their current layout; signal: do they say "we can't add capacity without a full kitchen rebuild"?
+4. THE PROOF POINT THAT LANDS
+   One specific proof point tied directly to the WHERE THEY LOSE gap — situation → friction → what changed. No invented customer names or unverified metrics. If a quantified outcome would land harder here, ask me for it rather than fabricate.
 
-5. Question 4 — Examines maintenance and downtime dependencies when one piece fails; signal: hesitation or workaround language ("we manage around it").
-
-6. Question 5 — Tests whether they've evaluated consolidation before and why they stayed with their current path; signal: cost justification or past solution friction they accepted.
-
-7. Coaching note per question — One line on why it disarms and what answer pattern signals genuine openness to the XR-Series footprint story.
+5. THE BOOBY TRAP
+   One thing I must NOT do or say. The move Convotherm's incumbents are trained to bait me into so they win the procurement debate. One sentence.
 
 ## GROUNDING
 
-- Anchor all questions to operational reality, not feature checklists. You're listening for pain, not prompting for it.
-- Convotherm is not the villain in the room — inefficient workflows and floor constraints are. Never invert that framing.
-- The XR-Series advantage is floor recovery — one unit replaces four. Don't mention it until they've confirmed they feel the squeeze.
-- If they say they've got floor space and no constraints, don't force it. Pivot to training simplicity or uptime confidence instead.
-- Avoid kitchen jargon you're unsure of; stick to plain operational language: "the equipment you're running for [function]," not combi-oven shop talk.
-- These are discovery questions, not closing questions. The signal you're hunting is acknowledgment of a gap, not a buying signal.
+- My sharpest edge is floor space recovery — the Northwind XR-Series replaces four pieces of equipment in one footprint. Convotherm footprints are larger. Ground this lever hard because it's irreversible; they can't get that kitchen real estate back.
+- This is solution discovery, not closing. The prospect is still comparing. Don't overplay confidence; surface the gap and let them feel it.
+- Convotherm is strong where they're strong — don't fake weakness on their side. Credibility comes from admitting their strengths first, then pivoting to the structural gap they miss.
+- The trap and proof point must be tethered to the floor-space lever — kitchen real estate scarcity is the frame that makes their gap matter.
+- Avoid generic "we're better" energy. Every statement anchors to a specific trade-off the prospect faces in their environment.
 
 ## STANDARD RULES
 
@@ -497,7 +471,7 @@ I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -516,59 +490,46 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "Deloitte (Operations Transformation practice)",
-    "ourAdvantage": "Senior-only delivery, working fixes by week 12, no junior analyst staffing"
+    "yourEdge": "Senior-only delivery, working fixes by week 12, no junior analyst staffing"
   },
   "sliderValues": {
-    "competitive-stance": 0,
     "conversation-stage": 0
   }
 }
 ```
 
-**Status:** OK | **Time:** 11875ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2151 | **Out:** 814 | **Cost:** $0.0050
+**Status:** OK | **Time:** 6664ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3555 (read=0, write=0) | **Out:** 577 | **Cost:** $0.0052
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset — a hands-on engagement where two senior partners embed with a client's team, diagnose the biggest cash leaks, and ship working fixes in 12 weeks. I'm on a first call with a prospect who may be considering Deloitte's Operations Transformation practice. Help me arm five discovery questions that surface friction with big consulting without naming them as the enemy — I want to plant subtle doubt about analyst-heavy delivery and recommendation decks without talking negatively about Deloitte. Give me the questions plus one-line coaching on why each works and what signal I'm listening for in the answer.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm in a first conversation with a prospect who's likely been approached by or is considering Deloitte's Operations Transformation practice. Be my competitive intelligence specialist and arm me with a battlecard — five surgical sections, each one a different lever for this conversation. The goal is to surface where Deloitte structurally underperforms for this prospect without naming them as the enemy.
 
 ## STRUCTURE
 
-1. **Question on team structure and seniority in past engagements**
-   - Goal: Uncover whether they've been handed junior consultants or analyst-built work before
-   - Listen for: Language about "being assigned a team," bench strength, or feeling like junior staff was doing the heavy lifting
-   - Signal you want: Frustration with depth of expertise or turnover on their engagement team
+1. WHERE THEY WIN
+One or two sentences acknowledging what Deloitte genuinely does better or has as an advantage. No hedging — just clean recognition of their strength.
 
-2. **Question on deliverables from their last ops engagement**
-   - Goal: Tease out whether they got decks or working changes
-   - Listen for: Mentions of presentations, recommendations, or handoff friction — vs. live operational changes implemented
-   - Signal you want: Hint that recommendations sat on a shelf or required the client to execute alone
+2. WHERE THEY LOSE
+One or two sentences identifying the single sharpest structural gap between what Deloitte delivers and what this prospect needs based on their situation. Not a feature gap — a mismatch in how they operate that should matter to this buyer.
 
-3. **Question on how embedded the consulting partner was in day-to-day execution**
-   - Goal: Surface whether senior leadership was hands-on or the firm disappeared after diagnosis
-   - Listen for: "They presented findings then left," "we had to figure out implementation," or mentions of post-engagement support gaps
-   - Signal you want: Absence of true partnership during the critical execution phase
+3. THE TRAP QUESTION
+One question I can ask the prospect that surfaces Deloitte's weakness without naming them as the enemy. Include a one-line coaching note on what answer signals the trap landed and how to follow up.
 
-4. **Question on margin impact and how it was measured**
-   - Goal: Expose whether engagements were tied to tangible cash recovery or just activity
-   - Listen for: Vague metrics, slow-to-measure results, or reliance on client's team to validate success
-   - Signal you want: Uncertainty about ROI or misalignment between consultant and client on what "done" means
+4. THE PROOF POINT THAT LANDS
+One proof point shaped as situation → friction → what changed. No invented customer names or specific metrics unless I supply them. If a statistic would sharpen this landing, ask me for it rather than make one up.
 
-5. **Question on timeline from diagnosis to live fix**
-   - Goal: Uncover whether recommendations took months to land or got stuck in approval
-   - Listen for: Delays between final report and first change, or changes that took longer to operationalize than promised
-   - Signal you want: Friction between consulting speed and client execution speed, or consultant hand-off leaving client stranded
+5. THE BOOBY TRAP
+One thing I must NOT do or say in this conversation — the exact move Deloitte's incumbents bait us into so they win the procurement debate. One sharp sentence.
 
 ## GROUNDING
 
-- Anchor all five questions to their past experience, not hypotheticals — "In your last [engagement type], what happened after diagnosis?" beats "How would you prefer to work?"
-- Avoid naming Deloitte or any incumbent directly. The questions work because they isolate friction that big consulting creates — let the prospect draw the parallel themselves
-- Senior-only delivery is our single differentiator here — the questions should map to the pain of analyst-staffed work without you saying the words
-- Working fixes by week 12 is our core promise — Q5 especially should surface the gap between "delivered recommendations" and "we shipped live changes"
-- If they haven't done an ops engagement before, ask them what they fear most about bringing in consulting — that's your opening to plant doubt about common big-consulting friction
-- Stay curious, not combative. These are questions, not statements. You're listening, not lecturing
-- First conversation stage: No pushback on their current thinking yet. Uncover friction, plant seeds, earn a second call
+- My sharpest edge is senior-only delivery and working fixes shipped by week 12 — anchor the battlecard to those two capabilities.
+- Deloitte is large-firm operations consulting; they staff with senior partners at engagement kickoff, then layer in analysts and junior consultants for execution and research. That structural difference matters here.
+- This is a first conversation, not a discovery phase — the prospect may not have decided between firms yet or may not even know Deloitte's staffing model. Don't over-explain; surface the gap through the trap question and proof point.
+- Avoid "They're expensive" or "They're bureaucratic" — those are rep assumptions, not prospect-owned problems. Stick to structural gaps this prospect can verify themselves.
+- The prospect's stage, industry, and specific pain point aren't in my inputs — if any of those would sharpen where Deloitte loses for THIS buyer, ask me.
 
 ## STANDARD RULES
 
@@ -577,7 +538,7 @@ I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations R
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.
@@ -596,57 +557,42 @@ After delivering the 5 discovery questions and coaching notes, pause and:
   "toolId": "competitor-battlecard",
   "variableValues": {
     "competitorName": "the client's existing in-house Transformation Lead",
-    "ourAdvantage": "Two senior partners with cross-industry pattern recognition the in-house lead can't get, with a 12-week shot clock"
+    "yourEdge": "Two senior partners with cross-industry pattern recognition the in-house lead can't get, with a 12-week shot clock"
   },
   "sliderValues": {
-    "competitive-stance": 1,
     "conversation-stage": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 11594ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2160 | **Out:** 882 | **Cost:** $0.0053
+**Status:** OK | **Time:** 8587ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3565 (read=0, write=0) | **Out:** 668 | **Cost:** $0.0055
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm on a discovery call with a prospect who has an in-house Transformation Lead already running ops improvement work, and I need to surface the gaps and friction that person can't solve alone — without positioning them as the enemy. Be my competitive intelligence specialist and give me five discovery questions designed to uncover whether in-house leadership alone can diagnose and ship the three biggest cash leaks before margin bleeds further. I'm building the business case, so every question should nudge toward the value of external pattern recognition and a hard 12-week deadline.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm prepping to call a prospect who's currently relying on an in-house Transformation Lead to fix their operations. Be my competitive intelligence specialist and arm me with a battlecard — five surgical sections that surface where we genuinely win, where the in-house incumbent is structurally exposed, and what traps to avoid. I'm at the business-case stage; this conversation is about moving them from "maybe we can fix this ourselves" to "we need external pattern recognition and a shot clock."
 
 ## STRUCTURE
 
-1. **Question 1: Scope and Visibility**
-Uncover whether the in-house lead has line-of-sight across the full operation or is bottlenecked by silos.
-- Listen for: isolation from frontline teams, reliance on static reports, lack of cross-functional data.
-- Signal of friction: if they name visibility gaps or admit the Transformation Lead is fighting org resistance to share real numbers.
+1. WHERE THEY WIN — The in-house Transformation Lead knows the business and internal politics deeply. Be specific: what does that advantage actually buy them in the client's eyes?
 
-2. **Question 2: Track Record and Pace**
-Surface how long improvement initiatives have been running and what's actually shipped versus what's still in flight.
-- Listen for: vague timelines, initiatives that have "been in progress" for quarters, or a steady stream of recommendations without live changes.
-- Signal of friction: if they describe a backlog of good ideas that can't move because the in-house lead lacks buy-in or bandwidth outside their core role.
+2. WHERE THEY LOSE — The single sharpest structural gap between an in-house resource and what THIS prospect needs given their margin bleed. Not "consultants are better than employees" — what does the prospect's situation demand that an embedded internal role cannot deliver? (Ask me for details on their operations challenge if you need more precision here.)
 
-3. **Question 3: Diagnostic Confidence**
-Test whether the in-house lead has identified the actual root causes or is treating symptoms.
-- Listen for: solutions framed around tactics (cost cutting, restructuring) rather than the systemic leaks driving those costs.
-- Signal of friction: if they express uncertainty about which three problems matter most or admit the Transformation Lead is overwhelmed by complexity.
+3. THE TRAP QUESTION — One question I can ask the prospect that surfaces the in-house incumbent's weakness without framing them as the competition. Include a one-line coaching note: what answer signals the trap landed, and how do I follow?
 
-4. **Question 4: Cross-Industry Pattern Recognition**
-Probe for blind spots that come from operating only inside their industry or company context.
-- Listen for: assumptions stated as facts, industry-specific "that's just how we do it," or resistance to ideas from outside their world.
-- Signal of friction: if they admit their in-house lead doesn't have exposure to how peer companies (or companies in adjacent sectors) solved similar problems faster.
+4. THE PROOF POINT THAT LANDS — One proof point shaped to address the WHERE THEY LOSE gap. Describe it as situation → friction → what changed. Do NOT invent customer names, timelines, or specific margin recovery numbers. If a hard number would make this land better, ask me for it rather than fabricate.
 
-5. **Question 5: Urgency and Ownership**
-Anchor to margin pressure and clarify who owns the outcome if the current approach stalls.
-- Listen for: CFO or board pressure, Q-by-Q margin targets, or ambiguity about whether the Transformation Lead's success is measured against a hard financial outcome.
-- Signal of friction: if they acknowledge margin can't wait another quarter or that the in-house lead's charter is fuzzy on accountability.
+5. THE BOOBY TRAP — One thing I must NOT say or do in this conversation. What is the in-house incumbent's incumbents trained to bait me into so they can win the procurement debate? One sentence.
 
 ## GROUNDING
 
-- The incumbent here is not a vendor — it's internal bandwidth and familiarity bias. Don't attack the Transformation Lead's competence; expose the isolation and pacing risk that comes with operating from inside.
-- Anchor every question to margin recovery and cash leaks, not process improvement or org change. This prospect is building the business case, so they're weighing cost of action against cost of inaction.
-- Our advantage is two senior partners with cross-industry pattern recognition and a 12-week fixed deadline. Don't name it directly — let the questions surface why both matter (they can't see outside their walls, and they can't afford to wait another year).
-- Avoid: "Have you considered bringing in outside help?" or "Your in-house team can't..." or any language that sounds like you're selling against the Transformation Lead. Curiosity and signal-seeking beats positioning.
-- If the prospect answers a question with "the Transformation Lead hasn't told us" or "we're not sure," that's your green light to lean into the gap without saying so — move to the next question and let the pattern emerge.
+- The in-house Transformation Lead is the real competitor here, not an external firm. Treat them as a credible internal advocate with real constraints, not as an underdog.
+- My sharpest edge is partner-level pattern recognition across industries plus a non-negotiable 12-week timeline. An in-house resource has neither.
+- "Pattern recognition" and "cross-industry" are anchor language; don't drift into generic "fresh eyes" or "external perspective" claims.
+- The prospect is bleeding margin. The question is not whether they *should* fix it — it's whether they can fix it fast enough with the bandwidth and pattern library they have in-house.
+- Avoid: generic consultant platitudes ("We bring best practices"), timeline flexibility ("We can adjust the schedule as needed"), or suggestions that the in-house lead is incompetent. The lead is probably smart; they're just solo and constrained.
+- Don't name the competitor directly. The trap question and proof point must surface the gap without saying "your in-house person can't do what we do."
 
 ## STANDARD RULES
 
@@ -655,7 +601,7 @@ Anchor to margin pressure and clarify who owns the outcome if the current approa
 
 ## DRILL-DOWN OFFER
 
-After delivering the 5 discovery questions and coaching notes, pause and:
+After delivering the battlecard, pause and:
 - Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
 - Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
 - If I reply with new context, weave it in and revise. If I don't, what you delivered stands.

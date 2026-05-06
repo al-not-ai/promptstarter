@@ -2,8 +2,8 @@
 
 **Run:** 2026-05-04  
 **Cases:** 9 (9 OK)  
-**Tokens:** 18,634 in / 4,093 out  
-**Engine cost (this tool):** $0.0313  
+**Tokens:** 28,833 in / 3,851 out  
+**Engine cost (this tool):** $0.0385  
 
 ---
 
@@ -26,25 +26,28 @@
 }
 ```
 
-**Status:** OK | **Time:** 5276ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2019 | **Out:** 364 | **Cost:** $0.0031
+**Status:** OK | **Time:** 5847ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3156 (read=0, write=0) | **Out:** 376 | **Cost:** $0.0040
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS to Marcus Reid, a VP RevOps who just posted on pipeline efficiency. I need you to write a short-form LinkedIn DM hook (under 100 words) that lands in his inbox cold, acknowledges his recent post without kissing up, and threads the "save time" angle to earn 90 seconds of attention — no ask, just intrigue.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching out cold to Marcus Reid, VP RevOps, on LinkedIn via DM after he posted publicly on pipeline efficiency. My goal is to earn 90 seconds of attention and a micro-commitment to a brief conversation. Write me a hook — tight, credible, no pressure.
 
 ## STRUCTURE
-1. Hook — Open by naming his post as the warm entry point; avoid generic praise. Land on the time-saving angle (auto-captures deal activity from email and calendar, zero manual CRM updates) as the bridge to why I'm reaching out.
-2. Specificity — One crisp observation about what VP RevOps spend time on that could evaporate. Keep it pattern-level, not company-assumed.
-3. Close — Soft permission ask (not a meeting pitch). Leave him a clear 90-second next step if he's curious.
+1. Hook (under 100 words)
+   - Anchor to the trigger: his pipeline efficiency post. Don't generic-praise it; signal you read it and spotted a concrete signal.
+   - One sharp value prop tied to time/cost savings. Pick the one lever that will land with a RevOps leader, not a scatter of features.
+   - Micro-commitment only — a question or soft ask for 15 minutes, not a demo or deep dive.
+   - No "I just wanted to reach out" or soft opening. Lead with substance.
 
 ## GROUNDING
-- Marcus just posted on pipeline efficiency; treat that as your only warm signal — don't invent other context.
-- "Save time" is the headline, but anchor it to the real mechanism: auto-capture eliminates manual CRM data entry. That's the time-back story.
-- Keep it under 100 words; DMs reward brevity.
-- No jargon about "Revenue OS" or "pipeline intelligence" — translate to his job (less admin, faster visibility, fewer data gaps).
-- Avoid "I saw your post and loved it" energy; acknowledge it as the trigger, not the compliment.
+- RevOps leaders live in pipeline visibility and forecast trust. Anchor to one of those, not broad efficiency.
+- Velara auto-captures activity and surfaces deal risk in real time — these are the moves that actually save RevOps time. Pick one for this hook.
+- No product name-drop required if the value lands without it. If you do name it, keep it clean.
+- Avoid vague efficiency language ("streamline," "optimize," "enhance"). Be specific about what actually changes.
+- Tone: peer-level, not supplicant. He's a thought leader; don't treat him as a cold target.
+- This is a DM — short is credible. Walls of text fail on LinkedIn.
 
 ## STANDARD RULES
 
@@ -62,7 +65,7 @@ After delivering the outreach hook, pause and:
 
 ---
 
-## [V] Cold Hook — Priya Nair / Email Casual / Cut Cost / competitor breach trigger
+## [V] Cold Hook — Priya Nair / Email Casual / Save Time-Cut Cost /competitor breach trigger
 
 **Profile:** Velara Revenue OS  
 **Inputs:**
@@ -76,32 +79,30 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 1,
-    "value-angle": 1
+    "value-angle": 0
   }
 }
 ```
 
-**Status:** OK | **Time:** 6086ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2027 | **Out:** 469 | **Cost:** $0.0035
+**Status:** OK | **Time:** 7418ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3164 (read=0, write=0) | **Out:** 520 | **Cost:** $0.0046
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that kills CRM data rot and surfaces deal risk before it kills deals. I'm cold-emailing Priya Nair, Head of GTM, after a publicized security incident at her current vendor (Outreach.io). I need you to write a short-form hook under 100 words that cuts through the noise by anchoring to cost savings, lands casual and direct, and earns 90 seconds of her attention without sounding salesy.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching out cold to Priya Nair, Head of GTM, via email in a casual tone. She's just dealt with a security incident involving her current outreach platform — that's my opening wedge. Be my cold outreach specialist and write me a hook under 100 words that earns 90 seconds of attention, anchored to the headline value of time savings and cost reduction.
 
 ## STRUCTURE
-1. **Opener** — Reference the vendor security incident as context (not as scare tactic). Make it factual, brief, move fast.
-2. **Value snap** — One sentence on cost. Highlight what she stops spending on (manual CRM updates, implementation heavy lifting, forecast guesswork).
-3. **Proof hook** — Velara Revenue OS ships live in 14 days, no implementation fees, no professional services. Make that feel like relief, not a feature list.
-4. **Close** — Soft ask. One sentence. Leave the door open for a quick call or conversation — no pressure.
+1. **Subject line** — Casual, short, no "urgent" energy; the security incident is the implicit frame (don't name it directly; imply the context shift).
+2. **Body** — Hook that lands the trigger (they're evaluating alternatives now), surfaces one concrete friction point (CRM data rot, missed forecast accuracy, or rep coaching gaps — pick the one that lands hardest for a GTM leader), and closes with a single, low-friction next step (15-min call, one question answered, etc.). Tone: peer-to-peer, no hard sell. Under 100 words.
+3. **Signature** — Casual; include my name and a single way to reach me (email or LinkedIn, your call).
 
 ## GROUNDING
-- Anchor every claim to Velara Revenue OS capabilities I own: auto-capture from email/calendar, 14-day deployment, zero implementation fees.
-- Casual tone — this is email, not a corporate memo. Short sentences. No jargon.
-- Avoid "synergy," "best-in-class," "industry-leading," or any generic SaaS filler.
-- Cost angle: frame it as what she *stops* spending (time, implementation hours, guesswork), not what she saves as a percentage. No invented numbers.
-- Security incident is the door opener, not the scare. Don't dwell on it or oversell the urgency — let it breathe.
-- Keep Priya's role (Head of GTM) in mind: she cares about pipeline health, team velocity, and cutting waste. Land there, not in IT or compliance language.
+- Priya is GTM-minded, so the hook must speak to rep productivity and forecast visibility — not IT security jargon or vendor whiplash. She cares about enablement and pipeline health, not compliance theater.
+- The security incident is the *reason* she's listening, not the *message*. Don't lead with "I saw your vendor had a breach" or sound like a vulture. Lead with the opportunity (she's reviewing alternatives) and land on what Velara solves that her old vendor didn't.
+- Velara Revenue OS eliminates manual CRM updates and surfaces real-time coaching signals — those are the muscle for a GTM leader under pressure. Don't bury them; make them the anchor.
+- Avoid: buzzwords like "innovative," "best-in-class," "synergy," "modern." Avoid: assuming she wants a demo or a meeting — she doesn't yet. Avoid: mentioning the incident name or tone of crisis.
+- Keep it casual — Priya is pragmatic, not formal. One sentence, no run-ons.
 
 ## STANDARD RULES
 
@@ -133,32 +134,40 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 3,
-    "value-angle": 3
+    "value-angle": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 6959ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2027 | **Out:** 486 | **Cost:** $0.0036
+**Status:** OK | **Time:** 6889ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3161 (read=0, write=0) | **Out:** 505 | **Cost:** $0.0045
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that surfaces deal risk before it's fatal. I'm cold-emailing David Kowalski, CRO, after his company missed Q3 ARR target by 18%. I need a short-form hook (under 100 words) that lands in his inbox without sounding like outreach, acknowledges the miss without being tone-deaf, and earns 90 seconds of attention by anchoring to the one thing a CRO in his position cares about most right now: pipeline visibility and forecast accuracy.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching out cold to David Kowalski, a CRO whose company just missed Q3 ARR target by 18%. Be my cold outreach specialist and write me a short-form hook — under 100 words — that lands in his inbox and earns 90 seconds of attention without sounding like a pitch.
 
 ## STRUCTURE
-1. Subject line — One sharp phrase that lands as relevant news, not pitch. Avoid "urgent," "quick question," or generic "Growth" language; anchor to the miss or the aftermath (visibility gap, forecast risk, pipeline clarity).
-2. Salutation — Use his name, keep it short.
-3. Body (under 100 words) — Open with a one-sentence acknowledgment of the Q3 miss that signals you're not guessing. Pivot to a single, tight insight: the visibility gap that likely contributed (forecast decay, deal slippage going unseen, pipeline stall). Name Velara Revenue OS once. End with a single, low-friction ask — a 15-minute call or a 3-minute video showing how we surface deal risk in real time.
-4. Signature — Title, company, single contact method (email or phone, not both).
+1. Single subject line
+   - Signals relevance to a missed target and revenue recovery, not a generic "check in" or "quick question"
+   - No hyperbole, no clickbait, no urgency language ("URGENT", "TODAY")
+
+2. Short-form hook (under 100 words)
+   - Opens with the specific trigger: the missed Q3 target
+   - Frames Velara Revenue OS as the connective tissue between forecast accuracy and execution — the real-time visibility that catches misses before they're fatal
+   - Anchor to our auto-capture and live coaching; don't bury CRM drift as the problem (he knows that), lead with the business outcome
+   - One clear next step (call, brief conversation, response) — specific and low-friction
+   - No generic value prop, no "we help companies like you", no data claims he can't verify
+
+3. Sign-off
+   - Professional, concise, includes your name and direct contact (email or phone — your choice)
 
 ## GROUNDING
-- CROs post-miss are paranoid about forecast accuracy and hidden deal decay — anchor there, not growth tactics.
-- Avoid financial jargon or ROI math; he doesn't trust a number he didn't build himself.
-- One product mention only (Velara Revenue OS); no feature spray.
-- No statistics, percentages, or "most companies" patterns — stick to what you know: his Q3 result.
-- Cold tone: respectful, specific to his situation, no urgency theater.
-- Subject lines that work here: signal intelligence (e.g., "Pipeline gaps in Q3 misses"), not CTA energy.
+- David's a CRO — he owns the miss. He's not looking for blame; he's looking for the gap between forecast and reality. That's your thread.
+- Missed target by 18% means visibility, pipeline hygiene, or deal execution broke down (or all three). Point to the real-time signals that would have flagged it, not the tool.
+- Avoid: "predictive", "AI-powered", "transform", "unlock", "maximize", "proven results" — these bounce off CROs who've heard them a thousand times.
+- Avoid: any stat, metric, or claim not in my inputs. The miss is real; everything else is assumption.
+- Keep it tight and assumptive — he's busy and skeptical. Respect that by not overselling.
 
 ## STANDARD RULES
 
@@ -190,30 +199,30 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 0,
-    "value-angle": 3
+    "value-angle": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 5579ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2008 | **Out:** 398 | **Cost:** $0.0032
+**Status:** OK | **Time:** 4918ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3142 (read=0, write=0) | **Out:** 320 | **Cost:** $0.0038
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS — a real-time pipeline intelligence platform that kills CRM data rot and surfaces deal risk before it tanks forecasts. I'm reaching out cold to Jordan Mehta on LinkedIn. Write me a short-form hook under 100 words that grabs 90 seconds of attention and earns a reply, anchored to the fact that they missed their last quarter.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching out to Jordan Mehta on LinkedIn to grab 90 seconds of attention around a miss in their last quarter. Write me a short-form hook under 100 words that lands clean on DM — no subject line needed, just the message itself.
 
 ## STRUCTURE
-1. Hook — Open with a sharp observation tied to missed quarter (no generic "hope this finds you well"). Make it specific enough to show you did your homework, warm enough to feel like a peer noticing, not a prospector prying.
-2. One-line value bridge — Connect their miss to the core problem my product solves: deals that slip, forecasts that miss, reps flying blind. Pick the one that lands hardest for a revenue leader in recovery mode.
-3. Micro-CTA — "Quick question" or "Curious if..." — low friction, conversational, no Calendly link. Let them reply first.
+1. Hook — lands the trigger (missed quarter) as real, concrete, and fixable; surfaces the core reason for reaching out without sounding like a sales pitch
+2. Value frame — ties the miss to forecast visibility and pipeline intelligence (what Velara does); anchor to the idea that the miss often signals a data problem, not just a sales problem
+3. Micro-ask — specific and low-friction; no ask to "grab coffee" or "jump on a call"; something they can say yes to in-thread
 
 ## GROUNDING
-- Jordan Mehta is a revenue decision-maker who just lived through a miss — they're acutely aware of forecast blindness and pipeline slippage. Lead there.
-- Avoid "I noticed you missed your target" — too blunt. Aim for "Missed quarter tells me your team's probably wrestling with [signal visibility / forecast accuracy / deal surprise]."
-- No numbers, projections, or promises. This is permission-to-talk, not proof.
-- Keep it conversational and short — LinkedIn DMs are glanceable. Respect that.
-- Don't mention Salesforce, HubSpot, integrations, or any technical jargon. Revenue language only.
+- Jordan's miss is the only signal you have; treat it as the real entry point — it's not a cold intro, it's a response to a visible event
+- Pipeline intelligence and forecast accuracy are your leverage, not product features; stay outcome-focused
+- Avoid generic "let's connect" energy; the hook earns attention by naming the problem they're likely facing
+- Keep tone direct and peer-level; no cheerleading, no false warmth
+- LinkedIn DM norms: shorter is sharper; under 100 words is a hard ceiling
 
 ## STANDARD RULES
 
@@ -245,44 +254,38 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 2,
-    "value-angle": 3
+    "value-angle": 2
   }
 }
 ```
 
-**Status:** OK | **Time:** 6238ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2043 | **Out:** 452 | **Cost:** $0.0034
+**Status:** OK | **Time:** 5503ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3177 (read=0, write=0) | **Out:** 406 | **Cost:** $0.0042
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling Velara Revenue OS to Erin Park, VP of GTM Operations at Rampcheck. She's just signaled that forecast accuracy at quarter-end is costing her team credibility with the board. I need you to be my cold outreach specialist and write a short-form hook — under 100 words, email-ready, formal tone — that lands on the one thing she cares about most: being right about the number when it matters.
+I'm a sales rep at Velara selling Velara Revenue OS. I'm reaching out cold to Erin Park, VP of GTM Operations at Rampcheck, off a recent public trigger about forecast accuracy credibility. Be my cold outreach specialist and write me a short-form email hook — under 100 words — that earns 90 seconds of attention on the basis of the trigger, lands the revenue-growth headline, and feels natural in a formal email channel.
 
 ## STRUCTURE
 1. Subject line
-   - Lead with the board-credibility angle, not the product
-   - Short, specific to her problem — no generic "Thought this might interest you"
+   - Credibility-forward, not cute; signal relevance to her specific credibility gap with the board
 
-2. Salutation & opening (1-2 sentences max)
-   - Name her directly; acknowledge the quarter-end pressure without sounding like you were eavesdropping
-   - Tee up the hook — don't bury the insight
+2. Salutation and body
+   - Opens with the trigger (forecast accuracy miss) as the anchor — name it directly, no softening
+   - Positions Velara Revenue OS as the resolution: auto-capture eliminates the manual CRM work that tanks accuracy
+   - Closes with a soft next step (no hard ask; just permission to grab 15 minutes)
+   - Tone: peer-level, direct, no spray-and-pray
 
-3. Core hook (2-3 sentences)
-   - Center on forecast accuracy as the lever — it's what she said matters
-   - Mention Velara Revenue OS once, by name; anchor to our 4% accuracy guarantee backed by SLA
-   - No feature dump; one sharp differentiator only
-
-4. Close & signature
-   - Clear ask (call, 20 minutes, whatever fits the moment)
-   - Formal sign-off; keep it pro
+3. Signoff
+   - Professional, consistent with formal email channel
 
 ## GROUNDING
-- Anchor everything to her quarter-end credibility gap with the board — that's the real problem
-- Forecast accuracy is the core lever; don't dilute with pipeline visibility or data rot fixes
-- One mention of Velara Revenue OS by name; no product jargon or acronyms she wouldn't use in a board meeting
-- Skip generic GTM language (efficiency, alignment, etc.) — stay specific to her stated pain
-- Formal email tone: no emojis, no exclamation chains, no false urgency
-- Under 100 words total; compress ruthlessly
+- Anchor hard to the trigger: board credibility tied to forecast accuracy. This is her stated pain, not a guess.
+- Velara Revenue OS auto-captures deal activity from email and calendar — zero manual CRM updates. This is the lever: manual work is what kills forecast accuracy.
+- No product jargon; speak to the outcome (accuracy, credibility restored).
+- Avoid: generic "improve your forecast" messaging, multi-feature laundry lists, anything that sounds like a mass template.
+- Formal channel means no emoji, no casual tone, no first-name-only openers unless she's used that in public comms.
 
 ## STANDARD RULES
 
@@ -300,7 +303,7 @@ After delivering the outreach hook, pause and:
 
 ---
 
-## [N] Cold Hook — Mark Vidal (Ascend Hotel Group) / Email Formal / Cut Cost / 14 new locations
+## [N] Cold Hook — Mark Vidal (Ascend Hotel Group) / Email Formal / Save Time-Cut Cost /14 new locations
 
 **Profile:** Northwind XR-Series Combi Oven  
 **Inputs:**
@@ -314,32 +317,32 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 2,
-    "value-angle": 1
+    "value-angle": 0
   }
 }
 ```
 
-**Status:** OK | **Time:** 7735ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2126 | **Out:** 497 | **Cost:** $0.0037
+**Status:** OK | **Time:** 7167ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3256 (read=0, write=0) | **Out:** 474 | **Cost:** $0.0045
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I'm reaching out cold to Mark Vidal, Director of Culinary Operations at Ascend Hotel Group, off a trigger: they're opening 14 new locations in the next 18 months. Be my cold outreach specialist and write me a short-form email hook under 100 words that lands on cost efficiency — sharp enough to earn 90 seconds of attention and a response, no more.
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I'm reaching out cold to Mark Vidal at Ascend Hotel Group via formal email off the back of their expansion announcement. Write me a short-form hook — under 100 words — that lands in his inbox with enough pull to earn 90 seconds of attention. Calibrate to his role (culinary ops lead scaling 14 new locations) and the immediate operational reality: equipping new kitchens fast, staying on budget, and keeping line staff ramp-up simple.
 
 ## STRUCTURE
-1. Subject line — one tight, benefit-forward phrase that signals cost control without hype; avoid "urgent," "exclusive," or false scarcity.
-2. Salutation — formal, name-only.
-3. Body — three to four sentences max. Open with the trigger (14 new locations) and the cost pain it creates. Anchor to energy efficiency and footprint recovery as the lever. One sentence on what sets us apart (measure energy, recover floor space). Close with a micro-ask: call or quick coffee, your choice, this week or next.
-4. Signoff — formal, rep name and title only.
+1. **Subject line.** Trigger-aware (expansion context), value-forward (time or cost savings), specific to his role. No clickbait or false urgency.
+
+2. **Body (under 100 words).** Open with a concrete reason you reached out — the expansion is the hook. Lead with the headline value (save time or cut cost, your choice based on what lands harder for his situation). Anchor to one capability of my product that solves a real friction point in equipping new locations or training line staff at scale. End with a clear, soft ask (5-minute call, brief conversation — something low-friction he can say yes to).
+
+3. **Signature.** Professional, rep name + title + company + phone.
 
 ## GROUNDING
-- Mark's role is culinary operations — frame this in kitchen productivity and budget terms, not chef artistry or menu innovation.
-- The trigger is real growth, real capex pressure: 14 locations means 14 kitchen setups, 14 equipment budgets. Lead there.
-- My product's sharp angle here is dual leverage: the Northwind XR-Series cuts energy spend *and* recovers ~14 sq ft per kitchen by replacing four pieces of traditional equipment in one unit. Both matter to a director scaling kitchens fast.
-- Energy efficiency is the differentiator — anchor to 30% lower energy draw vs. Rational and Convotherm. No percentages unless sourced; this one is field-tested and lives in my profile.
-- Don't mention warranty, recipe programming, or service speed — those are follow-up moves. Cost and space are the hook.
-- Tone: peer-to-peer, direct, respect the inbox. Avoid foodservice jargon he hears every day; speak his budget language.
+- Mark is operationally focused — he cares about execution, timeline, and staff readiness. Skip product specs; focus on what his expansion problem actually is.
+- The expansion is the only reason I'm emailing. Anchor the entire hook to that trigger.
+- Kitchen equipment buyers at his level are skeptical of "save money" claims that don't land on concrete tradeoffs (energy, space, training complexity). Pick one real pain point from the expansion and tie the value claim to it.
+- No competitor names, no percentages or numbers I haven't given you. If you need a specific cost or time saving to make the case crisp, ask me for it.
+- Formal email tone — respect his time and role; no buddy language or hype.
 
 ## STANDARD RULES
 
@@ -357,7 +360,7 @@ After delivering the outreach hook, pause and:
 
 ---
 
-## [N] Cold Hook — Chef Lila Okafor / LinkedIn DM / Cut Cost / NYT energy feature
+## [N] Cold Hook — Chef Lila Okafor / LinkedIn DM / Save Time-Cut Cost /NYT energy feature
 
 **Profile:** Northwind XR-Series Combi Oven  
 **Inputs:**
@@ -371,40 +374,35 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 0,
-    "value-angle": 1
+    "value-angle": 0
   }
 }
 ```
 
-**Status:** OK | **Time:** 6910ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2125 | **Out:** 531 | **Cost:** $0.0038
+**Status:** OK | **Time:** 6077ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3255 (read=0, write=0) | **Out:** 408 | **Cost:** $0.0042
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a cold outreach specialist writing a LinkedIn DM on behalf of a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. My prospect is Chef Lila Okafor, owner-operator of three SoHo restaurants, who was just featured in a NYT piece on cutting energy costs without compromising menu quality. I need a short-form hook under 100 words that lands on cost reduction, feels personal to her win, and opens a door to a 90-second conversation — no pitch, no ask, just a sharp reason to engage.
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. I'm reaching out cold to Chef Lila Okafor on LinkedIn via DM. She was just featured in a NYT piece on restaurants cutting energy costs without sacrificing menu — that's my hook. Write me a short-form hook under 100 words that earns 90 seconds of her attention. I want to lead on time and cost savings together (no energy-only pitch). Make it feel like I noticed her specifically; don't sound like I'm blasting.
 
 ## STRUCTURE
-1. Hook (2–3 sentences max)
-   - Anchor to her NYT feature and the energy-cost angle she's publicly championing
-   - Reference the Northwind XR-Series by name; lead with the 30% energy efficiency edge vs. comparable units
-   - No "I saw your article" vanilla openers — show you know what problem she's solving, not just that she exists
 
-2. Micro-credibility tag (one short line)
-   - Tie to same-day service network or the kitchen-space reclamation angle (whichever feels fresher given her three-location footprint)
-   - No stats, no promises — just a signal that we understand multi-location ops
-
-3. Close (one sentence)
-   - Soft ask: curiosity, not obligation — e.g., "worth 90 seconds?" or "open to a quick thought?"
-   - Keep it warm, not transactional
+1. Hook message (LinkedIn DM format)
+   - Acknowledge the NYT piece and her restaurant operation by name
+   - Land the core insight: one oven replaces four pieces of equipment *and* cuts energy spend — stack both wins
+   - End on a concrete next step (conversation, 15 min, etc.) — not a vague CTA
+   - Tone: Direct, respect her time, no hype
 
 ## GROUNDING
-- Chef Lila Okafor is an owner-operator with a public commitment to cost reduction; prestige and quality are non-negotiable. Land on efficiency, not corners cut.
-- Energy and space are the two levers she's publicly working. Pick one; don't force both.
-- Avoid food-industry jargon or "chef-speak" that feels patronizing. She's a businessperson first.
-- No percentages, timelines, or ROI projections — anchor only to the 30% energy-efficiency fact from my profile and the space-recovery fact if relevant.
-- The NYT mention is your only social proof here; use it as permission to personalize, not as a sales credential.
-- LinkedIn DMs are conversational — write like a human, not a template.
+
+- Prospect is an owner-operator of three restaurants — she owns the P&L and cares about both floor space and operating margin
+- The trigger is real and recent (NYT feature last week) — use it as permission to reach out, not as proof of a problem she's already solving
+- Energy savings alone won't move her; stack it with the space recovery (14 sq ft per unit) and training efficiency (line staff trained fast)
+- Avoid: generic "we help restaurants save energy" framing, competitor name-drops, or assumptions about her current equipment
+- Keep it tight — LinkedIn DMs reward brevity; under 100 words means every line earns its place
+- No false familiarity or "I read your interview" overtures that sound mass-produced
 
 ## STANDARD RULES
 
@@ -422,7 +420,7 @@ After delivering the outreach hook, pause and:
 
 ---
 
-## [A] Cold Hook — Rachel Mendez (PE-backed CEO) / Email C-Suite / Cut Cost / Q4 margin compression earnings call
+## [A] Cold Hook — Rachel Mendez (PE-backed CEO) / Email C-Suite / Save Time-Cut Cost /Q4 margin compression earnings call
 
 **Profile:** Aldermark 12-Week Operations Reset  
 **Inputs:**
@@ -436,35 +434,34 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 3,
-    "value-angle": 1
+    "value-angle": 0
   }
 }
 ```
 
-**Status:** OK | **Time:** 6317ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2130 | **Out:** 437 | **Cost:** $0.0035
+**Status:** OK | **Time:** 7506ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3263 (read=0, write=0) | **Out:** 501 | **Cost:** $0.0046
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Aldermark Advisory selling our 12-Week Operations Reset to PE-backed industrial CEOs. I'm cold-emailing Rachel Mendez at Ridgeway Industrial — she just disclosed Q4 margin compression on her investor call. Be my cold outreach specialist and write a short-form hook (under 100 words) that trades on the margin problem and earns 90 seconds of her attention. No soft openings, no generic "let's explore" — sharp and specific to her situation.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm cold-emailing Rachel Mendez, CEO of a PE-backed industrial company that just disclosed margin compression. Be my cold outreach specialist and write me a hook under 100 words that lands in her inbox as urgent and credible — something that makes her want 90 seconds on the phone to hear what we've seen in similar situations. She's a busy CEO; the trigger is real and recent. Treat that margin problem as the only reason this email exists.
 
 ## STRUCTURE
-1. Subject line — one phrase that moves on margin pressure, not a question or ask
-2. Salutation — CEO-direct, one line
-3. Body — three short sentences maximum
-   - Open: acknowledge the disclosed margin squeeze, signal that I know the real leak isn't where most think it is
-   - Bridge: name the motion (12-week fix, not a study) and who does it (senior-only, no junior analysts)
-   - Close: one soft ask — phone call or brief background on her ops challenge, nothing that requires a commitment
-4. Signoff — first name only, no title stack
+
+1. **Subject line** — Sharp, specific to her disclosed margin issue. No generic "quick call" energy.
+
+2. **Email body** — Under 100 words. Open with the trigger (margin compression is real; we see it constantly in PE industrial shops). The body must name the type of work we do (hands-on operational fixes, not recommendations) and hint at speed (12 weeks is the frame). Close with a single, low-friction ask — 15 minutes, phone, this week ideally. No "let me know your availability" softness.
+
+3. **Signature** — Your name, title, and a single direct line or email.
 
 ## GROUNDING
-- Anchor to the Q4 margin compression she disclosed — that's your only sourced fact; don't invent other problems or financial details
-- The Aldermark 12-Week Operations Reset ships working fixes, not recommendations — lead with motion and outcomes, not process
-- PE-backed industrial ops often hide cash leaks in procurement, labor utilization, or asset turns — pattern-match without inventing her specific leak
-- Avoid cost-cutting clichés ("optimize," "streamline," "leverage synergies") and consultant-speak
-- Keep the offer frictionless: a conversation, not a deck-review or 30-minute discovery call
-- Rachel is CEO of a company that matters to her PE sponsor — frame this as margin recovery for the fund, not just her P&L
+
+- Rachel is a CEO of a real, PE-backed shop at $80M revenue — she's drowning in operator work and investor pressure. Speed and concrete outcomes matter more than methodology. Avoid consulting jargon ("stakeholder alignment," "transformation roadmap," "synergy").
+- The margin compression disclosure is her pain point — anchor hard to that exact problem. Don't generalize to "operational inefficiency" or "growth challenges." She named the wound publicly.
+- PE-backed industrial CEOs are skeptical of consultant theater. Emphasize that we ship actual fixes (not decks) and that we work embedded with leadership — it's credible exactly because it's unglamorous.
+- No invented specifics. The trigger is margin compression on her recent call. Don't invent a percentage, timeline, or business unit affected unless she disclosed it.
+- Avoid: "best practices," "transformation," "world-class," "game-changing," buzzwords. Speak like an operator, not a vendor.
 
 ## STANDARD RULES
 
@@ -496,34 +493,29 @@ After delivering the outreach hook, pause and:
   },
   "sliderValues": {
     "outreach-channel": 1,
-    "value-angle": 2
+    "value-angle": 1
   }
 }
 ```
 
-**Status:** OK | **Time:** 6520ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✗ | **In:** 2129 | **Out:** 459 | **Cost:** $0.0035
+**Status:** OK | **Time:** 5253ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 3259 (read=0, write=0) | **Out:** 341 | **Cost:** $0.0040
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a cold outreach specialist writing a short-form email hook on behalf of a rep selling the Aldermark 12-Week Operations Reset. My prospect is Tomas Becker, COO of Becker Logistics, a family-owned logistics operation (~250 employees) who recently stepped into operations leadership after his father founded and ran the company. I need a sub-100-word email that lands in his inbox cold, grabs attention by framing operational risk as the real handoff challenge, and earns 90 seconds of his time — no ask beyond a reply.
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm reaching out cold to Tomas Becker, COO at Becker Logistics, who recently took over operations from the founder. Write me a short-form email hook (under 100 words) that lands in a casual tone and earns 90 seconds of attention by anchoring to the risk he's carrying in a transition like this.
 
 ## STRUCTURE
-1. Subject line — One sharp phrase anchored to "reduce risk" that makes a new COO pause (family transition context implicit, not stated).
-
-2. Salutation — Casual opener that lands warm without presuming relationship.
-
-3. Body — Under 100 words total. Open with the specific transition risk he's living (taking over ops after founder-led era). Pivot to how we've helped similar leaders stabilize margin during handoffs. Name Aldermark 12-Week Operations Reset once. Close with a single, low-friction next step (reply or brief call).
-
-4. Signoff — Casual, first-name only.
+1. Subject line — casual, risk-forward, not salesy. Name the real thing he's managing, not a generic pain.
+2. Hook (under 100 words) — one concrete observation about the operational risk that comes with inheriting a founder-led operation. Ground it in what typically breaks in that transition. Close with a single, low-friction next step (short call, brief conversation). No pitch. No mention of Aldermark, consulting, or process.
 
 ## GROUNDING
-- Tomas just inherited operations from a founder — that's the tension. Founder-led often means undocumented processes, thin margins masked by founder relationships. Anchor to the stability and clarity risk of his transition, not generic "operational efficiency."
-- Family businesses, founder handoffs: our target buyer. This is warm ground for us.
-- Avoid corporate jargon, consultant-speak, and any whiff of "you're doing it wrong." Tone is peer-to-peer — respect the handoff, acknowledge the complexity.
-- No statistics, percentages, or claims about margin improvement. Anchor to pattern only: "we've helped similar leaders" is the move.
-- Keep it casual. Tomas just became COO — he doesn't need "Mr. Becker" or formal structure.
+- Trigger is the transition itself — he's navigating a leadership handoff. Risk is your anchor, not "opportunity."
+- Family businesses often run on founder knowledge, relationships, and informal systems. The operational fragility is real in that context.
+- Casual tone means conversational, no corporate polish. Skip jargon.
+- Don't invent specifics about Becker Logistics operations, margin pressure, or any unnamed problem. Stick to what a transition like this universally surfaces.
+- Keep the ask small. You're earning attention, not closing anything.
 
 ## STANDARD RULES
 

@@ -2,8 +2,8 @@
 
 **Run:** 2026-05-04  
 **Cases:** 9 (9 OK)  
-**Tokens:** 15,709 in / 4,895 out  
-**Engine cost (this tool):** $0.0321  
+**Tokens:** 21,154 in / 4,635 out  
+**Engine cost (this tool):** $0.0355  
 
 ---
 
@@ -26,37 +26,37 @@
 }
 ```
 
-**Status:** OK | **Time:** 7964ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1733 | **Out:** 489 | **Cost:** $0.0033
+**Status:** OK | **Time:** 7587ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2338 (read=0, write=0) | **Out:** 511 | **Cost:** $0.0039
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling our Revenue OS, and I'm calling the VP of Revenue Operations at HubSpot cold — but they've signaled warm interest. Before I dial, I need you to act as my call-prep strategist: give me one sharp intel signal about this account that'll anchor my opening, three conversation starters I can choose from, and two early discovery questions that'll let me listen more than pitch.
+
+I'm a sales rep at Velara calling a VP of Revenue Operations at HubSpot. This is a cold conversation, but the prospect is warm and interested — I'm calling to gather background context on their org and priorities. Arm me with one sharp intel signal about this account, three conversation openers I can choose from, and two questions I can ask in the first five minutes to build credibility and steer toward what matters.
 
 ## STRUCTURE
 
-1. **One intel signal about HubSpot's revenue operations motion**
-   - Follow the research protocol below to surface one specific, verifiable signal about how HubSpot is currently operating or evolving its revenue function
-   - This anchors my opening and shows I've done homework — not generic flattery
+1. **One Intel Signal**
+   - A single, specific, sourced insight about HubSpot's revenue operations function, recent moves, or market position that will make this prospect take me seriously in the first 30 seconds. Follow the research protocol below.
 
-2. **Three conversation openers**
-   - Each one acknowledges the warm inbound; no cold-call energy
-   - One anchors to the signal from (1); one opens on their role broadly; one leans into curiosity about their current setup
-   - Give me the rail, not the script — I'll adapt the exact words
+2. **Three Conversation Openers**
+   - Each is distinct and can stand alone; pick whichever fits your voice.
+   - No cold-call energy — lean into the warm inbound posture.
+   - Each must earn attention without pitching Velara or assuming their problems.
 
-3. **Two discovery questions for the first five minutes**
-   - Both open-ended and genuinely curious — not qualification disguised as questions
-   - Neither should bake in assumptions about their stack or maturity
-   - Designed to get them talking about their world, not mine
+3. **Two Discovery Questions for the First 5 Minutes**
+   - Questions that signal you understand their function and earn trust fast.
+   - Designed to surface what they care about, not to qualify them for my product.
+   - Avoid generic "tell me about your role" phrasing; ask questions a peer in revenue ops would ask.
 
 ## GROUNDING
 
-- HubSpot is a massive, public, infrastructure-scale revenue platform — they live and breathe this space. Avoid generic "challenges" language; assume they're sophisticated and ahead of most peers
-- VP of Revenue Operations owns the systems, process, and data layer — likely reports to CRO or VP Sales. They care about efficiency, visibility, and tooling that scales with their org
-- Warm interest means they saw something that landed; don't squander it by pivoting to product. Stay curious, stay grounded in their world
-- No invented statistics, financials, or org details. If research surfaces something concrete, cite it clearly; if it's pattern-based, flag it as such
-- Avoid "transformation," "unlock," "best-in-class," and ROI theater — this audience has heard it all
+- HubSpot is a public SaaS company; revenue ops at that scale faces specific structural challenges (alignment, tooling complexity, forecasting rigor, scaling GTM motion). Anchor questions and intel to that context.
+- VP of Revenue Operations at HubSpot likely owns revenue planning, sales ops infrastructure, GTM strategy, or some combination. Don't assume the exact mandate — use the title as a signal of seniority and cross-functional influence, not role scope.
+- Warm and interested means the prospect already has some reason to talk to me. Don't open with discovery about whether they have a problem — assume they're open and dig into the specifics of what they're working on.
+- Avoid buzzword density (synergy, alignment, scalability, etc.). Speak like a peer in the function, not a vendor.
+- This is recon, not pitch. If you surface a product fit, don't mention it.
 
 ## STANDARD RULES
 
@@ -99,38 +99,32 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 8692ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1731 | **Out:** 618 | **Cost:** $0.0039
+**Status:** OK | **Time:** 6766ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2336 (read=0, write=0) | **Out:** 471 | **Cost:** $0.0038
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling our Revenue OS, and I'm about to cold-call the CFO at Stripe. I'm testing whether they have budget and the authority to move on a conversation about our platform. The CFO is skeptical and guarded, so I need to land this call by showing I've done my homework and asking questions that earn their time rather than waste it. Give me three things: one sharp intel signal about Stripe that I can anchor early, three different openers I can pick from, and two opening questions that surface budget and authority in the first five minutes without sounding like I'm fishing.
+I'm a sales rep at Velara calling the CFO at Stripe cold. My goal is to test budget and authority in a conversation with someone skeptical and guarded. Be my call-prep strategist and give me one sharp intel signal about this account, three openers I can choose from, and two questions to ask in the first five minutes that will help me gauge if there's real budget and decision-making power here.
 
 ## STRUCTURE
 
-1. **One intel signal about Stripe**
-   - A single, concrete observation about Stripe's current state, strategy, or recent moves that signals why a CFO there might care about revenue operations efficiency right now.
-   - Follow the research protocol below to source this — if you can't source it cleanly, flag the gap and give me a pattern-based signal instead.
-   - Frame it as a conversation hook, not a pitch: "Here's what I see" not "Here's why you need us."
+1. One Intel Signal
+   - A single, concrete observation about Stripe's current state or recent moves that signals budget appetite or CFO priorities. Follow the research protocol below to source this; flag if the signal rests on pattern-matching rather than confirmed fact.
 
-2. **Three conversation openers**
-   - Each one acknowledges a cold call but lands with enough specificity to feel like I did prep, not generic.
-   - Vary the angle: one could lead with the signal, one could acknowledge their skepticism directly, one could frame this as exploratory.
-   - Keep each to one or two sentences — the goal is entry, not explanation.
+2. Three Conversation Openers
+   - Each one is distinct in tone and angle — avoid repetition. None should sound like cold-call boilerplate; all three should feel grounded and honest. You pick the framing; I'll choose which one lands best for my mood and read of the room.
 
-3. **Two opening questions for the first five minutes**
-   - First question surfaces budget readiness without asking "Do you have budget?"
-   - Second question surfaces authority or buying process without asking "Are you the decision-maker?"
-   - Both should feel natural in conversation, not like a discovery form.
+3. Two Discovery Questions for the First Five Minutes
+   - Both are open-ended. Neither should telegraph my product or assume budget exists. Frame them as genuine curiosity about how their function operates, not as qualification gates. They should naturally surface whether authority and budget are in play.
 
 ## GROUNDING
 
-- **Stripe context:** Large-scale payments and fintech infrastructure. CFOs there care about scale, operational efficiency, and managing complexity across a high-growth org. Assume they're sophisticated and skeptical of outreach — they've heard the pitch before.
-- **Skeptical and guarded posture:** Don't lead with enthusiasm or over-prep. Acknowledge the cold call, show restraint, ask permission to ask questions.
-- **No product anchoring:** These questions and signals are about understanding Stripe's world, not fitting our product into it. Product relevance comes later, if at all.
-- **Budget and authority as signals, not asks:** Listen for language around "we're already doing" or "we'd need to talk to" — those tell you more than a direct question will.
-- **Avoid:** Generic fintech observations, speculation about their tech stack or tools, assumptions about pain points, "as a CFO you probably" framing.
+- Stripe is a payments and financial services infrastructure company; assume the CFO is managing scale, profitability, and cash positioning — not hunting for new vendor relationships.
+- "Skeptical and guarded" means I'm not walking in with social proof or warm context. Openness will be earned, not assumed. Avoid overly casual tone or forced rapport-building.
+- Budget testing means I'm listening for signals of spend appetite and investment readiness — not pitching Velara yet. The questions should feel like I'm trying to understand their world, not qualify them as a prospect.
+- Avoid broad statements about "AI," "automation," or "revenue growth." Stick to observable facts and honest questions.
+- This is a cold call, so brevity and permission-asking matter. Don't plan a 20-minute monologue.
 
 ## STANDARD RULES
 
@@ -173,41 +167,37 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7212ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1731 | **Out:** 536 | **Cost:** $0.0035
+**Status:** OK | **Time:** 8355ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2336 (read=0, write=0) | **Out:** 525 | **Cost:** $0.0040
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara calling the Director at Acme Corp cold. I need you to be my call-prep strategist and arm me with one sharp intel signal about this account, three openers I can actually choose from, and two discovery questions I can ask in the first five minutes. My goal is to find their main pain point, and the prospect sounds neutral and listening — so I'm fishing, not pitching.
+I'm a sales rep at Velara calling the Director at Acme Corp cold — they don't know me yet. My goal is to find their main pain point in the first conversation. I'm going in neutral and listening; they're open but not primed. Brief me like a call-prep strategist: give me one sharp intel signal about this account, three openers I can choose from, and two discovery questions I can ask in the first five minutes to surface what's actually broken.
 
 ## STRUCTURE
 
-1. One intel signal on Acme Corp
-   - A single, concrete observation about the account that might shape how I open or what I listen for
-   - Follow the research protocol below to source it
-   - Flag any confidence gaps — if data is thin, anchor to what a Director at a company like this typically owns
+1. **One Intel Signal About Acme Corp**
+   - Research this account for one concrete signal (operational friction, recent shift, market pressure, or structural challenge) that shapes how a Director might think about their revenue operation.
+   - Follow the research protocol below.
 
-2. Three conversation openers
-   - Each one works for a cold call to a neutral prospect
-   - Avoid product language, positioning, or "I'm calling because we help companies like you"
-   - One should acknowledge I'm reaching out unsolicited; one should be curiosity-driven; one should be permission-based
-   - Pick openers that let me land the call cleanly and transition into discovery
+2. **Three Conversation Openers**
+   - Each one acknowledges I'm calling cold without sounding like a cold call.
+   - No pitch. No product mention. Each opener is a different conversational hook — give me choices that vary in tone (one curious, one urgent, one collaborative).
 
-3. Two discovery questions for the first five minutes
-   - Questions that surface pain, not questions that test if they're a fit for Velara
-   - Open-ended; avoid yes/no
-   - Anchor to the prospect's role and what a Director typically cares about
-   - Build toward "main pain point" without leading them there
+3. **Two Discovery Questions for the First Five Minutes**
+   - Both are open-ended and anchor to Director-level concerns (not execution-level noise).
+   - Frame them to surface pain, not to validate what I already assume.
+   - Design them so the answer naturally reveals whether a revenue operation challenge exists and where.
 
 ## GROUNDING
 
-- Acme Corp is my only account context — use it to research and shape intel; don't invent details about their business, market position, or challenges
-- Director is the title; I have no other persona data, so keep questions broad enough for a Director-level role
-- "Neutral and listening" means no urgency or skepticism — I'm on equal footing, so openers should feel peer-to-peer, not desperate
-- This is discovery work, not product research; avoid any framing that hints at Velara's capabilities or how we solve things
-- If account intel is scarce, say so and give me a pattern-based signal instead (e.g., "Directors in this vertical often own X" with a flag that it's contextual, not sourced)
-- Don't use buzzwords like "synergy," "alignment," "innovative," or "best-in-class"
+- Acme Corp and the Director are completely unknown to me; treat this as true-cold research, not confirmation research.
+- A Director owns revenue accountability without day-to-day execution — questions should reflect that scope.
+- "Main pain point" means the friction that actually occupies their attention, not the problem I'd most like to solve. Listen for it; don't lead to it.
+- If Acme Corp details are sparse in available research, anchor the intel signal to structural patterns common to Directors in their industry vertical (hint: infer from Acme's sector if visible; flag the inference as a pattern if needed).
+- Avoid jargon specific to Velara's positioning (e.g., "revenue orchestration," "GTM alignment," "revenue velocity"). Speak like a peer; let them name their language.
+- These openers are decision forks, not scripts. I'll choose one and adapt it live based on how they pick up the phone.
 
 ## STANDARD RULES
 
@@ -250,38 +240,33 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7479ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1750 | **Out:** 513 | **Cost:** $0.0035
+**Status:** OK | **Time:** 7486ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2355 (read=0, write=0) | **Out:** 527 | **Cost:** $0.0040
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling our Revenue OS to early-stage fintech founders. I'm calling the Co-Founder & CEO at Verdn, a Series A company that just raised $14M. They're forced to take this call, and I want to challenge their status quo on how they're operating right now. Give me a call-prep brief with one sharp intel signal about the account, three openers I can choose from, and two discovery questions to use in the first five minutes.
+I'm a sales rep at Velara selling our Revenue OS. I'm calling the Co-Founder & CEO at Verdn, a Series A fintech that just raised $14M. They're forced to attend this call, and my goal is to challenge their status quo — not pitch. Be my call-prep strategist and arm me with one sharp intel signal, three openers I can actually choose from, and two discovery questions that'll crack open the first five minutes.
 
 ## STRUCTURE
-1. One specific intel signal about Verdn
-   - Follow the research protocol below to find a signal that explains why their status quo is fragile
-   - Anchor to the funding event, founding team, or market position — not to Velara's product
-   - Frame it as a fact or trend, not a pitch angle
 
-2. Three conversation openers
-   - Each one acknowledges I'm calling cold but lands with credibility, not apology
-   - One should reference the funding event or a visible company milestone
-   - One should name a tension or milestone typical for Series A fintech founders
-   - One should be a straightforward, direct ask for time — no fluff
+1. **One intel signal about Verdn that matters for this call**
+   - Follow the research protocol below to surface one specific, concrete insight about this company or founder that could justify the meeting in their mind — not a talking point, but a real reason they'd lean in. Flag your sourcing confidence.
 
-3. Two discovery questions for the first five minutes
-   - First question: Open-ended, designed to understand how they're currently measuring or managing [their core fintech operation]
-   - Second question: Probe the gap between where they are and where they need to be — avoid product language, stay on their business reality
-   - Both should feel natural in a forced-attendance call; don't make them defensive
+2. **Three conversation openers**
+   - Each one lands differently. One can lean into the funding moment; one can acknowledge the forced-attendance vibe directly; one can pivot to a founder-level concern. No cold-call energy. Each should be a genuine entry point, not a pitch.
+
+3. **Two questions to ask in the first five minutes**
+   - Both are open-ended and prospect-centric. One should probe a tension or gap you suspect from the intel. The other should be broad enough to reset the call's tone if the opener lands flat. Avoid product-baited discovery.
 
 ## GROUNDING
-- Verdn raised $14M Series A led by Index — this is your anchor for credibility and context
-- Series A fintech founders at this stage are typically managing rapid growth, hiring, and unit economics for the first time at scale
-- "Forced to attend" means they're skeptical of cold outreach — openers need to earn the next 30 seconds fast
-- Avoid generic fintech buzzwords (blockchain, crypto, decentralized) unless Verdn's positioning makes them unavoidable
-- Don't assume their product, market, or go-to-market strategy — let the research and their own words reveal it
-- No product positioning in the brief; your role here is strategist, not pitch coach
+
+- Verdn is Series A fintech, $14M funding led by Index. Assume they're in growth chaos — hiring, building, scaling ops — not a mature ops machine.
+- A forced attendee is skeptical of your time but won't blow you off entirely. The bar is "this was worth the 30 minutes," not "I want to buy."
+- Status quo challenge means you're poking at how they're currently running revenue operations or GTM — not selling Velara. The intelligence signal should support that poke.
+- Co-founder dynamics: early-stage founders are often bottlenecks. Assume operational friction is high and founder awareness of it may be low.
+- Index as lead investor is a signal — they back fintech operators with strong governance and scaling ambitions. Use that framing only if it's natural to the opener.
+- Avoid generic fintech jargon (lending, API, compliance stack, etc.) unless the intel directly ties to it.
 
 ## STANDARD RULES
 
@@ -324,39 +309,33 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7529ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1741 | **Out:** 515 | **Cost:** $0.0035
+**Status:** OK | **Time:** 7088ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2346 (read=0, write=0) | **Out:** 501 | **Cost:** $0.0039
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Velara selling the Revenue OS. I'm cold-calling the VP of Sales Operations at Walmart Connect — a skeptical, guarded prospect I haven't spoken to before. My goal is to test whether they have budget and decision-making authority for a conversation about revenue operations. Be my call-prep strategist and give me one sharp intel signal about this account, three openers I can actually use, and two opening questions that will tell me fast whether this call is worth continuing.
+
+I'm a sales rep at Velara calling the VP of Sales Operations at Walmart Connect. This prospect is skeptical and guarded, and I'm testing budget and authority on a cold call. Be my call-prep strategist and arm me with one sharp intel signal about this account, three openers I can choose from, and two discovery questions I can land in the first five minutes without triggering defensiveness.
 
 ## STRUCTURE
 
-1. **One intel signal about Walmart Connect's sales ops environment**
-   - A specific, sourced observation about how this prospect's function operates or what they're likely focused on now
-   - Avoid generic market commentary; anchor to Walmart's sales ops reality if possible
-   - Flag your source per the research protocol below
+1. One Account Intel Signal
+   - A specific, concrete signal about Walmart's sales operations environment or recent moves that explains *why* this prospect matters and *why now* is credible. Follow the research protocol below to source it.
 
-2. **Three cold-call openers**
-   - Each one acknowledges I'm calling cold and respects their skepticism — no false familiarity
-   - One should lead with a question, one with a reason-for-call, one with an observation
-   - Pick language that lands with ops leaders, not marketing speak
-   - Give me the rail, not verbatim copy
+2. Three Conversation Openers
+   - Each distinct in approach; choose the one that feels right for your rapport style. No cold-call energy — anchor to the intel signal or a credible angle of relevance. Skeptical prospects trust specificity over warmth, so make each opener earn its place.
 
-3. **Two opening discovery questions (to ask in first 5 minutes)**
-   - First question: surfaces whether they have budget allocated to sales ops tech or initiatives
-   - Second question: tests whether they own the decision or if there's a committee/gating layer above them
-   - Both should feel natural after your opener, not interrogatory
+3. Two Discovery Questions for the First 5 Minutes
+   - Questions that uncover budget and authority without sounding like a qualification checklist. Lead with genuine curiosity about how they're operating, not how they buy. Skeptical prospects clam up when they smell a sales process.
 
 ## GROUNDING
 
-- Walmart Connect is their first-party data and advertising platform — their sales ops leader will think in terms of seller enablement, data integration, and partner performance, not generic "sales tools"
-- Skepticism + guarded posture means no assumption of interest; your openers should justify the call in under 10 seconds or you lose them
-- Budget and authority are the only two things I'm testing today; discovery questions are binary gates, not relationship-builders
-- Avoid "digital transformation," "modern stack," "best-in-class," or other consultant-speak — this prospect has heard it all
-- If recon data is thin on Walmart Connect's current sales ops priorities, anchor to standard retail/marketplace seller-enablement patterns and flag them as inferred
+- Walmart Connect is a first-party advertising platform; the VP of Sales Operations likely owns P&L, team structure, and go-to-market efficiency — not just forecasting. Respect the operational lens.
+- "Skeptical and guarded" means this prospect has heard pitches before and is sensitive to time waste. Brevity and specificity are your only currency. No generic openers about "revolutionizing" or "transformation."
+- Budget and authority: Don't ask "Do you have budget?" Ask discovery that lets you *infer* it — e.g., headcount changes, recent hires, new program launches, competitive pressure. Authority surfaces when you understand who they influence and who influences them.
+- Avoid industry jargon sprayed for effect. Walmart Connect operates in a data-driven, metric-focused culture — speak like you understand their world, not like you're selling into it.
+- This is about *them*, not Velara. Curiosity wins here; pitch loses.
 
 ## STANDARD RULES
 
@@ -399,38 +378,39 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 6917ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1749 | **Out:** 526 | **Cost:** $0.0035
+**Status:** OK | **Time:** 7695ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2354 (read=0, write=0) | **Out:** 565 | **Cost:** $0.0041
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven, and I'm about to call a Director of F&B Operations at Marriott International cold. I need you to be my call-prep strategist — arm me with one sharp intel signal about this account, three distinct openers I can choose from, and two discovery questions I can deploy in the first five minutes to uncover their main pain point. My posture is that they're neutral and listening; I'm fishing for what actually matters to them operationally.
+I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. I'm calling the Director of F&B Operations at Marriott International, North America — a cold outreach with a neutral, listening prospect. My goal is to find their main pain point. Be my call-prep strategist and arm me with one sharp intel signal about this account, three openers I can choose from, and two discovery questions to ask in the first five minutes.
 
 ## STRUCTURE
 
-1. **One intel signal about Marriott's F&B operations footprint**
-   - A single, high-confidence observation about how Marriott's scale, portfolio mix, or operational model shapes kitchen strategy across North America
-   - Flag what's publicly known vs. what you're inferring from standard industry patterns
-   - Keep it specific enough to anchor my opener without sounding like I've stalked them
+1. **One intel signal about Marriott's F&B operations footprint or pressure**
+   - This should be credible and account-specific (follow the research protocol below)
+   - Anchor it to something a Director of F&B Operations would care about — operational scale, supply chain stress, menu innovation, labor complexity, equipment lifecycle, or cost management
+   - Write it as a fact or pattern, not a hypothesis
 
-2. **Three distinct cold-call openers**
-   - Each one nods to their scale or operational complexity — no generic "how are you" energy
-   - Avoid product mentions; your job is to earn the conversation
-   - Give me real choices so I can pick the one that feels natural to my voice
+2. **Three conversation openers**
+   - Each should feel natural for a cold call (no "I was just thinking about you" energy)
+   - Vary in approach — one can anchor to the signal, one can acknowledge their role/scale, one can open on a genuine curiosity about their operation
+   - Each should invite them to talk, not position a product
 
-3. **Two discovery questions for the first five minutes**
-   - Both designed to surface operational pain, not to qualify them for my product
-   - Frame them as genuine curiosity about how their kitchen operations actually run at their scale
-   - Questions should feel like I'm trying to understand their world, not testing them
+3. **Two discovery questions for the first 5 minutes**
+   - Both should flow naturally after they've briefly acknowledged the call
+   - First question opens the conversation broadly (their biggest operational challenge, how they think about equipment strategy, what's changed in their kitchens)
+   - Second question narrows down — follow the first answer and dig into one dimension (staffing, consistency, throughput, cost, sustainability, or menu capability)
+   - No product language; these are about *their* world
 
 ## GROUNDING
 
-- Marriott operates thousands of properties across North America with varied F&B footprints (full-service restaurants, quick-service, room service, banquet kitchens) — this portfolio complexity is your lens
-- A Director of F&B Operations at their scale manages standardization, consistency, and staffing across many properties — that tension is real
-- Neutral & listening means they're not hostile but also not pre-sold; they'll engage if I ask something that lands close to their reality
-- Avoid combi-oven jargon, efficiency metrics, or kitchen-tech speak — I don't know yet what their vocabulary is
-- This call is about discovery, not positioning; don't anchor questions to whether they *use* combi ovens or *need* mine
+- Marriott operates at massive scale across North America (corporate-owned and franchised properties); a Director of F&B Operations oversees multiple locations with standardized and local menu requirements
+- Hospitality F&B teams balance consistency (brand standards), speed (guest satisfaction), labor efficiency, and equipment reliability across high-volume service cycles
+- Directors at this level care about: operational metrics (cost per cover, throughput, labor hours), franchisee satisfaction, menu flexibility, equipment uptime, and supply chain resilience
+- Avoid product-speak, ROI claims, or anything that sounds like a pitch — this is about understanding their operation
+- "Neutral and listening" means they'll engage if you're relevant; they're not defensive, but you haven't earned authority yet
 
 ## STANDARD RULES
 
@@ -473,40 +453,31 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 8887ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1756 | **Out:** 678 | **Cost:** $0.0041
+**Status:** OK | **Time:** 6891ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2361 (read=0, write=0) | **Out:** 505 | **Cost:** $0.0039
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. I'm cold-calling the owner-chef at Lark & Linden Restaurant Group (3 NYC locations) to challenge their status quo around kitchen operations. They're skeptical and guarded, so I need sharp recon and openers that earn credibility fast. Be my call-prep strategist: give me one high-signal intel angle about this account, three distinct ways to open the call that don't feel like a pitch, and two questions I can ask in the first five minutes to build real discovery.
+I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. I'm cold-calling the owner-chef at Lark & Linden Restaurant Group (3 NYC locations) to challenge their status quo. They're skeptical and guarded, so I need sharp intel and openers that earn credibility fast. Be my call-prep strategist and give me one concrete signal about this account, three conversation starters I can choose from, and two early questions that cut through skepticism.
 
 ## STRUCTURE
 
-1. **One specific intel signal about Lark & Linden**
-   - Follow the research protocol below for sourcing.
-   - Surface a single insight about their operations, market position, or kitchen dynamics that a skeptical owner-chef would recognize and respect — something they're likely already aware of but haven't solved.
-   - Avoid product-adjacent framing; this is about their world, not mine.
+1. **One Intel Signal**
+   A single, specific insight about Lark & Linden or their market position that signals why they'd care about a combi oven conversation now (or why they're exposed to a problem combi ovens solve). Follow the research protocol below for sourcing. No generic industry trends — anchor to this account.
 
-2. **Three conversation openers**
-   - Each should land as peer-to-peer, not vendor-to-prospect.
-   - Acknowledge I'm cold; don't hide it or pretend we have a relationship.
-   - One opener should anchor to the intel signal above; the other two can open on separate angles (operational challenge, market observation, or kitchen-specific friction).
-   - No pitch language. No "I'm calling because we help restaurants..." Openers are invitations to talk, not product teasers.
+2. **Three Conversation Openers**
+   Each opener avoids cold-call energy and lands credibly with a skeptical, guarded owner-chef. Choose your angle (their operation, the market, a specific trigger) but make each distinct. Avoid product positioning — these open the conversation, not pitch the oven.
 
-3. **Two discovery questions for the first five minutes**
-   - These should feel natural after the opener — not interrogative, not a checklist.
-   - Designed to uncover their current approach to [kitchen efficiency / output / consistency / constraint] without telegraphing my product's angle.
-   - Each question should be open-ended enough that a guarded prospect can answer without feeling trapped or pitched.
+3. **Two Discovery Questions for the First 5 Minutes**
+   Questions that test whether skepticism masks a real problem or just caution. Ask questions a peer would ask, not a vendor. Frame these for a skeptical mindset — don't assume pain, probe it.
 
 ## GROUNDING
 
-- **Skeptical/guarded posture:** They've heard pitches before. Lead with curiosity and specificity, not reassurance. Credibility comes from naming a real constraint, not promising a fix.
-- **Three locations in NYC:** High-volume, competitive market. Operational consistency across sites and labor costs are likely live issues. Don't assume their pain — ask.
-- **Owner-chef role:** Operator, not just decision-maker. Respect kitchen knowledge; don't oversimplify or talk around their expertise.
-- **Status quo challenge, not solution sell:** My job is to make them think differently about what's possible or necessary — not to close them into a demo. Questions should provoke, not lead.
-- **Avoid generic restaurant-industry language:** Skip "streamline," "scalability," "optimize," "best practices." Speak to their actual constraint — be concrete or stay quiet.
-- **No product mention in openers or questions:** Northwind and XR-Series stay in my back pocket for now. This call is about their kitchen and their thinking.
+- Lark & Linden: 3 NYC locations suggests multi-unit operational complexity. Owner-chef signals hands-on decision-making and technical credibility as a gating factor — they won't defer to others.
+- Skeptical & guarded posture: Assume they've fielded pitches before and filter for substance. Avoid urgency language, proof-by-credentials, or "everyone's doing this" framing. Earn permission to ask questions.
+- Combi ovens in NYC fine dining: Footprint, consistency, and energy cost are the operating vectors. Don't assume which one matters most to them.
+- Cold call to owner-chef: They're resource-constrained and skeptical of time-wasters. Signal respect for that upfront.
 
 ## STANDARD RULES
 
@@ -549,35 +520,32 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7200ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1754 | **Out:** 522 | **Cost:** $0.0035
+**Status:** OK | **Time:** 6893ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2359 (read=0, write=0) | **Out:** 511 | **Cost:** $0.0039
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a sales rep at Aldermark Advisory selling our 12-Week Operations Reset to mid-market manufacturers. I'm cold-calling the CFO at Ridgeway Industrial (PE-backed, $80M revenue) to understand what's keeping them up at night. My goal is to land one concrete pain point in this first conversation — something I can reference back to if we talk again. The prospect is neutral and listening, so this is about smart questions and selective intel, not pitch. Be my call-prep strategist and give me the recon I need and the openers that'll land.
+I'm a sales rep at Aldermark Advisory calling the CFO at Ridgeway Industrial cold. My goal is to find their main pain point and keep them engaged. Be my call-prep strategist and give me one sharp intel signal about this account, three openers I can choose from, and two questions I can ask in the first five minutes to keep the conversation real.
 
 ## STRUCTURE
 
-1. **One intel signal about Ridgeway Industrial**
-   - Find one specific, directionally useful insight about the account (financials, recent news, operational posture, PE ownership dynamic, whatever surfaces). Follow the research protocol below.
-   - It should prompt a natural question or frame the call, not a product pitch.
+1. One intel signal about Ridgeway Industrial
+   - Follow the research protocol below to surface one concrete, specific observation about this account's operational or financial posture that would justify a CFO call. Flag your confidence level and source type (public record, market pattern, etc.).
 
-2. **Three conversation openers**
-   - Three distinct ways to kick off the call. Each one works in the neutral, listening posture — avoid aggressive cold-call energy and avoid any product mention.
-   - First opener should land the reason for the call. Second should acknowledge context (PE ownership, scale, industry). Third should be lightweight and permission-seeking.
+2. Three conversation openers
+   - Each one acknowledges this is a cold call and gives the CFO a reason to stay on the line. Vary the approach — one can lean on the intel signal; one can be curiosity-driven; one can be direct about your intent. No "I was just reaching out" energy. Each should feel natural coming from a peer, not a vendor.
 
-3. **Two discovery questions for the first 5 minutes**
-   - Two questions that get at operational or financial pain — the kind a CFO at a $80M PE-backed manufacturer would naturally care about.
-   - Don't anchor them to my product. Make them open enough that the prospect teaches you what matters.
+3. Two discovery questions for the first five minutes
+   - These are genuine questions, not product-camouflaged pitches. They should uncover what's actually keeping the CFO up at night operationally or financially. They're open enough to let them talk; specific enough to feel like you've done your homework.
 
 ## GROUNDING
 
-- Ridgeway is PE-backed; ownership transitions and margin pressure are part of that world. Don't assume struggle — assume the PE owner is pushing for operational efficiency or margin recovery. Angle curiosity there.
-- CFOs care about cash, margins, working capital, and operational efficiency. Steer toward those lanes, not revenue or market share.
-- Cold call to a neutral prospect: permission and clarity matter more than enthusiasm. Keep it short, credible, and curious.
-- No product language. Don't mention "12-Week Reset," "advisory," or service capability. You're a peer asking smart questions.
-- Avoid manufacturing clichés ("lean," "transformation," "best practices"). Talk like a peer, not a consultant.
+- Ridgeway is PE-backed mid-market manufacturing — typical triggers include margin pressure, operational sprawl, SG&A bloat, or integration friction post-acquisition. Your intel signal should tilt toward one of these without overreaching.
+- PE ownership often means the CFO is under pressure to hit EBITDA or revenue targets. That's your calibration lens, not your pitch.
+- "Neutral & Listening" means they're not hostile; it also means you have no warm signal. You're earning the conversation in the first 30 seconds.
+- Avoid: generic manufacturing platitudes ("I know manufacturers face X"), unsourced statistics, or pseudo-insights that sound like you Googled their homepage. If your intel is thin, anchor to what you know about their peer set — flag it as a pattern.
+- This call's win is keeping them talking past the first objection. Pitch nothing yet.
 
 ## STANDARD RULES
 
@@ -620,28 +588,32 @@ After delivering the recon brief, pause and:
 }
 ```
 
-**Status:** OK | **Time:** 7092ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 1764 | **Out:** 498 | **Cost:** $0.0034
+**Status:** OK | **Time:** 7432ms | **Drill-down:** ✓ | **Grounding:** ✓ | **Profile:** ✓ | **In:** 2369 (read=0, write=0) | **Out:** 519 | **Cost:** $0.0040
 
 **Generated Master Prompt:**
 
 ```markdown
 ## MISSION
-I'm a rep at Aldermark Advisory calling the newly promoted CEO of Kessler Plumbing & HVAC — a family-owned shop with about 120 people. He was forced to take this call. I need to test whether he has budget and decision-making authority, and I want to do it without triggering defensiveness. Brief me like a call-prep strategist: give me one sharp intel signal about this account, three ways to open the call that might lower his guard, and two early questions that let me assess his real position.
+I'm a sales rep at Aldermark Advisory selling the 12-Week Operations Reset. I'm cold-calling the CEO at Kessler Plumbing & HVAC—a family-owned ~120-person shop where the founder's son recently took over. He was forced to attend something and doesn't know me. Be my call-prep strategist and give me one sharp intel signal about this account, three conversation openers I can choose from, and two questions to ask in the first five minutes that will test whether he has budget and authority without sounding like I'm selling.
 
 ## STRUCTURE
-1. **One intel signal on Kessler Plumbing & HVAC.** A single observation about the company or this founder's-son transition that explains why he might be guarded or where real friction might live. Follow the research protocol below to anchor it.
 
-2. **Three openers.** Each one acknowledges he was pulled into this call without sounding like I'm apologizing. One should lean into the founder-to-successor angle; one should be purely curious about the business state; one should be disarming and direct. No cold-call energy.
+1. **One intel signal about Kessler Plumbing & HVAC**
+   - A single, specific observation about the account or the transition that explains why this moment matters for a cold call. Follow the research protocol below to source it. If account-specific data is thin, anchor to what a recent leadership transition typically triggers in a ~120-person family business.
 
-3. **Two discovery questions for the first five minutes.** Questions designed to surface budget and authority without asking "Do you have budget?" or "Are you the decision-maker?" One should open a door to operational pain; one should map who else influences major decisions. Both should feel natural in conversation.
+2. **Three conversation openers**
+   - Each can stand alone. Each must feel natural for a cold call to a forced attendee—no artificial warmth. One should acknowledge the transition; avoid the others mentioning it directly. Vary the energy; let me pick the one that fits my voice.
+
+3. **Two discovery questions for the first five minutes**
+   - Designed to surface budget readiness and decision-making authority. Ask them early, before objection energy builds. One should probe his mandate as the new leader; the other should explore operational pain or constraint he's already aware of.
 
 ## GROUNDING
-- He's new to the role — likely still proving himself to the family and the team. Defensiveness is expected.
-- Family business succession is a moment of internal politics and unproven authority. He may not yet have full spending power, or he may be overcompensating to show strength.
-- "Forced to attend" suggests someone else (founder, board, peer) sent him. That person matters — but I won't know who until I ask.
-- Avoid product pitch, capability language, or the word "reset." Avoid positioning this as a sales conversation.
-- This is a cold call. Build credibility through curiosity about the transition and the business, not through credential-dropping.
-- If recon surfaces family ownership nuance, flag it for tone — family dynamics in ops conversations can run hot.
+
+- Recent leadership transition = natural entry point for operations-focused conversation; frame it as context, not the sell.
+- Forced attendance is a feature, not a bug—means something brought operations front-of-mind already. Don't apologize for the cold call; lean into why now matters.
+- Family-owned, ~120 people = likely still running on inherited processes and systems. Avoid enterprise-scale language; ground in owner-operator constraints.
+- CEO, new role, founder's son = navigate respect for legacy while testing whether he's empowered to change things. Don't assume he has unilateral budget authority.
+- Avoid: generic "how's business," compliments about the family business, industry jargon that signals you're selling, any assumption about pain points.
 
 ## STANDARD RULES
 
