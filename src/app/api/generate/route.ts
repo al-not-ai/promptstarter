@@ -60,9 +60,13 @@ VOICE EXAMPLES — patterns to mimic:
 GOOD: "I'm a sales rep at Acme selling [product]. I'm calling [prospect]. Be my call-prep strategist and give me..."
 GOOD: "Anchor everything to my inputs and the profile below. If you need more context to sharpen this, ask me."
 GOOD: "Give me three openers I can choose from."
+GOOD: "I'm a sales rep at Acme. Be my cold outreach specialist and write me a hook for..."  ← role hint is correctly assigned to my assistant; "I" stays as the rep.
 BAD:  "You are a call-prep strategist. Your role is to arm the rep..."  ← talks about the rep in third person
 BAD:  "The rep should ask the prospect about..."  ← third-person rep
 BAD:  "You'll want to think about your discovery questions"  ← addresses rep as "you"; "you" must mean the assistant
+BAD:  "I'm a cold outreach specialist writing on behalf of a sales rep at Acme..."  ← treats the role hint as MY identity. The role hint describes the role I want my assistant to play. "I" is always the rep, never the assistant's assigned role.
+BAD:  "I'm a cold revival specialist at Acme..."  ← same trap. "Specialist" describes the assistant's role. My identity is "sales rep at Acme."
+BAD:  "I'm a commercial kitchen equipment rep at Acme..."  ← awkward self-description scraped from the seller profile. Just "I'm a sales rep at Acme" is correct; the product context comes from the profile and the inputs.
 
 The STANDARD RULES, RESEARCH PROTOCOL (recon only), and DRILL-DOWN blocks at the end of the Master Prompt are appended automatically — you do not write them. They're written in the same rep voice so the full prompt reads as one continuous brief. Don't try to pre-write them or address them.
 
@@ -74,6 +78,12 @@ CORE RULES:
 5. Compress. Each line earns its place. Cut hedge clauses, redundant qualifiers, and connective tissue. If a clause can be removed without changing the instruction's meaning, remove it. Trust the assistant — it doesn't need over-explanation.
 6. Format for scan. The rep glances at this before pasting. Use bullets where they sharpen. Reserve prose for MISSION (where rep voice needs flow). Avoid wall-of-text paragraphs in STRUCTURE and GROUNDING.
 7. No placeholder tokens. Never emit literal bracketed placeholder tokens in MISSION, STRUCTURE, or GROUNDING — no [company], [product], [name], [role], [date], or any other [xxx] gap. If a detail isn't in my inputs or the profile, omit the reference entirely or write around it. A sentence with a missing detail is better than a sentence with a literal "[company]" in it.
+8. No dictating argument order, opener framing, or word-count specificity. Rule applies engine-wide across MISSION, STRUCTURE, and GROUNDING for EVERY tool — including cold-hook (where the opener is the deliverable), deal-reviver (where each touch has its own opener), and objection-defuser (where the response begins live). Describe what MUST be present in the response (the substance), not HOW the response should open or which point comes first. The downstream assistant lays the track; you describe the rails.
+   - BAD (argument-order scripting): "Lead with X, then pivot to Y" / "Open with the energy advantage, then pivot to space" / "Don't bury Z; lead with it" / "Open by acknowledging X"
+   - BAD (word-count opener scripting): "Lead with the real reason for the call in the first 5 words" / "Open with one sentence acknowledging X" / "First sentence must name the trigger"
+   - BAD (positional substance dictates): "Lead with the cost reduction as the pay-back math" / "Lead with empathy — acknowledge the timing concern"
+   - GOOD (substance without order): "X must be present and treated as the strongest lever" / "The real reason for the call must be concrete and immediate (not 'I just wanted to touch base')" / "The trigger must anchor the message — buried triggers don't earn attention" / "Empathy is the dominant tone; don't sound argumentative"
+   The pattern test: if you can swap the order without changing the rule, the rule is substantive. If swapping the order breaks the rule, you're scripting.
 
 COMPRESSION EXAMPLES — write tight:
 LOOSE: "If account-specific intel would sharpen this signal meaningfully, name what data point would help most and ask the rep for it."
@@ -147,7 +157,7 @@ function buildUserPrompt(params: {
   return `Generate the Master Prompt for this tool run. Follow the 3-section structure (MISSION / STRUCTURE / GROUNDING). Write it in the rep's first-person voice per your VOICE rules. Do not write DRILL-DOWN or STANDARD RULES — those are appended.
 
 **Tool:** ${tool.name} (${tool.category})
-**Role hint for MISSION (the role I'm asking my assistant to play):** ${engineRoleHint}
+**Role hint for MISSION (the role I want my assistant to play — NOT a description of me; never echo this back as my identity):** ${engineRoleHint}
 **What my assistant must produce:** ${tool.outputFormat}${sellerLine}
 
 **My inputs:**
@@ -255,7 +265,15 @@ export async function POST(req: Request) {
       `- The exact product name (and company name when natural) must appear verbatim at least once in MISSION or STRUCTURE.\n` +
       `- Pick the SINGLE differentiator from <key_differentiators> most relevant to this run and have the assistant anchor to that one. One sharp anchor beats four floating features.\n` +
       `- Treat the profile as the only source of truth for the rep's product. Never invent capabilities, metrics, integrations, or guarantees not present here.\n` +
-      `- For per-call specifics (target buyer, named competitor, specific objection, trigger event), use the rep's inputs above — not this profile.\n\n` +
+      `- For per-call specifics (target buyer, named competitor, specific objection, trigger event), use the rep's inputs above — not this profile.\n` +
+      `- CRITICAL — NUMERICAL SPECIFICITY RULE: When a differentiator contains a specific number (e.g. "within 4%", "30% lower", "~14 sq ft", "10-year warranty", "50% holdback"), DO NOT echo that number anywhere in the master prompt unless the rep's per-call inputs explicitly contain that exact number. Reference the *capability* the differentiator describes, not the number itself. The numbers in <key_differentiators> describe what is broadly true of the product — not what is necessarily true of this deal, this prospect, or this engagement. The rep is the sole source of per-deal numerical claims; per-deal numbers come only from the rep's inputs above.\n` +
+      `   - "Anywhere" means: not as the assistant's anchor, not as a calculation basis, not as a source citation, not as a parenthetical aside, not in an Avoid: list as a positive example, not as a soft "mention if natural" suggestion. If the rep didn't supply the number, the number does not exist for this deliverable.\n` +
+      `   - GOOD: "anchor to my forecast accuracy SLA" / "lean on the energy-cost savings" / "our success-aligned fee structure" (capability references, no number)\n` +
+      `   - BAD:  "anchor to my 4% accuracy guarantee" / "lean on our 30% lower energy draw" / "our 50% holdback structure" (concretized differentiator numbers)\n` +
+      `   - BAD:  "the success-aligned fee structure (50% holdback) is a trust signal" (parenthetical re-introduces the very number the capability replaced)\n` +
+      `   - BAD:  "calculate savings from our 30% energy reduction" (uses a profile number as the math basis without rep authorization)\n` +
+      `   - Exception: if the rep's per-call inputs explicitly contain the specific number (e.g. they wrote "$24,000/year" or "30% margin compression" or "50% fee held back"), you may use that exact number — but ONLY that input-supplied number, and ONLY the way the rep phrased it.\n` +
+      `   - If the assistant needs a number to make the case (e.g. cfo-pitch FINANCIAL CASE bullets, ROI math, defuser counter-claims), instruct it to ASK ME FOR THE NUMBER. Do not back-fill from the profile. Phrase as "If we need the [specific quantification] to make the case land, ask me for it" or "Flag any assumed multiplier as an explicit assumption pending my input."\n\n` +
       profileXml;
   }
 
@@ -272,6 +290,14 @@ export async function POST(req: Request) {
   // ~150 fewer engine output tokens billed per call.
   const result = streamText({
     model: anthropic(MODEL),
+    // System prompt is server-trusted (BASE_SYSTEM_PROMPT + profile XML rendered
+    // server-side from Supabase or stress-test bypass). The AI SDK warns about
+    // role:"system" inside messages as a prompt-injection vector, but that
+    // attack surface doesn't exist here — no user input flows into the system
+    // content. We use messages instead of the top-level `system` parameter so
+    // we can attach Anthropic prompt-caching providerOptions to that block
+    // specifically. allowSystemInMessages opts into this pattern explicitly.
+    allowSystemInMessages: true,
     messages: [
       {
         role: "system",

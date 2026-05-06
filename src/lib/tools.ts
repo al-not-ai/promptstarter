@@ -97,13 +97,13 @@ export const tools: Tool[] = [
     includesProfile: true,
     variables: [
       { name: "statedObjection", label: "Their Objection (Word-for-Word)", placeholder: "e.g., We don't have the budget right now" },
-      { name: "productValue", label: "Our Strongest Counter", placeholder: "e.g., Saves 10 hours a week per rep" },
+      { name: "yourEdge", label: "Your Sharpest Counter", placeholder: "e.g., Saves 10 hours a week per rep" },
     ],
     sliders: [
       {
         id: "response-posture",
         label: "Your Response Style",
-        steps: ["Empathize & Pivot", "Stick to ROI", "Probe Deeper", "Push Back Directly"],
+        steps: ["Empathize & Probe", "Stick to ROI", "Push Back Directly"],
       },
       {
         id: "next-step-aggression",
@@ -113,32 +113,68 @@ export const tools: Tool[] = [
     ],
     lockedPreviewInputs: {
       variableValues: {
-        statedObjection: "We already have something that does this — I don't think we need another tool",
-        productValue: "Cuts manual reconciliation from 6 hours to 20 minutes per week",
+        statedObjection: "We tried McKinsey's ops practice last year and got a 90-page deck. Why is this different?",
+        yourEdge: "Working fixes shipped by week 12, not recommendations — 50% fee held back until margin recovery is signed off",
       },
-      sliderValues: { "response-posture": 2, "next-step-aggression": 1 },
+      sliderValues: { "response-posture": 2, "next-step-aggression": 3 },
     },
-    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
+    sampleOutput: `## MISSION
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm in an active call and just hit an objection about a failed McKinsey engagement last year — they got a deck, not results. I need you to be my sales coach and give me 3-5 sentences I can say verbatim or riff on to push back directly on this, plus one sharp follow-up question that keeps momentum toward a firm commitment.
+
+## STRUCTURE
+
+1. **The Counter (3-5 sentences, conversational, pushback tone)**
+   - Acknowledge the McKinsey experience as real (don't dismiss it), but land the fundamental difference: we ship working fixes by week 12; they shipped a deck. My fee is 50% held back until you sign off on measurable margin recovery — skin in the game, not consultant CYA.
+   - Don't soften the critique of their last engagement or hedge with "some consultants are different." Be direct.
+   - Tone: confident, not defensive. You're not apologizing for being different; you're stating why different matters.
+
+2. **The Follow-Up Question (one sharp ask)**
+   - Drive toward firm commitment. Ask what would need to be true for them to move forward — not a discovery softener, but a binary: are you ready to act on fixes, or are you still in evaluation mode?
+
+## GROUNDING
+
+- McKinsey objection is a proxy for consultant skepticism. They're not rejecting your product; they're burned. Acknowledge the burn; don't argue that McKinsey sucks. Pivot to outcome ownership (fee structure + shipped fixes), not consultant brand.
+- "Working fixes" means operational changes live in their business by week 12, not hypothetical improvements in a binder. Concrete beats theoretical.
+- "50% held back until margin recovery is signed off" is your strongest trust signal here — it's the anti-deck commitment. Land it calmly; don't over-explain it.
+- Avoid: consultant-war language ("we're better than McKinsey"), softening ("we're like McKinsey but..."), or retreating into discovery ("tell me what went wrong"). You're here to move them forward, not litigate the past.
+- If they push back on timeline or fee structure, don't concede ground. Hold the boundaries. Your follow-up should flush out whether they're serious about fixing ops or still shopping.
+
+## STANDARD RULES
+
+- **No unsourced numbers.** Don't cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in my inputs or the profile, or you flag it explicitly as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode.
+- **Deliver first, probe second.** Produce the complete deliverable before asking me anything. Don't ask me questions before delivering — that defeats the point.
+
+## DRILL-DOWN OFFER
+
+After delivering the defuser response and follow-up question, pause and:
+- Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
+- Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
+- If I reply with new context, weave it in and revise. If I don't, what you delivered stands.`,
   },
   {
     id: "competitor-battlecard",
     name: "Competitor Battlecard",
     category: "Call Prep",
     tier: 'pro',
-    outputFormat: "5 discovery questions numbered 1-5, each followed by a one-line coaching note on why it works and what signal to listen for in the answer. No scripted dialogue. No fake conversations.",
-    outputDescriptor: "the 5 discovery questions and coaching notes",
-    engineRoleHint: "competitive intelligence specialist arming the rep to uncover friction without naming the incumbent as the enemy",
+    outputFormat: `BATTLECARD STRUCTURE — five surgical sections, each one a different lever. Not a discovery sheet, not a feature-by-feature compare:
+
+1. WHERE THEY WIN — 1-2 sentences. Where the competitor genuinely outperforms us. Acknowledge it cleanly and specifically. (Reps lose more deals from refusing to admit competitor strengths than from admitting them.)
+
+2. WHERE THEY LOSE — 1-2 sentences. The single sharpest structural gap between what the competitor delivers and what THIS prospect needs. Not a feature gap — a mismatch the prospect should care about given their situation.
+
+3. THE TRAP QUESTION — One question the rep can ask the prospect that surfaces the competitor's weakness without naming the competitor as the enemy. Format: the question itself, then a one-line coaching note on what answer signals the trap landed and how to follow up.
+
+4. THE PROOF POINT THAT LANDS — One specific proof point that resonates because of the WHERE THEY LOSE gap. Describe the shape (situation → friction → what changed) without inventing customer names or metrics. If a specific stat would make this land harder, instruct the assistant to ask me for it rather than fabricate.
+
+5. THE BOOBY TRAP — One thing the rep must NOT do or say in this conversation. The thing the competitor's incumbents are trained to bait reps into saying so they can win the procurement debate. One sentence, sharp.`,
+    outputDescriptor: "the battlecard",
+    engineRoleHint: "competitive intelligence specialist arming the rep with the trap, the proof, and the booby trap — never naming the competitor as the enemy",
     includesProfile: true,
     variables: [
       { name: "competitorName", label: "Competitor Name", placeholder: "e.g., Salesforce, Oracle" },
-      { name: "ourAdvantage", label: "Our Main Advantage", placeholder: "e.g., No implementation fees or setup time" },
+      { name: "yourEdge", label: "Your Sharpest Edge", placeholder: "e.g., No implementation fees or setup time" },
     ],
     sliders: [
-      {
-        id: "competitive-stance",
-        label: "How to Attack",
-        steps: ["Drop Subtle Doubts", "Pivot to Business Value", "Hit a Feature Gap", "Go Head-to-Head"],
-      },
       {
         id: "conversation-stage",
         label: "Stage of the Deal",
@@ -147,12 +183,50 @@ export const tools: Tool[] = [
     ],
     lockedPreviewInputs: {
       variableValues: {
-        competitorName: "Salesforce",
-        ourAdvantage: "No implementation fees, live in 48 hours vs. 6-month rollout",
+        competitorName: "the client's existing in-house Transformation Lead",
+        yourEdge: "Two senior partners with cross-industry pattern recognition the in-house lead can't get, with a 12-week shot clock",
       },
-      sliderValues: { "competitive-stance": 1, "conversation-stage": 1 },
+      sliderValues: { "conversation-stage": 2 },
     },
-    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
+    sampleOutput: `## MISSION
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset, and I'm prepping to build the business case with a prospect whose operations are bleeding margin. Their current plan is to fix it with their in-house Transformation Lead. Be my competitive intelligence specialist and arm me with the trap, the proof, and the booby trap — never naming the in-house lead as the enemy.
+
+## STRUCTURE
+
+1. WHERE THEY WIN
+One clean sentence on what the in-house Transformation Lead legitimately has over us (proximity, organizational knowledge, headcount authority, cultural fluency — pick the real advantage). Acknowledge it without hedging.
+
+2. WHERE THEY LOSE
+The single structural gap between what an in-house lead delivers and what THIS prospect needs given they're bleeding margin on a 12-week clock. Not a capability gap — a mismatch the prospect should feel when they think it through. One sentence.
+
+3. THE TRAP QUESTION
+One question I can ask the prospect that surfaces the in-house lead's weakness without naming them as the competitor. Format: the question, then a one-line coaching note flagging what answer signals the trap landed and how to follow.
+
+4. THE PROOF POINT THAT LANDS
+One proof point (situation → friction → what changed) that resonates because of the WHERE THEY LOSE gap. Shape only — no customer names or invented metrics. If a specific stat would sharpen this, ask me for it instead of fabricating.
+
+5. THE BOOBY TRAP
+One thing I must NOT say or do in this conversation — the exact bait the in-house lead's playbook trains them to set so they can win the procurement debate. One sentence, sharp.
+
+## GROUNDING
+
+- The in-house Transformation Lead is the incumbent, not a named external competitor. Treat them as a credible internal resource with real organizational leverage — which makes them dangerous AND makes my edge (two senior partners, cross-industry pattern recognition, fixed 12-week shot clock) the relevant counter.
+- The business case stage means the prospect is already sold on the problem. They're deciding HOW to fix it. Frame every lever around execution velocity and pattern-based diagnosis — not more assessment or organizational buy-in cycles.
+- Margin bleeding + 12-week urgency is the prospect's clock, not ours. Anchor the WHERE THEY LOSE gap to the time/velocity mismatch, not feature gaps.
+- The prospect likely trusts their in-house lead on cultural fit and decision-making authority. Don't attack that. Attack the *pattern recognition bandwidth* and the *timeline* — two things internal resources structurally lack.
+- Avoid: downplaying the in-house lead's capabilities, implying they're not smart enough, suggesting internal politics (they'll smell it and defensive-flip), or any comparison that sounds like "we're consultants and you're not." We're faster, more focused, and pattern-heavy. That's the story.
+
+## STANDARD RULES
+
+- **No unsourced numbers.** Don't cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in my inputs or the profile, or you flag it explicitly as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode.
+- **Deliver first, probe second.** Produce the complete deliverable before asking me anything. Don't ask me questions before delivering — that defeats the point.
+
+## DRILL-DOWN OFFER
+
+After delivering the battlecard, pause and:
+- Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
+- Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
+- If I reply with new context, weave it in and revise. If I don't, what you delivered stands.`,
   },
   {
     id: "cold-hook",
@@ -176,17 +250,52 @@ export const tools: Tool[] = [
       {
         id: "value-angle",
         label: "Headline Value",
-        steps: ["Save Time", "Cut Cost", "Reduce Risk", "Grow Revenue"],
+        steps: ["Save Time / Cut Cost", "Reduce Risk", "Grow Revenue"],
       },
     ],
     lockedPreviewInputs: {
       variableValues: {
-        prospectName: "Jamie Chen, VP of Operations",
-        triggerEvent: "Their company just announced a 20% headcount reduction in ops",
+        prospectName: "Rachel Mendez, CEO of Ridgeway Industrial (PE-backed, ~$80M rev)",
+        triggerEvent: "Disclosed Q4 margin compression on the most recent quarterly call to investors",
       },
-      sliderValues: { "outreach-channel": 1, "value-angle": 0 },
+      sliderValues: { "outreach-channel": 3, "value-angle": 0 },
     },
-    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
+    sampleOutput: `## MISSION
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I'm reaching out cold to Rachel Mendez (CEO, Ridgeway Industrial) on the back of disclosed Q4 margin compression. Be my cold outreach specialist and write me a short-form email hook — under 100 words — that earns 90 seconds of attention and positions an exploratory call as the next step.
+
+## STRUCTURE
+
+1. **Subject line**
+   - No generic "quick question" energy. Anchor to the margin compression trigger — make it impossible to ignore without sounding alarmist.
+
+2. **Body (under 100 words)**
+   - Open with what I know: Q4 margin pressure is real and visible. Don't apologize for the cold reach.
+   - One sharp reason why I'm calling her specifically (PE-backed industrial ops, her scale, the margin signal) — not generic.
+   - Single concrete value: we embed senior partners with her team, diagnose the three biggest cash leaks, and ship working fixes by week 12. No slide decks, no analysts.
+   - End with a specific ask: a 15-minute call to explore whether this is worth her time. Make it easy to say yes.
+
+3. **Signature**
+   - Professional. Include my name, title, company, and one contact method (email or phone).
+
+## GROUNDING
+
+- Ridgeway is PE-backed at ~$80M revenue — industrial operations context, margin pressure is material to their LP narrative.
+- Q4 margin compression was disclosed publicly (investor call) — she chose to surface it, so it's fair game to reference directly.
+- The hook competes for inbox attention in a sea of vendor noise — specificity (the trigger, the fix, the timeline) is the only differentiator.
+- Avoid: generic consultant language ("synergies", "best practices", "transform"), apologies for cold outreach, multi-step asks (no "I'd love to connect you with a partner"), or any mention of ROI math or savings — that comes after the call earns it.
+- The margin compression is the only proof point I have; anchor to it, not to hypothetical wins or case studies.
+
+## STANDARD RULES
+
+- **No unsourced numbers.** Don't cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in my inputs or the profile, or you flag it explicitly as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode.
+- **Deliver first, probe second.** Produce the complete deliverable before asking me anything. Don't ask me questions before delivering — that defeats the point.
+
+## DRILL-DOWN OFFER
+
+After delivering the outreach hook, pause and:
+- Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
+- Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
+- If I reply with new context, weave it in and revise. If I don't, what you delivered stands.`,
   },
 
   // ── PRO TOOLS ────────────────────────────────────────────────────────────────
@@ -208,7 +317,7 @@ export const tools: Tool[] = [
 
   {
     id: "follow-up-forward",
-    name: "Follow-Up Forward",
+    name: "Post-Call Wrap",
     category: "Active Deals",
     tier: 'pro',
     outputFormat: `TWO assets, each with a clear heading:
@@ -245,12 +354,47 @@ ASSET 2 — FORWARD-READY RECAP (prospect → their internal decision-maker): 5�
     ],
     lockedPreviewInputs: {
       variableValues: {
-        callNotes: "Walked through live dashboard. Rachel flagged that her team rebuilds the same pipeline report every Monday — 3 hours gone. She lit up when I showed the scheduled export. Her boss joined late, asked about SOC 2.",
-        biggestAha: "They're losing a full team-day per week to a report that could auto-send itself",
+        callNotes: "60-min strategy call with CEO. He wants to take this to his board next month — asked us to put together a one-pager he can drop into the pre-read.",
+        biggestAha: "Margin compression isn't a procurement problem — it's three legacy SOPs nobody on his team has the political capital to kill",
       },
-      sliderValues: { "buying-role": 2, "call-mood": 2 },
+      sliderValues: { "buying-role": 3, "call-mood": 3 },
     },
-    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
+    sampleOutput: `## MISSION
+I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations Reset. I just finished a 60-min strategy call with a CEO who wants to take this to his board next month and asked for a one-pager to drop into the pre-read. Be my post-meeting strategist and produce two assets: a follow-up email from me to him that opens with the real aha from our call and closes with one concrete next step, and a forward-ready recap he can send internally to his board without editing — written in his voice, not mine, that surfaces the problem, what we observed, and the fit to his priority.
+
+## STRUCTURE
+
+1. **Follow-Up Email (rep → prospect)**
+   - Open with the margin compression insight from the call — specifically that this is a legacy SOP problem, not procurement
+   - Reference one specific moment or observation from the call that anchors this insight
+   - Close with one concrete next step tied to his board timeline (the one-pager for pre-read)
+   - Avoid: "Great call today," feature recaps, marketing language, "per our conversation"
+
+2. **Forward-Ready Recap (prospect → board)**
+   - Five to seven bullets, one sentence each, scannable — written so the CEO authored it
+   - Order: problem in his words → what we observed during the call → how this connects to his stated priority → two concrete proof points → proposed next step
+   - No rep name, no Aldermark branding, no dollar amounts outside his inputs
+   - Tone: internal leadership brief, not vendor summary
+
+## GROUNDING
+
+- The real aha is operational — legacy SOPs with no political owner — not a buying/vendor problem. Anchor both assets to this.
+- The CEO is already selling internally ("taking to the board"). The recap is ammunition for that sale; the email is permission to move fast.
+- Board-readiness is the constraint. The one-pager must land as strategic, not consultative.
+- Avoid vendor language in the recap: no "our engagement," "our team," "proven methodology," "ROI calculator," or process-speak. He's briefing peers.
+- The follow-up email is warm but businesslike — he's not in discovery anymore, he's in conviction.
+
+## STANDARD RULES
+
+- **No unsourced numbers.** Don't cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in my inputs or the profile, or you flag it explicitly as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode.
+- **Deliver first, probe second.** Produce the complete deliverable before asking me anything. Don't ask me questions before delivering — that defeats the point.
+
+## DRILL-DOWN OFFER
+
+After delivering the follow-up email and forward-ready recap, pause and:
+- Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
+- Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
+- If I reply with new context, weave it in and revise. If I don't, what you delivered stands.`,
   },
 
   {
@@ -258,13 +402,13 @@ ASSET 2 — FORWARD-READY RECAP (prospect → their internal decision-maker): 5�
     name: "Deal Reviver",
     category: "Pipeline",
     tier: 'pro',
-    outputFormat: `THREE-TOUCH REVIVAL SEQUENCE — each touch as its own labeled sub-section:
+    outputFormat: `THREE-TOUCH REVIVAL SEQUENCE — each touch as its own labeled sub-section. CRITICAL: this is RE-engagement, not first contact. Every touch must read as if written by someone who has previously talked with this prospect — never as a cold opener.
 
-TOUCH 1 — EMAIL: Subject line + 3 short paragraphs. Opens with a specific, earned reason to reach out tied to the revival angle — not "just checking in." Closes with a low-friction ask (a reply, a 15-min call, or a simple yes/no). Avoid: "circle back," desperation signals, referencing how long they've been quiet.
+TOUCH 1 — EMAIL: Subject line + 3 short paragraphs. MUST explicitly reference our prior conversation — a moment, a topic, or a concern they raised — NOT a generic "I wanted to follow up." The shared-history reference is the wedge that makes Touch 1 different from a cold email; without it, this tool collapses into a cold hook. If the rep's input doesn't supply enough prior-conversation detail, instruct the assistant to ask the rep for one specific moment or concern from the original call before drafting. Closes with a low-friction ask (a reply, a 15-min call, or a simple yes/no). Avoid: "circle back," "just checking in," desperation signals, referencing how long they've been quiet, or any text a stranger could plausibly send.
 
-TOUCH 2 — LINKEDIN DM: 2–3 sentences max. Hook must be distinct from the email opener. No link, no attachment ask. Reads human — not a forwarded version of the email.
+TOUCH 2 — LINKEDIN DM: 2–3 sentences max. Distinct from the email — different hook, different angle. Should still feel like a re-contact, not a first DM. No link, no attachment ask. Reads human — not a forwarded version of the email.
 
-TOUCH 3 — VOICEMAIL SCRIPT (label "if applicable"): 20–30 seconds when spoken aloud. Leads with a real reason for the call in the first 5 words. Leaves one question for the prospect to sit with — no explicit callback demand. Avoid: "just wanted to touch base," restating the email.`,
+TOUCH 3 — VOICEMAIL SCRIPT (label "if applicable"): 20–30 seconds when spoken aloud. The real reason for the call must be concrete and immediate — anchored to the revival angle or shared history, not generic "just calling to follow up" filler. Leaves one question for the prospect to sit with — no explicit callback demand. Avoid: "just wanted to touch base," restating the email.`,
     outputDescriptor: "the 3-touch revival sequence",
     engineRoleHint: "cold revival specialist crafting a multi-touch re-engagement sequence with a real reason to reach out",
     includesProfile: true,
@@ -289,22 +433,54 @@ TOUCH 3 — VOICEMAIL SCRIPT (label "if applicable"): 20–30 seconds when spoke
       {
         id: "revival-angle",
         label: "Revival Angle",
-        steps: ["New Data or Signal", "Product or Feature Update", "Outside Helpful Resource", `The "Last Try" Email`],
+        steps: ["New Data or Signal", "Product or Feature Update", `The "Last Try" Email`],
       },
     ],
     lockedPreviewInputs: {
       variableValues: {
-        prospectCompany: "Jordan at Nexus Logistics",
-        wentCold: "Liked the demo but said Q3 budget was locked — wanted to revisit in Q4",
+        prospectCompany: "Diego, Executive Chef at a 4-restaurant Bay Area group",
+        wentCold: "They went with Rational 6 months ago. Diego said off-the-record he was disappointed in the service response on a recent breakdown.",
       },
-      sliderValues: { "silence-duration": 1, "revival-angle": 0 },
+      sliderValues: { "silence-duration": 3, "revival-angle": 2 },
     },
-    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
+    sampleOutput: `## MISSION
+I'm a sales rep at Northwind Commercial Kitchen selling the Northwind XR-Series Combi Oven. Diego is an Executive Chef at a 4-restaurant Bay Area group who went with Rational 6 months ago but mentioned off-the-record frustration with their service response after a recent breakdown. I'm running a last-try revival sequence — three touches designed to re-engage him by anchoring to his actual pain point (service lag) and our core advantage (same-day on-site response nationwide). Each touch must feel like it's written by someone who's already talked to him; nothing cold or generic. Help me write the sequence.
+
+## STRUCTURE
+
+**1. EMAIL — Touch 1 (the wedge)**
+Subject line + three short paragraphs. Explicitly reference the service frustration Diego mentioned — that's the shared-history wedge that makes this re-engagement, not a cold email. If you need more texture on what happened during the breakdown or exactly what he said, ask me before drafting. Anchor the Northwind XR-Series to same-day on-site response as the direct counter to his pain. Close with a low-friction ask — a reply, a 15-min call, or a simple yes/no question. Avoid desperation signals, "circle back," "just checking in," or mentions of how long he's been quiet.
+
+**2. LINKEDIN DM — Touch 2 (distinct angle)**
+Two to three sentences. Different hook than the email — don't forward-paste the email premise. Still reads as re-contact, not a first DM. No links or attachment asks. Human tone.
+
+**3. VOICEMAIL SCRIPT — Touch 3 (if applicable)**
+20–30 seconds when spoken aloud. Anchor the real reason for calling to the revival angle or shared history — not generic "just calling to follow up" filler. Leave one question for him to sit with; no explicit callback demand. Avoid "just wanted to touch base" or restating the email.
+
+## GROUNDING
+
+- **The wedge is service frustration.** Diego's pain is real and recent — Rational's response lag on the breakdown. Northwind's same-day on-site response is the lever; lead with the capability, not the comparison.
+- **Re-engagement voice, not cold voice.** Every touch must assume prior relationship. "You mentioned..." / "When that breakdown happened..." / "That service delay you were dealing with..." — these are permission structures. Without them, the touch reads as if I'm a stranger.
+- **Last-try calibration.** This is the final sequence before a prospect goes fully dormant. No over-apologizing for silence. Tone is respect + confidence, not desperation.
+- **Anchor to XR-Series, not just "better service."** The product replaces four units in one footprint and includes the service backbone. If the assistant wants to reference uptime, kitchen productivity, or space recovery as secondary benefits, they can — but same-day response is the primary wedge for Diego.
+- **Avoid:** "Let's sync," "just touching base," "I know you went a different direction," "circle back," "it's been a while," "would love to chat," passive openers ("I thought of you"), or any signal that implies Diego ghosted or that I'm desperate to win back his attention.
+
+## STANDARD RULES
+
+- **No unsourced numbers.** Don't cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in my inputs or the profile, or you flag it explicitly as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode.
+- **Deliver first, probe second.** Produce the complete deliverable before asking me anything. Don't ask me questions before delivering — that defeats the point.
+
+## DRILL-DOWN OFFER
+
+After delivering the 3-touch revival sequence, pause and:
+- Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
+- Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
+- If I reply with new context, weave it in and revise. If I don't, what you delivered stands.`,
   },
 
   {
     id: "cfo-pitch",
-    name: "CFO Pitch",
+    name: "CFO-Forward Brief",
     category: "Active Deals",
     tier: 'pro',
     outputFormat: `A one-page financial brief written as if the prospect's internal champion authored it to their own finance decision-maker. "We" refers to the prospect's company, never the vendor's. Structured for a 90-second skim.
@@ -344,17 +520,64 @@ Avoid throughout: vendor branding, "industry-leading," "robust," "cutting-edge,"
       {
         id: "reader-audience",
         label: "Who's Reading This",
-        steps: ["Champion (selling it for them)", "CFO Directly", "CEO / COO", "Procurement"],
+        steps: ["Champion (selling it for them)", "CFO Directly", "CEO / COO"],
       },
     ],
     lockedPreviewInputs: {
       variableValues: {
-        painPoint: "Our AR team is manually reconciling invoices against three different systems — we're closing the books 6 days late every quarter",
-        annualCost: "$36,000/year",
+        painPoint: "We had 3 unplanned kitchen closures last year because our incumbent vendor's service tech took 4-6 days to dispatch — each closure cost us roughly $40K in lost revenue per location",
+        annualCost: "$22,000/unit one-time + $1,800/unit/yr service",
       },
-      sliderValues: { "financial-case": 0, "reader-audience": 1 },
+      sliderValues: { "financial-case": 3, "reader-audience": 2 },
     },
-    sampleOutput: `[SAMPLE OUTPUT — PLACEHOLDER]\n\nThis preview will be replaced with a real engine-generated output before launch.\n\nSee the ⚠️ comment in tools.ts for the pre-launch checklist.`,
+    sampleOutput: `## MISSION
+I'm a sales rep at Northwind Commercial Kitchen selling the XR-Series Combi Oven. My champion is forwarding a financial brief to their CEO or COO to justify the investment. Write this brief entirely in the champion's voice — as if they authored it internally, not as vendor collateral. The champion is making a risk-reduction and operational-resilience case anchored to their service-dispatch pain and the annual cost I've supplied. One page, 90-second skim, zero vendor language.
+
+## STRUCTURE
+
+1. **THE PROBLEM (2–3 bullets)**
+   - Anchor to the unplanned closures and the per-incident revenue loss I've provided
+   - Use the champion's own tone — operational frustration, not marketing concern
+   - No feature preamble; jump to the pain
+
+2. **FINANCIAL CASE (3–4 bullets)**
+   - Translate the one-time and annual costs into business impact (risk avoidance, operational resilience, or net cost of downtime prevented)
+   - Build from the closure frequency and per-closure cost I've supplied
+   - Flag any assumed multiplier explicitly (e.g., "assuming X closures prevented per year...")
+   - If you need a specific annual figure beyond the two costs I've given you to complete the math, ask me for it
+
+3. **WHAT WE EVALUATED (1–2 bullets)**
+   - Specific, behavioral observations during the champion's evaluation — what they *saw* work, not a feature checklist
+   - No vendor name; frame as "the unit" or "this solution"
+   - One concrete operational win (e.g., setup time, staff training, floor footprint, or service response speed)
+
+4. **THE ASK (1 bullet)**
+   - Single, specific approval or next step the CEO/COO needs to take
+   - No soft language ("consider," "explore") — direct decision language
+
+**Avoid throughout:** Northwind branding, "industry-leading," "robust," "cutting-edge," vendor company name in the body, any dollar amounts beyond $40K (per-closure loss), $22,000 (one-time cost), and $1,800/year (service cost).
+
+## GROUNDING
+
+- The champion is the author; the brief reads as internal institutional thinking, not an external pitch
+- Financial case is risk reduction / operational resilience — frame closures prevented, not feature adoption
+- CEO/COO reads this in 90 seconds; bury nothing that justifies the investment
+- Operational tone (urgency, business-continuity framing) beats sales tone
+- The service-dispatch bottleneck is the core pain; same-day on-site response is the lever, but lead with the problem it solves, not the feature itself
+- Use "we," "our," "us" for the prospect's company only; never "we" as vendor
+- If the brief needs a third financial variable (e.g., annual revenue per location, closure frequency beyond "last year," production impact beyond revenue loss) to complete the business case, ask me for it
+
+## STANDARD RULES
+
+- **No unsourced numbers.** Don't cite a statistic, percentage, dollar figure, timeline, headcount, or revenue number unless it appears in my inputs or the profile, or you flag it explicitly as a category pattern ("most orgs of this size typically report..."). Confident fabricated stats are the single biggest failure mode.
+- **Deliver first, probe second.** Produce the complete deliverable before asking me anything. Don't ask me questions before delivering — that defeats the point.
+
+## DRILL-DOWN OFFER
+
+After delivering the CFO-ready business case, pause and:
+- Identify 2–3 places where missing data or your own assumptions shaped what you wrote. Be specific about what you guessed versus what you knew from my inputs or the profile. State each gap plainly.
+- Close with one targeted request to me. Name the single piece of context that would let you sharpen the most consequential gap. If relevant, suggest concrete forms — prior emails or call notes I have on this account, internal Slack threads about it, files I'm sitting on, notes from a teammate who knows the prospect, or specific intel from a past meeting. Make the ask easy to ignore but valuable to answer — don't require it, but explain what it would unlock.
+- If I reply with new context, weave it in and revise. If I don't, what you delivered stands.`,
   },
 ];
 
