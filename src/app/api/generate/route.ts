@@ -319,17 +319,13 @@ export async function POST(req: Request) {
   // blocks at the end of the stream. The rep sees the engine work as it
   // happens, then the templated blocks appear at the bottom — same UX,
   // ~150 fewer engine output tokens billed per call.
-  // KNOWN ISSUE — prompt caching not currently firing.
-  // Cycles 5–8 (docs/test-runs/2026-05-05-cycle{5..8}/) confirmed that
-  // cacheReadInputTokens and cacheCreationInputTokens are 0 across all 63 test
-  // cases regardless of TTL setting ("5m" or "1h") or beta header presence.
-  // Suspected cause: the @ai-sdk/anthropic version installed does not emit
-  // cache_control on the wire when the system message content is a plain string.
-  // The likely fix is to restructure the system message as a content-block array:
-  //   content: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }]
-  // instead of relying on providerOptions on a string-content message.
-  // Tracked for future work. Until then, this config (1h TTL + beta header) is
-  // the intended target state and will start saving cost the moment caching fires.
+  // CACHING NOTE — cache_control reaches Anthropic correctly; caching is structurally
+  // bounded by prompt size. Investigation (docs/audit/2026-05-05/06-caching-investigation.md)
+  // confirmed the SDK emits cache_control on the wire as expected. The 0/0 read/write
+  // telemetry across all cycles is explained by Haiku's 2,048-token minimum cacheable
+  // prefix: the system block for the tested tool was ~1,700 tokens — below the floor.
+  // No code fix is warranted; the config (1h TTL + beta header) is correct and will
+  // fire automatically if/when system prompt size crosses the 2,048-token threshold.
   const result = streamText({
     model: anthropic(MODEL),
     // System prompt is server-trusted (BASE_SYSTEM_PROMPT + profile XML rendered
