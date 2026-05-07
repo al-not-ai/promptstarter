@@ -51,6 +51,7 @@ export function ControlPanel({
   });
 
   const profile = useProfile();
+  const yourEdgeInputRef = useRef<HTMLInputElement>(null);
   const isLocked = activeTool.tier === 'pro' && userTier === 'core';
   const [showSample, setShowSample] = useState(false);
 
@@ -125,21 +126,30 @@ export function ControlPanel({
                       {variable.label}
                     </label>
                     {showChips && (
-                      <div className="flex flex-wrap gap-1.5 mb-1">
-                        {profile!.key_differentiators.map((diff, i) => (
-                          <button
-                            key={i}
-                            type="button"
-                            title={diff}
-                            onClick={() => onVariableChange(variable.name, diff)}
-                            className="max-w-[220px] truncate rounded-full text-[11px] font-medium px-2.5 py-0.5 border border-zinc-700 bg-zinc-800/60 text-zinc-400 hover:text-zinc-100 hover:border-zinc-600 hover:bg-zinc-700/60 transition-colors duration-150"
-                          >
-                            {diff}
-                          </button>
-                        ))}
+                      <div className="flex flex-col gap-1 mb-0.5">
+                        <span className="text-[10px] uppercase tracking-wider text-zinc-500">Quick-fill from your differentiators</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {profile!.key_differentiators.map((diff, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => {
+                                onVariableChange(variable.name, diff);
+                                requestAnimationFrame(() => {
+                                  yourEdgeInputRef.current?.focus();
+                                  yourEdgeInputRef.current?.select();
+                                });
+                              }}
+                              className="inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded border border-zinc-700 bg-zinc-800/60 text-zinc-400 hover:text-zinc-100 hover:border-zinc-600 hover:bg-zinc-700/60 transition-colors duration-150"
+                            >
+                              {diff}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     )}
                     <Input
+                      ref={variable.name === "yourEdge" ? yourEdgeInputRef : undefined}
                       value={displayVariableValues[variable.name] ?? ""}
                       onChange={(e) => onVariableChange(variable.name, e.target.value)}
                       onFocus={(e) => e.currentTarget.select()}
