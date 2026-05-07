@@ -80,10 +80,57 @@ function buildCfoPitchStructure(params: {
 **Avoid throughout:** vendor marketing language ("industry-leading," "robust," "cutting-edge"), feature lists, dollar amounts beyond what I've supplied.`;
 }
 
+// Returns the templated STRUCTURE block for follow-up-forward with slots filled.
+function buildFollowUpForwardStructure(params: {
+  variableValues: Record<string, string>;
+  sliderValues: Record<string, number>;
+}): string {
+  const { variableValues, sliderValues } = params;
+  const callNotes = variableValues.callNotes ?? "(not provided)";
+  const biggestAha = variableValues.biggestAha ?? "(not provided)";
+
+  const buyingRoles = ["Operational User", "Department Manager", "VP / Director", "C-Suite"];
+  const buyingRole = buyingRoles[sliderValues["buying-role"] ?? 0] ?? buyingRoles[0];
+
+  const moodLabels = ["Skeptical", "Mildly Interested", "Bought-In", "Already Selling Internally"];
+  const callMood = moodLabels[sliderValues["call-mood"] ?? 0] ?? moodLabels[0];
+
+  const toneNotes: Record<string, string> = {
+    "Skeptical": "direct and grounded — acknowledge the skepticism without defensiveness; earn the next step, don't assume it",
+    "Mildly Interested": "measured and curious — lean into what they showed interest in; let the call moment do the work",
+    "Bought-In": "peer-level and forward-leaning — assume conviction; focus on momentum and the concrete next step",
+    "Already Selling Internally": "confident and enabling — your job is to sharpen their case; write so they can move fast",
+  };
+  const toneNote = toneNotes[callMood] ?? toneNotes["Mildly Interested"];
+
+  const audienceLabels: Record<string, string> = {
+    "Operational User": "their team lead or department manager",
+    "Department Manager": "their VP or director-level decision-maker",
+    "VP / Director": "their executive sponsor or C-suite approver",
+    "C-Suite": "their board or internal leadership team",
+  };
+  const internalAudience = audienceLabels[buyingRole] ?? audienceLabels["Department Manager"];
+
+  return `## STRUCTURE
+
+1. **FOLLOW-UP EMAIL (rep → prospect)** — 3–4 short paragraphs
+   - Open with the single biggest aha or pain they surfaced:
+     > ${biggestAha}
+   - Reference one concrete moment from my call notes:
+     > ${callNotes}
+   - Close with one concrete next step — no vague "let's stay in touch"
+   - Tone: ${toneNote}
+   - Avoid: pleasantry openers ("Great chatting today"), feature-benefit lists, marketing copy, "per our conversation"
+
+2. **FORWARD-READY RECAP (prospect → ${internalAudience})** — 5–7 scannable bullets, one sentence each
+   - Written entirely in the prospect's voice — they could have authored this; no rep language, no vendor branding
+   - Cover in this order: problem in their own words → what they observed on the call → how it fits their stated priority → two concrete proof points → proposed next step
+   - No rep name, no product marketing copy, no dollar amounts I haven't supplied`;
+}
+
 /**
  * Dispatch fn — returns the templated STRUCTURE block for the given tool with
- * slots filled. For the Phase 3 pilot, only cfo-pitch is implemented; throws
- * for any other toolId.
+ * slots filled. Throws for any unrecognised toolId.
  */
 export function buildTemplatedStructure(params: {
   toolId: string;
@@ -93,6 +140,7 @@ export function buildTemplatedStructure(params: {
 }): string {
   const { toolId } = params;
   if (toolId === "cfo-pitch") return buildCfoPitchStructure(params);
+  if (toolId === "follow-up-forward") return buildFollowUpForwardStructure(params);
   throw new Error(`No templated STRUCTURE defined for tool: ${toolId}`);
 }
 

@@ -341,6 +341,7 @@ ASSET 2 — FORWARD-READY RECAP (prospect → their internal decision-maker): 5�
     outputDescriptor: "the follow-up email and forward-ready recap",
     engineRoleHint: "post-meeting strategist producing a forward-ready recap the prospect can send internally without editing",
     includesProfile: true,
+    engineSkipsStructure: true,
     variables: [
       {
         name: "callNotes",
@@ -377,17 +378,19 @@ I'm a sales rep at Aldermark Advisory selling the Aldermark 12-Week Operations R
 
 ## STRUCTURE
 
-1. **Follow-Up Email (rep → prospect)**
-   - Open with the margin compression insight from the call — specifically that this is a legacy SOP problem, not procurement
-   - Reference one specific moment or observation from the call that anchors this insight
-   - Close with one concrete next step tied to his board timeline (the one-pager for pre-read)
-   - Avoid: "Great call today," feature recaps, marketing language, "per our conversation"
+1. **FOLLOW-UP EMAIL (rep → prospect)** — 3–4 short paragraphs
+   - Open with the single biggest aha or pain they surfaced:
+     > Margin compression isn't a procurement problem — it's three legacy SOPs nobody on his team has the political capital to kill
+   - Reference one concrete moment from my call notes:
+     > 60-min strategy call with CEO. He wants to take this to his board next month — asked us to put together a one-pager he can drop into the pre-read.
+   - Close with one concrete next step — no vague "let's stay in touch"
+   - Tone: confident and enabling — your job is to sharpen their case; write so they can move fast
+   - Avoid: pleasantry openers ("Great chatting today"), feature-benefit lists, marketing copy, "per our conversation"
 
-2. **Forward-Ready Recap (prospect → board)**
-   - Five to seven bullets, one sentence each, scannable — written so the CEO authored it
-   - Order: problem in his words → what we observed during the call → how this connects to his stated priority → two concrete proof points → proposed next step
-   - No rep name, no Aldermark branding, no dollar amounts outside his inputs
-   - Tone: internal leadership brief, not vendor summary
+2. **FORWARD-READY RECAP (prospect → their board or internal leadership team)** — 5–7 scannable bullets, one sentence each
+   - Written entirely in the prospect's voice — they could have authored this; no rep language, no vendor branding
+   - Cover in this order: problem in their own words → what they observed on the call → how it fits their stated priority → two concrete proof points → proposed next step
+   - No rep name, no product marketing copy, no dollar amounts I haven't supplied
 
 ## GROUNDING
 
