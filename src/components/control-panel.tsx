@@ -54,6 +54,7 @@ export function ControlPanel({
   const yourEdgeInputRef = useRef<HTMLInputElement>(null);
   const isLocked = activeTool.tier === 'pro' && userTier === 'core';
   const [showSample, setShowSample] = useState(false);
+  const [chipsOpen, setChipsOpen] = useState(false);
 
   // Detect isLoading: true → false with a non-empty completion to fire onGenerationComplete
   const prevLoadingRef = useRef(false);
@@ -125,9 +126,27 @@ export function ControlPanel({
                     <label className="text-sm font-semibold text-zinc-200 mb-1.5 block">
                       {variable.label}
                     </label>
-                    {showChips && (
-                      <div className="flex flex-col gap-1 mb-0.5">
-                        <span className="text-[10px] uppercase tracking-wider text-zinc-500">Quick-fill from your differentiators</span>
+                    <Input
+                      ref={variable.name === "yourEdge" ? yourEdgeInputRef : undefined}
+                      value={displayVariableValues[variable.name] ?? ""}
+                      onChange={(e) => onVariableChange(variable.name, e.target.value)}
+                      onFocus={(e) => e.currentTarget.select()}
+                      className="font-sans bg-zinc-900 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-primary h-[40px] text-sm"
+                      placeholder={variable.placeholder}
+                      readOnly={isLocked}
+                    />
+                    {showChips && !chipsOpen && (
+                      <button
+                        type="button"
+                        onClick={() => setChipsOpen(true)}
+                        className="flex items-center gap-0.5 text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150"
+                      >
+                        <ChevronDown size={11} />
+                        Use one of your differentiators ({profile!.key_differentiators.length})
+                      </button>
+                    )}
+                    {showChips && chipsOpen && (
+                      <div className="flex flex-col gap-1.5">
                         <div className="flex flex-wrap gap-1.5">
                           {profile!.key_differentiators.map((diff, i) => (
                             <button
@@ -135,6 +154,7 @@ export function ControlPanel({
                               type="button"
                               onClick={() => {
                                 onVariableChange(variable.name, diff);
+                                setChipsOpen(false);
                                 requestAnimationFrame(() => {
                                   yourEdgeInputRef.current?.focus();
                                   yourEdgeInputRef.current?.select();
@@ -146,17 +166,16 @@ export function ControlPanel({
                             </button>
                           ))}
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => setChipsOpen(false)}
+                          className="flex items-center gap-0.5 text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors duration-150 w-fit"
+                        >
+                          <ChevronDown size={11} className="rotate-180" />
+                          Hide
+                        </button>
                       </div>
                     )}
-                    <Input
-                      ref={variable.name === "yourEdge" ? yourEdgeInputRef : undefined}
-                      value={displayVariableValues[variable.name] ?? ""}
-                      onChange={(e) => onVariableChange(variable.name, e.target.value)}
-                      onFocus={(e) => e.currentTarget.select()}
-                      className="font-sans bg-zinc-900 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-primary h-[40px] text-sm"
-                      placeholder={variable.placeholder}
-                      readOnly={isLocked}
-                    />
                   </div>
                 );
               })}
