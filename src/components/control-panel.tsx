@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { TerminalOutput } from "@/components/terminal-output";
+import { useProfile } from "@/lib/profile-context";
 import type { Tool } from "@/lib/tools";
 
 interface ControlPanelProps {
@@ -49,6 +50,7 @@ export function ControlPanel({
     streamProtocol: "text",
   });
 
+  const profile = useProfile();
   const isLocked = activeTool.tier === 'pro' && userTier === 'core';
   const [showSample, setShowSample] = useState(false);
 
@@ -110,21 +112,44 @@ export function ControlPanel({
           {/* Text inputs — side by side on md+; pointer-events disabled in locked mode */}
           <div className={isLocked ? "pointer-events-none opacity-60" : ""}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {activeTool.variables.map((variable) => (
-                <div key={variable.name} className="space-y-1.5">
-                  <label className="text-sm font-semibold text-zinc-200 mb-1.5 block">
-                    {variable.label}
-                  </label>
-                  <Input
-                    value={displayVariableValues[variable.name] ?? ""}
-                    onChange={(e) => onVariableChange(variable.name, e.target.value)}
-                    onFocus={(e) => e.currentTarget.select()}
-                    className="font-sans bg-zinc-900 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-primary h-[40px] text-sm"
-                    placeholder={variable.placeholder}
-                    readOnly={isLocked}
-                  />
-                </div>
-              ))}
+              {activeTool.variables.map((variable) => {
+                const showChips =
+                  !isLocked &&
+                  variable.name === "yourEdge" &&
+                  (activeTool.id === "objection-defuser" || activeTool.id === "competitor-battlecard") &&
+                  (profile?.key_differentiators?.length ?? 0) > 0;
+
+                return (
+                  <div key={variable.name} className="space-y-1.5">
+                    <label className="text-sm font-semibold text-zinc-200 mb-1.5 block">
+                      {variable.label}
+                    </label>
+                    {showChips && (
+                      <div className="flex flex-wrap gap-1.5 mb-1">
+                        {profile!.key_differentiators.map((diff, i) => (
+                          <button
+                            key={i}
+                            type="button"
+                            title={diff}
+                            onClick={() => onVariableChange(variable.name, diff)}
+                            className="max-w-[220px] truncate rounded-full text-[11px] font-medium px-2.5 py-0.5 border border-zinc-700 bg-zinc-800/60 text-zinc-400 hover:text-zinc-100 hover:border-zinc-600 hover:bg-zinc-700/60 transition-colors duration-150"
+                          >
+                            {diff}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <Input
+                      value={displayVariableValues[variable.name] ?? ""}
+                      onChange={(e) => onVariableChange(variable.name, e.target.value)}
+                      onFocus={(e) => e.currentTarget.select()}
+                      className="font-sans bg-zinc-900 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-primary h-[40px] text-sm"
+                      placeholder={variable.placeholder}
+                      readOnly={isLocked}
+                    />
+                  </div>
+                );
+              })}
             </div>
 
             {/* Segmented controls */}
