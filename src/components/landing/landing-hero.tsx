@@ -2,42 +2,29 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { AlertTriangle } from "lucide-react";
 
-type Downstream = { name: string; initial: string; color: string };
+/* ────────────────────────────────────────────────────────────────────────────
+ * Hero — left half is the value prop. Right half is a single ChatGPT chat
+ * that tells the whole story end-to-end:
+ *   1. Vague rep prompt → generic hedgy response (the problem)
+ *   2. PROMPTSTARTER · 5s divider (the bridge)
+ *   3. Artifact-attachment YOU bubble → sharp specific response (the fix)
+ * Diagnosis bar at the bottom flips from "Sound familiar?" to "Same 5
+ * seconds." once the good half lands — so the visitor sees the proof inside
+ * the hero, not just a claim.
+ * ──────────────────────────────────────────────────────────────────────── */
 
-const DOWNSTREAMS: Downstream[] = [
-  { name: "ChatGPT", initial: "C", color: "#10A37F" },
-  { name: "Claude", initial: "C", color: "#D97706" },
-  { name: "Gemini", initial: "G", color: "#4285F4" },
-];
-
-const STEP_COPY = [
-  {
-    num: "Step 1 of 3",
-    tag: "YOU",
-    title: "Type the account you're stuck on.",
-    sub: "Pull up the deal you've been staring at all morning.",
-  },
-  {
-    num: "Step 2 of 3",
-    tag: "PROMPTSTARTER",
-    title: "We engineer the prompt — role, facts, structure.",
-    sub: "Sub-90-second compile. No terminals. No form-fills.",
-  },
-  {
-    num: "Step 3 of 3",
-    tag: "YOUR AI",
-    title: "Paste it in. The deliverable writes itself.",
-    sub: "On your ChatGPT, Claude, or Gemini. Your subscription, not ours.",
-  },
-];
+const PROMPT_TEXT = "help me prep for my Acme call tomorrow";
 
 export function LandingHero() {
-  const [step, setStep] = useState(0);
-  const [typed1, setTyped1] = useState("");
-  const [typed2, setTyped2] = useState("");
-  const [downstreamIdx, setDownstreamIdx] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [badPara, setBadPara] = useState(0);
+  const [flagged, setFlagged] = useState(false);
+  const [showDivider, setShowDivider] = useState(false);
+  const [showAttach, setShowAttach] = useState(false);
+  const [goodPara, setGoodPara] = useState(0);
+  const [showFinal, setShowFinal] = useState(false);
 
   const cancelledRef = useRef(false);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -73,31 +60,23 @@ export function LandingHero() {
       tick();
     };
 
-    const runLoop = () => {
-      if (cancelledRef.current) return;
-      setStep(0);
-      setTyped1("");
-      setTyped2("");
-
-      typeInto("Acme Robotics", 55, setTyped1, () => {
-        schedule(() => {
-          typeInto("CFO from Stripe; eval vs. internal build", 30, setTyped2, () => {
-            schedule(() => {
-              setStep(1);
-              schedule(() => {
-                setStep(2);
-                schedule(() => {
-                  setDownstreamIdx((idx) => (idx + 1) % DOWNSTREAMS.length);
-                  runLoop();
-                }, 3600);
-              }, 3200);
-            }, 700);
-          });
-        }, 200);
-      });
-    };
-
-    runLoop();
+    typeInto(PROMPT_TEXT, 50, setTyped, () => {
+      // Bad response paragraphs fade in
+      schedule(() => setBadPara(1), 550);
+      schedule(() => setBadPara(2), 1100);
+      schedule(() => setBadPara(3), 1700);
+      // Hedge phrases get the wavy red underline
+      schedule(() => setFlagged(true), 2300);
+      // PromptStarter divider stitches in
+      schedule(() => setShowDivider(true), 3200);
+      // Artifact attachment YOU bubble
+      schedule(() => setShowAttach(true), 3800);
+      // Good response streams in
+      schedule(() => setGoodPara(1), 4400);
+      schedule(() => setGoodPara(2), 5000);
+      // Diagnosis bar flips to "same 5 seconds"
+      schedule(() => setShowFinal(true), 5800);
+    });
 
     return () => {
       cancelledRef.current = true;
@@ -106,16 +85,22 @@ export function LandingHero() {
     };
   }, []);
 
-  const copy = STEP_COPY[step];
-  const downstream = DOWNSTREAMS[downstreamIdx];
-
   return (
-    <section id="top" className="relative pt-28 md:pt-36 pb-20 md:pb-28 overflow-hidden">
-      <div aria-hidden className="absolute inset-0 landing-grid-bg pointer-events-none" />
-      <div aria-hidden className="absolute inset-0 landing-hero-vignette pointer-events-none" />
+    <section
+      id="top"
+      className="relative pt-28 md:pt-36 pb-20 md:pb-28 overflow-hidden"
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0 landing-grid-bg pointer-events-none"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 landing-hero-vignette pointer-events-none"
+      />
 
       <div className="relative max-w-[1280px] mx-auto px-5 md:px-8 grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-        {/* Left: copy */}
+        {/* Left — value prop */}
         <div className="lg:col-span-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-[12px] font-mono landing-text-muted mb-6">
             <span className="landing-live-dot" />
@@ -133,8 +118,9 @@ export function LandingHero() {
             <br />
             <span style={{ color: "#FF3300" }}>Your AI</span> closes the deal.
           </h1>
-          <p className="mt-6 landing-text-body text-[17px] md:text-[18px] leading-relaxed max-w-[520px]">
-            Master prompts for sales reps. Built in 90 seconds, run on the AI you already pay for.
+          <p className="mt-6 landing-text-body text-[17px] md:text-[18px] leading-relaxed max-w-[480px]">
+            Master prompts for sales reps. Built in 90 seconds. Runs on the AI
+            you already pay for.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link href="/login" className="landing-btn-primary text-[15px]">
@@ -150,165 +136,360 @@ export function LandingHero() {
           </p>
         </div>
 
-        {/* Right: animation stage */}
+        {/* Right — chat that tells the whole story */}
         <div className="lg:col-span-6">
-          <div
-            className="landing-stage relative flex flex-col"
-            style={{ aspectRatio: "5 / 4.4", maxHeight: 600 }}
-          >
-            <div className="landing-step-header flex items-start justify-between gap-4 shrink-0">
-              <div className="min-w-0">
-                <div className="landing-step-num">
-                  {copy.num} · {copy.tag}
-                </div>
-                <h3 className="landing-step-title">{copy.title}</h3>
-                <p className="landing-step-sub">{copy.sub}</p>
-              </div>
-              <div className="flex items-center gap-1.5 mt-1.5 shrink-0">
-                {[0, 1, 2].map((i) => (
-                  <span
-                    key={i}
-                    className={cn("landing-step-pip", step === i && "is-active")}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Slot container */}
-            <div className="relative flex-1">
-              {/* Slot 0 — inputs */}
-              <div className={cn("landing-slot", step === 0 && "is-active")}>
-                <div className="space-y-3">
-                  <div className="landing-wf-input focused">
-                    <div className="landing-wf-label">Target Account</div>
-                    <div className="landing-wf-value">
-                      <span>{typed1}</span>
-                      <span className="landing-caret" />
-                    </div>
-                  </div>
-                  <div className="landing-wf-input">
-                    <div className="landing-wf-label">Tool</div>
-                    <div className="landing-wf-value">Pre-Call Recon Brief</div>
-                  </div>
-                  <div className="landing-wf-input">
-                    <div className="landing-wf-label">Add Context</div>
-                    <div className="landing-wf-value landing-text-muted">{typed2}</div>
-                  </div>
-                </div>
-                <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
-                  <span className="font-mono text-[11px] landing-text-muted">
-                    inputs only — no form-fills
-                  </span>
-                  <span
-                    className="landing-btn-primary"
-                    style={{ pointerEvents: "none", padding: "8px 14px", fontSize: 13 }}
-                  >
-                    <span>Generate Prompt</span>
-                    <span className="arrow">→</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Slot 1 — compile */}
-              <div className={cn("landing-slot", step === 1 && "is-active")}>
-                <div className="font-mono text-[12px] leading-[1.55] text-zinc-300 h-full overflow-hidden">
-                  <div className="text-[10px] uppercase tracking-[.18em] landing-text-muted mb-2">
-                    {"// MASTER PROMPT — compiled"}
-                  </div>
-                  <div className="space-y-1">
-                    <div>
-                      <span style={{ color: "#FF7A55" }}>&lt;MISSION&gt;</span>
-                    </div>
-                    <div className="pl-3">You are a B2B competitive-intel analyst briefing</div>
-                    <div className="pl-3">an AE before a discovery call. Speak to the rep —</div>
-                    <div className="pl-3">second person, no preamble.</div>
-                    <div>
-                      <span style={{ color: "#FF7A55" }}>&lt;TARGET&gt;</span>{" "}
-                      <span className="text-white">Acme Robotics, Series C</span>
-                    </div>
-                    <div>
-                      <span style={{ color: "#FF7A55" }}>&lt;ANCHOR FACTS&gt;</span>
-                    </div>
-                    <div className="pl-3">— Funding round: $42M Series C, March</div>
-                    <div className="pl-3">— New CFO joined Q2 from Stripe</div>
-                    <div className="pl-3">— Public hiring: 7 ML eng roles open</div>
-                    <div>
-                      <span style={{ color: "#FF7A55" }}>&lt;STRUCTURE&gt;</span> 5 sections, &lt; 600 words
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
-                  <span className="font-mono text-[11px] landing-text-muted">
-                    role · facts · structure · close
-                  </span>
-                  <span
-                    className="landing-btn-primary"
-                    style={{ pointerEvents: "none", padding: "8px 14px", fontSize: 13 }}
-                  >
-                    <span>Copy</span>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="9" y="9" width="13" height="13" rx="2" />
-                      <path d="M5 15V5a2 2 0 0 1 2-2h10" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              {/* Slot 2 — paste into downstream */}
-              <div className={cn("landing-slot", step === 2 && "is-active")}>
-                <div className="rounded-xl border border-white/10 bg-[#0E0E0E] p-4 h-full flex flex-col">
-                  <div className="flex items-center justify-between text-[11px] font-mono landing-text-muted">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="w-5 h-5 rounded-full grid place-items-center text-[10px] font-bold"
-                        style={{ background: downstream.color, color: "#fff" }}
-                      >
-                        {downstream.initial}
-                      </span>
-                      <span>{downstream.name}</span>
-                    </div>
-                    <span>pasted from PromptStarter</span>
-                  </div>
-                  <div className="mt-3 rounded-lg border border-white/5 bg-black/40 p-3 font-mono text-[11px] leading-[1.45] text-zinc-400 max-h-[120px] overflow-hidden">
-                    <div>
-                      <span style={{ color: "#FF7A55" }}>&lt;MISSION&gt;</span> Brief the rep on Acme Robotics…
-                    </div>
-                    <div>
-                      <span style={{ color: "#FF7A55" }}>&lt;ANCHOR FACTS&gt;</span> $42M Series C · new CFO ex-Stripe…
-                    </div>
-                    <div>
-                      <span style={{ color: "#FF7A55" }}>&lt;STRUCTURE&gt;</span> 5 sections · &lt; 600 words…
-                    </div>
-                  </div>
-                  <div className="mt-3 flex-1 overflow-hidden">
-                    <div className="text-[12px] leading-[1.55] text-zinc-200">
-                      <strong className="text-white">Recon Brief — Acme Robotics</strong>
-                      <p className="mt-1 text-zinc-300">
-                        Their Series C closed six weeks ago. The new CFO came from Stripe — she&apos;s running her first cost-of-capital review and ML-infra spend is on the chopping block. Open with that, not your feature list…
-                        <span className="landing-caret" />
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute bottom-5 left-5 right-5 flex items-center">
-                  <span className="font-mono text-[11px] landing-text-muted">
-                    on your subscription, not ours
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PromptComparisonDemo
+            typed={typed}
+            badPara={badPara}
+            flagged={flagged}
+            showDivider={showDivider}
+            showAttach={showAttach}
+            goodPara={goodPara}
+            showFinal={showFinal}
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+/* ── Chat demo ──────────────────────────────────────────────────────────── */
+
+function PromptComparisonDemo({
+  typed,
+  badPara,
+  flagged,
+  showDivider,
+  showAttach,
+  goodPara,
+  showFinal,
+}: {
+  typed: string;
+  badPara: number;
+  flagged: boolean;
+  showDivider: boolean;
+  showAttach: boolean;
+  goodPara: number;
+  showFinal: boolean;
+}) {
+  const promptDone = typed.length >= PROMPT_TEXT.length;
+
+  return (
+    <div
+      className="landing-stage relative flex flex-col"
+      style={{ aspectRatio: "5 / 5.4", maxHeight: 720 }}
+    >
+      {/* Chat header */}
+      <div
+        className="flex items-center justify-between px-5 py-3 border-b shrink-0"
+        style={{
+          borderColor: "rgba(255,255,255,0.06)",
+          background: "#0E0E0E",
+        }}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <span
+            className="w-6 h-6 rounded-full grid place-items-center text-[12px] font-bold text-white shrink-0"
+            style={{ background: "#10A37F" }}
+          >
+            C
+          </span>
+          <span className="font-sans text-[13px] text-zinc-200">ChatGPT</span>
+          <span className="font-mono text-[10px] landing-text-muted">·</span>
+          <span className="font-mono text-[10px] landing-text-muted truncate">
+            no system prompt
+          </span>
+        </div>
+        <div
+          className={`flex items-center gap-1.5 px-2 py-1 rounded-full border whitespace-nowrap transition-opacity duration-500 ${
+            flagged && !showFinal ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            background: "rgba(255,51,0,0.08)",
+            borderColor: "rgba(255,51,0,0.30)",
+          }}
+        >
+          <AlertTriangle
+            size={11}
+            style={{ color: "#FF7A55" }}
+            className="lhi-pulse"
+          />
+          <span
+            className="font-mono text-[9px] uppercase tracking-[.18em]"
+            style={{ color: "#FF7A55" }}
+          >
+            Generic
+          </span>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 px-5 py-4 overflow-hidden flex flex-col gap-3 min-h-0">
+        {/* USER — vague prompt */}
+        <div className="self-end max-w-[88%]">
+          <div className="font-mono text-[10px] tracking-[.14em] uppercase landing-text-muted mb-1 text-right">
+            You
+          </div>
+          <div
+            className="rounded-2xl rounded-br-md px-3.5 py-2"
+            style={{
+              background: "#1E1E1E",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <span className="font-sans text-[14px] text-zinc-100">
+              {typed}
+              {!promptDone && (
+                <span className="landing-caret" style={{ height: 12 }} />
+              )}
+            </span>
+          </div>
+        </div>
+
+        {/* CHATGPT — bad response */}
+        <div className="self-start max-w-full">
+          <div className="font-mono text-[10px] tracking-[.14em] uppercase landing-text-muted mb-1">
+            ChatGPT
+          </div>
+          <div className="font-sans text-[13px] leading-[1.55] text-zinc-400">
+            <Para visible={badPara >= 1}>
+              <Hedge active={flagged}>Sure!</Hedge> Here are some{" "}
+              <Hedge active={flagged}>general tips</Hedge> for your call:
+            </Para>
+            <Para visible={badPara >= 2} extraTopMargin>
+              1. Research the company&apos;s recent news
+              <br />
+              2. Look up people on LinkedIn
+              <br />
+              3. Have your value proposition ready
+            </Para>
+            <Para visible={badPara >= 3} extraTopMargin>
+              <Hedge active={flagged}>
+                Let me know if you need more specific advice!
+              </Hedge>
+            </Para>
+          </div>
+        </div>
+
+        {/* DIVIDER — PromptStarter takes over */}
+        <PromptStarterDivider visible={showDivider} />
+
+        {/* USER — engineered prompt as artifact attachment */}
+        <ArtifactBubble visible={showAttach} />
+
+        {/* CHATGPT — good response */}
+        <div className="self-start max-w-full">
+          <div
+            className={`font-mono text-[10px] tracking-[.14em] uppercase landing-text-muted mb-1 transition-opacity duration-300 ${
+              goodPara >= 1 ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            ChatGPT
+          </div>
+          <div className="font-sans text-[13px] leading-[1.55] text-zinc-200">
+            <Para visible={goodPara >= 1}>
+              <span className="font-tech font-semibold text-white">
+                Recon Brief — Acme Robotics
+              </span>
+              <br />
+              Their Series C closed six weeks ago. The new CFO came from Stripe
+              — open with cost-of-capital,{" "}
+              <span className="text-white">not your feature list.</span>
+            </Para>
+            <Para visible={goodPara >= 2} extraTopMargin>
+              Lead with the funding signal. Anchor on margin discipline.
+              <span className="landing-caret" style={{ height: 10 }} />
+            </Para>
+          </div>
+        </div>
+      </div>
+
+      {/* Diagnosis bar — flips from "Sound familiar?" to "Same 5 seconds." */}
+      <div
+        className="relative px-5 py-3 border-t shrink-0 flex items-center justify-between gap-3 min-h-[42px]"
+        style={{
+          borderColor: "rgba(255,255,255,0.06)",
+          background: "#0A0A0A",
+        }}
+      >
+        {/* Bad diagnosis */}
+        <div
+          className={`absolute inset-0 px-5 py-3 flex items-center justify-between gap-3 transition-opacity duration-500 ${
+            flagged && !showFinal ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="font-mono text-[10px] uppercase tracking-[.14em] landing-text-muted truncate">
+            {"// generic prompt · generic response"}
+          </span>
+          <span
+            className="font-mono text-[10px] uppercase tracking-[.18em] whitespace-nowrap"
+            style={{ color: "#FF7A55" }}
+          >
+            Sound familiar?
+          </span>
+        </div>
+        {/* Good diagnosis */}
+        <div
+          className={`absolute inset-0 px-5 py-3 flex items-center justify-between gap-3 transition-opacity duration-500 ${
+            showFinal ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="font-mono text-[10px] uppercase tracking-[.14em] landing-text-muted truncate">
+            {"// engineered prompt · expert response"}
+          </span>
+          <span
+            className="font-mono text-[10px] uppercase tracking-[.18em] whitespace-nowrap"
+            style={{ color: "#FF3300" }}
+          >
+            Same 5 seconds.
+          </span>
+        </div>
+        {/* Spacer to lock the bar's height */}
+        <span className="font-mono text-[10px] opacity-0 select-none">
+          {"// placeholder"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ── Helpers ────────────────────────────────────────────────────────────── */
+
+function Para({
+  visible,
+  extraTopMargin = false,
+  children,
+}: {
+  visible: boolean;
+  extraTopMargin?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <p
+      className={`transition-opacity duration-500 ${
+        extraTopMargin ? "mt-2" : ""
+      }`}
+      style={{ opacity: visible ? 1 : 0 }}
+    >
+      {children}
+    </p>
+  );
+}
+
+function Hedge({
+  active,
+  children,
+}: {
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className="transition-all duration-500"
+      style={{
+        textDecorationLine: active ? "underline" : "none",
+        textDecorationStyle: "wavy",
+        textDecorationColor: active ? "#FF3300" : "transparent",
+        textDecorationThickness: "1.5px",
+        textUnderlineOffset: "3px",
+        color: active ? "#a1a1aa" : undefined,
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+function PromptStarterDivider({ visible }: { visible: boolean }) {
+  return (
+    <div
+      className={`relative flex items-center my-1 transition-opacity duration-500 ${
+        visible ? "opacity-100" : "opacity-0"
+      }`}
+      aria-hidden
+    >
+      <span
+        className="flex-1 h-px"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, rgba(255,51,0,0.35) 40%, rgba(255,51,0,0.35) 60%, transparent)",
+        }}
+      />
+      <span
+        className="mx-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border whitespace-nowrap"
+        style={{
+          background: "rgba(255,51,0,0.08)",
+          borderColor: "rgba(255,51,0,0.30)",
+        }}
+      >
+        <span
+          className="font-mono text-[9px] tracking-[.18em] uppercase"
+          style={{ color: "#FF7A55" }}
+        >
+          PromptStarter
+        </span>
+        <span
+          className="w-px h-2.5"
+          style={{ background: "rgba(255,122,85,0.4)" }}
+        />
+        <span className="font-mono text-[9px] text-zinc-300">5s</span>
+      </span>
+      <span
+        className="flex-1 h-px"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, rgba(255,51,0,0.35) 40%, rgba(255,51,0,0.35) 60%, transparent)",
+        }}
+      />
+    </div>
+  );
+}
+
+function ArtifactBubble({ visible }: { visible: boolean }) {
+  return (
+    <div
+      className={`self-end max-w-[88%] transition-all duration-500 ${
+        visible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-2 pointer-events-none"
+      }`}
+    >
+      <div className="font-mono text-[10px] tracking-[.14em] uppercase landing-text-muted mb-1 text-right">
+        You · pasted
+      </div>
+      <div
+        className="inline-flex items-center gap-2 rounded-2xl rounded-br-md px-2.5 py-2 border"
+        style={{
+          background: "#1E1E1E",
+          borderColor: "rgba(255,51,0,0.30)",
+          boxShadow: visible
+            ? "0 8px 24px -8px rgba(255,51,0,0.40)"
+            : undefined,
+        }}
+      >
+        <div
+          className="w-6 h-7 rounded-sm flex items-center justify-center shrink-0"
+          style={{
+            background: "rgba(255,51,0,0.10)",
+            border: "1px solid rgba(255,51,0,0.30)",
+          }}
+        >
+          <span
+            className="font-mono text-[8px] font-bold"
+            style={{ color: "#FF3300" }}
+          >
+            MD
+          </span>
+        </div>
+        <div className="flex flex-col min-w-0">
+          <span className="font-mono text-[11px] text-white truncate">
+            pre-call-recon · acme.md
+          </span>
+          <span className="font-mono text-[8.5px] tracking-[.08em] uppercase landing-text-muted">
+            from PromptStarter
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }

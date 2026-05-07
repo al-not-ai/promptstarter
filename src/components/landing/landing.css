@@ -292,6 +292,54 @@
   animation: landing-pulse 1.6s ease-in-out infinite;
 }
 
+/* How-it-works — flow animations */
+@keyframes lhi-chev {
+  0%, 100% { opacity: 0.18; transform: translateX(-2px); }
+  45%, 55% { opacity: 1; transform: translateX(0); }
+}
+.lhi-chev {
+  animation: lhi-chev 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 51, 0, 0.45));
+}
+
+@keyframes lhi-bob {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50%      { transform: translateY(-6px) rotate(-5deg); }
+}
+.lhi-artifact { animation: lhi-bob 4.2s ease-in-out infinite; }
+@media (max-width: 1023px) {
+  /* No rotation on mobile */
+  @keyframes lhi-bob-mobile {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  .lhi-artifact { animation: lhi-bob-mobile 4.2s ease-in-out infinite; }
+}
+
+@keyframes lhi-halo {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.94); }
+  50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.06); }
+}
+.lhi-halo { animation: lhi-halo 4.2s ease-in-out infinite; }
+
+@keyframes lhi-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.lhi-pulse { animation: lhi-pulse 1.8s ease-in-out infinite; }
+
+@keyframes lhi-generate-glow {
+  0%, 100% { box-shadow: 0 8px 28px -10px rgba(255, 51, 0, 0.45); }
+  50%      { box-shadow: 0 8px 32px -8px  rgba(255, 51, 0, 0.75); }
+}
+.lhi-generate { animation: lhi-generate-glow 3.2s ease-in-out infinite; }
+
+@keyframes lhi-bubble-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 51, 0, 0.0); }
+  50%      { box-shadow: 0 0 16px -2px rgba(255, 51, 0, 0.45); }
+}
+.lhi-bubble { animation: lhi-bubble-glow 4.2s ease-in-out infinite; animation-delay: 1.2s; }
+
 @media (prefers-reduced-motion: reduce) {
   .landing-root *,
   .landing-root *::before,
