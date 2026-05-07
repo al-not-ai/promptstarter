@@ -147,7 +147,7 @@ export function ControlPanel({
                     )}
                     {showChips && chipsOpen && (
                       <div className="flex flex-col gap-1.5">
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-col gap-0.5">
                           {profile!.key_differentiators.map((diff, i) => (
                             <button
                               key={i}
@@ -160,7 +160,7 @@ export function ControlPanel({
                                   yourEdgeInputRef.current?.select();
                                 });
                               }}
-                              className="inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded border border-zinc-700 bg-zinc-800/60 text-zinc-400 hover:text-zinc-100 hover:border-zinc-600 hover:bg-zinc-700/60 transition-colors duration-150"
+                              className="w-full text-left text-[11px] font-medium px-2 py-1.5 rounded border border-zinc-700 bg-zinc-800/60 text-zinc-400 hover:text-zinc-100 hover:border-zinc-600 hover:bg-zinc-700/60 transition-colors duration-150"
                             >
                               {diff}
                             </button>
