@@ -5,6 +5,101 @@
 
 ---
 
+## Post-implementation update — 2026-05-06
+
+### Headline
+
+Cycle 4 → Cycle 12: **$0.00488 → $0.00434/case (−11%)**, against a projected $0.0049 → $0.0021 (−57%). The gap is explained by caching not firing on the wire — but investigation (2026-05-06) confirmed this is not a code bug. Haiku's minimum cacheable prefix is 2,048 tokens; the system prompt measures ~1,700 tokens. Caching is structurally bounded by prompt size. The non-cache changes — system prompt trims, URL strip, two-tool templating — each delivered within range of their projections.
+
+---
+
+### What shipped
+
+**Phase 1 — Cache config, URL strip, instrumentation**
+
+Implemented just before the audit finalized (commits `2a9d306`, `3727fe3`, `ecdca07`, `de36d19` are all pre-audit). Cycle 5 (`a6c17e3`) was the first post-audit validation run.
+
+- Cache TTL bumped 5m → 1h; `extended-cache-ttl-2025-04-11` beta header added.
+- `<company_url>` and `<product_url>` stripped from profile XML.
+- Cache hit/write/miss tokens surfaced per-case in stress-test output.
+
+Cycles 5–8 were diagnostic: cycle 6 added the beta header, cycle 7 tried a fresh dev server, cycle 8 reverted to vanilla 5m TTL to isolate the stack. None produced cache token hits. Commit `67d9080` restored the intended 1h+beta config and documented the known issue. The URL strip (≈25 tokens) is too small to register as measurable cost change against cycle noise.
+
+**Phase 2 — System prompt trims**
+
+Commits `b5c6593`, `096e342`, `a19c7ff`, `a91c69c`. Cut CORE RULE 3 (≈30t), COMPRESSION EXAMPLES (≈100t), collapsed VOICE BAD #4/#5 (≈40t), trimmed NUMERICAL SPECIFICITY RULE and added no-enumeration clause (≈150t). Approximately 320–345 tokens removed from the system block.
+
+Validated in cycle 9 (`e40ec95`): $0.2893 / 63 = **$0.00459/case**, down from $0.00488 in cycle 4 (−6.0%). Automated compliance: DRILL-DOWN present 63/63, GROUNDING present 63/63; profile name surfaced 62/63 (one-case blip vs 63/63 baseline). Fabrication auditing was manual in cycle 4 and not re-run programmatically; no fabrication escalation was noted.
+
+Source: `docs/test-runs/2026-05-05-cycle9/_index.md`.
+
+**Phase 3 — cfo-pitch + follow-up-forward templated STRUCTURE**
+
+Commits `443bf95` (`engineSkipsStructure` flag, enabled on cfo-pitch only), `94412ee` (`buildTemplatedStructure` + `splitOnGroundingHeader` + `assembleMasterPrompt` splice), `0e676b7` (engine skip-STRUCTURE branch). The engine emits MISSION + GROUNDING only for cfo-pitch; `assembleMasterPrompt` splices server-templated STRUCTURE at the `## GROUNDING` boundary. Cycle 10/11 validated cfo-pitch; commit `501d241` fixed three template rendering issues (blockquote for `painPoint`, colon-not-paren for `annualCost`, drop company-name avoid clause).
+
+Cycle 12 extended Phase 3 to follow-up-forward: `engineSkipsStructure: true` added to tools.ts; `buildFollowUpForwardStructure()` added to `src/lib/prompt-templates.ts`. Two long free-text inputs (`biggestAha`, `callNotes`) are blockquoted verbatim in the template — the downstream AI extracts the specific moment rather than the server. Slot mapping: `buying-role` → internal audience for Forward-Ready Recap; `call-mood` → tone calibration for Follow-Up Email. Cycle 12 confirmed 9/9 OK.
+
+cfo-pitch per-case cost: $0.0430/9 = $0.00478 (cycle 9) → $0.0382/9 = $0.00424 (cycle 11) = **−11% on that tool**.
+follow-up-forward per-case cost: $0.0433/9 = $0.00481 (cycle 11) → $0.0351/9 = $0.00390 (cycle 12) = **−19% on that tool**.
+Aggregate cycle 11 → cycle 12: $0.2837 → $0.2734 = **−$0.0103/run** (−4%).
+
+Source: `docs/test-runs/2026-05-04-cycle10/_index.md`, `docs/test-runs/2026-05-04-cycle11/_index.md`, `docs/test-runs/2026-05-06-cycle12/_index.md`.
+
+**Phase 4 — yourEdge differentiator chips**
+
+Commits `88d0556`, `ab99d13`, `99520d4`, `359e029`. `yourEdge` chips sourced from `profile.key_differentiators[]` on objection-defuser and competitor-battlecard. Inline disclosure pattern: chips closed by default, expand on click, click-to-fill, rep can edit before submit. No engine cost impact. Matches the audit §3 verdict precisely.
+
+---
+
+### What didn't ship and why
+
+**Wire-level caching** — Investigated and closed 2026-05-06. Not a code bug. The SDK emits `cache_control` correctly on the wire; the `anthropic-beta` header is present. Caching doesn't fire because Haiku's minimum cacheable prefix is 2,048 tokens and the system prompt measures ~1,700 tokens — 348 tokens below the floor. The API silently produces 0/0 telemetry for any prefix below the minimum. The config (1h TTL + beta header) is correct and will fire automatically if/when the system prompt crosses the threshold. See `docs/audit/2026-05-05/06-caching-investigation.md §9` for full outcome.
+
+**Phase 3 extension to battlecard / deal-reviver** — follow-up-forward shipped in cycle 12. Two tools remain: competitor-battlecard and deal-reviver. Each requires a `buildXxxStructure` function in `prompt-templates.ts`, dispatch case in `buildTemplatedStructure`, updated `sampleOutput` in `tools.ts`, and lockstep `TEST_CASES` updates in `scripts/stress-test-v2.mjs`. Caching investigation is closed; the output-token savings are the primary driver regardless.
+
+**§6.2 forbidden-number enumeration addendum** — The no-enumeration clause shipped (commit `a91c69c`). The specific sub-rule the audit recommended — *"Do not enumerate the forbidden numbers as part of your instruction; reference them only by category"* — was not explicitly added. Partial ship; the soft-leak pattern is reduced but the exact fix is outstanding.
+
+**§6.3 battlecard structural overhaul (P1-1)** — Not pursued in phases 1–4. The tool still produces the 5-section symmetrical output the audit flagged as structurally weak.
+
+**§6.4 Tool-specific system prompt variants** — Not pursued. The recon framing rule remains in the user prompt as a workaround.
+
+---
+
+### Updated forward projection
+
+Applying the audit's §5 deltas to the cycle 12 baseline (all numbers approximate):
+
+| State | $/case | Notes |
+|---|---:|---|
+| Cycle 12 (stress-test) | $0.0043 | measured; source: cycle 12 `_index.md`; cfo-pitch + follow-up-forward templated |
+| + Phase 3 extension to 2 more tools (battlecard + deal-reviver) | ~$0.0040 | approx; extrapolated from cfo-pitch and follow-up-forward savings at similar output-token reduction |
+| + wire-level caching (if system prompt crosses 2,048 tokens) | ~$0.0030 | structurally bounded today; would fire automatically without code change |
+
+Caching is not a near-term lever — it requires intentional system prompt growth past the 2,048-token Haiku floor. The Phase 3 extension path (two remaining tools) is the next concrete saving. The original $0.0021 target from audit §5 was predicated on full caching firing; without it the realistic floor is approximately $0.0038–$0.0040 from output-token templating alone.
+
+---
+
+### Audit recommendations grade card
+
+| Section | Item | Status | Notes |
+|---|---|---|---|
+| §1.1 | Engine regenerating its own config | **partial** | cfo-pitch + follow-up-forward templated (Phase 3); battlecard/deal-reviver still generating STRUCTURE |
+| §1.2 | BASE_SYSTEM_PROMPT bloat | **shipped** | Phase 2, cycle 9 (`b5c6593`, `096e342`, `a19c7ff`, `a91c69c`) |
+| §1.3 | Inert profile XML fields | **shipped** | URL strip, commit `3727fe3` (pre-audit) |
+| §2.1 | Cache TTL 5m → 1h | **investigated, structurally bounded** | Config correct; caching bounded by prompt size (~1,700 tokens vs 2,048-token Haiku floor); not a code bug — see `06-caching-investigation.md §9` |
+| §2.2 | Two-stage architecture (4 tools) | **partial** | cfo-pitch + follow-up-forward piloted (cycles 10→12); battlecard + deal-reviver deferred |
+| §2.3 | Trim system prompt + drop URL fields | **shipped** | All five named changes addressed across Phase 1 + Phase 2 |
+| §3 | yourEdge chips (objection-defuser, battlecard) | **shipped** | Phase 4, commits `88d0556`–`359e029` |
+| §3 | competitorName chips | **deferred** | Per audit verdict; requires new profile schema field |
+| §4 | Background enrichment | **not pursued** | Per audit verdict ("No"); no change in direction |
+| §6.1 | Cache-hit instrumentation in stress test | **shipped** | Commits `de36d19`, `333f8cd` (pre-audit); showing 0/0/0 correctly because caching doesn't fire |
+| §6.2 | NUMERICAL SPECIFICITY soft-leak fix | **partial** | No-enumeration clause added (`a91c69c`); "don't enumerate forbidden numbers by name" sub-rule not added |
+| §6.3 | Battlecard structural overhaul | **deferred** | Not pursued in phases 1–4 |
+| §6.4 | Tool-specific system prompt variants | **not pursued** | |
+| §6.5 | Cycle 2→4 input bloat ROI analysis | **not pursued** | Side-by-side comparison not run |
+
+---
+
 ## 1. Top 3 wasteful patterns (with token-cost data)
 
 ### 1.1 — Engine regenerating its own configuration
@@ -216,3 +311,5 @@ The two UX ideas:
 - **Background enrichment (3.2)**: no — wrong direction of fix; would multiply fabrication risk for unclear benefit.
 
 The single most important instrumentation change is exposing cache-hit metrics in stress test output. Without that you cannot measure any of the cache-related recommendations.
+
+_See "Post-implementation update" at the top for what shipped and how the projections played out._
